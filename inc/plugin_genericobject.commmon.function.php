@@ -300,6 +300,8 @@ function plugin_genericobject_addTable($name)
 			`object_type` INT( 11 ) NOT NULL DEFAULT 0,
 			`deleted` INT( 1 ) NOT NULL DEFAULT 0,
 	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
+	 		`comments` TEXT NULL  ,
+	 		`notes` TEXT NULL  ,
 	 		PRIMARY KEY ( `ID` ) 
 			) ENGINE = MYISAM COMMENT = '$name table';";
 	$DB->query($query);
