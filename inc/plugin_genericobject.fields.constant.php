@@ -52,8 +52,8 @@ $GENERICOBJECT_AVAILABLE_FIELDS['otherserial']['field']='otherserial';
 $GENERICOBJECT_AVAILABLE_FIELDS['otherserial']['input_type']='text';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['comments']['name']=$LANG['common'][25];
-$GENERICOBJECT_AVAILABLE_FIELDS['comments']['field']='otherserial';
-$GENERICOBJECT_AVAILABLE_FIELDS['comments']['input_type']='multitext';
+$GENERICOBJECT_AVAILABLE_FIELDS['comments']['field']='comments';
+$GENERICOBJECT_AVAILABLE_FIELDS['comments']['input_type']='text';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['name']=$LANG['entity'][0];
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['table']='glpi_entities';
