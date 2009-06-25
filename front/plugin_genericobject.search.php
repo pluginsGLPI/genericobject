@@ -37,7 +37,9 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (isset($_REQUEST['device_type']))
 	$_SESSION["plugin_genericobject_device_type"] = $_REQUEST['device_type'];
 
-commonHeader($_SESSION["plugin_genericobject_device_type"],$_SERVER['PHP_SELF'],"plugins","genericobject",plugin_genericobject_getNameByID($_SESSION["plugin_genericobject_device_type"]));
+$name=plugin_genericobject_getNameByID($_SESSION["plugin_genericobject_device_type"]);
+
+commonHeader($LANG["genericobject"][$name][1],$_SERVER['PHP_SELF'],"plugins","genericobject",$name);
 
 plugin_genericobject_checkRight(plugin_genericobject_getNameByID($_SESSION["plugin_genericobject_device_type"]),'r');
  

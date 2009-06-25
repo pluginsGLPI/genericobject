@@ -66,7 +66,7 @@ elseif (isset($_POST["delete"]))
 	
 
 
-commonHeader($LANG["genericobject"][$name][1],$_SERVER['PHP_SELF'],"plugins","genericobject",plugin_genericobject_getNameByID($_SESSION["plugin_genericobject_device_type"]));
+commonHeader($LANG["genericobject"][$name][1],$_SERVER['PHP_SELF'],"plugins","genericobject",$name);
 $object->obj->showForm($_SERVER["PHP_SELF"],$_REQUEST["ID"]);
 
 commonFooter();
