@@ -164,7 +164,7 @@ class PluginGenericObject extends CommonDBTM {
 		$this->closeColumn();
 
 		$this->displayActionButtons($ID, $canedit);
-		echo "</table></div>";
+		echo "</table></div></form>";
 		echo "<div id='tabcontent'></div>";
 		echo "<script type='text/javascript'>loadDefaultTab();</script>";
 	}
