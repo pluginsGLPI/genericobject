@@ -67,9 +67,9 @@ $GENERICOBJECT_AVAILABLE_FIELDS['recursive']['linkfield']='recursive';
 $GENERICOBJECT_AVAILABLE_FIELDS['recursive']['input_type']='dropdown_yesno';
 $GENERICOBJECT_AVAILABLE_FIELDS['recursive']['datatype']='bool';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['name']=$LANG['entity'][9];
+$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['name']=$LANG['common'][13];
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['field']='is_template';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['linkfield']='recursive';
+$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['linkfield']='';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['input_type']='dropdown_yesno';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['datatype']='bool';
 
