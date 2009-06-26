@@ -73,34 +73,36 @@ class PluginGenericObject extends CommonDBTM {
 		$ong = array ();
 
 		$ong[1] = $LANG['title'][26];
-		if ($this->canUseInfocoms()) {
-			$ong[4] = $LANG['Menu'][26];
-		}
+		
+		if ($ID > 0){
+			if ($this->canUseInfocoms()) {
+				$ong[4] = $LANG['Menu'][26];
+			}
 
-		if ($this->canUseDocuments()) {
-			$ong[5] = $LANG['Menu'][27];
-		}
+			if ($this->canUseDocuments()) {
+				$ong[5] = $LANG['Menu'][27];
+			}
 
-		if ($this->canUseTickets()) {
-			$ong[6] = $LANG['title'][28];
-		}
+			if ($this->canUseTickets()) {
+				$ong[6] = $LANG['title'][28];
+			}
 
-/*
-		if ($this->type_infos["use_links"] && haveRight("link", "r")) {
-			$ong[7] = $LANG['title'][34];
-		}
-*/
-		if ($this->type_infos["use_notes"] && haveRight("notes", "r")) {
-			$ong[10] = $LANG['title'][37];
-		}
+	/*
+			if ($this->type_infos["use_links"] && haveRight("link", "r")) {
+				$ong[7] = $LANG['title'][34];
+			}
+	*/
+			if ($this->type_infos["use_notes"] && haveRight("notes", "r")) {
+				$ong[10] = $LANG['title'][37];
+			}
 
-		if ($this->canUseLoans()) {
-			$ong[11] = $LANG['Menu'][17];
+			if ($this->canUseLoans()) {
+				$ong[11] = $LANG['Menu'][17];
+			}
+
+			if ($this->canUseHistory())
+				$ong[12] = $LANG['title'][38];
 		}
-
-		if ($this->canUseHistory())
-			$ong[12] = $LANG['title'][38];
-
 		return $ong;
 	}
 
