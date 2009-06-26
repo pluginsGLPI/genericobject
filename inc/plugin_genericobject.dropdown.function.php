@@ -44,4 +44,15 @@ function plugin_genericobject_dropdownState($name,$value=0) {
 	$state[GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED] = $LANG['genericobject']['state'][2];
 	return dropdownArrayValues($name,$state,$value);	
 }
+
+function plugin_genericobject_dropdownFields($name,$used=array())
+{
+	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	
+	$dropdown_types = array();
+	foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values)
+		if(!in_array($field,$used))
+			$dropdown_types[$field] = $values['name']." (".$field.")";
+	return dropdownArrayValues($name,$dropdown_types);
+}
 ?>

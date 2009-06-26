@@ -53,7 +53,35 @@ elseif (isset($_POST["delete"]))
 	$type->delete($_POST);
 	glpi_header($CFG_GLPI["root_doc"] . '/'.$SEARCH_PAGES[PLUGIN_GENERICOBJECT_TYPE]);	
 }
-	
+elseif (isset($_POST["delete_field"]))
+{
+	$type->getFromDB($_POST["ID"]);
+	plugin_genericobject_registerOneType($type->fields);
+	plugin_genericobject_includeLocales($type->fields["name"]);
+
+	foreach($_POST["fields"] as $field => $value)
+		if ($value == 1)
+		{
+			$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
+			plugin_genericobject_deleteFieldFromDB($table,$field);
+			addMessageAfterRedirect($LANG['genericobject']['fields'][5],true);
+		}
+		glpi_header($_SERVER['HTTP_REFERER']);
+}
+elseif (isset($_POST["add_field"]))
+{
+	if ($_POST["new_field"])
+	{
+		$type->getFromDB($_POST["ID"]);
+		plugin_genericobject_registerOneType($type->fields);
+		plugin_genericobject_includeLocales($type->fields["name"]);
+
+		$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
+		plugin_genericobject_addFieldInDB($table,$_POST["new_field"]);
+		addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
+	}
+	glpi_header($_SERVER['HTTP_REFERER']);
+}
 
 commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'],"plugins","genericobject","type");
 $type->showForm($_SERVER["PHP_SELF"],$_REQUEST["ID"]);

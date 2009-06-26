@@ -33,6 +33,8 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 function plugin_genericobject_showPrevisualisationForm($type) {
+	global $LANG;
+	//echo "<br>".$LANG['genericobject']['config'][8]."<br>";
 	$name = plugin_genericobject_getNameByID($type);
 	$object = new CommonItem;
 	$object->setType($type, true);

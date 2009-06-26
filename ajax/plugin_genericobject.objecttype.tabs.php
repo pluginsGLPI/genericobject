@@ -36,16 +36,23 @@ include (GLPI_ROOT . "/inc/includes.php");
 header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
+
 useplugin('genericobject',true);
 
 if(!isset($_POST["ID"])) {
 	exit();
 }
+
+$type = new PluginGenericObjectType;
+$type->getFromDB($_POST["ID"]);
+
+plugin_genericobject_registerOneType($type->fields);
+plugin_genericobject_includeLocales($type->fields["name"]);
+
 if(!isset($_POST["sort"])) $_POST["sort"] = "";
 if(!isset($_POST["order"])) $_POST["order"] = "";
 if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 
-$type = new PluginGenericObjectType;
 		switch($_POST['glpi_tab']){
 			case -1:
 					$type->showBehaviourForm($_POST['target'],$_POST["ID"]);
@@ -61,8 +68,8 @@ $type = new PluginGenericObjectType;
 			case 4 :
 				break;		
 			case 5 :
-			$type->getFromDB($_POST["ID"]);
-			plugin_genericobject_showPrevisualisationForm($type->fields["device_type"]);
+				$type->getFromDB($_POST["ID"]);
+				plugin_genericobject_showPrevisualisationForm($type->fields["device_type"]);
 			break;
 			case 12 :
 				showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);

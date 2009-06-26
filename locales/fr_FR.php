@@ -48,11 +48,16 @@ $LANG['genericobject']['config'][4] = "Liaisons";
 $LANG['genericobject']['config'][5] = "Pas de fichier de langue disponible pour ce type d'objet : celui-ci ne peut-être utilisé!";
 $LANG['genericobject']['config'][6] = "Types d'objets";
 $LANG['genericobject']['config'][7] = "Prévisualisation";
-
+$LANG['genericobject']['config'][8] = "Prévisualisation d'un objet de ce type";
 
 $LANG['genericobject']['state'][1] = "En création";
 $LANG['genericobject']['state'][2] = "En utilisation";
 
 $LANG['genericobject']['fields'][1] = "Champs associés à l'objet";
+$LANG['genericobject']['fields'][2] = "Nom dans la base";
+$LANG['genericobject']['fields'][3] = "Libellé";
+$LANG['genericobject']['fields'][4] = "Ajout d'un nouveau champs";
+$LANG['genericobject']['fields'][5] = "Champs supprimé(s) avec succès";
+$LANG['genericobject']['fields'][6] = "Champs ajouté avec succès";
 
 ?>

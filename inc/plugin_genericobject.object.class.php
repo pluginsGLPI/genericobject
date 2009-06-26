@@ -140,22 +140,25 @@ class PluginGenericObject extends CommonDBTM {
 	function showForm($target, $ID, $withtemplate = '',$previsualisation=false) {
 		global $LANG;
 
-		if ($ID > 0){
-			$this->check($ID,'r');
-		} else {
-			// Create item 
-			$this->check(-1,'w');
-			$use_cache=false;
-			$this->getEmpty();
-		} 
-
-		if(!$previsualisation)
+		if($previsualisation)
 		{
+			$canedit = true;
+			$this->getEmpty();
+		}
+		else
+		{
+			if ($ID > 0){
+				$this->check($ID,'r');
+			} else {
+				// Create item 
+				$this->check(-1,'w');
+				$use_cache=false;
+				$this->getEmpty();
+			} 
+
 			$this->showTabs($ID, '', $_SESSION['glpi_tab']);
 			$canedit = $this->can($ID,'w');	
 		}
-		else
-			$canedit = true;	
 
 		echo "<form name='form' method='post' action=\"$target\">";
 		if ($this->type_infos["use_entity"])
@@ -295,16 +298,6 @@ class PluginGenericObject extends CommonDBTM {
 				$this->cpt++;
 			}
 			echo "</tr>";
-		}
-	}
-
-	function getUsedFields()
-	{
-		global $GENERICOBJECT_BLACKLISTED_FIELDS;
-		$used = array();
-		foreach ($this->fields as $field => $value) {
-			if (!in_array($field,$GENERICOBJECT_BLACKLISTED_FIELDS))
-				$used[$field] = $value; 
 		}
 	}
 }

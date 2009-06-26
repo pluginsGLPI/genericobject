@@ -168,7 +168,7 @@ function plugin_genericobject_registerOneType($type) {
 
 	$tablename = plugin_genericobject_getObjectTableNameByName($name);
 	//If table doesn't exists, do not try to register !
-	if (TableExists($tablename)) {
+	if (TableExists($tablename) && !defined($typeID)) {
 		$object_identifier = plugin_genericobject_getObjectIdentifierByName($name);
 
 		$db_fields = $DB->list_fields($tablename);
