@@ -37,6 +37,7 @@ class PluginGenericObject extends CommonDBTM {
 	private $type_infos = array ();
 
 	//Fields not to be used in form display
+/*
 	private $blacklisted_display_fields = array (
 		"object_type",
 		"table",
@@ -46,7 +47,7 @@ class PluginGenericObject extends CommonDBTM {
 		"recursive",
 		"is_template"
 	);
-
+*/
 	//Internal field counter
 	private $cpt = 0;
 
@@ -134,7 +135,7 @@ class PluginGenericObject extends CommonDBTM {
 		return ($this->type_infos["use_history"]);
 	}
 	
-	function showForm($target, $ID, $withtemplate = '') {
+	function showForm($target, $ID, $withtemplate = '',$previsualisation=false) {
 		global $LANG;
 
 		if ($ID > 0){
@@ -146,15 +147,23 @@ class PluginGenericObject extends CommonDBTM {
 			$this->getEmpty();
 		} 
 
-		$this->showTabs($ID, '', $_SESSION['glpi_tab']);
-		$canedit = $this->can($ID,'w');
+		if(!$previsualisation)
+		{
+			$this->showTabs($ID, '', $_SESSION['glpi_tab']);
+			$canedit = $this->can($ID,'w');	
+		}
+		else
+			$canedit = true;	
 
 		echo "<form name='form' method='post' action=\"$target\">";
-
 		if ($this->type_infos["use_entity"])
 			echo "<input type='hidden' name='FK_entities' value='" . $this->fields["FK_entities"] . "'>";
 
-		echo "<div class='center' id='tabsbody'>";
+		if(!$previsualisation)
+			echo "<div class='center' id='tabsbody'>";
+		else
+			echo "<div class='center'>";
+			
 		echo "<table class='tab_cadre_fixe' >";
 		$this->showFormHeader($ID, $withtemplate,2);
 
@@ -163,10 +172,15 @@ class PluginGenericObject extends CommonDBTM {
 		}
 		$this->closeColumn();
 
-		$this->displayActionButtons($ID, $canedit);
+		if(!$previsualisation)
+			$this->displayActionButtons($ID, $canedit);
+			
 		echo "</table></div></form>";
-		echo "<div id='tabcontent'></div>";
-		echo "<script type='text/javascript'>loadDefaultTab();</script>";
+		if(!$previsualisation)
+		{
+			echo "<div id='tabcontent'></div>";
+			echo "<script type='text/javascript'>loadDefaultTab();</script>";
+		}
 	}
 
 	function displayActionButtons($ID, $canedit)
@@ -206,9 +220,9 @@ class PluginGenericObject extends CommonDBTM {
 	}
 
 	function displayField($canedit,$name, $value) {
-		global $GENERICOBJECT_AVAILABLE_FIELDS;
+		global $GENERICOBJECT_AVAILABLE_FIELDS,$GENERICOBJECT_BLACKLISTED_FIELDS;
 
-		if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$name]) && !in_array($name,$this->blacklisted_display_fields)) {
+		if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$name]) && !in_array($name,$GENERICOBJECT_BLACKLISTED_FIELDS)) {
 			
 			$this->startColumn();
 			echo $GENERICOBJECT_AVAILABLE_FIELDS[$name]['name'];
@@ -282,5 +296,14 @@ class PluginGenericObject extends CommonDBTM {
 		}
 	}
 
+	function getUsedFields()
+	{
+		global $GENERICOBJECT_BLACKLISTED_FIELDS;
+		$used = array();
+		foreach ($this->fields as $field => $value) {
+			if (!in_array($field,$GENERICOBJECT_BLACKLISTED_FIELDS))
+				$used[$field] = $value; 
+		}
+	}
 }
 ?>

@@ -47,7 +47,18 @@ define ("GENERICOBJECT_CLASS_TEMPLATE",GLPI_ROOT."/plugins/genericobject/objects
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
-	global $PLUGIN_HOOKS,$LANG,$CFG_GLPI;
+	global $PLUGIN_HOOKS,$LANG,$CFG_GLPI,$GENERICOBJECT_BLACKLISTED_FIELDS;
+
+	$GENERICOBJECT_BLACKLISTED_FIELDS = array (
+		"object_type",
+		"table",
+		"deleted",
+		"ID",
+		"FK_entities",
+		"recursive",
+		"is_template",
+		"notes"
+	);
 
 	$plugin = new Plugin;
 	

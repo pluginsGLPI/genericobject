@@ -1,4 +1,6 @@
 <?php
+
+
 /*
  ----------------------------------------------------------------------
  GLPI - Gestionnaire Libre de Parc Informatique
@@ -27,32 +29,13 @@
  ------------------------------------------------------------------------
 */
 
-// Original Author of file: Walid NOUH
+// Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-
-$LANG['genericobject']['title'][1]="Gestion d'objets";
-
-$LANG['genericobject']['common'][1]="Identifiant interne";
-$LANG['genericobject']['common'][2]="Type interne";
-$LANG['genericobject']['common'][3]="Etat";
-
-$LANG['genericobject']['profile'][0] = "Gestion des droits";
-$LANG['genericobject']['profile'][1] = "Associer des tickets à cet objet d'inventaire";
-$LANG['genericobject']['setup'][1] = "Plugin non utilisable depuis le helpdesk";
-
-$LANG['genericobject']['config'][1] = "Utiliser";
-$LANG['genericobject']['config'][2] = "Etat de l'objet";
-$LANG['genericobject']['config'][3] = "Comportement";
-$LANG['genericobject']['config'][4] = "Liaisons";
-$LANG['genericobject']['config'][5] = "Pas de fichier de langue disponible pour ce type d'objet : celui-ci ne peut-être utilisé!";
-$LANG['genericobject']['config'][6] = "Types d'objets";
-$LANG['genericobject']['config'][7] = "Prévisualisation";
-
-
-$LANG['genericobject']['state'][1] = "En création";
-$LANG['genericobject']['state'][2] = "En utilisation";
-
-$LANG['genericobject']['fields'][1] = "Champs associés à l'objet";
-
+function plugin_genericobject_showPrevisualisationForm($type) {
+	$name = plugin_genericobject_getNameByID($type);
+	$object = new CommonItem;
+	$object->setType($type, true);
+	$object->obj->showForm('', '', '', true);
+}
 ?>

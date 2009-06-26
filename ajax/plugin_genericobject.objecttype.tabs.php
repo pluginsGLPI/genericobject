@@ -48,12 +48,22 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 $type = new PluginGenericObjectType;
 		switch($_POST['glpi_tab']){
 			case -1:
-					showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);
 					$type->showBehaviourForm($_POST['target'],$_POST["ID"]);
+					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["ID"]);
+					showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);
 				break;
 			case 2 :
 					$type->showBehaviourForm($_POST['target'],$_POST["ID"]);
 				break;		
+			case 3 :
+					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["ID"]);
+				break;		
+			case 4 :
+				break;		
+			case 5 :
+			$type->getFromDB($_POST["ID"]);
+			plugin_genericobject_showPrevisualisationForm($type->fields["device_type"]);
+			break;
 			case 12 :
 				showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);
 				break;

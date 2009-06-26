@@ -248,6 +248,11 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 	return $search_options;
 }
 
+/**
+ * Get an object type configuration by device_type
+ * @param device_type the object device type
+ * @return an array which contains all the type's configuration
+ */
 function plugin_genericobject_getObjectTypeConfiguration($device_type)
 {
 	$objecttype = new PluginGenericObjectType;
@@ -255,6 +260,15 @@ function plugin_genericobject_getObjectTypeConfiguration($device_type)
 	return $objecttype->fields;
 }
 
+function plugin_genericobject_addObjectTypeDirectory($name)
+{
+	
+}
+/**
+ * Include locales for a specific type
+ * @name object type's name
+ * @return nothing
+ */
 function plugin_genericobject_includeLocales($name) {
 	global $CFG_GLPI, $LANG;
 	
@@ -275,6 +289,11 @@ function plugin_genericobject_includeLocales($name) {
 	}
 }
 
+/**
+ * Include object type class
+ * @name object type's name
+ * @return nothing
+ */
 function plugin_genericobject_includeClass($name) {
 	//If class comes directly with the plugin
 	if (file_exists(GLPI_ROOT."/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php"))
@@ -290,6 +309,11 @@ function plugin_genericobject_includeClass($name) {
 		
 }
 
+/**
+ * Add object type table + entries in glpi_display
+ * @name object type's name
+ * @return nothing
+ */
 function plugin_genericobject_addTable($name)
 {
 	global $DB;
@@ -306,17 +330,21 @@ function plugin_genericobject_addTable($name)
 			) ENGINE = MYISAM COMMENT = '$name table';";
 	$DB->query($query);
 	
-	$type = plugin_genericobject_getObjectIdentifierByName($name);
 	$query ="INSERT INTO `glpi_display` (`ID`, `type`, `num`, `rank`, `FK_users`) VALUES
-			(NULL, $type, 2, 1, 0);";
+			(NULL, ".plugin_genericobject_getIDByName($name).", 2, 1, 0);";
 	$DB->query($query);
 	
 }
 
+/**
+ * Delete object type table + entries in glpi_display
+ * @name object type's name
+ * @return nothing
+ */
 function plugin_genericobject_deleteTable($name)
 {
 	global $DB;
-	$type = plugin_genericobject_getObjectIdentifierByName($name);
+	$type = plugin_genericobject_getIDByName($name);
 	syslog(LOG_ERR,"DELETE FROM `glpi_display` WHERE type='$type'");
 	$DB->query("DELETE FROM `glpi_display` WHERE type='$type'");
 

@@ -53,8 +53,10 @@ class PluginGenericObjectType extends CommonDBTM{
 		$ong[1] = $LANG['title'][26];
 		if($ID>0)
 		{
-			$ong[2]=$LANG['genericobject']['config'][3];
-			$ong[3]=$LANG['genericobject']['config'][4];
+			$ong[2] = $LANG['genericobject']['config'][3];
+			$ong[3] = $LANG['rulesengine'][12];
+			$ong[4] = $LANG['genericobject']['config'][4];
+			$ong[5] = $LANG['genericobject']['config'][7];
 			$ong[12] = $LANG['title'][38];	
 		}
 
