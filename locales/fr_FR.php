@@ -32,6 +32,7 @@
 // ----------------------------------------------------------------------
 
 $LANG['genericobject']['title'][1]="Gestion d'objets";
+$LANG['genericobject']['title'][2]="Types d'objets";
 
 $LANG['genericobject']['common'][1]="Identifiant interne";
 $LANG['genericobject']['common'][2]="Type interne";

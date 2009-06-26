@@ -34,7 +34,7 @@ $NEEDED_ITEMS = array("search");
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-commonHeader(PLUGIN_GENERICOBJECT_TYPE,$_SERVER['PHP_SELF'],"plugins","genericobject","type");
+commonHeader($LANG['genericobject']['title'][2],$_SERVER['PHP_SELF'],"plugins","genericobject","type");
 
 checkRight("config","w");
  
