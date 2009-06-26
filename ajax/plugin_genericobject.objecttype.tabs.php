@@ -44,10 +44,13 @@ if(!isset($_POST["ID"])) {
 }
 
 $type = new PluginGenericObjectType;
-$type->getFromDB($_POST["ID"]);
-
-plugin_genericobject_registerOneType($type->fields);
-plugin_genericobject_includeLocales($type->fields["name"]);
+if ($_POST["ID"] != '')
+{
+	$type->getFromDB($_POST["ID"]);
+	
+	plugin_genericobject_registerOneType($type->fields);
+	plugin_genericobject_includeLocales($type->fields["name"]);
+}
 
 if(!isset($_POST["sort"])) $_POST["sort"] = "";
 if(!isset($_POST["order"])) $_POST["order"] = "";

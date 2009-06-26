@@ -36,7 +36,7 @@
 define('GLPI_ROOT', '../..'); 
 include (GLPI_ROOT . "/inc/includes.php"); 
 
-commonHeader($LANG["Menu"][0],$_SERVER['PHP_SELF'],"plugins","genericobject");
+commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'],"plugins","genericobject");
 
 echo "<table class='tab_cadre_fixe'>";
 echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";

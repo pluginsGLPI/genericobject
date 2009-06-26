@@ -286,7 +286,9 @@ function plugin_genericobject_includeLocales($name) {
 
 	} else {
 		logInFile('php-errors', "includeLocales($name) => not found\n");
+		return false;
 	}
+	return true;
 }
 
 /**

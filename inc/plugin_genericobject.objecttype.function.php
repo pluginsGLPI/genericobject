@@ -173,4 +173,27 @@ function plugin_genericobject_addFieldInDB($table,$field)
 		$DB->query($query);
 	}
 }
+
+function plugin_genericobject_addDropdownTable($name,$field)
+{
+	global $DB;
+	if (!TableExists("glpi_dropdown_plugin_$name_$field"))
+	{
+		$query = "CREATE TABLE `glpi_dropdown_plugin_$name_$field` (
+		  `ID` int(11) NOT NULL auto_increment,
+		  `name` varchar(255) collate utf8_unicode_ci default NULL,
+		  `comments` text collate utf8_unicode_ci,
+		  PRIMARY KEY  (`ID`),
+		  KEY `name` (`name`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+		$DB->query($query);
+	}
+}
+
+function plugin_genericobject_deleteDropdownTable($name,$field)
+{
+	global $DB;
+	if (TableExists("glpi_dropdown_plugin_$name_$field"))
+		$DB->query("DROP TABLE `glpi_dropdown_plugin_$name_$field`");
+}
 ?>
