@@ -81,6 +81,7 @@ function plugin_genericobject_deleteClassFile($name)
 function plugin_genericobject_showObjectFieldsForm($target,$ID)
 {
 	global $LANG,$DB,$GENERICOBJECT_BLACKLISTED_FIELDS,$GENERICOBJECT_AVAILABLE_FIELDS,$CFG_GLPI;
+
 	$object_type = new PluginGenericObjectType;
 	$object_type->getFromDB($ID);
 	
@@ -94,7 +95,7 @@ function plugin_genericobject_showObjectFieldsForm($target,$ID)
 	echo "<table class='tab_cadre_fixe' >";
 	echo "<input type='hidden' name='ID' value='$ID'>";
 	echo "<tr class='tab_bg_1'><th colspan='3'>";
-	echo $LANG['genericobject']['fields'][1]." : ".$LANG['genericobject'][$object_type->fields["name"]][1];
+	echo $LANG['genericobject']['fields'][1]." : ".(isset($LANG['genericobject'][$object_type->fields["name"]][1])?$LANG['genericobject'][$object_type->fields["name"]][1]:$object_type->fields["name"]);
 	echo "</th></tr>";
 
 	echo "<tr class='tab_bg_1'><th></th>";
@@ -141,14 +142,19 @@ function plugin_genericobject_showObjectFieldsForm($target,$ID)
 	echo "</table></div></form>";
 }
 
-function plugin_genericobject_deleteFieldFromDB($table,$field)
+function plugin_genericobject_deleteFieldFromDB($table,$field,$name)
 {
 	global $DB;
 	if (FieldExists($table,$field))
+	{
 		$DB->query("ALTER TABLE `$table` DROP `$field`;");
+		if (plugin_genericobject_isDropdownTypeSpecific($field))
+			plugin_genericobject_deleteDropdownTable($name,$field);	 
+	}
+		
 }
 
-function plugin_genericobject_addFieldInDB($table,$field)
+function plugin_genericobject_addFieldInDB($table,$field,$name)
 {
 	global $DB,$GENERICOBJECT_AVAILABLE_FIELDS;
 	$query = "ALTER TABLE `$table` ADD `$field` ";
@@ -166,6 +172,11 @@ function plugin_genericobject_addFieldInDB($table,$field)
 				$query.="TEXT NULL";
 				break;
 			case 'dropdown':
+				$query.="INT ( 11 ) NOT NULL DEFAULT 0";
+				if (plugin_genericobject_isDropdownTypeSpecific($field))
+					plugin_genericobject_addDropdownTable($name,$field);
+					
+				break;			
 			case 'integer':
 				$query.="INT ( 11 ) NOT NULL DEFAULT 0";
 				break;
@@ -177,9 +188,9 @@ function plugin_genericobject_addFieldInDB($table,$field)
 function plugin_genericobject_addDropdownTable($name,$field)
 {
 	global $DB;
-	if (!TableExists("glpi_dropdown_plugin_$name_$field"))
+	if (!TableExists(plugin_genericobject_getDropdownTableName($name,$field)))
 	{
-		$query = "CREATE TABLE `glpi_dropdown_plugin_$name_$field` (
+		$query = "CREATE TABLE `".plugin_genericobject_getDropdownTableName($name,$field)."` (
 		  `ID` int(11) NOT NULL auto_increment,
 		  `name` varchar(255) collate utf8_unicode_ci default NULL,
 		  `comments` text collate utf8_unicode_ci,
@@ -193,7 +204,59 @@ function plugin_genericobject_addDropdownTable($name,$field)
 function plugin_genericobject_deleteDropdownTable($name,$field)
 {
 	global $DB;
-	if (TableExists("glpi_dropdown_plugin_$name_$field"))
-		$DB->query("DROP TABLE `glpi_dropdown_plugin_$name_$field`");
+	if (TableExists(plugin_genericobject_getDropdownTableName($name,$field)))
+		$DB->query("DROP TABLE `".plugin_genericobject_getDropdownTableName($name,$field)."`");
+}
+
+/**
+ * Add object type table + entries in glpi_display
+ * @name object type's name
+ * @return nothing
+ */
+function plugin_genericobject_addTable($name)
+{
+	global $DB;
+	$query = "CREATE TABLE `glpi_plugin_genericobject_$name` (
+			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
+	 		`name` VARCHAR( 255 ) NOT NULL ,
+			`FK_entities` INT( 11 ) NOT NULL DEFAULT 0,
+			`object_type` INT( 11 ) NOT NULL DEFAULT 0,
+			`deleted` INT( 1 ) NOT NULL DEFAULT 0,
+	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
+	 		`comments` TEXT NULL  ,
+	 		`notes` TEXT NULL  ,
+	 		PRIMARY KEY ( `ID` ) 
+			) ENGINE = MYISAM COMMENT = '$name table';";
+	$DB->query($query);
+	
+	$query ="INSERT INTO `glpi_display` (`ID`, `type`, `num`, `rank`, `FK_users`) VALUES
+			(NULL, ".plugin_genericobject_getIDByName($name).", 2, 1, 0);";
+	$DB->query($query);
+	
+}
+
+/**
+ * Delete object type table + entries in glpi_display
+ * @name object type's name
+ * @return nothing
+ */
+function plugin_genericobject_deleteTable($name)
+{
+	global $DB;
+	$type = plugin_genericobject_getIDByName($name);
+	$DB->query("DELETE FROM `glpi_display` WHERE type='$type'");
+	$DB->query("DROP TABLE IF EXISTS `glpi_plugin_genericobject_$name`");
+}
+
+function plugin_genericobject_getDropdownTableName($name,$field)
+{
+	return "glpi_dropdown_plugin_".$name."_".$field;
+}
+
+function plugin_genericobject_isDropdownTypeSpecific($field)
+{
+	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	return (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type']) &&
+				 $GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type'] == 'type_specific');
 }
 ?>

@@ -63,7 +63,7 @@ elseif (isset($_POST["delete_field"]))
 		if ($value == 1)
 		{
 			$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
-			plugin_genericobject_deleteFieldFromDB($table,$field);
+			plugin_genericobject_deleteFieldFromDB($table,$field,$type->fields["name"]);
 			addMessageAfterRedirect($LANG['genericobject']['fields'][5],true);
 		}
 		glpi_header($_SERVER['HTTP_REFERER']);
@@ -77,7 +77,7 @@ elseif (isset($_POST["add_field"]))
 		plugin_genericobject_includeLocales($type->fields["name"]);
 
 		$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
-		plugin_genericobject_addFieldInDB($table,$_POST["new_field"]);
+		plugin_genericobject_addFieldInDB($table,$_POST["new_field"],$type->fields["name"]);
 		addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
 	}
 	glpi_header($_SERVER['HTTP_REFERER']);

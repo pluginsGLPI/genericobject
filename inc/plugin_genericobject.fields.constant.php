@@ -56,14 +56,12 @@ $GENERICOBJECT_AVAILABLE_FIELDS['comments']['field']='comments';
 $GENERICOBJECT_AVAILABLE_FIELDS['comments']['input_type']='multitext';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['name']=$LANG['common'][17];
-$GENERICOBJECT_AVAILABLE_FIELDS['type']['table']='glpi_type_computers';
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['linkfield']='type';
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['input_type']='dropdown';
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['dropdown_type']='type_specific';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['name']=$LANG['common'][22];
-$GENERICOBJECT_AVAILABLE_FIELDS['model']['table']='glpi_dropdown_model';
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['linkfield']='model';
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['input_type']='dropdown';

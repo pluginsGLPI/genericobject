@@ -36,23 +36,10 @@ class PluginGenericObject extends CommonDBTM {
 	//Object type configuration
 	private $type_infos = array ();
 
-	//Fields not to be used in form display
-/*
-	private $blacklisted_display_fields = array (
-		"object_type",
-		"table",
-		"deleted",
-		"ID",
-		"FK_entities",
-		"recursive",
-		"is_template"
-	);
-*/
 	//Internal field counter
 	private $cpt = 0;
 
 	function __construct($device_type = 0) {
-
 		if ($device_type)
 			$this->setType($device_type);
 		else
@@ -241,7 +228,6 @@ class PluginGenericObject extends CommonDBTM {
 						echo $value;	
 					break;
 				case 'text' :
-					
 					if ($canedit)
 					{
 						$table = plugin_genericobject_getObjectTableNameByName($name);
@@ -251,10 +237,19 @@ class PluginGenericObject extends CommonDBTM {
 						echo $value;	
 					break;
 				case 'dropdown' :
+					if (plugin_genericobject_isDropdownTypeSpecific($name))
+					{
+						$device_name = plugin_genericobject_getNameByID($this->type);
+						$table = plugin_genericobject_getDropdownTableName($device_name,$name);
+					}
+						
+					else	
+						$table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
+
 					if ($canedit)
-						dropdownValue($GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'], $name, $value, 1);
+						dropdownValue($table, $name, $value, 1);
 					else
-						echo getDropdownName($GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'], $value);	
+						echo getDropdownName($table, $value);	
 					break;
 				case 'dropdown_yesno' :
 					if ($canedit)

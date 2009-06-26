@@ -181,7 +181,7 @@ function plugin_genericobject_registerOneType($type) {
 			'tablename' => $tablename,
 			'formpage' => 'front/plugin_genericobject.object.form.php',
 			'searchpage' => 'front/plugin_genericobject.search.php',
-			'typename' => $LANG["genericobject"][$name][1],
+			'typename' => (isset($LANG["genericobject"][$name][1])?$LANG["genericobject"][$name][1]:$name),
 			'deleted_tables' => ($type["use_deleted"] ? true : false),
 			'template_tables' => ($type["use_template"] ? true : false),
 			'specif_entities_tables' => ($type["use_entity"] ? true : false),
@@ -225,7 +225,11 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 							$search_options[$ID][$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
 							break;
 						case 'dropdown' :
+							if (plugin_genericobject_isDropdownTypeSpecific($field_name))
+				 				$search_options[$ID][$i]['table'] = plugin_genericobject_getDropdownTableName($name,$field_name);
+				 			else	
 							$search_options[$ID][$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
+							
 							$search_options[$ID][$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
 							break;
 						case 'dropdown_yesno' :
@@ -309,54 +313,5 @@ function plugin_genericobject_includeClass($name) {
 	}
 		
 		
-}
-
-/**
- * Add object type table + entries in glpi_display
- * @name object type's name
- * @return nothing
- */
-function plugin_genericobject_addTable($name)
-{
-	global $DB;
-	$query = "CREATE TABLE `glpi_plugin_genericobject_$name` (
-			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
-	 		`name` VARCHAR( 255 ) NOT NULL ,
-			`FK_entities` INT( 11 ) NOT NULL DEFAULT 0,
-			`object_type` INT( 11 ) NOT NULL DEFAULT 0,
-			`deleted` INT( 1 ) NOT NULL DEFAULT 0,
-	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
-	 		`comments` TEXT NULL  ,
-	 		`notes` TEXT NULL  ,
-	 		PRIMARY KEY ( `ID` ) 
-			) ENGINE = MYISAM COMMENT = '$name table';";
-	$DB->query($query);
-	
-	$query ="INSERT INTO `glpi_display` (`ID`, `type`, `num`, `rank`, `FK_users`) VALUES
-			(NULL, ".plugin_genericobject_getIDByName($name).", 2, 1, 0);";
-	$DB->query($query);
-	
-}
-
-/**
- * Delete object type table + entries in glpi_display
- * @name object type's name
- * @return nothing
- */
-function plugin_genericobject_deleteTable($name)
-{
-	global $DB;
-	$type = plugin_genericobject_getIDByName($name);
-	syslog(LOG_ERR,"DELETE FROM `glpi_display` WHERE type='$type'");
-	$DB->query("DELETE FROM `glpi_display` WHERE type='$type'");
-
-	$DB->query("DROP TABLE IF EXISTS `glpi_plugin_genericobject_$name`");
-	
-}
-
-function plugin_genericobject_addBooleanField($name,$field)
-{
-	global $DB;
-	$query = "";	
 }
 ?>
