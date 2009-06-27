@@ -159,7 +159,7 @@ function plugin_genericobject_registerNewTypes() {
  * @return nothing
  */
 function plugin_genericobject_registerOneType($type) {
-	global $LANG, $DB,$PLUGIN_HOOKS;
+	global $LANG, $DB,$PLUGIN_HOOKS,$CFG_GLPI;
 	$name = $type["name"];
 	$typeID = $type["device_type"];
 
@@ -193,6 +193,14 @@ function plugin_genericobject_registerOneType($type) {
 
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type='.$typeID;
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type='.$typeID;
+	
+		/* Later, when per entity and tree dropdowns will be managed !
+		foreach(plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name)
+		{
+			array_push($CFG_GLPI["specif_entities_tables"], $table);
+			array_push($CFG_GLPI["dropdowntree_tables"], $table);
+		}
+		*/
 	}
 }
 

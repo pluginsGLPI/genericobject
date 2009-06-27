@@ -49,11 +49,6 @@ function plugin_genericobject_getSearchOption() {
 	$sopt[PLUGIN_GENERICOBJECT_TYPE][2]['name'] = $LANG["genericobject"]["common"][2];
 	$sopt[PLUGIN_GENERICOBJECT_TYPE][2]['datatype']='itemlink';
 
-	$sopt[PLUGIN_GENERICOBJECT_TYPE][4]['table'] = 'glpi_plugin_genericobject_types';
-	$sopt[PLUGIN_GENERICOBJECT_TYPE][4]['field'] = 'state';
-	$sopt[PLUGIN_GENERICOBJECT_TYPE][4]['linkfield'] = 'state';
-	$sopt[PLUGIN_GENERICOBJECT_TYPE][4]['name'] = $LANG["genericobject"]["common"][3];
-
 	$sopt[PLUGIN_GENERICOBJECT_TYPE][5]['table'] = 'glpi_plugin_genericobject_types';
 	$sopt[PLUGIN_GENERICOBJECT_TYPE][5]['field'] = 'status';
 	$sopt[PLUGIN_GENERICOBJECT_TYPE][5]['linkfield'] = 'status';
@@ -201,18 +196,35 @@ function plugin_genericobject_AssignToTicket($types){
 
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown() {
-	// Table => Name
-	global $LANG;
+	$dropdowns = array();
 	
 	$plugin = new Plugin();
-	
 	if ($plugin->isActivated("genericobject"))
-		return array (
-			"glpi_dropdown_plugin_compte_type" => $LANG['plugin_compte']['setup'][2],
-			"glpi_dropdown_plugin_compte_status" => $LANG['plugin_compte'][9]
-		);
-	else
-		return array ();
+	{
+		foreach (plugin_genericobject_getAllTypes() as $tmp => $values)
+			plugin_genericobject_getDropdownSpecific($dropdowns,$values);
+	}
+
+	return $dropdowns;	
+}
+
+// Define dropdown relations
+function plugin_genericobject_getDatabaseRelations(){
+	$dropdowns = array();
+
+	$plugin = new Plugin();
+	if ($plugin->isActivated("genericobject"))
+	{
+		foreach (plugin_genericobject_getAllTypes() as $tmp => $values)
+		{
+			plugin_genericobject_getDatabaseRelationsSpecificDropdown($dropdowns,$values);
+			if ($values["use_entity"])
+				$dropdowns["glpi_entities"][plugin_genericobject_getObjectTableNameByName($values["name"])] = "FK_entities";
+		}
+			
+	}
+
+	return $dropdowns;	
 }
 
 ?>

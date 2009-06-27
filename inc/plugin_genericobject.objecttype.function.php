@@ -275,4 +275,47 @@ function plugin_genericobject_disableTemplateManagement($name) {
 		$DB->query($query);
 	}
 }
+
+function plugin_genericobject_getDropdownSpecificFields()
+{
+	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	$specific_fields = array();
+	
+	foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values)
+		if (isset($values["dropdown_type"]) && $values["dropdown_type"] == 'type_specific')
+			$specific_fields[$field] = $field;
+
+	return $specific_fields;			
+}
+
+function plugin_genericobject_getDropdownSpecific(&$dropdowns,$type)
+{
+	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	$specific_types = plugin_genericobject_getDropdownSpecificFields();
+	$table = plugin_genericobject_getTableNameByName($type["name"]);
+	
+	foreach ($specific_types as $ID => $field)
+		if (FieldExists($table,$field))
+			$dropdowns[plugin_genericobject_getDropdownTableName($type["name"],$field)] = plugin_genericobject_getObjectName($type["name"]).' : '.$GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+}
+
+function plugin_genericobject_getDatabaseRelationsSpecificDropdown(&$dropdowns,$type)
+{
+	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	$specific_types = plugin_genericobject_getDropdownSpecificFields();
+	$table = plugin_genericobject_getTableNameByName($type["name"]);
+	
+	foreach ($specific_types as $ID => $field)
+		if (FieldExists($table,$field))
+			$dropdowns[$table] = array (plugin_genericobject_getDropdownTableName($table,$field)=>$GENERICOBJECT_AVAILABLE_FIELDS[$field]['linkfield']);
+}
+
+function plugin_genericobject_getSpecificDropdownsTablesByType($type)
+{
+	$dropdowns = array();
+	$object_type = new PluginGenericObjectType;
+	$object_type->getFromDBByType($type);
+	plugin_genericobject_getDropdownSpecific($dropdowns,$object_type->fields);
+	return $dropdowns;
+}
 ?>
