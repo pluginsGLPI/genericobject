@@ -247,7 +247,15 @@ class PluginGenericObject extends CommonDBTM {
 						$table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
 
 					if ($canedit)
-						dropdownValue($table, $name, $value, 1);
+					{
+						if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity']) && $GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity'] == 'entity_restrict')
+							$entity_restrict = $this->fields["FK_entities"];
+						else
+							$entity_restrict = getEntitySons($this->fields["FK_entities"]);
+								
+						dropdownValue($table, $name, $value, 1,$entity_restrict);
+					}
+						
 					else
 						echo getDropdownName($table, $value);	
 					break;

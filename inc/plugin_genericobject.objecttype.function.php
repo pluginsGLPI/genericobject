@@ -180,6 +180,8 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 function plugin_genericobject_addDropdownTable($name, $field) {
 	global $DB;
 	if (!TableExists(plugin_genericobject_getDropdownTableName($name, $field))) {
+		if (!plugin_genericobject_isDropdownEntityRestrict($field))
+		{
 		$query = "CREATE TABLE `" . plugin_genericobject_getDropdownTableName($name, $field) . "` (
 				  `ID` int(11) NOT NULL auto_increment,
 				  `name` varchar(255) collate utf8_unicode_ci default NULL,
@@ -187,6 +189,23 @@ function plugin_genericobject_addDropdownTable($name, $field) {
 				  PRIMARY KEY  (`ID`),
 				  KEY `name` (`name`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+		}
+		else
+		{
+			$query ="CREATE TABLE IF NOT EXISTS `".plugin_genericobject_getDropdownTableName($name, $field)."` (
+			  `ID` int(11) NOT NULL auto_increment,
+			  `FK_entities` int(11) NOT NULL default '0',
+			  `name` varchar(255) collate utf8_unicode_ci default NULL,
+			  `parentID` int(11) NOT NULL default '0',
+			  `completename` text collate utf8_unicode_ci,
+			  `comments` text collate utf8_unicode_ci,
+			  `level` int(11) NOT NULL default '0',
+			  PRIMARY KEY  (`ID`),
+			  UNIQUE KEY `name` (`name`,`parentID`,`FK_entities`),
+			  KEY `parentID` (`parentID`),
+			  KEY `FK_entities` (`FK_entities`)
+			) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1061 ;";
+		}
 		$DB->query($query);
 	}
 }
@@ -245,6 +264,11 @@ function plugin_genericobject_isDropdownTypeSpecific($field) {
 	return (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type']) && $GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type'] == 'type_specific');
 }
 
+function plugin_genericobject_isDropdownEntityRestrict($field) {
+	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	return (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['entity']) && $GENERICOBJECT_AVAILABLE_FIELDS[$field]['entity'] == 'entity_restrict');
+}
+
 function plugin_genericobject_enableTemplateManagement($name) {
 	global $DB;
 	$table = plugin_genericobject_getTableNameByName($name);
@@ -288,7 +312,7 @@ function plugin_genericobject_getDropdownSpecificFields()
 	return $specific_fields;			
 }
 
-function plugin_genericobject_getDropdownSpecific(&$dropdowns,$type)
+function plugin_genericobject_getDropdownSpecific(&$dropdowns,$type,$check_entity=false)
 {
 	global $GENERICOBJECT_AVAILABLE_FIELDS;
 	$specific_types = plugin_genericobject_getDropdownSpecificFields();
@@ -296,7 +320,10 @@ function plugin_genericobject_getDropdownSpecific(&$dropdowns,$type)
 	
 	foreach ($specific_types as $ID => $field)
 		if (FieldExists($table,$field))
-			$dropdowns[plugin_genericobject_getDropdownTableName($type["name"],$field)] = plugin_genericobject_getObjectName($type["name"]).' : '.$GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+		{
+			if (!$check_entity || ($check_entity && plugin_genericobject_isDropdownEntityRestrict($field)))
+				$dropdowns[plugin_genericobject_getDropdownTableName($type["name"],$field)] = plugin_genericobject_getObjectName($type["name"]).' : '.$GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+		}
 }
 
 function plugin_genericobject_getDatabaseRelationsSpecificDropdown(&$dropdowns,$type)
@@ -315,7 +342,7 @@ function plugin_genericobject_getSpecificDropdownsTablesByType($type)
 	$dropdowns = array();
 	$object_type = new PluginGenericObjectType;
 	$object_type->getFromDBByType($type);
-	plugin_genericobject_getDropdownSpecific($dropdowns,$object_type->fields);
+	plugin_genericobject_getDropdownSpecific($dropdowns,$object_type->fields,true);
 	return $dropdowns;
 }
 ?>

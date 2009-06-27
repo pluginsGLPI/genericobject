@@ -90,6 +90,7 @@ $GENERICOBJECT_AVAILABLE_FIELDS['location']['table']='glpi_dropdown_locations';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['linkfield']='location';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['location']['entity']='entity_restrict';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['name']=$LANG['joblist'][0];
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['table']='glpi_dropdown_state';
