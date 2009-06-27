@@ -114,12 +114,14 @@ function plugin_genericobject_install() {
 
 	$query = "CREATE TABLE `glpi_plugin_genericobject_furniture` (
 			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
+	 		`name` VARCHAR( 255 ) NOT NULL ,
 			`FK_entities` INT( 11 ) NOT NULL DEFAULT 0,
-	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
 			`object_type` INT( 11 ) NOT NULL DEFAULT 0,
+			`deleted` INT( 1 ) NOT NULL DEFAULT 0,
+	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
+	 		`comments` TEXT NULL  ,
+	 		`notes` TEXT NULL  ,
 	 		`status` INT (11 ) NOT NULL DEFAULT 0 ,
-	 		`name` VARCHAR( 255 )  collate utf8_unicode_ci NOT NULL ,
-	 		`deleted` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`is_template` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`type` INT ( 11 ) NOT NULL DEFAULT 0 ,
 	 		`model` INT ( 11 ) NOT NULL DEFAULT 0 ,
@@ -128,8 +130,6 @@ function plugin_genericobject_install() {
 	 		`FK_glpi_enterprise` INT ( 11 ) NULL DEFAULT 0 ,
 	 		`serial` VARCHAR ( 255 )  collate utf8_unicode_ci NOT NULL DEFAULT '' ,
 	 		`otherserial` VARCHAR ( 255 )  collate utf8_unicode_ci NOT NULL DEFAULT '' ,
-	 		`comments` TEXT NULL  ,
-	 		`notes` TEXT NULL  ,
 	 		PRIMARY KEY ( `ID` ) 
 			) ENGINE = MYISAM COMMENT = 'Object specific definition table';";
 	$DB->query($query);

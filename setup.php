@@ -57,7 +57,8 @@ function plugin_init_genericobject() {
 		"FK_entities",
 		"recursive",
 		"is_template",
-		"notes"
+		"notes",
+		"tplname"
 	);
 
 	$plugin = new Plugin;

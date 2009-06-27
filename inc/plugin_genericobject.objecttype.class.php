@@ -181,12 +181,12 @@ class PluginGenericObjectType extends CommonDBTM{
 		echo $LANG['genericobject']['config'][3];
 		echo "</th></tr>";
 
-		$use = array("use_tickets"=>$LANG['Menu'][31],
+		$use = array("use_entity"=>$LANG['Menu'][37],
+					"use_recursivity"=>$LANG['entity'][9],
+					"use_tickets"=>$LANG['Menu'][31],
 					"use_deleted"=>$LANG['ocsconfig'][49],
 					"use_notes"=>$LANG['title'][37],
 					"use_history"=>$LANG['title'][38],
-					"use_entity"=>$LANG['Menu'][37],
-					"use_recursivity"=>$LANG['entity'][9],
 					"use_template"=>$LANG['common'][14],
 					"use_infocoms"=>$LANG['financial'][3],
 					"use_documents"=>$LANG['Menu'][27],
@@ -195,9 +195,19 @@ class PluginGenericObjectType extends CommonDBTM{
 		{
 			echo "<tr class='tab_bg_1'>";
 			echo "<td>".$LANG['genericobject']['config'][1]." ".$label."</td>";
-			echo "<td>";
-			dropdownYesNo($right,$this->fields[$right]);
-			echo "</td>";
+			if ($right == 'use_recursivity' && !$this->fields['use_entity'])
+			{
+				echo "<td>";
+				echo "<input type='hidden' name='use_recursivity' value='0'>\n";
+				echo $LANG['choice'][0];
+				echo "</td>";
+			}
+			else
+			{
+				echo "<td>";
+				dropdownYesNo($right,$this->fields[$right]);
+				echo "</td>";
+			}
 			echo "</tr>";
 		}
 
