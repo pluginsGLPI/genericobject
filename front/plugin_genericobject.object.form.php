@@ -1,4 +1,5 @@
 <?php
+
 /*
  ----------------------------------------------------------------------
  GLPI - Gestionnaire Libre de Parc Informatique
@@ -27,47 +28,41 @@
  ------------------------------------------------------------------------
 */
 
-// Original Author of file: BALPE Dévi
+// Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (isset($_REQUEST['device_type']))
+if (isset ($_REQUEST['device_type']))
 	$_SESSION["plugin_genericobject_device_type"] = $_REQUEST['device_type'];
 
-if (!isset($_REQUEST["ID"]))
+if (!isset ($_REQUEST["ID"]))
 	$_REQUEST["ID"] = '';
 
 $name = plugin_genericobject_getNameByID($_SESSION["plugin_genericobject_device_type"]);
 $object = new CommonItem;
-$object->setType($_SESSION["plugin_genericobject_device_type"],true);
+$object->setType($_SESSION["plugin_genericobject_device_type"], true);
 
-if (isset($_POST["add"]))
-{
+if (isset ($_POST["add"])) {
 	$object->obj->add($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);	
-}	
-elseif (isset($_POST["update"]))
-{
+	glpi_header($_SERVER["HTTP_REFERER"]);
+}
+elseif (isset ($_POST["update"])) {
 	$object->obj->update($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);	
+	glpi_header($_SERVER["HTTP_REFERER"]);
 }
-elseif (isset($_POST["restore"]))
-{
+elseif (isset ($_POST["restore"])) {
 	$object->obj->restore($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);	
+	glpi_header($_SERVER["HTTP_REFERER"]);
 }
-elseif (isset($_POST["delete"]))
-{
+elseif (isset ($_POST["delete"])) {
 	$object->obj->delete($_POST);
-	glpi_header($CFG_GLPI["root_doc"] . '/'.$SEARCH_PAGES[$_SESSION["plugin_genericobject_device_type"]]."?device_type=".$_SESSION["plugin_genericobject_device_type"]);	
+	glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$_SESSION["plugin_genericobject_device_type"]] . "?device_type=" . $_SESSION["plugin_genericobject_device_type"]);
 }
-	
 
-
-commonHeader($LANG["genericobject"][$name][1],$_SERVER['PHP_SELF'],"plugins","genericobject",$name);
-$object->obj->showForm($_SERVER["PHP_SELF"],$_REQUEST["ID"]);
+commonHeader(plugin_genericobject_getObjectName($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
+$object->obj->showForm($_SERVER["PHP_SELF"], $_REQUEST["ID"]);
 
 commonFooter();
 ?>

@@ -99,6 +99,15 @@ class PluginGenericObjectType extends CommonDBTM{
 			
 		echo "</td>";
 		echo "</tr>";
+
+		echo "<tr class='tab_bg_1'>";
+		echo "<td>".$LANG['genericobject']['config'][9]."</td>";
+		echo "<td>";
+		if ($ID)
+			echo plugin_genericobject_getObjectName($this->fields["name"]);
+		echo "</td>";
+		echo "</tr>";
+
 		
 		echo "<tr class='tab_bg_1'>";				
 		echo "<td>".$LANG['genericobject']['common'][2]."</td>";
@@ -115,29 +124,6 @@ class PluginGenericObjectType extends CommonDBTM{
 			echo "<input type='hidden' name='device_type' value='".$this->fields["device_type"]."'>";
 		}
 			
-		echo "</td>";
-		echo "</tr>";
-
-		echo "<tr class='tab_bg_1'>";				
-		echo "<td>".$LANG['genericobject']['config'][2]."</td>";
-		echo "<td>"; 
-		if (!$ID)
-		{
-			echo $LANG['genericobject']['state'][1];
-			echo "<input type='hidden' name='state' value='0'>";
-		}
-			
-		else
-		{
-			if (isset($LANG['genericobject'][$this->fields['name']]))
-				plugin_genericobject_dropdownState("state",$this->fields["state"]);
-			else
-			{
-				echo $LANG['genericobject']['config'][5];
-				echo "<input type='hidden' name='state' value='".$this->fields["state"]."'>";					
-			}
-
-		}
 		echo "</td>";
 		echo "</tr>";
 
@@ -246,6 +232,12 @@ class PluginGenericObjectType extends CommonDBTM{
 		$this->getFromDB($input["ID"]);
 		if (isset($input["status"]) && $input["status"])
 			plugin_genericobject_registerOneType($this->fields);
+			
+		if (isset($input["use_template"]))
+			if ($input["use_template"])
+				plugin_genericobject_enableTemplateManagement($this->fields["name"]);	
+			else
+				plugin_genericobject_disableTemplateManagement($this->fields["name"]);	
 		return $input;
 	}
 

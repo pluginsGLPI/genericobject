@@ -76,10 +76,7 @@ function plugin_genericobject_getAllTypes($all=false) {
 	if (TableExists("glpi_plugin_genericobject_types"))
 	{
 		if (!$all)
-		{
-			$where = "state=" . GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED .
-			" AND status=" . GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE;
-		}
+			$where = " status=" . GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE;
 		else
 			$where='';
 		return getAllDatasFromTable("glpi_plugin_genericobject_types", $where);
@@ -191,6 +188,8 @@ function plugin_genericobject_registerOneType($type) {
 			'linkgroup_types' => (($type["use_tickets"] && isset($db_fields["FK_groups"]))? true : false),
 		));
 	
+		if ($type["use_template"])
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name]='front/plugin_genericobject.object.form.php?device_type='.$typeID.'&amp;add=0';
 
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type='.$typeID;
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type='.$typeID;
@@ -214,7 +213,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 		$i = 1;
 	
 		if (!empty ($fields)) {
-			$search_options[$ID]['common'] = $LANG['genericobject'][$name][1];
+			$search_options[$ID]['common'] = plugin_genericobject_getObjectName($name);
 			foreach ($fields as $field_values) {
 				$field_name = $field_values['Field'];
 				if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name])) {
@@ -313,5 +312,14 @@ function plugin_genericobject_includeClass($name) {
 	}
 		
 		
+}
+
+function plugin_genericobject_getObjectName($name)
+{
+	global $LANG;
+	if (isset($LANG['genericobject'][$name][1]))
+		return $LANG['genericobject'][$name][1];
+	else
+		return $name;	
 }
 ?>

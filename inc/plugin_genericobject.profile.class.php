@@ -65,9 +65,9 @@ class PluginGenericObjectProfile extends CommonDBTM {
 		if (!empty ($types)) {
 			foreach ($types as $tmp => $profile) {
 				$name = plugin_genericobject_getNameByID($profile['device_type']);
-				echo "<th><th align='center' colspan='2' class='tab_bg_2'>".$LANG['genericobject'][$profile['name']][1]."</td></th>";
+				echo "<th><th align='center' colspan='2' class='tab_bg_2'>".plugin_genericobject_getObjectName($profile['name'])."</td></th>";
 				echo "<tr class='tab_bg_2'>";
-				echo "<td>" . $LANG['genericobject'][$profile['name']][1] . ":</td><td>";
+				echo "<td>" . plugin_genericobject_getObjectName($profile['name']) . ":</td><td>";
 				dropdownNoneReadWrite($name, $this->fields[$profile['name']], 1, 1, 1);
 				echo "</td>";
 				echo "</tr>";

@@ -50,6 +50,7 @@ $LANG['genericobject']['config'][5] = "Pas de fichier de langue disponible pour 
 $LANG['genericobject']['config'][6] = "Types d'objets";
 $LANG['genericobject']['config'][7] = "Prévisualisation";
 $LANG['genericobject']['config'][8] = "Prévisualisation d'un objet de ce type";
+$LANG['genericobject']['config'][9] = "Libellé";
 
 $LANG['genericobject']['state'][1] = "En création";
 $LANG['genericobject']['state'][2] = "En utilisation";

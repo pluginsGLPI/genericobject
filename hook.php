@@ -193,12 +193,26 @@ function plugin_genericobject_AssignToTicket($types){
 	global $LANG;
 	
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
-	{
 		if (plugin_genericobject_haveRight($value["name"].'_open_ticket',"1"))
-			$types[$value['device_type']]=$LANG['genericobject'][$value['name']][1];
-	}
+			$types[$value['device_type']]=plugin_genericobject_getObjectName($value['name']);
 		
 	return $types;
+}
+
+// Define Dropdown tables to be manage in GLPI :
+function plugin_genericobject_getDropdown() {
+	// Table => Name
+	global $LANG;
+	
+	$plugin = new Plugin();
+	
+	if ($plugin->isActivated("genericobject"))
+		return array (
+			"glpi_dropdown_plugin_compte_type" => $LANG['plugin_compte']['setup'][2],
+			"glpi_dropdown_plugin_compte_status" => $LANG['plugin_compte'][9]
+		);
+	else
+		return array ();
 }
 
 ?>
