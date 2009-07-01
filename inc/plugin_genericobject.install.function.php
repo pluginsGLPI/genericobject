@@ -94,12 +94,14 @@ function plugin_genericobject_install() {
 			) ENGINE = MYISAM COMMENT = 'Object types definition table';";
 	$DB->query($query);
 
+/*
 	$query = "INSERT INTO `glpi_plugin_genericobject_types` (
 				`ID`,`device_type` ,`state` ,`status` ,`name` ,`use_deleted` ,`use_notes`,
 				`use_history` ,`use_entity` ,`use_recursivity` ,`use_template` ,`use_infocoms` ,
 				`use_documents` ,`use_tickets` ,`use_links` ,`use_loans`)
 				VALUES (NULL , '4090', '1', '1', 'furniture', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0');";
 	$DB->query($query);
+*/
 
 	$query = "CREATE TABLE `glpi_plugin_genericobject_profiles` (
 			`ID` int(11) NOT NULL auto_increment,
@@ -112,6 +114,7 @@ function plugin_genericobject_install() {
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 	$DB->query($query);
 
+/*
 	$query = "CREATE TABLE `glpi_plugin_genericobject_furniture` (
 			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
 	 		`name` VARCHAR( 255 ) NOT NULL ,
@@ -121,7 +124,7 @@ function plugin_genericobject_install() {
 	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
 	 		`comments` TEXT NULL  ,
 	 		`notes` TEXT NULL  ,
-	 		`status` INT (11 ) NOT NULL DEFAULT 0 ,
+	 		`state` INT (11 ) NOT NULL DEFAULT 0 ,
 	 		`is_template` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`type` INT ( 11 ) NOT NULL DEFAULT 0 ,
 	 		`model` INT ( 11 ) NOT NULL DEFAULT 0 ,
@@ -133,7 +136,31 @@ function plugin_genericobject_install() {
 	 		PRIMARY KEY ( `ID` ) 
 			) ENGINE = MYISAM COMMENT = 'Object specific definition table';";
 	$DB->query($query);
+*/
+	$query = "CREATE TABLE `glpi_plugin_genericobject_type_fields` (
+	`ID` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`device_type` INT( 11 ) NOT NULL DEFAULT 0 ,
+	`name` VARCHAR( 255 )   collate utf8_unicode_ci NOT NULL DEFAULT '' ,
+	`rank` INT( 11 ) NOT NULL DEFAULT 0 ,
+	`mandatory` INT( 1 ) NOT NULL ,
+	`entity_restrict` INT( 1 ) NOT NULL ,
+	`unique` INT( 1 ) NOT NULL
+	) ENGINE = MYISAM  COMMENT = 'Field type description';";
+	$DB->query($query);
 
+/*
+	plugin_genericobject_addDropdownTable('furniture','type');
+	plugin_genericobject_addDropdownTable('furniture','model');
+*/	
+
+	$query = "CREATE TABLE `glpi_plugin_genericobject_type_links` (
+			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+			`device_type` INT( 11 ) NOT NULL ,
+			`destination_type` INT( 11 ) NOT NULL ,
+			PRIMARY KEY ( `ID` )
+			) ENGINE = MYISAM COMMENT = 'Device type links definitions';";
+	$DB->query($query);
+	
 	$query ="INSERT INTO `glpi_display` (`ID`, `type`, `num`, `rank`, `FK_users`) VALUES
 			(NULL, 4850, 10, 6, 0),
 			(NULL, 4850, 9, 5, 0),
@@ -154,11 +181,16 @@ function plugin_genericobject_install() {
 		if (!is_dir(GENERICOBJECT_CLASS_PATH))
 			@ mkdir(GENERICOBJECT_CLASS_PATH,0777,true) or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
 		
+	plugin_init_genericobject();
 	return true;
 }
 
 function plugin_genericobject_uninstall() {
 	global $DB;
+
+	//Delete search display preferences
+	$query="DELETE FROM glpi_display WHERE type='4850';";
+	$DB->query($query);
 
 	//For each type
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
@@ -175,26 +207,33 @@ function plugin_genericobject_uninstall() {
 			$DB->query($query);
 		}
 		
+		//Drop device_type link table
+		plugin_genericobject_deleteLinkTable($value["device_type"]);
+		
 		//Delete if exists data_injection models
 		if (TableExists("glpi_plugin_data_injection_models"))
+		{
 			$DB->query("DELETE FROM glpi_plugin_data_injection_models, glpi_plugin_data_injection_mappings, glpi_plugin_data_injection_infos USING glpi_plugin_data_injection_models, glpi_plugin_data_injection_mappings, glpi_plugin_data_injection_infos
 			WHERE glpi_plugin_data_injection_models.device_type=".$value["device_type"]."
 			AND glpi_plugin_data_injection_mappings.model_id=glpi_plugin_data_injection_models.ID
 			AND glpi_plugin_data_injection_infos.model_id=glpi_plugin_data_injection_models.ID");
+		}
 
-		//Delete type table
+		plugin_genericobject_deleteSpecificDropdownTables($value["device_type"]);
+			
+		//Drop type table
 		$DB->query("DROP TABLE IF EXISTS `" .
 		plugin_genericobject_getTableNameByName($value["name"]) . "`");
 	}
 
-	//Delete search display preferences
-	$query="DELETE FROM glpi_display WHERE type='".PLUGIN_GENERICOBJECT_TYPE."';";
-	$DB->query($query);
-
 	//Delete plugin's table
 	$tables = array (
 		"glpi_plugin_genericobject_types",
-		"glpi_plugin_genericobject_profiles"
+		"glpi_plugin_genericobject_profiles",
+//		"glpi_dropdown_plugin_genericobject_furniture_type",
+//		"glpi_dropdown_plugin_genericobject_furniture_model",
+		"glpi_plugin_genericobject_type_fields",
+		"glpi_plugin_genericobject_type_links"
 	);
 	foreach ($tables as $table)
 		$DB->query("DROP TABLE IF EXISTS `$table`");

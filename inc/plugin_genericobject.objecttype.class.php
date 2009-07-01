@@ -63,7 +63,7 @@ class PluginGenericObjectType extends CommonDBTM{
 		return $ong;
 	}
 
-	function showForm($target,$ID)
+	function showForm($target,$ID,$extraparams=array())
 	{
 		global $LANG;
 		if ($ID > 0){
@@ -76,7 +76,7 @@ class PluginGenericObjectType extends CommonDBTM{
 		} 
 
 		plugin_genericobject_includeLocales($this->fields["name"]);
-		$this->showTabs($ID, '', $_SESSION['glpi_tab']);
+		$this->showTabs($ID, '', $_SESSION['glpi_tab'],$extraparams);
 		$canedit = $this->can($ID,'w');
 
 		echo "<form name='form' method='post' action=\"$target\">";
@@ -154,7 +154,7 @@ class PluginGenericObjectType extends CommonDBTM{
 		}
 
 
-		echo "</table></div>";
+		echo "</table></div></form>";
 		echo "<div id='tabcontent'></div>";
 		echo "<script type='text/javascript'>loadDefaultTab();</script>";
 		
@@ -174,7 +174,7 @@ class PluginGenericObjectType extends CommonDBTM{
 
 		$canedit = $this->can($ID,'w');
 
-		echo "<form name='form' method='post' action=\"$target\">";
+		echo "<form name='behaviour' method='post' action=\"$target\">";
 		echo "<div class='center'>";
 		echo "<table class='tab_cadre_fixe' >";
 		echo "<tr class='tab_bg_1'><th colspan='2'>";
@@ -234,6 +234,8 @@ class PluginGenericObjectType extends CommonDBTM{
 		plugin_genericobject_addTable($input["name"]);
 		plugin_genericobject_addClassFile($input["name"],plugin_genericobject_getObjectClassByName($input["name"]),$input["device_type"]);
 		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["ID"]);
+		plugin_genericobject_addNewField($input["device_type"],"name");
+		plugin_genericobject_addLinkTable($input["device_type"]);
 		return true;
 	}
 
@@ -254,9 +256,25 @@ class PluginGenericObjectType extends CommonDBTM{
 	function pre_deleteItem($ID)
 	{
 		$this->getFromDB($ID);
+
+		//Delete all tables related to the type (dropdowns)
+		plugin_genericobject_deleteSpecificDropdownTables($this->fields["device_type"]);
+
+		//Delete relation table
+		plugin_genericobject_deleteLinkTable($this->fields["device_type"]);
+		
+		//Remove class from the filesystem
 		plugin_genericobject_deleteClassFile($this->fields["name"]);
+		
+		//Delete profile informations associated with this type
 		plugin_genericobject_deleteTypeFromProfile($this->fields["name"]);
+		
+		//Table type table in DB
 		plugin_genericobject_deleteTable($this->fields["name"]);
+		
+		//Remove fields from the type_fields table
+		plugin_genericobject_deleteAllFieldsByType($this->fields["device_type"]);
+		
 		return true;
 	}
 }

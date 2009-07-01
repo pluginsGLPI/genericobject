@@ -41,4 +41,55 @@ function plugin_genericobject_showPrevisualisationForm($type) {
 	$object->setType($type, true);
 	$object->obj->showForm('', '', '', true);
 }
+
+function plugin_genericobject_changeFieldOrder($field,$type,$action){
+		global $DB;
+
+		$sql ="SELECT ID, rank FROM glpi_plugin_genericobject_type_fields WHERE device_type='$type' AND name='$field'";
+
+		if ($result = $DB->query($sql)){
+			if ($DB->numrows($result)==1){
+				
+				$current_rank=$DB->result($result,0,"rank");
+				$ID = $DB->result($result,0,"ID");
+				// Search rules to switch
+				$sql2="";
+				switch ($action){
+					case "up":
+						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$type' AND rank < '$current_rank' ORDER BY rank DESC LIMIT 1";
+					break;
+					case "down":
+						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$type' AND rank > '$current_rank' ORDER BY rank ASC LIMIT 1";
+					break;
+					default :
+						return false;
+					break;
+				}
+				
+				if ($result2 = $DB->query($sql2)){
+					if ($DB->numrows($result2)==1){
+						list($other_ID,$new_rank)=$DB->fetch_array($result2);
+						$query="UPDATE `glpi_plugin_genericobject_type_fields` SET rank='$new_rank' WHERE ID ='$ID'";
+						$query2="UPDATE `glpi_plugin_genericobject_type_fields` SET rank='$current_rank' WHERE ID ='$other_ID'";
+						return ($DB->query($query)&&$DB->query($query2));
+					}
+				}
+			}
+			return false;
+		}
+	}
+
+function plugin_genericobject_reorderFields($device_type)
+{
+	global $DB;
+	$query = "SELECT ID FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type' ORDER BY rank ASC";
+	$result = $DB->query($query);
+	$i = 0;
+	while ($datas = $DB->fetch_array($result))
+	{
+		$query = "UPDATE `glpi_plugin_genericobject_type_fields` SET rank=$i WHERE device_type='$device_type' AND ID=".$datas["ID"];
+		$DB->query($query);
+		$i++;	
+	}	
+}
 ?>

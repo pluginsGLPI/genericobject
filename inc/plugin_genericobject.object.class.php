@@ -159,7 +159,9 @@ class PluginGenericObject extends CommonDBTM {
 		echo "<table class='tab_cadre_fixe' >";
 		$this->showFormHeader($ID, $withtemplate,2);
 
-		foreach ($this->fields as $field => $value) {
+		foreach(plugin_genericobject_getFieldsByType($this->type) as $field => $tmp)
+		{
+			$value = $this->fields[$field];
 			$this->displayField($canedit,$field, $value);
 		}
 		$this->closeColumn();
@@ -248,12 +250,12 @@ class PluginGenericObject extends CommonDBTM {
 
 					if ($canedit)
 					{
-						if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity']) && $GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity'] == 'entity_restrict')
+						//if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity']) && $GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity'] == 'entity_restrict')
 							$entity_restrict = $this->fields["FK_entities"];
-						else
-							$entity_restrict = getEntitySons($this->fields["FK_entities"]);
+						//else
+						//	$entity_restrict = getEntitySons($this->fields["FK_entities"]);
 								
-						dropdownValue($table, $name, $value, 1,$entity_restrict);
+						dropdownValue($table, $name, $value, 1, $entity_restrict);
 					}
 						
 					else

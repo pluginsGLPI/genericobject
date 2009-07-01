@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @version $Id: HEADER 7762 2009-01-06 18:30:32Z moyo $
  -------------------------------------------------------------------------
@@ -32,22 +33,22 @@
 // Original Author of file:
 // Purpose of file:
 // ----------------------------------------------------------------------
-include_once(GLPI_ROOT."/inc/profile.class.php");
+include_once (GLPI_ROOT . "/inc/profile.class.php");
 foreach (glob(GLPI_ROOT . '/plugins/genericobject/inc/*.php') as $file)
-        include_once ($file);
+	include_once ($file);
 
-define ("GENERICOBJECT_OBJECTTYPE_STATE_DRAFT",0);
-define ("GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED",1);
+define("GENERICOBJECT_OBJECTTYPE_STATE_DRAFT", 0);
+define("GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED", 1);
 
-define ("GENERICOBJECT_OBJECTTYPE_STATUS_INACTIVE",0);
-define ("GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE",1);
+define("GENERICOBJECT_OBJECTTYPE_STATUS_INACTIVE", 0);
+define("GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE", 1);
 
-define ("GENERICOBJECT_CLASS_PATH",GLPI_PLUGIN_DOC_DIR."/genericobject/classes");
-define ("GENERICOBJECT_CLASS_TEMPLATE",GLPI_ROOT."/plugins/genericobject/objects/generic.class.tpl");
+define("GENERICOBJECT_CLASS_PATH", GLPI_PLUGIN_DOC_DIR . "/genericobject/classes");
+define("GENERICOBJECT_CLASS_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/generic.class.tpl");
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
-	global $PLUGIN_HOOKS,$LANG,$CFG_GLPI,$GENERICOBJECT_BLACKLISTED_FIELDS;
+	global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS, $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, $GENERICOBJECT_LINK_TYPES;
 
 	$GENERICOBJECT_BLACKLISTED_FIELDS = array (
 		"object_type",
@@ -61,74 +62,94 @@ function plugin_init_genericobject() {
 		"tplname"
 	);
 
-	$plugin = new Plugin;
-	
+	$GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS = array (
+		"ID",
+		"name",
+		"notes",
+		"FK_entities",
+		"recursive",
+		
+	);
 
-	if ($plugin->isActivated("genericobject"))
-	{
-	
+	$GENERICOBJECT_LINK_TYPES = array (
+		COMPUTER_TYPE,
+		SOFTWARE_TYPE,
+		SOFTWARELICENSE_TYPE,
+		MONITOR_TYPE,
+		PRINTER_TYPE,
+		PERIPHERAL_TYPE,
+		PHONE_TYPE,
+		NETWORKING_TYPE,
+		CONTRACT_TYPE,
+		CONTACT_TYPE,
+		ENTERPRISE_TYPE,
+		ENTITY_TYPE
+	);
+
+	$plugin = new Plugin;
+
+	if ($plugin->isActivated("genericobject")) {
+
 		// Params : plugin name - string type - ID - Array of attributes
-		registerPluginType('genericobject', 'PLUGIN_GENERICOBJECT_TYPE', 4850, array(
-			'classname'  => 'PluginGenericObjectType',
-			'tablename'  => 'glpi_plugin_genericobject_types',
-			'formpage'   => 'front/plugin_genericobject.objecttype.form.php',
+		registerPluginType('genericobject', 'PLUGIN_GENERICOBJECT_TYPE', 4850, array (
+			'classname' => 'PluginGenericObjectType',
+			'tablename' => 'glpi_plugin_genericobject_types',
+			'formpage' => 'front/plugin_genericobject.objecttype.form.php',
 			'searchpage' => 'front/plugin_genericobject.objecttype.php',
-			'typename'   => $LANG['genericobject']['config'][6],
-			'massiveaction_noupdate'=>true
-			));
-	
+			'typename' => $LANG['genericobject']['config'][6],
+			'massiveaction_noupdate' => true
+		));
+
 		/* load changeprofile function */
 		$PLUGIN_HOOKS['change_profile']['genericobject'] = 'plugin_genericobject_changeprofile';
-		
+
 		// Display a menu entry ?
 		$PLUGIN_HOOKS['menu_entry']['genericobject'] = true;
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/plugin_genericobject.objecttype.php';
-	
+
 		// Config page
-		if (haveRight('config','w')) {
+		if (haveRight('config', 'w')) {
 			$PLUGIN_HOOKS['config_page']['genericobject'] = 'front/plugin_genericobject.objecttype.php';
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type'] = 'front/plugin_genericobject.objecttype.form.php';
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/plugin_genericobject.objecttype.php';
 		}
-	
+
 		$PLUGIN_HOOKS['change_profile']['genericobject'] = 'plugin_change_profile_genericobject';
 		$PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
-		
+
 		// Onglets management
 		$PLUGIN_HOOKS['headings']['genericobject'] = 'plugin_get_headings_genericobject';
 		$PLUGIN_HOOKS['headings_action']['genericobject'] = 'plugin_headings_actions_genericobject';
-	
+
 		plugin_genericobject_registerNewTypes();
 	}
 }
 
-
 // Get the name and the version of the plugin - Needed
-function plugin_version_genericobject(){
+function plugin_version_genericobject() {
 	global $LANG;
-	return array( 
-		'name'    => $LANG["genericobject"]["title"][1],
+	return array (
+		'name' => $LANG["genericobject"]["title"][1],
 		'version' => '1.0.0',
 		'author' => 'Walid Nouh',
-		'homepage'=> 'http://glpi-project.org',
-		'minGlpiVersion' => '0.72',// For compatibility / no install in version < 0.72
+		'homepage' => 'http://glpi-project.org',
+		'minGlpiVersion' => '0.72', // For compatibility / no install in version < 0.72
+		
 	);
 }
 
-
 // Optional : check prerequisites before install : may print errors or add to message after redirect
-function plugin_genericobject_check_prerequisites(){
-	if (GLPI_VERSION>=0.72){
+function plugin_genericobject_check_prerequisites() {
+	if (GLPI_VERSION >= 0.72) {
 		return true;
 	} else {
 		echo "GLPI >= 0.72 is needed";
 	}
 }
 
-
 // Check configuration process for plugin : need to return true if succeeded
 // Can display a message only if failure and $verbose is true
-function plugin_genericobject_check_config($verbose=false){
+function plugin_genericobject_check_config($verbose = false) {
 	global $LANG;
 
 	if (true) { // Your configuration check
@@ -141,14 +162,13 @@ function plugin_genericobject_check_config($verbose=false){
 }
 
 function plugin_genericobject_haveTypeRight($type, $right) {
-	switch ($type)
-	{
-		case PLUGIN_GENERICOBJECT_TYPE:
-			return haveRight("config",$right);
+	switch ($type) {
+		case PLUGIN_GENERICOBJECT_TYPE :
+			return haveRight("config", $right);
 		default :
-			return plugin_genericobject_checkRight(plugin_genericobject_getNameByID($type),$right); 
+			return plugin_genericobject_checkRight(plugin_genericobject_getNameByID($type), $right);
 	}
-	
+
 }
 
 function plugin_genericobject_checkRight($module, $right) {
@@ -165,5 +185,4 @@ function plugin_genericobject_checkRight($module, $right) {
 	}
 	return true;
 }
-
 ?>

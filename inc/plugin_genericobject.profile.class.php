@@ -102,7 +102,6 @@ class PluginGenericObjectProfile extends CommonDBTM {
 
 		$prof_datas = array ();
 		$query = "SELECT `device_name`, `right`, `open_ticket` FROM `" . $this->table . "` WHERE name='" . $profile->fields["name"] . "'";
-		syslog(LOG_ERR,$query);
 		$result = $DB->query($query);
 		while ($prof = $DB->fetch_array($result))
 		{

@@ -159,7 +159,7 @@ function plugin_genericobject_registerNewTypes() {
  * @return nothing
  */
 function plugin_genericobject_registerOneType($type) {
-	global $LANG, $DB,$PLUGIN_HOOKS,$CFG_GLPI;
+	global $LANG, $DB,$PLUGIN_HOOKS,$CFG_GLPI,$GENERICOBJECT_LINK_TYPES;
 	$name = $type["name"];
 	$typeID = $type["device_type"];
 
@@ -187,7 +187,9 @@ function plugin_genericobject_registerOneType($type) {
 			'linkuser_types' => (($type["use_tickets"] && isset($db_fields["FK_users"]))? true : false),
 			'linkgroup_types' => (($type["use_tickets"] && isset($db_fields["FK_groups"]))? true : false),
 		));
-	
+
+		array_push($GENERICOBJECT_LINK_TYPES,$typeID);
+			
 		if ($type["use_template"])
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name]='front/plugin_genericobject.object.form.php?device_type='.$typeID.'&amp;add=0';
 
@@ -284,7 +286,6 @@ function plugin_genericobject_includeLocales($name) {
 	global $CFG_GLPI, $LANG;
 	
 	$prefix = GLPI_ROOT . "/plugins/genericobject/objects/". $name ."/" . $name;
-	syslog(LOG_ERR,$prefix); 
 	if (isset ($_SESSION["glpilanguage"]) 
 		&& file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
 		include_once  ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);

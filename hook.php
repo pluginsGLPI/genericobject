@@ -226,5 +226,4 @@ function plugin_genericobject_getDatabaseRelations(){
 
 	return $dropdowns;	
 }
-
 ?>

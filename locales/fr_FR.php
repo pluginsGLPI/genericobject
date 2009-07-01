@@ -61,5 +61,7 @@ $LANG['genericobject']['fields'][3] = "Libellé";
 $LANG['genericobject']['fields'][4] = "Ajout d'un nouveau champs";
 $LANG['genericobject']['fields'][5] = "Champs supprimé(s) avec succès";
 $LANG['genericobject']['fields'][6] = "Champs ajouté avec succès";
+$LANG['genericobject']['fields'][7] = "Obligatoire";
+$LANG['genericobject']['fields'][8] = "Unique";
 
 ?>
