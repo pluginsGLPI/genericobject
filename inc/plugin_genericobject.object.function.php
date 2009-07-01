@@ -92,4 +92,65 @@ function plugin_genericobject_reorderFields($device_type)
 		$i++;	
 	}	
 }
+
+function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$entity,$add=0)
+{
+	global $LANG,$DB;
+	$name = plugin_genericobject_getNameByID($device_type);
+	$commonitem = new CommonItem;
+	$commonitem->setType($device_type,true);
+	$title = plugin_genericobject_getObjectName($name);
+	$query = "SELECT * FROM `".$commonitem->obj->table."` WHERE is_template = '1' AND FK_entities='" . $_SESSION["glpiactive_entity"] . "' ORDER by tplname";
+	if ($result = $DB->query($query)) {
+
+		echo "<div class='center'><table class='tab_cadre' width='50%'>";
+		if ($add) {
+			echo "<tr><th>" . $LANG['common'][7] . " - $title:</th></tr>";
+		} else {
+			echo "<tr><th colspan='2'>" . $LANG['common'][14] . " - $title:</th></tr>";
+		}
+
+		if ($add) {
+
+			echo "<tr>";
+			echo "<td align='center' class='tab_bg_1'>";
+			echo "<a href=\"$target?device_type=$device_type&ID=-1&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;" . $LANG['common'][31] . "&nbsp;&nbsp;&nbsp;</a></td>";
+			echo "</tr>";
+		}
+	
+		while ($data = $DB->fetch_array($result)) {
+
+			$templname = $data["tplname"];
+			if ($_SESSION["glpiview_ID"]||empty($data["tplname"])){
+            			$templname.= "(".$data["ID"].")";
+			}
+			echo "<tr>";
+			echo "<td align='center' class='tab_bg_1'>";
+			
+			if (haveTypeRight($device_type, "w") && !$add) {
+				echo "<a href=\"$target?device_type=$device_type&ID=" . $data["ID"] . "&amp;withtemplate=1\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
+
+				echo "<td align='center' class='tab_bg_2'>";
+				echo "<strong><a href=\"$target?device_type=$device_type&ID=" . $data["ID"] . "&amp;purge=purge&amp;withtemplate=1\">" . $LANG['buttons'][6] . "</a></strong>";
+				echo "</td>";
+			} else {
+				echo "<a href=\"$target?device_type=$device_type&ID=" . $data["ID"] . "&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
+			}
+
+			echo "</tr>";
+
+		}
+
+		if (haveTypeRight($device_type, "w") &&!$add) {
+			echo "<tr>";
+			echo "<td colspan='2' align='center' class='tab_bg_2'>";
+			echo "<strong><a href=\"$target?device_type=$device_type&withtemplate=1\">" . $LANG['common'][9] . "</a></strong>";
+			echo "</td>";
+			echo "</tr>";
+		}
+
+		echo "</table></div>";
+	}
+	
+}
 ?>

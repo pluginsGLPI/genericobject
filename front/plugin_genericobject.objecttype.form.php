@@ -99,6 +99,14 @@ elseif (isset($_POST["add_field"]))
 	}
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
+elseif (isset($_POST["update_links_types"]))
+{
+	$type->getFromDB($_POST["ID"]);
+	plugin_genericobject_deleteAllLinkedDeviceByType($type->fields["device_type"]);
+	foreach($_POST["link_device_type"] as $tmp => $destination_type)
+		plugin_genericobject_addNewLinkedDeviceType($type->fields["device_type"],$destination_type);
+	glpi_header($_SERVER['HTTP_REFERER']);
+}
 
 commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'],"plugins","genericobject","type");
 $type->showForm($_SERVER["PHP_SELF"],$_REQUEST["ID"],$extraparams);

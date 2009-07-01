@@ -64,4 +64,6 @@ $LANG['genericobject']['fields'][6] = "Champs ajouté avec succès";
 $LANG['genericobject']['fields'][7] = "Obligatoire";
 $LANG['genericobject']['fields'][8] = "Unique";
 
+$LANG['genericobject']['links'][1] = "Laison avec d'autres objets";
+
 ?>

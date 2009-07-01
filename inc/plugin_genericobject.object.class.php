@@ -74,6 +74,12 @@ class PluginGenericObject extends CommonDBTM {
 				$ong[6] = $LANG['title'][28];
 			}
 
+			$linked_types = plugin_genericobject_getLinksByType($this->type); 
+			if (!empty($linked_types))
+			{
+				$ong[7] = $LANG['setup'][620];
+			}
+			
 	/*
 			if ($this->type_infos["use_links"] && haveRight("link", "r")) {
 				$ong[7] = $LANG['title'][34];
@@ -124,6 +130,10 @@ class PluginGenericObject extends CommonDBTM {
 		return ($this->type_infos["use_history"]);
 	}
 	
+	function title($name)
+	{
+		displayTitle('', plugin_genericobject_getObjectName($name), plugin_genericobject_getObjectName($name));
+	}
 	function showForm($target, $ID, $withtemplate = '',$previsualisation=false) {
 		global $LANG;
 
@@ -147,7 +157,9 @@ class PluginGenericObject extends CommonDBTM {
 			$canedit = $this->can($ID,'w');	
 		}
 
-		echo "<form name='form' method='post' action=\"$target\">";
+		echo "<form name='form' method='post' action=\"$target?device_type=".$this->type."\">";
+		echo "<input type='hidden' name='device_type' value='" . $this->type . "'>";
+
 		if ($this->type_infos["use_entity"])
 			echo "<input type='hidden' name='FK_entities' value='" . $this->fields["FK_entities"] . "'>";
 
@@ -167,7 +179,7 @@ class PluginGenericObject extends CommonDBTM {
 		$this->closeColumn();
 
 		if(!$previsualisation)
-			$this->displayActionButtons($ID, $canedit);
+			$this->displayActionButtons($ID, $withtemplate, $canedit);
 			
 		echo "</table></div></form>";
 		if(!$previsualisation)
@@ -177,7 +189,7 @@ class PluginGenericObject extends CommonDBTM {
 		}
 	}
 
-	function displayActionButtons($ID, $canedit)
+	function displayActionButtons($ID, $withtemplate, $canedit)
 	{
 		global $LANG;
 		if ($canedit)
@@ -185,7 +197,7 @@ class PluginGenericObject extends CommonDBTM {
 				echo "<tr>";
 				echo "<td class='tab_bg_2' colspan='4' align='center'>";
 
-				if (empty ($ID) || $ID < 0) {
+				if (empty ($ID) || $ID < 0 || $withtemplate==2) {
 					echo "<input type='submit' name='add' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
 				} else {
 					echo "<input type='hidden' name='ID' value=\"$ID\">\n";
@@ -303,6 +315,61 @@ class PluginGenericObject extends CommonDBTM {
 				$this->cpt++;
 			}
 			echo "</tr>";
+		}
+	}
+
+	function prepareInputForAdd($input) {
+
+		if (isset($input["ID"])&&$input["ID"]>0){
+			$input["_oldID"]=$input["ID"];
+		}
+		unset($input['ID']);
+		unset($input['withtemplate']);
+
+		return $input;
+	}
+
+
+	function post_addItem($newID,$input) {
+		global $DB;
+		// Manage add from template
+		if (isset($input["_oldID"])){
+			// ADD Infocoms
+			$ic= new Infocom();
+			if ($ic->getFromDBforDevice($this->type,$input["_oldID"])){
+				$ic->fields["FK_device"]=$newID;
+				unset ($ic->fields["ID"]);
+				if (isset($ic->fields["num_immo"])) {
+					$ic->fields["num_immo"] = autoName($ic->fields["num_immo"], "num_immo", 1, INFOCOM_TYPE,$input['FK_entities']);
+				}
+				if (empty($ic->fields['use_date'])){
+					unset($ic->fields['use_date']);
+				}
+				if (empty($ic->fields['buy_date'])){
+					unset($ic->fields['buy_date']);
+				}
+				$ic->addToDB();
+			}
+
+    		// ADD Contract
+			$query="SELECT FK_contract 
+				FROM glpi_contract_device 
+				WHERE FK_device='".$input["_oldID"]."' AND device_type='".$this->type."';";
+			$result=$DB->query($query);
+			if ($DB->numrows($result)>0){
+				while ($data=$DB->fetch_array($result))
+					addDeviceContract($data["FK_contract"],$this->type,$newID);
+			}
+
+			// ADD Documents
+			$query="SELECT FK_doc 
+				FROM glpi_doc_device 
+				WHERE FK_device='".$input["_oldID"]."' AND device_type='".$this->type."';";
+			$result=$DB->query($query);
+			if ($DB->numrows($result)>0){
+				while ($data=$DB->fetch_array($result))
+					addDeviceDocument($data["FK_doc"],$this->type,$newID);
+			}
 		}
 	}
 }

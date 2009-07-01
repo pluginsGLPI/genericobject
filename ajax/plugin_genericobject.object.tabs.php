@@ -37,7 +37,7 @@ header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
 useplugin('genericobject',true);
-$type = $_SESSION["plugin_genericobject_device_type"];
+$type = $_POST["type"];
 
 
 if(!isset($_POST["ID"])) {

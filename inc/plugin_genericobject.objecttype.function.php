@@ -273,6 +273,11 @@ function plugin_genericobject_getDropdownTableName($name, $field) {
 	return "glpi_dropdown_plugin_genericobject_" . $name . "_" . $field;
 }
 
+function plugin_genericobject_getLinkDeviceTableName($name)
+{
+	return "glpi_plugin_genericobject_".$name."_device";
+}
+
 function plugin_genericobject_isDropdownTypeSpecific($field) {
 	global $GENERICOBJECT_AVAILABLE_FIELDS;
 	return (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type']) && $GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type'] == 'type_specific');

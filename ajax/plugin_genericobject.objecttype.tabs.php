@@ -60,6 +60,9 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 			case -1:
 					$type->showBehaviourForm($_POST['target'],$_POST["ID"]);
 					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["ID"]);
+					plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["ID"]);
+					$type->getFromDB($_POST["ID"]);
+					plugin_genericobject_showPrevisualisationForm($type->fields["device_type"]);
 					showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);
 				break;
 			case 2 :
@@ -69,6 +72,7 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["ID"]);
 				break;		
 			case 4 :
+				plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["ID"]);
 				break;		
 			case 5 :
 				$type->getFromDB($_POST["ID"]);

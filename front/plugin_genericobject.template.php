@@ -34,42 +34,18 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (!isset ($_REQUEST["ID"]))
-	$_REQUEST["ID"] = '';
-if (!isset ($_GET["withtemplate"]))
-	$_GET["withtemplate"] = '';
-
 if (!isset($_SESSION["glpi_plugin_genericobject_device_type"]))
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
 elseif (isset($_REQUEST["device_type"]))
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
 else
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"];
+	
+$type = $_SESSION["glpi_plugin_genericobject_device_type"];
 
 $name = plugin_genericobject_getNameByID($type);
-$object = new CommonItem;
-$object->setType($type, true);
-
-if (isset ($_POST["add"])) {
-	$object->obj->add($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);
-}
-elseif (isset ($_POST["update"])) {
-	$object->obj->update($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);
-}
-elseif (isset ($_POST["restore"])) {
-	$object->obj->restore($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);
-}
-elseif (isset ($_POST["delete"])) {
-	$object->obj->delete($_POST);
-	glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$type] . "?device_type=" . $type);
-}
 
 commonHeader(plugin_genericobject_getObjectName($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
-$object->obj->title($name);
-$object->obj->showForm($_SERVER["PHP_SELF"], $_REQUEST["ID"],$_GET["withtemplate"]);
-
+plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$_GET["device_type"]],$_GET["device_type"],$_SESSION["glpiactive_entity"],$_GET["add"]);
 commonFooter();
 ?>
