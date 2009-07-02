@@ -113,4 +113,14 @@ function plugin_genericobject_deleteTypeFromProfile($name)
 	$query = "DELETE FROM `glpi_plugin_genericobject_profiles` WHERE device_name='$name'";
 	$DB->query($query);
 }
+
+function plugin_change_profile_genericobject()
+{
+	$prof=new PluginGenericObjectProfile();
+	if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['ID']))
+		$_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
+	else
+		unset($_SESSION["glpi_plugin_genericobject_profile"]);
+
+}
 ?>

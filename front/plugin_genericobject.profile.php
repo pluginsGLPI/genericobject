@@ -31,13 +31,14 @@
 $NEEDED_ITEMS=array("profile");
 define('GLPI_ROOT', '../../..'); 
 include (GLPI_ROOT."/inc/includes.php");
-
+include (GLPI_ROOT."/plugins/genericobject/hook.php");
 checkRight("profile","r");
 
 $prof=new PluginGenericObjectProfile();
 /* save profile */
 if (isset ($_POST['update_user_profile'])) {
 	$prof->saveProfileToDB($_POST);
+	plugin_change_profile_genericobject();
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
 ?>

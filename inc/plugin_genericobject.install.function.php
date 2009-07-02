@@ -245,8 +245,8 @@ function plugin_genericobject_uninstall() {
 	plugin_init_genericobject();
 	cleanCache("GLPI_HEADER_".$_SESSION["glpiID"]);
 
-	if (is_dir(PLUGIN_DATA_INJECTION_UPLOAD_DIR)) {
-		deleteDir(PLUGIN_DATA_INJECTION_UPLOAD_DIR);
+	if (is_dir(GENERICOBJECT_CLASS_PATH)) {
+		deleteDir(GENERICOBJECT_CLASS_PATH);
 	}
 
 	return true;

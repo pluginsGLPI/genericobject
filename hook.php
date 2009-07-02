@@ -29,7 +29,7 @@
  ------------------------------------------------------------------------
 */
 
-// Original Author of file: BALPE Dévi & Walid Nouh
+// Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
 function plugin_genericobject_getSearchOption() {
@@ -174,16 +174,6 @@ function plugin_headings_genericobject($type, $ID, $withtemplate = 0)
 	}	
 }
 
-function plugin_change_profile_genericobject()
-{
-	$prof=new PluginGenericObjectProfile();
-	if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['ID']))
-		$_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
-	else
-		unset($_SESSION["glpi_plugin_genericobject_profile"]);
-
-}
-
 function plugin_genericobject_AssignToTicket($types){
 	global $LANG;
 	
@@ -225,5 +215,56 @@ function plugin_genericobject_getDatabaseRelations(){
 	}
 
 	return $dropdowns;	
+}
+
+/**
+ * Integration with data_injection plugin
+ */
+function plugin_genericobject_data_injection_variables()
+{
+	global $DATA_INJECTION_MAPPING,$DATA_INJECTION_INFOS, $GENERICOBJECT_AVAILABLE_FIELDS,$SEARCH_OPTION;
+	
+	$types = plugin_genericobject_getAllTypes();
+	foreach ($types as $tmp => $value)
+	{
+		$name = plugin_genericobject_getNameByID($value["device_type"]);
+		$fields = plugin_genericobject_getFieldsByType($value["device_type"]);
+		foreach ($fields as $field => $object)
+		{
+			switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
+					case 'date':
+					case 'text':
+						$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						break;
+					case 'dropdown' :
+						if (plugin_genericobject_isDropdownTypeSpecific($field))
+						{
+							$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getDropdownTableName($name,$field);
+							$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getDropdownTableName($name,$field);	
+						}
+			 			else
+			 			{
+			 				$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
+			 				$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
+			 			}	
+							
+						break;
+					case 'dropdown_yesno' :
+						$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						break;
+			}
+				
+			$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+			$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
+			$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['type'] = (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?$GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
+
+			$DATA_INJECTION_INFOS[$value["device_type"]][$field]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+			$DATA_INJECTION_INFOS[$value["device_type"]][$field]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
+			$DATA_INJECTION_INFOS[$value["device_type"]][$field]['input_type'] = (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?$GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
+
+		}	
+	}
 }
 ?>

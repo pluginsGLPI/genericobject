@@ -32,20 +32,36 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
+/**
+ * Display object preview form
+ * @param type the object type
+ */
 function plugin_genericobject_showPrevisualisationForm($type) {
 	global $LANG;
-	$name = plugin_genericobject_getNameByID($type);
-	echo "<br>" . $LANG['genericobject']['config'][8] . "<br>";
-
-	$object = new CommonItem;
-	$object->setType($type, true);
-	$object->obj->showForm('', '', '', true);
+	
+	if (plugin_genericobject_haveTypeRight($type,'r'))
+	{
+		$name = plugin_genericobject_getNameByID($type);
+		echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
+	
+		$object = new CommonItem;
+		$object->setType($type, true);
+		$object->obj->showForm('', '', '', true);
+	}
+	else
+		echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";
 }
 
-function plugin_genericobject_changeFieldOrder($field,$type,$action){
+/**
+ * Change object field's order
+ * @param field the field to move up/down
+ * @param device_type object device type
+ * @param action up/down
+ */
+function plugin_genericobject_changeFieldOrder($field,$device_type,$action){
 		global $DB;
 
-		$sql ="SELECT ID, rank FROM glpi_plugin_genericobject_type_fields WHERE device_type='$type' AND name='$field'";
+		$sql ="SELECT ID, rank FROM glpi_plugin_genericobject_type_fields WHERE device_type='$device_type' AND name='$field'";
 
 		if ($result = $DB->query($sql)){
 			if ($DB->numrows($result)==1){
@@ -56,10 +72,10 @@ function plugin_genericobject_changeFieldOrder($field,$type,$action){
 				$sql2="";
 				switch ($action){
 					case "up":
-						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$type' AND rank < '$current_rank' ORDER BY rank DESC LIMIT 1";
+						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type' AND rank < '$current_rank' ORDER BY rank DESC LIMIT 1";
 					break;
 					case "down":
-						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$type' AND rank > '$current_rank' ORDER BY rank ASC LIMIT 1";
+						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type' AND rank > '$current_rank' ORDER BY rank ASC LIMIT 1";
 					break;
 					default :
 						return false;
@@ -79,6 +95,10 @@ function plugin_genericobject_changeFieldOrder($field,$type,$action){
 		}
 	}
 
+/**
+ * Reorder all fields for a type
+ * @param device_type the object type
+ */
 function plugin_genericobject_reorderFields($device_type)
 {
 	global $DB;

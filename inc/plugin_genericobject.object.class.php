@@ -129,6 +129,21 @@ class PluginGenericObject extends CommonDBTM {
 	{
 		return ($this->type_infos["use_history"]);
 	}
+
+	function canUsePluginDataInjection()
+	{
+		return ($this->type_infos["use_plugin_data_injection"]);
+	}
+
+	function canUsePluginPDF()
+	{
+		return ($this->type_infos["use_plugin_pdf"]);
+	}
+
+	function canUsePluginOrder()
+	{
+		return ($this->type_infos["use_plugin_order"]);
+	}
 	
 	function title($name)
 	{

@@ -159,7 +159,7 @@ function plugin_genericobject_registerNewTypes() {
  * @return nothing
  */
 function plugin_genericobject_registerOneType($type) {
-	global $LANG, $DB,$PLUGIN_HOOKS,$CFG_GLPI,$GENERICOBJECT_LINK_TYPES;
+	global $LANG, $DB,$PLUGIN_HOOKS,$CFG_GLPI,$GENERICOBJECT_LINK_TYPES,$IMPORT_PRIMARY_TYPES,$IMPORT_TYPES;
 	$name = $type["name"];
 	$typeID = $type["device_type"];
 
@@ -190,7 +190,17 @@ function plugin_genericobject_registerOneType($type) {
 		));
 
 		array_push($GENERICOBJECT_LINK_TYPES,$typeID);
-			
+		
+		//Integration with data_injection plugin
+		$plugin = new Plugin;
+		if ($type["use_plugin_data_injection"] && $plugin->isActivated("data_injection"))
+		{
+			$PLUGIN_HOOKS['data_injection'][$name] = "plugin_genericobject_data_injection_variables";
+			array_push($IMPORT_PRIMARY_TYPES, $typeID);
+			array_push($IMPORT_TYPES, $typeID);
+		}
+		//End integration with data_injection plugin
+
 		if ($type["use_template"])
 		{
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name]='front/plugin_genericobject.template.php?device_type='.$typeID.'&amp;add=0';
@@ -309,7 +319,6 @@ function plugin_genericobject_includeLocales($name) {
 			include_once  ($prefix . ".fr_FR.php");
 
 	} else {
-		logInFile('php-errors', "includeLocales($name) => not found\n");
 		return false;
 	}
 	return true;

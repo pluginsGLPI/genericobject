@@ -190,24 +190,53 @@ class PluginGenericObjectType extends CommonDBTM{
 					"use_template"=>$LANG['common'][14],
 					"use_infocoms"=>$LANG['financial'][3],
 					"use_documents"=>$LANG['Menu'][27],
-					"use_loans"=>$LANG['Menu'][17]);
+					"use_loans"=>$LANG['Menu'][17],
+					"use_plugin_data_injection"=>$LANG['genericobject']['config'][10],
+					"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
+					"use_plugin_order"=>$LANG['genericobject']['config'][12]);
 		foreach($use as $right => $label)
 		{
 			echo "<tr class='tab_bg_1'>";
 			echo "<td>".$LANG['genericobject']['config'][1]." ".$label."</td>";
-			if ($right == 'use_recursivity' && !$this->fields['use_entity'])
+			echo "<td>";
+
+			switch ($right)
 			{
-				echo "<td>";
-				echo "<input type='hidden' name='use_recursivity' value='0'>\n";
-				echo $LANG['choice'][0];
-				echo "</td>";
+				case 'use_recursivity':
+					if (!$this->fields['use_entity'])
+					{
+						echo "<input type='hidden' name='use_recursivity' value='0'>\n";
+						echo $LANG['choice'][0];
+					}
+					else
+						dropdownYesNo($right,$this->fields[$right]);
+				break;
+				case 'use_plugin_data_injection':
+					$plugin = new Plugin;
+					if ($plugin->isActivated("data_injection"))
+						dropdownYesNo($right,$this->fields[$right]);
+					else
+						echo "<input type='hidden' name='use_plugin_data_injection' value='0'>\n";
+					break;	
+				case 'use_plugin_pdf':
+					$plugin = new Plugin;
+					if ($plugin->isActivated("pdf"))
+						dropdownYesNo($right,$this->fields[$right]);
+					else
+						echo "<input type='hidden' name='use_plugin_pdf' value='0'>\n";
+					break;	
+				case 'use_plugin_order':
+					$plugin = new Plugin;
+					if ($plugin->isActivated("order"))
+						dropdownYesNo($right,$this->fields[$right]);
+					else
+						echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
+					break;	
+				default:
+						dropdownYesNo($right,$this->fields[$right]);
+				break;			
 			}
-			else
-			{
-				echo "<td>";
-				dropdownYesNo($right,$this->fields[$right]);
-				echo "</td>";
-			}
+			echo "</td>";
 			echo "</tr>";
 		}
 
@@ -231,11 +260,22 @@ class PluginGenericObjectType extends CommonDBTM{
 	
 	function post_addItem($ID,$input)
 	{
+		//Add new type table
 		plugin_genericobject_addTable($input["name"]);
+		
+		//Write object class on the filesystem
 		plugin_genericobject_addClassFile($input["name"],plugin_genericobject_getObjectClassByName($input["name"]),$input["device_type"]);
-		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["ID"]);
+		
+		//Create rights for this new object
+		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["ID"],true);
+		
+		//Add default field 'name' for the object
 		plugin_genericobject_addNewField($input["device_type"],"name");
+		
+		//Add new link device table
 		plugin_genericobject_addLinkTable($input["device_type"]);
+		
+		plugin_change_profile_genericobject();
 		return true;
 	}
 

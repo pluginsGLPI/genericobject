@@ -51,9 +51,9 @@ $LANG['genericobject']['config'][6] = "Types d'objets";
 $LANG['genericobject']['config'][7] = "Prévisualisation";
 $LANG['genericobject']['config'][8] = "Prévisualisation d'un objet de ce type";
 $LANG['genericobject']['config'][9] = "Libellé";
-
-$LANG['genericobject']['state'][1] = "En création";
-$LANG['genericobject']['state'][2] = "En utilisation";
+$LANG['genericobject']['config'][10] = "Plugin injection de fichiers";
+$LANG['genericobject']['config'][11] = "Plugin PDF";
+$LANG['genericobject']['config'][12] = "Plugin gestion des commandes";
 
 $LANG['genericobject']['fields'][1] = "Champs associés à l'objet";
 $LANG['genericobject']['fields'][2] = "Nom dans la base";
@@ -63,6 +63,7 @@ $LANG['genericobject']['fields'][5] = "Champs supprimé(s) avec succès";
 $LANG['genericobject']['fields'][6] = "Champs ajouté avec succès";
 $LANG['genericobject']['fields'][7] = "Obligatoire";
 $LANG['genericobject']['fields'][8] = "Unique";
+$LANG['genericobject']['fields'][9] = "Vous devez configurer les droits sur cet objet pour voir la prévisualisation";
 
 $LANG['genericobject']['fields'][30] = "Date de création";
 $LANG['genericobject']['fields'][31] = "Date d'expiration";

@@ -91,7 +91,6 @@ function plugin_init_genericobject() {
 	$plugin = new Plugin;
 
 	if ($plugin->isActivated("genericobject")) {
-
 		foreach (glob(GLPI_ROOT . '/plugins/genericobject/inc/*.php') as $file)
 			include_once ($file);
 
