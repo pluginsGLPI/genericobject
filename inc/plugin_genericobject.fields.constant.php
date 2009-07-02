@@ -55,6 +55,18 @@ $GENERICOBJECT_AVAILABLE_FIELDS['comments']['name']=$LANG['common'][25];
 $GENERICOBJECT_AVAILABLE_FIELDS['comments']['field']='comments';
 $GENERICOBJECT_AVAILABLE_FIELDS['comments']['input_type']='multitext';
 
+$GENERICOBJECT_AVAILABLE_FIELDS['other']['name']=$LANG['common'][62];
+$GENERICOBJECT_AVAILABLE_FIELDS['other']['field']='other';
+$GENERICOBJECT_AVAILABLE_FIELDS['other']['input_type']='text';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['name']=$LANG['genericobject']['fields'][30];
+$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['field']='creationdate';
+$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['input_type']='date';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['name']=$LANG['genericobject']['fields'][31];
+$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['field']='expirationdate';
+$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['input_type']='date';
+
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['name']=$LANG['common'][17];
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['linkfield']='type';

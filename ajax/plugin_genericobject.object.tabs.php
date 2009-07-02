@@ -69,7 +69,7 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 				if ($commonitem->obj->canUseNotes())
 					showNotesForm($_POST['target'],$type,$_POST["ID"]);
 				if ($commonitem->obj->canUseLoans())
-					showReservationForm($type,$_POST["ID"]);
+					showDeviceReservations($_POST['target'],$type,$_POST["ID"]);
 				if ($commonitem->obj->canUseHistory())
 					showHistory($type,$_POST["ID"]);
 				plugin_genericobject_showDevice($_POST['target'],$type,$_POST["ID"]);
@@ -89,16 +89,11 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 			case 7 :
 				plugin_genericobject_showDevice($_POST['target'],$type,$_POST["ID"]);
 				break;
-/*
-			case 7 :
-				showLinkOnDevice($type,$_POST["ID"]);
-				break;
-*/
 			case 10 :
 				showNotesForm($_POST['target'],$type,$_POST["ID"]);
 				break;
 			case 11 :
-				showReservationForm($type,$_POST["ID"]);
+				showDeviceReservations($_POST['target'],$type,$_POST["ID"]);
 				break;
 			case 12 :
 				showHistory($type,$_POST["ID"]);

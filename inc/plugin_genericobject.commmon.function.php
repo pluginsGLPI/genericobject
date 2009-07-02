@@ -182,6 +182,7 @@ function plugin_genericobject_registerOneType($type) {
 			'deleted_tables' => ($type["use_deleted"] ? true : false),
 			'template_tables' => ($type["use_template"] ? true : false),
 			'specif_entities_tables' => ($type["use_entity"] ? true : false),
+			'reservation_types' => ($type["use_loans"] ? true : false),
 			'recursive_type' => ($type["use_recursivity"] ? true : false),
 			'infocom_types' => ($type["use_infocoms"] ? true : false),
 			'linkuser_types' => (($type["use_tickets"] && isset($db_fields["FK_users"]))? true : false),
@@ -227,6 +228,11 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 		$fields = $DB->list_fields($table);
 		$i = 1;
 	
+		$search_options[$ID][80]['table']='glpi_entities';
+		$search_options[$ID][80]['field']='completename';
+		$search_options[$ID][80]['linkfield']='FK_entities';
+		$search_options[$ID][80]['name']=$LANG["entity"][0];
+	
 		if (!empty ($fields)) {
 			$search_options[$ID]['common'] = plugin_genericobject_getObjectName($name);
 			foreach ($fields as $field_values) {
@@ -235,6 +241,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 					$search_options[$ID][$i]['linkfield'] = '';
 					
 					switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['input_type']) {
+						case 'date':
 						case 'text':
 							$search_options[$ID][$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
 							break;

@@ -30,10 +30,16 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-function plugin_genericobject_getFieldsByType($type)
+
+/**
+ * Get all fields for an object type
+ * @device_type the object type
+ * @return an array with all the fields for this type
+ */
+function plugin_genericobject_getFieldsByType($device_type)
 {
 	global $DB;
-	$query = "SELECT * FROM `glpi_plugin_genericobject_type_fields` WHERE device_type=$type ORDER BY rank ASC";
+	$query = "SELECT * FROM `glpi_plugin_genericobject_type_fields` WHERE device_type=$device_type ORDER BY rank ASC";
 	$result = $DB->query($query);
 	$fields = array();
 	
@@ -46,10 +52,15 @@ function plugin_genericobject_getFieldsByType($type)
 	return $fields;
 }
 
-function plugin_genericobject_getNextRanking($type)
+/**
+ * Get next available field display ranking for a type
+ * @type the device_type
+ * @return the next available ranking
+ */
+function plugin_genericobject_getNextRanking($device_type)
 {
 	global $DB;
-	$query = "SELECT MAX(rank) as cpt FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$type'";
+	$query = "SELECT MAX(rank) as cpt FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type'";
 	$result = $DB->query($query);
 	if ($DB->result($result,0,"cpt") != null)
 		return $DB->result($result,0,"cpt") + 1;
@@ -57,6 +68,10 @@ function plugin_genericobject_getNextRanking($type)
 		return 0;	
 }
 
+/**
+ * Add a new field for an object (into object's device table)
+ * @device_type the object type
+ */
 function plugin_genericobject_addNewField($device_type,$name)
 {
 	$type_field = new PluginGenericObjectField;
@@ -74,5 +89,10 @@ function plugin_genericobject_deleteAllFieldsByType($device_type)
 	global $DB;
 	$query = "DELETE FROM `glpi_plugin_genericobject_type_fields` WHERE device_type=$device_type";
 	$DB->query($query);
+}
+
+function plugin_genericobject_setMandatoryField($device_type,$field)
+{
+	
 }
 ?>

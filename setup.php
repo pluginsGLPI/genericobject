@@ -34,8 +34,6 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 include_once (GLPI_ROOT . "/inc/profile.class.php");
-foreach (glob(GLPI_ROOT . '/plugins/genericobject/inc/*.php') as $file)
-	include_once ($file);
 
 define("GENERICOBJECT_OBJECTTYPE_STATE_DRAFT", 0);
 define("GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED", 1);
@@ -89,6 +87,9 @@ function plugin_init_genericobject() {
 	$plugin = new Plugin;
 
 	if ($plugin->isActivated("genericobject")) {
+
+		foreach (glob(GLPI_ROOT . '/plugins/genericobject/inc/*.php') as $file)
+			include_once ($file);
 
 		// Params : plugin name - string type - ID - Array of attributes
 		registerPluginType('genericobject', 'PLUGIN_GENERICOBJECT_TYPE', 4850, array (

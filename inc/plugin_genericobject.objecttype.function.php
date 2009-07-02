@@ -184,11 +184,12 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 				$query .= "INT ( 11 ) NOT NULL DEFAULT 0";
 				if (plugin_genericobject_isDropdownTypeSpecific($field))
 					plugin_genericobject_addDropdownTable($name, $field);
-
 				break;
 			case 'integer' :
 				$query .= "INT ( 11 ) NOT NULL DEFAULT 0";
 				break;
+			case 'date':
+				$query.="date default NULL";	
 		}
 		$DB->query($query);
 	}

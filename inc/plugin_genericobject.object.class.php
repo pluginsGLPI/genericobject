@@ -250,6 +250,12 @@ class PluginGenericObject extends CommonDBTM {
 					else
 						echo $value;	
 					break;
+				case 'date':
+					if ($canedit)
+						showDateFormItem($name,$value,false,true);
+					else
+						echo convDate($value);
+					break;	
 				case 'dropdown' :
 					if (plugin_genericobject_isDropdownTypeSpecific($name))
 					{
