@@ -34,6 +34,10 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 include_once (GLPI_ROOT . "/inc/profile.class.php");
+include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.install.function.php");
+include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.profile.class.php");
+include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.profile.function.php");
+include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.commmon.function.php");
 
 define("GENERICOBJECT_OBJECTTYPE_STATE_DRAFT", 0);
 define("GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED", 1);

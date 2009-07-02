@@ -90,6 +90,9 @@ function plugin_genericobject_install() {
 	 		`use_tickets` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_links` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_loans` INT ( 1 ) NOT NULL DEFAULT 0 ,
+	 		`use_plugin_data_injection` INT ( 1 ) NOT NULL DEFAULT 0 ,
+	 		`use_plugin_pdf` INT ( 1 ) NOT NULL DEFAULT 0 ,
+	 		`use_plugin_order` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		PRIMARY KEY ( `ID` ) 
 			) ENGINE = MYISAM COMMENT = 'Object types definition table';";
 	$DB->query($query);
