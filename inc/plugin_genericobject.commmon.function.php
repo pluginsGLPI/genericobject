@@ -196,7 +196,7 @@ function plugin_genericobject_registerOneType($type) {
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.template.php?device_type='.$typeID.'&amp;add=1';
 		}
 		else
-		$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.template.object.form.php?device_type='.$typeID;	
+		$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type='.$typeID;	
 
 		
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type='.$typeID;

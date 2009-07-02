@@ -39,9 +39,9 @@ if (!isset ($_REQUEST["ID"]))
 if (!isset ($_GET["withtemplate"]))
 	$_GET["withtemplate"] = '';
 
-if (!isset($_SESSION["glpi_plugin_genericobject_device_type"]))
+if (isset($_REQUEST["device_type"]))
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
-elseif (isset($_REQUEST["device_type"]))
+elseif (!isset($_SESSION["glpi_plugin_genericobject_device_type"]))
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
 else
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"];
@@ -65,6 +65,19 @@ elseif (isset ($_POST["restore"])) {
 elseif (isset ($_POST["delete"])) {
 	$object->obj->delete($_POST);
 	glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$type] . "?device_type=" . $type);
+}
+elseif(isset($_POST["add_type_link"]))
+{
+	plugin_genericobject_addDeviceLink($type,$_POST["source_id"],$_POST["type"],$_POST["FK_device"]);
+	glpi_header($_SERVER["HTTP_REFERER"]);
+}
+elseif(isset($_POST["delete_type_link"]))
+{
+	if (isset($_POST["item"]))
+		foreach($_POST["item"] as $item => $value)
+			if ($value==1)
+				plugin_genericobject_deleteDeviceLink($type,$item);
+	glpi_header($_SERVER["HTTP_REFERER"]);
 }
 
 commonHeader(plugin_genericobject_getObjectName($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);

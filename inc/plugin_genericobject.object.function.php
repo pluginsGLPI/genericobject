@@ -95,7 +95,7 @@ function plugin_genericobject_reorderFields($device_type)
 
 function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$entity,$add=0)
 {
-	global $LANG,$DB;
+	global $LANG,$DB,$GENERICOBJECT_LINK_TYPES;
 	$name = plugin_genericobject_getNameByID($device_type);
 	$commonitem = new CommonItem;
 	$commonitem->setType($device_type,true);
@@ -152,5 +152,142 @@ function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$ent
 		echo "</table></div>";
 	}
 	
+}
+
+function plugin_genericobject_showDevice($target,$device_type,$device_id) {
+	global $DB,$CFG_GLPI, $LANG,$INFOFORM_PAGES,$LINK_ID_TABLE,$GENERICOBJECT_LINK_TYPES;
+	
+	$name = plugin_genericobject_getNameByID($device_type);
+	
+	if (!haveTypeRight($name,"r"))	return false;
+	
+	$rand=mt_rand();
+	
+	$commonitem = new CommonItem;
+	if ($commonitem->getFromDB($device_type,$device_id)){
+		$obj = $commonitem->obj;
+		
+		$canedit=$obj->can($device_id,'w'); 
+
+		$query = "SELECT DISTINCT device_type 
+				FROM `".plugin_genericobject_getLinkDeviceTableName($name)."` 
+				WHERE source_id = '$device_id' 
+				ORDER BY device_type";
+		
+		$result = $DB->query($query);
+		$number = $DB->numrows($result);
+
+		$i = 0;
+		if (isMultiEntitiesMode()) {
+			$colsup=1;
+		}else {
+			$colsup=0;
+		}
+		echo "<form method='post' name='link_type_form$rand' id='link_type_form$rand'  action=\"$target\">";
+	
+		echo "<div align='center'><table class='tab_cadrehov'>";
+		echo "<tr><th colspan='".($canedit?(5+$colsup):(4+$colsup))."'>".$LANG['genericobject']['links'][2].":</th></tr><tr>";
+		if ($canedit) {
+			echo "<th>&nbsp;</th>";
+		}
+		echo "<th>".$LANG['common'][17]."</th>";
+		echo "<th>".$LANG['common'][16]."</th>";
+		if (isMultiEntitiesMode())
+			echo "<th>".$LANG['entity'][0]."</th>";
+		echo "<th>".$LANG['common'][19]."</th>";
+		echo "<th>".$LANG['common'][20]."</th>";
+		echo "</tr>";
+	
+		$ci=new CommonItem();
+		while ($i < $number) {
+			$type=$DB->result($result, $i, "device_type");
+			if (haveTypeRight($type,"r")){
+				$column="name";
+				if ($type==TRACKING_TYPE) $column="ID";
+				if ($type==KNOWBASE_TYPE) $column="question";
+
+				$query = "SELECT ".$LINK_ID_TABLE[$type].".*, ".plugin_genericobject_getLinkDeviceTableName($name).".ID AS IDD "
+					." FROM `".plugin_genericobject_getLinkDeviceTableName($name)."`, `".$LINK_ID_TABLE[$type]."`, `".$obj->table."`"
+					." WHERE ".$LINK_ID_TABLE[$type].".ID = ".plugin_genericobject_getLinkDeviceTableName($name).".FK_device 
+					AND ".plugin_genericobject_getLinkDeviceTableName($name).".device_type='$type' 
+					AND ".plugin_genericobject_getLinkDeviceTableName($name).".source_id = '$device_id' ";
+					$query.=getEntitiesRestrictRequest(" AND ",$LINK_ID_TABLE[$type],'','',isset($CFG_GLPI["recursive_type"][$type])); 
+
+					if (in_array($LINK_ID_TABLE[$type],$CFG_GLPI["template_tables"])){
+						$query.=" AND ".$LINK_ID_TABLE[$type].".is_template='0'";
+				}
+				$query.=" ORDER BY ".$obj->table.".FK_entities, ".$LINK_ID_TABLE[$type].".$column";
+
+				if ($result_linked=$DB->query($query))
+					if ($DB->numrows($result_linked)){
+						$ci->setType($type);
+						initNavigateListItems($type,plugin_genericobject_getObjectName($name)." = ".$obj->fields['name']);
+						while ($data=$DB->fetch_assoc($result_linked)){
+							addToNavigateListItems($type,$data["ID"]);
+							$ID="";
+							if ($type==TRACKING_TYPE) $data["name"]=$LANG['job'][38]." ".$data["ID"];
+							if ($type==KNOWBASE_TYPE) $data["name"]=$data["question"];
+							
+							if($_SESSION["glpiview_ID"]||empty($data["name"])) $ID= " (".$data["ID"].")";
+							$item_name= "<a href=\"".$CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$type]."?ID=".$data["ID"]."&device_type=$type\">"
+								.$data["name"]."$ID</a>";
+	
+							echo "<tr class='tab_bg_1'>";
+
+							if ($canedit){
+								echo "<td width='10'>";
+								$sel="";
+								if (isset($_GET["select"])&&$_GET["select"]=="all") $sel="checked";
+								echo "<input type='checkbox' name='item[".$data["IDD"]."]' value='1' $sel>";
+								echo "</td>";
+							}
+							echo "<td class='center'>".$ci->getType()."</td>";
+							
+							echo "<td class='center' ".(isset($data['deleted'])&&$data['deleted']?"class='tab_bg_2_2'":"").">".$item_name."</td>";
+
+							if (isMultiEntitiesMode())
+								echo "<td class='center'>".getDropdownName("glpi_entities",$data['FK_entities'])."</td>";
+							
+							echo "<td class='center'>".(isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
+							echo "<td class='center'>".(isset($data["otherserial"])? "".$data["otherserial"]."" :"-")."</td>";
+							
+							echo "</tr>";
+						}
+					}
+			}
+			$i++;
+		}
+	
+		if ($canedit)	{
+			echo "<tr class='tab_bg_1'><td colspan='".(3+$colsup)."' class='center'>";
+	
+			echo "<input type='hidden' name='source_id' value='$device_id'>";
+			dropdownAllItems("FK_device",0,0,($obj->fields['recursive']?-1:$obj->fields['FK_entities']),plugin_genericobject_getLinksByType($device_type));		
+			echo "</td>";
+			echo "<td colspan='2' class='center' class='tab_bg_2'>";
+			echo "<input type='submit' name='add_type_link' value=\"".$LANG['buttons'][8]."\" class='submit'>";
+			echo "</td></tr>";
+			echo "</table></div>" ;
+			
+			echo "<div class='center'>";
+			echo "<table width='80%' class='tab_glpi'>";
+			echo "<tr><td><img src=\"".$CFG_GLPI["root_doc"]."/pics/arrow-left.png\" alt=''></td><td class='center'><a onclick= \"if ( markCheckboxes('link_type_form$rand') ) return false;\" href='".$_SERVER['PHP_SELF']."?ID=$device_id&amp;select=all'>".$LANG['buttons'][18]."</a></td>";
+			
+			echo "<td>/</td><td class='center'><a onclick= \"if ( unMarkCheckboxes('link_type_form$rand') ) return false;\" href='".$_SERVER['PHP_SELF']."?ID=$device_id&amp;select=none'>".$LANG['buttons'][19]."</a>";
+			echo "</td>";
+			echo "<td align='left' width='80%'>";
+			echo "<input type='submit' name='delete_type_link' value=\"".$LANG['buttons'][6]."\" class='submit'>";
+			echo "</td>";
+			echo "</table>";
+		
+			echo "</div>";
+
+		}else{
+	
+			echo "</table></div>";
+		}
+		echo "</form>";
+	}
+
 }
 ?>

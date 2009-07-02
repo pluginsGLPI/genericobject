@@ -117,9 +117,20 @@ function plugin_genericobject_deleteAllLinkedDeviceByType($device_type)
 	$DB->query("DELETE FROM `glpi_plugin_genericobject_type_links` WHERE device_type='$device_type'");
 }
 
-
-function plugin_genericobject_showLinkedDeviceByID($device_type,$device_id)
+function plugin_genericobject_addDeviceLink($source_type,$source_id,$device_type,$device_id)
 {
-	
+	global $DB;
+	$name = plugin_genericobject_getNameByID($source_type);
+	$table = plugin_genericobject_getLinkDeviceTableName($name);
+	$query = "INSERT INTO `$table` (`ID`, `source_id`, `device_type`, `FK_device`) VALUES (NULL, $source_id, $device_type,$device_id)";
+	$DB->query($query);
+}
+
+function plugin_genericobject_deleteDeviceLink($source_type,$link_id)
+{
+	global $DB;
+	$name = plugin_genericobject_getNameByID($source_type);
+	$table = plugin_genericobject_getLinkDeviceTableName($name);
+	$DB->query("DELETE FROM `$table` WHERE ID=$link_id");
 }
 ?>

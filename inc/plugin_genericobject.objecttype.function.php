@@ -417,7 +417,7 @@ function plugin_genericobject_addLinkTable($type)
 {
 	global $DB;
 	$name = plugin_genericobject_getNameByID($type);
-	$query = "CREATE TABLE IF NOT EXISTS `glpi_plugin_".$name."_device` (
+	$query = "CREATE TABLE IF NOT EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."` (
 	  `ID` int(11) NOT NULL auto_increment,
 	  `source_id` int(11) NOT NULL default '0',
 	  `FK_device` int(11) NOT NULL default '0',
@@ -434,7 +434,7 @@ function plugin_genericobject_deleteLinkTable($type)
 {
 	global $DB;
 	$name = plugin_genericobject_getNameByID($type);
-	$DB->query("DROP TABLE IF EXISTS `glpi_plugin_".$name."_device`");
+	$DB->query("DROP TABLE IF EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."`");
 }
 	
 

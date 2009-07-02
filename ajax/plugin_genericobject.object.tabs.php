@@ -72,6 +72,7 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 					showReservationForm($type,$_POST["ID"]);
 				if ($commonitem->obj->canUseHistory())
 					showHistory($type,$_POST["ID"]);
+				plugin_genericobject_showDevice($_POST['target'],$type,$_POST["ID"]);
 				if (!displayPluginAction($type,$_POST["ID"],$_POST['glpi_tab'])){
 				}
 				break;
@@ -84,6 +85,9 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 				break;
 			case 6:
 				showJobListForItem($type,$_POST["ID"]);
+				break;
+			case 7 :
+				plugin_genericobject_showDevice($_POST['target'],$type,$_POST["ID"]);
 				break;
 /*
 			case 7 :

@@ -65,5 +65,5 @@ $LANG['genericobject']['fields'][7] = "Obligatoire";
 $LANG['genericobject']['fields'][8] = "Unique";
 
 $LANG['genericobject']['links'][1] = "Laison avec d'autres objets";
-
+$LANG['genericobject']['links'][2] = "Elément(s) associé(s)";
 ?>

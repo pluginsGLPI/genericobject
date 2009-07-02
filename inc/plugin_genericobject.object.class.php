@@ -329,7 +329,6 @@ class PluginGenericObject extends CommonDBTM {
 		return $input;
 	}
 
-
 	function post_addItem($newID,$input) {
 		global $DB;
 		// Manage add from template
