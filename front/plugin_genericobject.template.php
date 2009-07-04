@@ -45,7 +45,7 @@ $type = $_SESSION["glpi_plugin_genericobject_device_type"];
 
 $name = plugin_genericobject_getNameByID($type);
 
-commonHeader(plugin_genericobject_getObjectName($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
+commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
 plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$_GET["device_type"]],$_GET["device_type"],$_SESSION["glpiactive_entity"],$_GET["add"]);
 commonFooter();
 ?>

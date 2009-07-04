@@ -198,6 +198,9 @@ function plugin_genericobject_uninstall() {
 	//For each type
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
 	{
+		//Delete if exists data_injection models
+		plugin_genericobject_removeDataInjectionModels($value["device_type"]);
+
 		//Delete search display preferences
 		$query="DELETE FROM glpi_display WHERE type='".$value["device_type"]."';";
 		$DB->query($query);
@@ -212,15 +215,7 @@ function plugin_genericobject_uninstall() {
 		
 		//Drop device_type link table
 		plugin_genericobject_deleteLinkTable($value["device_type"]);
-		
-		//Delete if exists data_injection models
-		if (TableExists("glpi_plugin_data_injection_models"))
-		{
-			$DB->query("DELETE FROM glpi_plugin_data_injection_models, glpi_plugin_data_injection_mappings, glpi_plugin_data_injection_infos USING glpi_plugin_data_injection_models, glpi_plugin_data_injection_mappings, glpi_plugin_data_injection_infos
-			WHERE glpi_plugin_data_injection_models.device_type=".$value["device_type"]."
-			AND glpi_plugin_data_injection_mappings.model_id=glpi_plugin_data_injection_models.ID
-			AND glpi_plugin_data_injection_infos.model_id=glpi_plugin_data_injection_models.ID");
-		}
+
 
 		plugin_genericobject_deleteSpecificDropdownTables($value["device_type"]);
 			
@@ -242,12 +237,12 @@ function plugin_genericobject_uninstall() {
 		$DB->query("DROP TABLE IF EXISTS `$table`");
 
 	
-	plugin_init_genericobject();
-	cleanCache("GLPI_HEADER_".$_SESSION["glpiID"]);
-
 	if (is_dir(GENERICOBJECT_CLASS_PATH)) {
 		deleteDir(GENERICOBJECT_CLASS_PATH);
 	}
+
+	plugin_init_genericobject();
+	cleanCache("GLPI_HEADER_".$_SESSION["glpiID"]);
 
 	return true;
 }

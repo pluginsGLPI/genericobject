@@ -104,7 +104,7 @@ class PluginGenericObjectType extends CommonDBTM{
 		echo "<td>".$LANG['genericobject']['config'][9]."</td>";
 		echo "<td>";
 		if ($ID)
-			echo plugin_genericobject_getObjectName($this->fields["name"]);
+			echo plugin_genericobject_getObjectLabel($this->fields["name"]);
 		echo "</td>";
 		echo "</tr>";
 
@@ -315,6 +315,7 @@ class PluginGenericObjectType extends CommonDBTM{
 		//Remove fields from the type_fields table
 		plugin_genericobject_deleteAllFieldsByType($this->fields["device_type"]);
 		
+		plugin_genericobject_removeDataInjectionModels($this->fields["device_type"]);
 		return true;
 	}
 }

@@ -99,7 +99,7 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 	echo "<table class='tab_cadre_fixe' >";
 	echo "<input type='hidden' name='ID' value='$ID'>";
 	echo "<tr class='tab_bg_1'><th colspan='7'>";
-	echo $LANG['genericobject']['fields'][1] . " : " . plugin_genericobject_getObjectName($object_type->fields["name"]);
+	echo $LANG['genericobject']['fields'][1] . " : " . plugin_genericobject_getObjectLabel($object_type->fields["name"]);
 	echo "</th></tr>";
 
 	echo "<tr class='tab_bg_1'>";
@@ -310,12 +310,12 @@ function plugin_genericobject_disableTemplateManagement($name) {
 
 	if (FieldExists($table, "is_template")) {
 		$table = plugin_genericobject_getTableNameByName($name);
-		$query = "ALTER TABLE `$table` DROP `is_template`, `tplname`";
+		$query = "ALTER TABLE `$table` DROP `is_template`";
 		$DB->query($query);
 	}
 
 	if (FieldExists($table, "tplname")) {
-		$query = "ALTER TABLE `$table` DROP `is_template`, `tplname`";
+		$query = "ALTER TABLE `$table` DROP `tplname`";
 		$DB->query($query);
 	}
 }
@@ -340,7 +340,7 @@ function plugin_genericobject_getDropdownSpecific(& $dropdowns, $type, $check_en
 	{
 		if (FieldExists($table, $field)) {
 			if (!$check_entity || ($check_entity && plugin_genericobject_isDropdownEntityRestrict($field)))
-				$dropdowns[plugin_genericobject_getDropdownTableName($type["name"], $field)] = plugin_genericobject_getObjectName($type["name"]) . ' : ' . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+				$dropdowns[plugin_genericobject_getDropdownTableName($type["name"], $field)] = plugin_genericobject_getObjectLabel($type["name"]) . ' : ' . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
 		}
 	}
 }
@@ -351,7 +351,7 @@ function plugin_genericobject_getDatabaseRelationsSpecificDropdown(& $dropdowns,
 	$table = plugin_genericobject_getTableNameByName($type["name"]);
 
 	foreach ($specific_types as $ID => $field)
-		if (FieldExists($table, $field))
+		if (TableExists($table) && FieldExists($table, $field))
 			$dropdowns[$table] = array (
 				plugin_genericobject_getDropdownTableName($table, $field) => $GENERICOBJECT_AVAILABLE_FIELDS[$field]['linkfield']
 			);
@@ -438,5 +438,18 @@ function plugin_genericobject_deleteLinkTable($type)
 	$DB->query("DROP TABLE IF EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."`");
 }
 	
-
+function plugin_genericobject_removeDataInjectionModels($device_type)
+{
+	global $DB;
+		$plugin = new Plugin;
+			//Delete if exists data_injection models
+		if ($plugin->isInstalled("data_injection"))
+		{
+			$DB->query("DELETE FROM `glpi_plugin_data_injection_models`, `glpi_plugin_data_injection_mappings`, `glpi_plugin_data_injection_infos` USING `glpi_plugin_data_injection_models`, `glpi_plugin_data_injection_mappings`, `glpi_plugin_data_injection_infos`
+			WHERE glpi_plugin_data_injection_models.device_type=".$device_type."
+			AND glpi_plugin_data_injection_mappings.model_id=glpi_plugin_data_injection_models.ID
+			AND glpi_plugin_data_injection_infos.model_id=glpi_plugin_data_injection_models.ID");
+		}
+	
+}
 ?>

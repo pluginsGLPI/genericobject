@@ -147,7 +147,7 @@ class PluginGenericObject extends CommonDBTM {
 	
 	function title($name)
 	{
-		displayTitle('', plugin_genericobject_getObjectName($name), plugin_genericobject_getObjectName($name));
+		displayTitle('', plugin_genericobject_getObjectLabel($name), plugin_genericobject_getObjectLabel($name));
 	}
 	function showForm($target, $ID, $withtemplate = '',$previsualisation=false) {
 		global $LANG;

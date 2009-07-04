@@ -119,7 +119,7 @@ function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$ent
 	$name = plugin_genericobject_getNameByID($device_type);
 	$commonitem = new CommonItem;
 	$commonitem->setType($device_type,true);
-	$title = plugin_genericobject_getObjectName($name);
+	$title = plugin_genericobject_getObjectLabel($name);
 	$query = "SELECT * FROM `".$commonitem->obj->table."` WHERE is_template = '1' AND FK_entities='" . $_SESSION["glpiactive_entity"] . "' ORDER by tplname";
 	if ($result = $DB->query($query)) {
 
@@ -241,7 +241,7 @@ function plugin_genericobject_showDevice($target,$device_type,$device_id) {
 				if ($result_linked=$DB->query($query))
 					if ($DB->numrows($result_linked)){
 						$ci->setType($type);
-						initNavigateListItems($type,plugin_genericobject_getObjectName($name)." = ".$obj->fields['name']);
+						initNavigateListItems($type,plugin_genericobject_getObjectLabel($name)." = ".$obj->fields['name']);
 						while ($data=$DB->fetch_assoc($result_linked)){
 							addToNavigateListItems($type,$data["ID"]);
 							$ID="";

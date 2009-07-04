@@ -72,17 +72,15 @@ function plugin_genericobject_getObjectClassByName($name) {
 /**
  * Get all types of active&published objects
  */
-function plugin_genericobject_getAllTypes($all=false) {
-	if (TableExists("glpi_plugin_genericobject_types"))
-	{
+function plugin_genericobject_getAllTypes($all = false) {
+	if (TableExists("glpi_plugin_genericobject_types")) {
 		if (!$all)
 			$where = " status=" . GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE;
 		else
-			$where='';
+			$where = '';
 		return getAllDatasFromTable("glpi_plugin_genericobject_types", $where);
-	}
-	else
-		return array();
+	} else
+		return array ();
 }
 
 /**
@@ -90,15 +88,14 @@ function plugin_genericobject_getAllTypes($all=false) {
  * @param name the object's name
  * @return the object's ID
  */
-function plugin_genericobject_getIDByName($name)
-{
+function plugin_genericobject_getIDByName($name) {
 	global $DB;
 	$query = "SELECT device_type FROM `glpi_plugin_genericobject_types` WHERE name='$name'";
 	$result = $DB->query($query);
 	if ($DB->numrows($result))
-		return $DB->result($result,0,"device_type");
+		return $DB->result($result, 0, "device_type");
 	else
-		return 0;	
+		return 0;
 }
 
 /**
@@ -106,15 +103,14 @@ function plugin_genericobject_getIDByName($name)
  * @param ID the internal ID
  * @return the name associated with the ID
  */
-function plugin_genericobject_getNameByID($device_type)
-{
+function plugin_genericobject_getNameByID($device_type) {
 	global $DB;
 	$query = "SELECT name FROM `glpi_plugin_genericobject_types` WHERE device_type='$device_type'";
 	$result = $DB->query($query);
 	if ($DB->numrows($result))
-		return $DB->result($result,0,"name");
+		return $DB->result($result, 0, "name");
 	else
-		return "";	
+		return "";
 }
 
 /**
@@ -122,13 +118,12 @@ function plugin_genericobject_getNameByID($device_type)
  * @param ID the object's ID
  * @return the table
  */
-function plugin_genericobject_getTableNameByID($ID)
-{
+function plugin_genericobject_getTableNameByID($ID) {
 	global $LINK_ID_TABLE;
-	if (isset($LINK_ID_TABLE[$ID]))
+	if (isset ($LINK_ID_TABLE[$ID]))
 		return $LINK_ID_TABLE[$ID];
 	else
-		return false;	
+		return false;
 }
 
 /**
@@ -136,10 +131,9 @@ function plugin_genericobject_getTableNameByID($ID)
  * @param ID the object's ID
  * @return the table
  */
-function plugin_genericobject_getTableNameByName($name)
-{
+function plugin_genericobject_getTableNameByName($name) {
 	global $LINK_ID_TABLE;
-	return 'glpi_plugin_genericobject_'.$name;	
+	return 'glpi_plugin_genericobject_' . $name;
 }
 
 /**
@@ -159,7 +153,10 @@ function plugin_genericobject_registerNewTypes() {
  * @return nothing
  */
 function plugin_genericobject_registerOneType($type) {
-	global $LANG, $DB,$PLUGIN_HOOKS,$CFG_GLPI,$GENERICOBJECT_LINK_TYPES,$IMPORT_PRIMARY_TYPES,$IMPORT_TYPES;
+	global $LANG, $DB, $PLUGIN_HOOKS, $CFG_GLPI, 
+			$GENERICOBJECT_LINK_TYPES, 
+			$IMPORT_PRIMARY_TYPES, $IMPORT_TYPES, $ORDER_AVAILABLE_TYPES,
+			$ORDER_TYPE_TABLES,$ORDER_MODEL_TABLES, $ORDER_TEMPLATE_TABLES;
 	$name = $type["name"];
 	$typeID = $type["device_type"];
 
@@ -169,8 +166,8 @@ function plugin_genericobject_registerOneType($type) {
 		$object_identifier = plugin_genericobject_getObjectIdentifierByName($name);
 
 		$db_fields = $DB->list_fields($tablename);
-		//Include locales
-        plugin_genericobject_includeLocales($name);
+		//Include locales, 
+		plugin_genericobject_includeLocales($name);
 		plugin_genericobject_includeClass($name);
 
 		registerPluginType('genericobject', $object_identifier, $typeID, array (
@@ -178,47 +175,55 @@ function plugin_genericobject_registerOneType($type) {
 			'tablename' => $tablename,
 			'formpage' => 'front/plugin_genericobject.object.form.php',
 			'searchpage' => 'front/plugin_genericobject.search.php',
-			'typename' => (isset($LANG["genericobject"][$name][1])?$LANG["genericobject"][$name][1]:$name),
+			'typename' => (isset ($LANG["genericobject"][$name][1]) ? $LANG["genericobject"][$name][1] : $name),
 			'deleted_tables' => ($type["use_deleted"] ? true : false),
 			'template_tables' => ($type["use_template"] ? true : false),
 			'specif_entities_tables' => ($type["use_entity"] ? true : false),
 			'reservation_types' => ($type["use_loans"] ? true : false),
 			'recursive_type' => ($type["use_recursivity"] ? true : false),
 			'infocom_types' => ($type["use_infocoms"] ? true : false),
-			'linkuser_types' => (($type["use_tickets"] && isset($db_fields["FK_users"]))? true : false),
-			'linkgroup_types' => (($type["use_tickets"] && isset($db_fields["FK_groups"]))? true : false),
+			'linkuser_types' => (($type["use_tickets"] && isset ($db_fields["FK_users"])) ? true : false),
+			'linkgroup_types' => (($type["use_tickets"] && isset ($db_fields["FK_groups"])) ? true : false),
+			
 		));
 
-		array_push($GENERICOBJECT_LINK_TYPES,$typeID);
-		
+		array_push($GENERICOBJECT_LINK_TYPES, $typeID);
+
 		//Integration with data_injection plugin
 		$plugin = new Plugin;
-		if ($type["use_plugin_data_injection"] && $plugin->isActivated("data_injection"))
-		{
+		if ($type["use_plugin_data_injection"] && $plugin->isActivated("data_injection")) {
 			$PLUGIN_HOOKS['data_injection'][$name] = "plugin_genericobject_data_injection_variables";
 			array_push($IMPORT_PRIMARY_TYPES, $typeID);
 			array_push($IMPORT_TYPES, $typeID);
 		}
 		//End integration with data_injection plugin
 
-		if ($type["use_template"])
-		{
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name]='front/plugin_genericobject.template.php?device_type='.$typeID.'&amp;add=0';
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.template.php?device_type='.$typeID.'&amp;add=1';
+		if ($type["use_plugin_order"] && $plugin->isActivated("order")) {
+			usePlugin("order");
+			array_push($ORDER_AVAILABLE_TYPES, $typeID);
+			if (isset ($db_fields["type"]))
+				$ORDER_TYPE_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'type');
+			if (isset ($db_fields["model"]))
+				$ORDER_MODEL_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'model');
+			if ($type["use_template"])
+				array_push($ORDER_TEMPLATE_TABLES,$typeID);
 		}
-		else
-		$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type='.$typeID;	
-
+		//End integration with data_injection plugin
 		
-		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type='.$typeID;
-	
+		if ($type["use_template"]) {
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name] = 'front/plugin_genericobject.template.php?device_type=' . $typeID . '&amp;add=0';
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.template.php?device_type=' . $typeID . '&amp;add=1';
+		} else
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type=' . $typeID;
+
+		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type=' . $typeID;
+
 		// Later, when per entity and tree dropdowns will be managed !
-		foreach(plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name)
-		{
+		foreach (plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name) {
 			array_push($CFG_GLPI["specif_entities_tables"], $table);
 			//array_push($CFG_GLPI["dropdowntree_tables"], $table);
 		}
-		
+
 	}
 }
 
@@ -229,7 +234,7 @@ function plugin_genericobject_registerOneType($type) {
  */
 function plugin_genericobject_objectSearchOptions($name, $search_options = array ()) {
 	global $DB, $GENERICOBJECT_AVAILABLE_FIELDS, $LANG;
-	
+
 	$table = plugin_genericobject_getObjectTableNameByName($name);
 
 	if (TableExists($table)) {
@@ -237,30 +242,30 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 		$ID = plugin_genericobject_getIDByName($name);
 		$fields = $DB->list_fields($table);
 		$i = 1;
-	
-		$search_options[$ID][80]['table']='glpi_entities';
-		$search_options[$ID][80]['field']='completename';
-		$search_options[$ID][80]['linkfield']='FK_entities';
-		$search_options[$ID][80]['name']=$LANG["entity"][0];
-	
+
+		$search_options[$ID][80]['table'] = 'glpi_entities';
+		$search_options[$ID][80]['field'] = 'completename';
+		$search_options[$ID][80]['linkfield'] = 'FK_entities';
+		$search_options[$ID][80]['name'] = $LANG["entity"][0];
+
 		if (!empty ($fields)) {
-			$search_options[$ID]['common'] = plugin_genericobject_getObjectName($name);
+			$search_options[$ID]['common'] = plugin_genericobject_getObjectLabel($name);
 			foreach ($fields as $field_values) {
 				$field_name = $field_values['Field'];
 				if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name])) {
 					$search_options[$ID][$i]['linkfield'] = '';
-					
+
 					switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['input_type']) {
-						case 'date':
-						case 'text':
+						case 'date' :
+						case 'text' :
 							$search_options[$ID][$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
 							break;
 						case 'dropdown' :
 							if (plugin_genericobject_isDropdownTypeSpecific($field_name))
-				 				$search_options[$ID][$i]['table'] = plugin_genericobject_getDropdownTableName($name,$field_name);
-				 			else	
-							$search_options[$ID][$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
-							
+								$search_options[$ID][$i]['table'] = plugin_genericobject_getDropdownTableName($name, $field_name);
+							else
+								$search_options[$ID][$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
+
 							$search_options[$ID][$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
 							break;
 						case 'dropdown_yesno' :
@@ -270,12 +275,12 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 					}
 					$search_options[$ID][$i]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['field'];
 					$search_options[$ID][$i]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['name'];
-					if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype']))
+					if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype']))
 						$search_options[$ID][$i]['datatype'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype'];
 
 					$i++;
 				}
-				
+
 			}
 		}
 
@@ -288,16 +293,14 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
  * @param device_type the object device type
  * @return an array which contains all the type's configuration
  */
-function plugin_genericobject_getObjectTypeConfiguration($device_type)
-{
+function plugin_genericobject_getObjectTypeConfiguration($device_type) {
 	$objecttype = new PluginGenericObjectType;
 	$objecttype->getFromDBByType($device_type);
 	return $objecttype->fields;
 }
 
-function plugin_genericobject_addObjectTypeDirectory($name)
-{
-	
+function plugin_genericobject_addObjectTypeDirectory($name) {
+
 }
 /**
  * Include locales for a specific type
@@ -306,21 +309,22 @@ function plugin_genericobject_addObjectTypeDirectory($name)
  */
 function plugin_genericobject_includeLocales($name) {
 	global $CFG_GLPI, $LANG;
-	
-	$prefix = GLPI_ROOT . "/plugins/genericobject/objects/". $name ."/" . $name;
-	if (isset ($_SESSION["glpilanguage"]) 
-		&& file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
-		include_once  ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
 
-	} else if (file_exists($prefix . ".en_GB.php")) {
-			include_once  ($prefix . ".en_GB.php");
+	$prefix = GLPI_ROOT . "/plugins/genericobject/objects/" . $name . "/" . $name;
+	if (isset ($_SESSION["glpilanguage"]) && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
+		include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
 
-	} else if (file_exists($prefix . ".fr_FR.php")) {
-			include_once  ($prefix . ".fr_FR.php");
+	} else
+		if (file_exists($prefix . ".en_GB.php")) {
+			include_once ($prefix . ".en_GB.php");
 
-	} else {
-		return false;
-	}
+		} else
+			if (file_exists($prefix . ".fr_FR.php")) {
+				include_once ($prefix . ".fr_FR.php");
+
+			} else {
+				return false;
+			}
 	return true;
 }
 
@@ -331,25 +335,19 @@ function plugin_genericobject_includeLocales($name) {
  */
 function plugin_genericobject_includeClass($name) {
 	//If class comes directly with the plugin
-	if (file_exists(GLPI_ROOT."/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php"))
-	{
-		include_once(GLPI_ROOT."/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php");
+	if (file_exists(GLPI_ROOT . "/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php")) {
+		include_once (GLPI_ROOT . "/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php");
+	} else {
+		include_once (GENERICOBJECT_CLASS_PATH . '/plugin_genericobject.' . $name . '.class.php');
 	}
-		
-	else	
-	{
-		include_once (GENERICOBJECT_CLASS_PATH.'/plugin_genericobject.'.$name.'.class.php');
-	}
-		
-		
+
 }
 
-function plugin_genericobject_getObjectName($name)
-{
+function plugin_genericobject_getObjectLabel($name) {
 	global $LANG;
-	if (isset($LANG['genericobject'][$name][1]))
+	if (isset ($LANG['genericobject'][$name][1]))
 		return $LANG['genericobject'][$name][1];
 	else
-		return $name;	
+		return $name;
 }
 ?>

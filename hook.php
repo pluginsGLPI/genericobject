@@ -179,7 +179,7 @@ function plugin_genericobject_AssignToTicket($types){
 	
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
 		if (plugin_genericobject_haveRight($value["name"].'_open_ticket',"1"))
-			$types[$value['device_type']]=plugin_genericobject_getObjectName($value['name']);
+			$types[$value['device_type']]=plugin_genericobject_getObjectLabel($value['name']);
 		
 	return $types;
 }
@@ -205,7 +205,7 @@ function plugin_genericobject_getDatabaseRelations(){
 	$plugin = new Plugin();
 	if ($plugin->isActivated("genericobject"))
 	{
-		foreach (plugin_genericobject_getAllTypes() as $tmp => $values)
+		foreach (plugin_genericobject_getAllTypes(true) as $tmp => $values)
 		{
 			plugin_genericobject_getDatabaseRelationsSpecificDropdown($dropdowns,$values);
 			if ($values["use_entity"])

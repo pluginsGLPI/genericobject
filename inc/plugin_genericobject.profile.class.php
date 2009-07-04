@@ -67,9 +67,9 @@ class PluginGenericObjectProfile extends CommonDBTM {
 				$name = plugin_genericobject_getNameByID($profile['device_type']);
 
 				plugin_genericobject_includeLocales($name);
-				echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".plugin_genericobject_getObjectName($profile['name'])."</th></tr>";
+				echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".plugin_genericobject_getObjectLabel($profile['name'])."</th></tr>";
 				echo "<tr class='tab_bg_2'>";
-				echo "<td>" . plugin_genericobject_getObjectName($profile['name']) . ":</td><td>";
+				echo "<td>" . plugin_genericobject_getObjectLabel($profile['name']) . ":</td><td>";
 				dropdownNoneReadWrite($name, $this->fields[$profile['name']], 1, 1, 1);
 				echo "</td>";
 				echo "</tr>";

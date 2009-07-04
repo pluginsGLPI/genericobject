@@ -80,7 +80,7 @@ elseif(isset($_POST["delete_type_link"]))
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }
 
-commonHeader(plugin_genericobject_getObjectName($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
+commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
 $object->obj->title($name);
 $object->obj->showForm($_SERVER["PHP_SELF"], $_REQUEST["ID"],$_GET["withtemplate"]);
 
