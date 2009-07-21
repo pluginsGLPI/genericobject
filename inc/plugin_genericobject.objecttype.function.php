@@ -171,7 +171,8 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 	$query = "ALTER TABLE `$table` ADD `$field` ";
 	if (!FieldExists($table, $field)) {
 		switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
-			case 'bool' :
+			case 'dropdown_yesno' :
+         case 'bool' :
 				$query .= "INT ( 1 ) NOT NULL DEFAULT 0";
 				break;
 			case 'text' :

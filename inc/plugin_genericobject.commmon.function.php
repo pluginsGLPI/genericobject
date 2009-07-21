@@ -156,7 +156,8 @@ function plugin_genericobject_registerOneType($type) {
 	global $LANG, $DB, $PLUGIN_HOOKS, $CFG_GLPI, 
 			$GENERICOBJECT_LINK_TYPES, 
 			$IMPORT_PRIMARY_TYPES, $IMPORT_TYPES, $ORDER_AVAILABLE_TYPES,
-			$ORDER_TYPE_TABLES,$ORDER_MODEL_TABLES, $ORDER_TEMPLATE_TABLES;
+			$ORDER_TYPE_TABLES,$ORDER_MODEL_TABLES, $ORDER_TEMPLATE_TABLES,
+         $UNINSTALL_TYPES,$GENERICOBJECT_PDF_TYPES;
 	$name = $type["name"];
 	$typeID = $type["device_type"];
 
@@ -188,7 +189,12 @@ function plugin_genericobject_registerOneType($type) {
 		));
 
 		array_push($GENERICOBJECT_LINK_TYPES, $typeID);
-
+      
+      //If helpdesk functionnality is on, and helpdesk_visible field exists for this object type
+      if ($type['use_tickets'] && isset($db_fields['helpdesk_visible'])) {
+         array_push($CFG_GLPI['helpdesk_visible_types'],$typeID);
+      }
+      
 		//Integration with data_injection plugin
 		$plugin = new Plugin;
 		if ($type["use_plugin_data_injection"] && $plugin->isActivated("data_injection")) {
@@ -208,7 +214,7 @@ function plugin_genericobject_registerOneType($type) {
 			if ($type["use_template"])
 				array_push($ORDER_TEMPLATE_TABLES,$typeID);
 		}
-		//End integration with data_injection plugin
+		//End integration with order plugin
 		
 		if ($type["use_template"]) {
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name] = 'front/plugin_genericobject.template.php?device_type=' . $typeID . '&amp;add=0';
@@ -217,7 +223,12 @@ function plugin_genericobject_registerOneType($type) {
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type=' . $typeID;
 
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type=' . $typeID;
-
+/*
+        if ($type['use_plugin_pdf'] && $plugin->isActivated('pdf')) {
+           $GENERICOBJECT_PDF_TYPES[] = $typeID;
+           $PLUGIN_HOOKS['plugin_pdf'][$typeID] = 'genericobject';
+        }
+*/
 		// Later, when per entity and tree dropdowns will be managed !
 		foreach (plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name) {
 			array_push($CFG_GLPI["specif_entities_tables"], $table);
@@ -350,4 +361,29 @@ function plugin_genericobject_getObjectLabel($name) {
 	else
 		return $name;
 }
+
+/**
+ * Show for PDF an applicatif
+ *
+ * @param $pdf object for the output
+ * @param $ID of the applicatif
+ */
+/*
+function plugin_genericobject_main_PDF ($pdf, $type, $ID) {
+	global $LANG, $DB;
+
+	$item=new CommonItem();
+	if (!$item->getFromDB($type,$ID)) return false;
+
+	$pdf->setColumnsSize(50,50);
+	$col1 = '<b>'.$LANG["common"][2].' '.$item->obj->fields['ID'].'</b>';
+	if (isset($item->obj->fields["date_mod"])) {
+		$col2 = $LANG["common"][26].' : '.convDateTime($item->obj->fields["date_mod"]);
+	} else {
+		$col2 = '';
+	}
+	$pdf->displayTitle($col1, $col2);
+   $item->obj->showFormPDF($pdf);
+   $pdf->displaySpace();
+}*/
 ?>

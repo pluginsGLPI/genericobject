@@ -55,7 +55,7 @@ class PluginGenericObjectType extends CommonDBTM{
 		{
 			$ong[2] = $LANG['genericobject']['config'][3];
 			$ong[3] = $LANG['rulesengine'][12];
-			$ong[4] = $LANG['genericobject']['config'][4];
+			//$ong[4] = $LANG['genericobject']['config'][4];
 			$ong[5] = $LANG['genericobject']['config'][7];
 			$ong[12] = $LANG['title'][38];	
 		}
@@ -192,8 +192,10 @@ class PluginGenericObjectType extends CommonDBTM{
 					"use_documents"=>$LANG['Menu'][27],
 					"use_loans"=>$LANG['Menu'][17],
 					"use_plugin_data_injection"=>$LANG['genericobject']['config'][10],
-					"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
-					"use_plugin_order"=>$LANG['genericobject']['config'][12]);
+					//"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
+					//"use_plugin_order"=>$LANG['genericobject']['config'][12],
+					//"use_plugin_uninstall"=>$LANG['genericobject']['config'][13]
+      );
 		foreach($use as $right => $label)
 		{
 			echo "<tr class='tab_bg_1'>";
@@ -231,6 +233,16 @@ class PluginGenericObjectType extends CommonDBTM{
 						dropdownYesNo($right,$this->fields[$right]);
 					else
 						echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
+					break;	
+				default:
+						dropdownYesNo($right,$this->fields[$right]);
+				break;			
+				case 'use_plugin_uninstall':
+					$plugin = new Plugin;
+					if ($plugin->isActivated("uninstall"))
+						dropdownYesNo($right,$this->fields[$right]);
+					else
+						echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
 					break;	
 				default:
 						dropdownYesNo($right,$this->fields[$right]);

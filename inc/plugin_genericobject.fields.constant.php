@@ -67,6 +67,11 @@ $GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['name']=$LANG['genericobject']
 $GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['field']='expirationdate';
 $GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['input_type']='date';
 
+$GENERICOBJECT_AVAILABLE_FIELDS['url']['name']=$LANG['genericobject']['fields'][10];
+$GENERICOBJECT_AVAILABLE_FIELDS['url']['field']='url';
+$GENERICOBJECT_AVAILABLE_FIELDS['url']['input_type']='date';
+
+
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['name']=$LANG['common'][17];
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['type']['linkfield']='type';
@@ -78,6 +83,13 @@ $GENERICOBJECT_AVAILABLE_FIELDS['model']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['linkfield']='model';
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['input_type']='dropdown';
 $GENERICOBJECT_AVAILABLE_FIELDS['model']['dropdown_type']='type_specific';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['category']['name']=$LANG['common'][36];
+$GENERICOBJECT_AVAILABLE_FIELDS['category']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['category']['linkfield']='category';
+$GENERICOBJECT_AVAILABLE_FIELDS['category']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['category']['dropdown_type']='type_specific';
+
 
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['name']=$LANG['entity'][0];
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['table']='glpi_entities';
@@ -96,6 +108,12 @@ $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['field']='is_template';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['linkfield']='';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['input_type']='dropdown_yesno';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['datatype']='bool';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['name']=$LANG['software'][46];
+$GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['field']='helpdesk_visible';
+$GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['linkfield']='';
+$GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['input_type']='dropdown_yesno';
+$GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['datatype']='bool';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['name']=$LANG['common'][15];
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['table']='glpi_dropdown_locations';
@@ -127,5 +145,28 @@ $GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['table']='glpi_dropdown_ma
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['linkfield']='FK_glpi_enterprise';
 $GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['input_type']='dropdown';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['name']=$LANG['common'][10];
+$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['table']='glpi_users';
+$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['linkfield']='tech_num';
+$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['input_type']='dropdown';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['domain']['name']=$LANG['setup'][89];
+$GENERICOBJECT_AVAILABLE_FIELDS['domain']['table']='glpi_dropdown_domain';
+$GENERICOBJECT_AVAILABLE_FIELDS['domain']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['domain']['linkfield']='domain';
+$GENERICOBJECT_AVAILABLE_FIELDS['domain']['input_type']='dropdown';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['contact']['name']=$LANG['common'][18];
+$GENERICOBJECT_AVAILABLE_FIELDS['contact']['field']='contact';
+$GENERICOBJECT_AVAILABLE_FIELDS['contact']['linkfield']='contact';
+$GENERICOBJECT_AVAILABLE_FIELDS['contact']['input_type']='text';
+
+$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['name']=$LANG['common'][21];
+$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['field']='contact_num';
+$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['linkfield']='contact_num';
+$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['input_type']='text';
+
 
 ?>

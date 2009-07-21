@@ -244,7 +244,8 @@ class PluginGenericObject extends CommonDBTM {
 		global $GENERICOBJECT_AVAILABLE_FIELDS,$GENERICOBJECT_BLACKLISTED_FIELDS;
 
 		if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$name]) && !in_array($name,$GENERICOBJECT_BLACKLISTED_FIELDS)) {
-			
+
+
 			$this->startColumn();
 			echo $GENERICOBJECT_AVAILABLE_FIELDS[$name]['name'];
 			$this->endColumn();
@@ -305,25 +306,89 @@ class PluginGenericObject extends CommonDBTM {
 		}
 	}
 
+/*
+	function getFieldValue($name, $value) {
+		global $GENERICOBJECT_AVAILABLE_FIELDS,$GENERICOBJECT_BLACKLISTED_FIELDS;
+
+		if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$name]) && !in_array($name,$GENERICOBJECT_BLACKLISTED_FIELDS)) {
+
+			switch ($GENERICOBJECT_AVAILABLE_FIELDS[$name]['input_type']) {
+				case 'multitext':
+						return $value;
+					break;
+				case 'text' :
+					if ($canedit)
+					{
+						$table = plugin_genericobject_getObjectTableNameByName($name);
+						autocompletionTextField($name, $table, $GENERICOBJECT_AVAILABLE_FIELDS[$name]['field'], $value);
+					}
+					else
+						echo $value;
+					break;
+				case 'date':
+					if ($canedit)
+						showDateFormItem($name,$value,false,true);
+					else
+						echo convDate($value);
+					break;
+				case 'dropdown' :
+					if (plugin_genericobject_isDropdownTypeSpecific($name))
+					{
+						$device_name = plugin_genericobject_getNameByID($this->type);
+						$table = plugin_genericobject_getDropdownTableName($device_name,$name);
+					}
+
+					else
+						$table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
+
+					if ($canedit)
+					{
+						//if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity']) && $GENERICOBJECT_AVAILABLE_FIELDS[$name]['entity'] == 'entity_restrict')
+							$entity_restrict = $this->fields["FK_entities"];
+						//else
+						//	$entity_restrict = getEntitySons($this->fields["FK_entities"]);
+
+						dropdownValue($table, $name, $value, 1, $entity_restrict);
+					}
+
+					else
+						echo getDropdownName($table, $value);
+					break;
+				case 'dropdown_yesno' :
+					if ($canedit)
+						dropdownYesNo($name, $value);
+					else
+						echo getYesNo($value);
+					break;
+			}
+			$this->endColumn();
+		}
+	}
+*/
+   
 	/**
 	* Add a new column
 	**/
 	function startColumn() {
-		if ($this->cpt == 0)
-			echo "<tr class='tab_bg_1'>";
-		echo "<td>";
-		$this->cpt++;
-	}
+      if ($this->cpt == 0) {
+             echo "<tr class='tab_bg_1'>";
+      }
+
+      echo "<td>";
+ 		$this->cpt++;
+ 	}
 
 	/**
 	* End a column
 	**/
 	function endColumn() {
-		echo "</td>";
+         echo "</td>";
+      
 		if ($this->cpt == 4) {
-			echo "</tr>";
+          echo "</tr>";
 			$this->cpt = 0;
 		}
+
 	}
 
 	/**
@@ -392,5 +457,37 @@ class PluginGenericObject extends CommonDBTM {
 			}
 		}
 	}
+
+/*
+ 	function showFormPDF($pdf) {
+		global $LANG,$GENERICOBJECT_AVAILABLE_FIELDS;
+
+      $code = '';
+      $this->cpt=0;
+		foreach(plugin_genericobject_getFieldsByType($this->type) as $field => $tmp)
+		{
+         $code.='<b><i>'.$GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'].'</i></b>';
+         $value = $this->fields[$field];
+         $code.='<i>'.html_clean(getFieldValue($field,$value)).'</i>';
+         $this->cpt++;
+
+         if ($this->cpt == 4) {
+            $pdf->displayLine($code);
+            $code ='';
+            $this->cpt = 0;
+         }
+		}
+
+      if ($this->cpt != 0)
+      {
+         while ($this->cpt < 4) {
+				echo "<i></i>";
+				$this->cpt++;
+			}
+          $pdf->displayLine($code);
+      }
+
+	}
+*/
 }
 ?>

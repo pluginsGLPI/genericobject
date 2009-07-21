@@ -267,4 +267,78 @@ function plugin_genericobject_data_injection_variables()
 		}	
 	}
 }
+
+function plugin_uninstall_addUninstallTypes($uninstal_types)
+{
+	/*
+	$types = plugin_genericobject_getAllTypes();
+	
+	foreach ($types as $tmp => $type)
+		if ($type["use_plugin_uninstall"])
+			$uninstal_types[] = $type["device_type"];
+	*/
+	return $uninstal_types;		
+}
+/*
+function plugin_genericobject_prefPDF($type) {
+	global $LANG,$GENERICOBJECT_PDF_TYPES;
+
+   $tabs = array();
+   if (in_array($type,$GENERICOBJECT_PDF_TYPES)) {
+      $commonitem = new CommonItem();
+      $commonitem->setType($type,true);
+      $tabs = $commonitem->obj->defineTabs(1,'');
+   }
+   return $tabs;
+}
+
+
+function plugin_genericobject_generatePDF($type, $tab_id, $tab, $page=0) {
+	global $LANG,$GENERICOBJECT_PDF_TYPES;
+
+   $pdf = new simplePDF('a4', ($page ? 'landscape' : 'portrait'));
+
+	$nb_id = count($tab_id);
+
+	foreach($tab_id as $key => $ID)	{
+
+		if (plugin_pdf_add_header($pdf,$ID,$type)) {
+			$pdf->newPage();
+		} else {
+			// Object not found or no right to read
+			continue;
+		}
+
+   if (in_array($type,$GENERICOBJECT_PDF_TYPES)) {
+			plugin_genericobject_main_PDF($pdf,$type,$ID);
+
+			foreach($tab as $i)	{
+				switch($i) { // See plugin_applicatif::defineTabs();
+					case 1:
+						break;
+					case 6:
+						plugin_pdf_ticket($pdf,$ID,$type);
+						plugin_pdf_oldticket($pdf,$ID,$type);
+						break;
+					case 9:
+						plugin_pdf_financial($pdf,$ID,$type);
+						plugin_pdf_contract ($pdf,$ID,$type);
+						break;
+					case 10:
+						plugin_pdf_document($pdf,$ID,$type);
+						break;
+					case 11:
+						plugin_pdf_note($pdf,$ID,$type);
+						break;
+					case 12:
+						plugin_pdf_history($pdf,$ID,$type);
+						break;
+					default:
+						plugin_pdf_pluginhook($i,$pdf,$ID,$type);
+				}
+			}
+		} // Switch type
+	} // Each ID
+	$pdf->render();
+}*/
 ?>
