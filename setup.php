@@ -189,7 +189,7 @@ function plugin_genericobject_haveTypeRight($type, $right) {
       case PLUGIN_GENERICOBJECT_TYPE :
          return haveRight("config", $right);
          default :
-            return plugin_genericobject_checkRight(plugin_genericobject_getNameByID($type), $right);
+            return plugin_genericobject_haveRight(plugin_genericobject_getNameByID($type), $right);
          }
 
       }
