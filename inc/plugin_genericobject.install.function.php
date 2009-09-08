@@ -163,8 +163,10 @@ function plugin_genericobject_uninstall() {
 	//For each type
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
 	{
+      //Delete loans
+      plugin_genericobject_deleteLoans($value["device_type"]);
+
 		//Delete if exists datainjection models
-      
 		plugin_genericobject_removeDataInjectionModels($value["device_type"]);
 
 		//Delete search display preferences
