@@ -218,11 +218,11 @@ function plugin_genericobject_getDatabaseRelations(){
 }
 
 /**
- * Integration with data_injection plugin
+ * Integration with datainjection plugin
  */
-function plugin_genericobject_data_injection_variables()
+function plugin_genericobject_datainjection_variables()
 {
-	global $DATA_INJECTION_MAPPING,$DATA_INJECTION_INFOS, $GENERICOBJECT_AVAILABLE_FIELDS,$SEARCH_OPTION;
+	global $DATAINJECTION_MAPPING,$DATAINJECTION_INFOS, $GENERICOBJECT_AVAILABLE_FIELDS,$SEARCH_OPTION;
 	
 	$types = plugin_genericobject_getAllTypes();
 	foreach ($types as $tmp => $value)
@@ -234,35 +234,35 @@ function plugin_genericobject_data_injection_variables()
 			switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
 					case 'date':
 					case 'text':
-						$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
-						$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						$DATAINJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						$DATAINJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
 						break;
 					case 'dropdown' :
 						if (plugin_genericobject_isDropdownTypeSpecific($field))
 						{
-							$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getDropdownTableName($name,$field);
-							$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getDropdownTableName($name,$field);	
+							$DATAINJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getDropdownTableName($name,$field);
+							$DATAINJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getDropdownTableName($name,$field);	
 						}
 			 			else
 			 			{
-			 				$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
+			 				$DATAINJECTION_MAPPING[$value["device_type"]][$field]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
 			 				$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
 			 			}	
 							
 						break;
 					case 'dropdown_yesno' :
-						$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
-						$DATA_INJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						$DATAINJECTION_MAPPING[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+						$DATAINJECTION_INFOS[$value["device_type"]][$field]['table'] = plugin_genericobject_getObjectTableNameByName($name);
 						break;
 			}
 				
-			$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
-			$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
-			$DATA_INJECTION_MAPPING[$value["device_type"]][$field]['type'] = (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?$GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
+			$DATAINJECTION_MAPPING[$value["device_type"]][$field]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+			$DATAINJECTION_MAPPING[$value["device_type"]][$field]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
+			$DATAINJECTION_MAPPING[$value["device_type"]][$field]['type'] = (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?$GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
 
-			$DATA_INJECTION_INFOS[$value["device_type"]][$field]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
-			$DATA_INJECTION_INFOS[$value["device_type"]][$field]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
-			$DATA_INJECTION_INFOS[$value["device_type"]][$field]['input_type'] = (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?$GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
+			$DATAINJECTION_INFOS[$value["device_type"]][$field]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+			$DATAINJECTION_INFOS[$value["device_type"]][$field]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
+			$DATAINJECTION_INFOS[$value["device_type"]][$field]['input_type'] = (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?$GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
 
 		}	
 	}

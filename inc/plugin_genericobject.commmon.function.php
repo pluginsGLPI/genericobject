@@ -195,14 +195,14 @@ function plugin_genericobject_registerOneType($type) {
          array_push($CFG_GLPI['helpdesk_visible_types'],$typeID);
       }
       
-		//Integration with data_injection plugin
+		//Integration with datainjection plugin
 		$plugin = new Plugin;
-		if ($type["use_plugin_data_injection"] && $plugin->isActivated("data_injection")) {
-			$PLUGIN_HOOKS['data_injection'][$name] = "plugin_genericobject_data_injection_variables";
+		if ($type["use_plugin_datainjection"] && $plugin->isActivated("datainjection")) {
+			$PLUGIN_HOOKS['datainjection'][$name] = "plugin_genericobject_datainjection_variables";
 			array_push($IMPORT_PRIMARY_TYPES, $typeID);
 			array_push($IMPORT_TYPES, $typeID);
 		}
-		//End integration with data_injection plugin
+		//End integration with datainjection plugin
 
 		if ($type["use_plugin_order"] && $plugin->isActivated("order")) {
 			usePlugin("order");

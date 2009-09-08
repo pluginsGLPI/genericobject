@@ -191,7 +191,7 @@ class PluginGenericObjectType extends CommonDBTM{
 					"use_infocoms"=>$LANG['financial'][3],
 					"use_documents"=>$LANG['Menu'][27],
 					"use_loans"=>$LANG['Menu'][17],
-					"use_plugin_data_injection"=>$LANG['genericobject']['config'][10],
+					"use_plugin_datainjection"=>$LANG['genericobject']['config'][10],
 					//"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
 					//"use_plugin_order"=>$LANG['genericobject']['config'][12],
 					//"use_plugin_uninstall"=>$LANG['genericobject']['config'][13]
@@ -213,12 +213,12 @@ class PluginGenericObjectType extends CommonDBTM{
 					else
 						dropdownYesNo($right,$this->fields[$right]);
 				break;
-				case 'use_plugin_data_injection':
+				case 'use_plugin_datainjection':
 					$plugin = new Plugin;
-					if ($plugin->isActivated("data_injection"))
+					if ($plugin->isActivated("datainjection"))
 						dropdownYesNo($right,$this->fields[$right]);
 					else
-						echo "<input type='hidden' name='use_plugin_data_injection' value='0'>\n";
+						echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
 					break;	
 				case 'use_plugin_pdf':
 					$plugin = new Plugin;
@@ -309,6 +309,9 @@ class PluginGenericObjectType extends CommonDBTM{
 	{
 		$this->getFromDB($ID);
 
+      //Delete loans associated with this type
+      plugin_genericobject_deleteLoans($this->fields["device_type"]);
+      
 		//Delete all tables related to the type (dropdowns)
 		plugin_genericobject_deleteSpecificDropdownTables($this->fields["device_type"]);
 

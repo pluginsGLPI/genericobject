@@ -132,7 +132,7 @@ class PluginGenericObject extends CommonDBTM {
 
 	function canUsePluginDataInjection()
 	{
-		return ($this->type_infos["use_plugin_data_injection"]);
+		return ($this->type_infos["use_plugin_datainjection"]);
 	}
 
 	function canUsePluginPDF()

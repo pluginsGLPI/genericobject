@@ -39,6 +39,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 include_once (GLPI_ROOT . "/inc/includes.php");
+include_once ("plugin_genericobject.objecttype.function.php");
 
 function plugin_genericobject_haveRight($module, $right) {
 	$matches = array (
@@ -90,22 +91,13 @@ function plugin_genericobject_install() {
 	 		`use_tickets` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_links` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_loans` INT ( 1 ) NOT NULL DEFAULT 0 ,
-	 		`use_plugin_data_injection` INT ( 1 ) NOT NULL DEFAULT 0 ,
+	 		`use_plugin_datainjection` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_plugin_pdf` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_plugin_order` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_plugin_uninstall` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		PRIMARY KEY ( `ID` ) 
 			) ENGINE = MYISAM COMMENT = 'Object types definition table';";
 	$DB->query($query);
-
-/*
-	$query = "INSERT INTO `glpi_plugin_genericobject_types` (
-				`ID`,`device_type` ,`state` ,`status` ,`name` ,`use_deleted` ,`use_notes`,
-				`use_history` ,`use_entity` ,`use_recursivity` ,`use_template` ,`use_infocoms` ,
-				`use_documents` ,`use_tickets` ,`use_links` ,`use_loans`)
-				VALUES (NULL , '4090', '1', '1', 'furniture', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0');";
-	$DB->query($query);
-*/
 
 	$query = "CREATE TABLE `glpi_plugin_genericobject_profiles` (
 			`ID` int(11) NOT NULL auto_increment,
@@ -118,29 +110,6 @@ function plugin_genericobject_install() {
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 	$DB->query($query);
 
-/*
-	$query = "CREATE TABLE `glpi_plugin_genericobject_furniture` (
-			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
-	 		`name` VARCHAR( 255 ) NOT NULL ,
-			`FK_entities` INT( 11 ) NOT NULL DEFAULT 0,
-			`object_type` INT( 11 ) NOT NULL DEFAULT 0,
-			`deleted` INT( 1 ) NOT NULL DEFAULT 0,
-	 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
-	 		`comments` TEXT NULL  ,
-	 		`notes` TEXT NULL  ,
-	 		`state` INT (11 ) NOT NULL DEFAULT 0 ,
-	 		`is_template` INT ( 1 ) NOT NULL DEFAULT 0 ,
-	 		`type` INT ( 11 ) NOT NULL DEFAULT 0 ,
-	 		`model` INT ( 11 ) NOT NULL DEFAULT 0 ,
-	 		`FK_users` INT ( 11 ) NOT NULL DEFAULT 0 ,
-	 		`FK_groups` INT ( 11 ) NOT NULL DEFAULT 0 ,
-	 		`FK_glpi_enterprise` INT ( 11 ) NULL DEFAULT 0 ,
-	 		`serial` VARCHAR ( 255 )  collate utf8_unicode_ci NOT NULL DEFAULT '' ,
-	 		`otherserial` VARCHAR ( 255 )  collate utf8_unicode_ci NOT NULL DEFAULT '' ,
-	 		PRIMARY KEY ( `ID` ) 
-			) ENGINE = MYISAM COMMENT = 'Object specific definition table';";
-	$DB->query($query);
-*/
 	$query = "CREATE TABLE `glpi_plugin_genericobject_type_fields` (
 	`ID` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	`device_type` INT( 11 ) NOT NULL DEFAULT 0 ,
@@ -151,11 +120,6 @@ function plugin_genericobject_install() {
 	`unique` INT( 1 ) NOT NULL
 	) ENGINE = MYISAM  COMMENT = 'Field type description';";
 	$DB->query($query);
-
-/*
-	plugin_genericobject_addDropdownTable('furniture','type');
-	plugin_genericobject_addDropdownTable('furniture','model');
-*/	
 
 	$query = "CREATE TABLE `glpi_plugin_genericobject_type_links` (
 			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -199,7 +163,8 @@ function plugin_genericobject_uninstall() {
 	//For each type
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
 	{
-		//Delete if exists data_injection models
+		//Delete if exists datainjection models
+      
 		plugin_genericobject_removeDataInjectionModels($value["device_type"]);
 
 		//Delete search display preferences
@@ -229,8 +194,6 @@ function plugin_genericobject_uninstall() {
 	$tables = array (
 		"glpi_plugin_genericobject_types",
 		"glpi_plugin_genericobject_profiles",
-//		"glpi_dropdown_plugin_genericobject_furniture_type",
-//		"glpi_dropdown_plugin_genericobject_furniture_model",
 		"glpi_plugin_genericobject_type_fields",
 		"glpi_plugin_genericobject_type_links"
 	);

@@ -415,10 +415,10 @@ function plugin_genericobject_deleteSpecificDropdownTables($device_type)
 		
 }
 
-function plugin_genericobject_addLinkTable($type)
+function plugin_genericobject_addLinkTable($device_type)
 {
 	global $DB;
-	$name = plugin_genericobject_getNameByID($type);
+	$name = plugin_genericobject_getNameByID($device_type);
 	$query = "CREATE TABLE IF NOT EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."` (
 	  `ID` int(11) NOT NULL auto_increment,
 	  `source_id` int(11) NOT NULL default '0',
@@ -432,10 +432,10 @@ function plugin_genericobject_addLinkTable($type)
 	$DB->query($query);
 }
 
-function plugin_genericobject_deleteLinkTable($type)
+function plugin_genericobject_deleteLinkTable($device_type)
 {
 	global $DB;
-	$name = plugin_genericobject_getNameByID($type);
+	$name = plugin_genericobject_getNameByID($device_type);
 	$DB->query("DROP TABLE IF EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."`");
 }
 	
@@ -443,14 +443,32 @@ function plugin_genericobject_removeDataInjectionModels($device_type)
 {
 	global $DB;
 		$plugin = new Plugin;
-			//Delete if exists data_injection models
-		if ($plugin->isInstalled("data_injection"))
+			//Delete if exists datainjection models
+		if ($plugin->isInstalled("datainjection"))
 		{
-			$DB->query("DELETE FROM `glpi_plugin_data_injection_models`, `glpi_plugin_data_injection_mappings`, `glpi_plugin_data_injection_infos` USING `glpi_plugin_data_injection_models`, `glpi_plugin_data_injection_mappings`, `glpi_plugin_data_injection_infos`
-			WHERE glpi_plugin_data_injection_models.device_type=".$device_type."
-			AND glpi_plugin_data_injection_mappings.model_id=glpi_plugin_data_injection_models.ID
-			AND glpi_plugin_data_injection_infos.model_id=glpi_plugin_data_injection_models.ID");
+			$query = "DELETE FROM `glpi_plugin_datainjection_models`, `glpi_plugin_datainjection_mappings`, `glpi_plugin_datainjection_infos` " .
+               "USING `glpi_plugin_datainjection_models`, `glpi_plugin_datainjection_mappings`, `glpi_plugin_datainjection_infos` " .
+                  "WHERE glpi_plugin_datainjection_models.device_type=".$device_type." " .
+                        "AND glpi_plugin_datainjection_mappings.model_id=glpi_plugin_datainjection_models.ID " .
+                           "AND glpi_plugin_datainjection_infos.model_id=glpi_plugin_datainjection_models.ID";
+         
+         $DB->query ($query);
 		}
 	
 }
+
+/**
+ * Delete all loans associated with a device_type
+ */
+function plugin_genericobject_deleteLoans($device_type)
+{
+   global $DB;
+   
+   $query = "DELETE FROM  `glpi_reservation_item`, `glpi_reservation_resa` " .
+            "USING `glpi_reservation_item`, `glpi_reservation_resa` " .
+               "WHERE `glpi_reservation_item`.`device_type`='$device_type' " .
+                  "AND `glpi_reservation_item`.`ID`=`glpi_reservation_resa`.`id_item`";
+   $DB->query($query); 
+}
+
 ?>
