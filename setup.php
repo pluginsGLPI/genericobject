@@ -141,11 +141,6 @@ function plugin_init_genericobject() {
 		$PLUGIN_HOOKS['headings_action']['genericobject'] = 'plugin_headings_actions_genericobject';
 
 		plugin_genericobject_registerNewTypes();
-		/*
-		      $plugin = new Plugin;
-		      if ($plugin->isActivated("uninstall"))
-		         usePlugin("uninstall",true);
-		*/
 	}
 }
 

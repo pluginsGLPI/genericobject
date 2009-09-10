@@ -198,7 +198,8 @@ function plugin_genericobject_registerOneType($type) {
 		//Integration with datainjection plugin
 		$plugin = new Plugin;
 		if ($type["use_plugin_datainjection"] && $plugin->isActivated("datainjection")) {
-			$PLUGIN_HOOKS['datainjection'][$name] = "plugin_genericobject_datainjection_variables";
+          usePlugin("datainjection");
+         $PLUGIN_HOOKS['datainjection'][$name] = "plugin_genericobject_datainjection_variables";
 			array_push($IMPORT_PRIMARY_TYPES, $typeID);
 			array_push($IMPORT_TYPES, $typeID);
 		}
@@ -223,12 +224,12 @@ function plugin_genericobject_registerOneType($type) {
 			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type=' . $typeID;
 
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type=' . $typeID;
-/*
-        if ($type['use_plugin_pdf'] && $plugin->isActivated('pdf')) {
-           $GENERICOBJECT_PDF_TYPES[] = $typeID;
-           $PLUGIN_HOOKS['plugin_pdf'][$typeID] = 'genericobject';
+
+        if ($type['use_plugin_uninstall'] && $plugin->isActivated('uninstall')) {
+           usePlugin("uninstall");
+           $UNINSTALL_TYPES[] = $typeID;
         }
-*/
+
 		// Later, when per entity and tree dropdowns will be managed !
 		foreach (plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name) {
 			array_push($CFG_GLPI["specif_entities_tables"], $table);

@@ -193,9 +193,10 @@ class PluginGenericObjectType extends CommonDBTM{
 					"use_loans"=>$LANG['Menu'][17],
 					"use_plugin_datainjection"=>$LANG['genericobject']['config'][10],
 					//"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
-					//"use_plugin_order"=>$LANG['genericobject']['config'][12],
-					//"use_plugin_uninstall"=>$LANG['genericobject']['config'][13]
+					"use_plugin_order"=>$LANG['genericobject']['config'][12],
+					"use_plugin_uninstall"=>$LANG['genericobject']['config'][13]
       );
+
 		foreach($use as $right => $label)
 		{
 			echo "<tr class='tab_bg_1'>";
@@ -215,10 +216,14 @@ class PluginGenericObjectType extends CommonDBTM{
 				break;
 				case 'use_plugin_datainjection':
 					$plugin = new Plugin;
-					if ($plugin->isActivated("datainjection"))
+               $infos = plugin_version_datainjection();
+					if ($plugin->isActivated("datainjection") && $infos['version'] >= '1.7.0') {
 						dropdownYesNo($right,$this->fields[$right]);
-					else
+					}
+					else {
 						echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
+					}
+						
 					break;	
 				case 'use_plugin_pdf':
 					$plugin = new Plugin;
@@ -239,10 +244,14 @@ class PluginGenericObjectType extends CommonDBTM{
 				break;			
 				case 'use_plugin_uninstall':
 					$plugin = new Plugin;
-					if ($plugin->isActivated("uninstall"))
-						dropdownYesNo($right,$this->fields[$right]);
-					else
+					$infos = plugin_version_uninstall();
+               if ($plugin->isActivated("uninstall") && $infos['version'] >= '1.2.1') {
+               	dropdownYesNo($right,$this->fields[$right]);
+               }
+					else {
 						echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
+					}
+						
 					break;	
 				default:
 						dropdownYesNo($right,$this->fields[$right]);
