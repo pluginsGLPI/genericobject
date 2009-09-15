@@ -192,12 +192,16 @@ class PluginGenericObjectType extends CommonDBTM{
 					"use_documents"=>$LANG['Menu'][27],
 					"use_loans"=>$LANG['Menu'][17],
                "use_loans"=>$LANG['Menu'][17],
-					"use_network_ports"=>$LANG['genericobject']['config'][14],
-               "use_direct_connections"=>$LANG['connect'][0],
+               "use_network_ports"=>$LANG['genericobject']['config'][14],
 					//"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
 					"use_plugin_order"=>$LANG['genericobject']['config'][12],
 					"use_plugin_uninstall"=>$LANG['genericobject']['config'][13]
       );
+      
+      if (GLPI_VERSION >= '0.72.3') {
+           $use["use_direct_connections"]=$LANG['connect'][0];
+      	
+      }
 
 		foreach($use as $right => $label)
 		{
@@ -279,6 +283,7 @@ class PluginGenericObjectType extends CommonDBTM{
 	function prepareInputForAdd($input)
 	{
 		$input["name"] = strtolower($input["name"]);
+      $input['name'] = str_replace(' ','',$input['name']);
 		return $input;
 	}
 	
