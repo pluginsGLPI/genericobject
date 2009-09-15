@@ -251,9 +251,11 @@ class PluginGenericObjectType extends CommonDBTM{
 				case 'use_plugin_uninstall':
 					$plugin = new Plugin;
 					
-               if ($plugin->isActivated("uninstall") && $infos['version'] >= '1.2.1') {
+               if ($plugin->isActivated("uninstall")) {
                	$infos = plugin_version_uninstall();
-                  dropdownYesNo($right,$this->fields[$right]);
+                  if ($infos['version'] >= '1.2.1') {
+                     dropdownYesNo($right,$this->fields[$right]);	
+                  }
                }
 					else {
 						echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
