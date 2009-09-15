@@ -191,7 +191,9 @@ class PluginGenericObjectType extends CommonDBTM{
 					"use_infocoms"=>$LANG['financial'][3],
 					"use_documents"=>$LANG['Menu'][27],
 					"use_loans"=>$LANG['Menu'][17],
-					"use_plugin_datainjection"=>$LANG['genericobject']['config'][10],
+               "use_loans"=>$LANG['Menu'][17],
+					"use_network_ports"=>$LANG['genericobject']['config'][14],
+               "use_direct_connections"=>$LANG['connect'][0],
 					//"use_plugin_pdf"=>$LANG['genericobject']['config'][11],
 					"use_plugin_order"=>$LANG['genericobject']['config'][12],
 					"use_plugin_uninstall"=>$LANG['genericobject']['config'][13]
@@ -244,9 +246,10 @@ class PluginGenericObjectType extends CommonDBTM{
 				break;			
 				case 'use_plugin_uninstall':
 					$plugin = new Plugin;
-					$infos = plugin_version_uninstall();
+					
                if ($plugin->isActivated("uninstall") && $infos['version'] >= '1.2.1') {
-               	dropdownYesNo($right,$this->fields[$right]);
+               	$infos = plugin_version_uninstall();
+                  dropdownYesNo($right,$this->fields[$right]);
                }
 					else {
 						echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";

@@ -354,7 +354,7 @@ function plugin_genericobject_getDatabaseRelationsSpecificDropdown(& $dropdowns,
 	foreach ($specific_types as $ID => $field)
 		if (TableExists($table) && FieldExists($table, $field))
 			$dropdowns[$table] = array (
-				plugin_genericobject_getDropdownTableName($table, $field) => $GENERICOBJECT_AVAILABLE_FIELDS[$field]['linkfield']
+				plugin_genericobject_getDropdownTableName($type["name"], $field) => $GENERICOBJECT_AVAILABLE_FIELDS[$field]['linkfield']
 			);
 }
 
@@ -407,10 +407,8 @@ function plugin_genericobject_deleteSpecificDropdownTables($device_type)
 	$name = plugin_genericobject_getNameByID($device_type);
 	$types = plugin_genericobject_getDropdownSpecificFields();
 
-	foreach($types as $type => $tmp)
-	{
+	foreach($types as $type => $tmp)	{
 		$DB->query("DROP TABLE IF EXISTS `" . plugin_genericobject_getDropdownTableName($name,$type)."`");
-		syslog(LOG_ERR,"DROP TABLE IF EXISTS `" . plugin_genericobject_getDropdownTableName($name,$type)."`");
 	}
 		
 }
@@ -471,4 +469,30 @@ function plugin_genericobject_deleteLoans($device_type)
    $DB->query($query); 
 }
 
+
+function plugin_genericobject_deleteNetworking($device_type) {
+	    global $DB;
+        $query = "SELECT ID 
+               FROM glpi_networking_ports 
+               WHERE device_type = '" . $device_type . "'";
+      $result = $DB->query($query);
+      while ($data = $DB->fetch_array($result)) {
+         $q = "DELETE FROM glpi_networking_wire WHERE end1 = '" . $data["ID"] . "' OR end2 = '" . $data["ID"] . "'";
+         $result2 = $DB->query($q);
+      }
+
+      $query2 = "DELETE FROM glpi_networking_ports WHERE device_type = '" . $device_type . "'";
+      $result2 = $DB->query($query2);
+
+      $query = "SELECT ID FROM glpi_connect_wire WHERE type='" . $device_type."'";
+      if ($result = $DB->query($query)) {
+         if ($DB->numrows($result) > 0) {
+            while ($data = $DB->fetch_array($result)) {
+               // Disconnect without auto actions
+               Disconnect($data["ID"], 1, false);
+            }
+         }
+      }
+   
+}
 ?>

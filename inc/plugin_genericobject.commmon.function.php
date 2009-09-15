@@ -190,6 +190,9 @@ function plugin_genericobject_registerOneType($type) {
 
 		array_push($GENERICOBJECT_LINK_TYPES, $typeID);
       
+      if ($type['use_network_ports']) {
+      	array_push($CFG_GLPI["netport_types"],$typeID);
+      }
       //If helpdesk functionnality is on, and helpdesk_visible field exists for this object type
       if ($type['use_tickets'] && isset($db_fields['helpdesk_visible'])) {
          array_push($CFG_GLPI['helpdesk_visible_types'],$typeID);
@@ -205,6 +208,7 @@ function plugin_genericobject_registerOneType($type) {
 		}
 		//End integration with datainjection plugin
 
+      //Integration with order management plugin
 		if ($type["use_plugin_order"] && $plugin->isActivated("order")) {
 			usePlugin("order");
 			array_push($ORDER_AVAILABLE_TYPES, $typeID);

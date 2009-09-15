@@ -74,6 +74,7 @@ function plugin_genericobject_haveRight($module, $right) {
 
 function plugin_genericobject_install() {
 	global $DB;
+   
 	$query = "CREATE TABLE `glpi_plugin_genericobject_types` (
 			`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
 			`device_type` INT( 11 ) NOT NULL DEFAULT 0 ,
@@ -91,6 +92,8 @@ function plugin_genericobject_install() {
 	 		`use_tickets` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_links` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_loans` INT ( 1 ) NOT NULL DEFAULT 0 ,
+         `use_network_ports` INT ( 1 ) NOT NULL DEFAULT 0 ,
+         `use_direct_connections` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_plugin_datainjection` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_plugin_pdf` INT ( 1 ) NOT NULL DEFAULT 0 ,
 	 		`use_plugin_order` INT ( 1 ) NOT NULL DEFAULT 0 ,
@@ -156,6 +159,8 @@ function plugin_genericobject_install() {
 function plugin_genericobject_uninstall() {
 	global $DB;
 
+   include_once(GLPI_ROOT."/inc/computer.class.php");
+   include_once(GLPI_ROOT."/inc/computer.function.php");
 	//Delete search display preferences
 	$query="DELETE FROM glpi_display WHERE type='4850';";
 	$DB->query($query);
@@ -163,18 +168,21 @@ function plugin_genericobject_uninstall() {
 	//For each type
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
 	{
+      
       //Delete loans
       plugin_genericobject_deleteLoans($value["device_type"]);
 
 		//Delete if exists datainjection models
 		plugin_genericobject_removeDataInjectionModels($value["device_type"]);
 
+      plugin_genericobject_deleteNetworking($value["device_type"]);
+      
 		//Delete search display preferences
 		$query="DELETE FROM glpi_display WHERE type='".$value["device_type"]."';";
 		$DB->query($query);
 		
 		//Delete link tables
-		$link_tables = array("glpi_doc_device","glpi_contract_device","glpi_bookmark","glpi_history");
+		$link_tables = array("glpi_infocoms","glpi_reservation_item","glpi_doc_device","glpi_contract_device","glpi_bookmark","glpi_history");
 		foreach ($link_tables as $link_table)
 		{
 			$query="DELETE FROM `".$link_table."` WHERE device_type='".$value["device_type"]."';";
@@ -212,3 +220,16 @@ function plugin_genericobject_uninstall() {
 
 	return true;
 }
+
+function updatev10to11() {
+	global $DB;
+   
+   if (!FieldExists('glpi_plugin_genericobject_types','use_network_ports')) {
+	  $DB->query("ALTER TABLE `glpi_plugin_genericobject_types` ADD `use_network_ports` INT( 1 ) NOT NULL DEFAULT '0'");	
+	}
+   
+   if (!FieldExists('glpi_plugin_genericobject_types','use_direct_connections')) {
+     $DB->query("ALTER TABLE `glpi_plugin_genericobject_types` ADD `use_direct_connections` INT( 1 ) NOT NULL DEFAULT '0'"); 
+   }
+}
+?>

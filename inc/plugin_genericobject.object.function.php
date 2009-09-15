@@ -310,4 +310,5 @@ function plugin_genericobject_showDevice($target,$device_type,$device_id) {
 	}
 
 }
+
 ?>

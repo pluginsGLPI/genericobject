@@ -55,6 +55,7 @@ $LANG['genericobject']['config'][10] = "Plugin injection de fichiers";
 $LANG['genericobject']['config'][11] = "Plugin PDF";
 $LANG['genericobject']['config'][12] = "Plugin gestion des commandes";
 $LANG['genericobject']['config'][13] = "Plugin de désinstallation des matériels";
+$LANG['genericobject']['config'][14] = "Connexions réseaux";
 
 $LANG['genericobject']['fields'][1] = "Champs associés à l'objet";
 $LANG['genericobject']['fields'][2] = "Nom dans la base";

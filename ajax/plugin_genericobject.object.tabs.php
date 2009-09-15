@@ -29,79 +29,102 @@
     Original Author of file: 
     Purpose of file:
     ----------------------------------------------------------------------*/
-$NEEDED_ITEMS=array("reservation","link","computer","printer","networking","monitor","software","peripheral","phone","tracking","document","user","enterprise","contract","infocom","group");
+$NEEDED_ITEMS = array ("reservation","link","computer","printer",
+	"networking","monitor","software","peripheral","phone",
+	"tracking","document","user","enterprise","contract",
+	"infocom","group");
 
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
-useplugin('genericobject',true);
+useplugin('genericobject', true);
 $type = $_POST["type"];
 
-
-if(!isset($_POST["ID"])) {
-	exit();
+if (!isset ($_POST["ID"])) {
+	exit ();
 }
-if(!isset($_POST["sort"])) $_POST["sort"] = "";
-if(!isset($_POST["order"])) $_POST["order"] = "";
-if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
+if (!isset ($_POST["sort"]))
+	$_POST["sort"] = "";
+if (!isset ($_POST["order"]))
+	$_POST["order"] = "";
+if (!isset ($_POST["withtemplate"]))
+	$_POST["withtemplate"] = "";
 
-	if (empty($_POST["ID"])){
-		switch($_POST['glpi_tab']){
-			default :
-				break;
-		}
-	}else{
-		$commonitem = new CommonItem;
-		$commonitem->getFromDB($type,$_POST["ID"]);
-		switch($_POST['glpi_tab']){
-			case -1:
-				if ($commonitem->obj->canUseInfocoms())
-				{
-					showInfocomForm($CFG_GLPI["root_doc"]."/front/infocom.form.php",$type,$_POST["ID"],1,$_POST["withtemplate"]);
-					showContractAssociated($type,$_POST["ID"],$_POST["withtemplate"]);
-				}
-				if ($commonitem->obj->canUseDocuments())
-					showDocumentAssociated($type,$_POST["ID"],$_POST["withtemplate"]);
-				if ($commonitem->obj->canUseTickets())
-					showJobListForItem($type,$_POST["ID"]);
-				if ($commonitem->obj->canUseNotes())
-					showNotesForm($_POST['target'],$type,$_POST["ID"]);
-				if ($commonitem->obj->canUseLoans())
-					showDeviceReservations($_POST['target'],$type,$_POST["ID"]);
-				if ($commonitem->obj->canUseHistory())
-					showHistory($type,$_POST["ID"]);
-				plugin_genericobject_showDevice($_POST['target'],$type,$_POST["ID"]);
-				if (!displayPluginAction($type,$_POST["ID"],$_POST['glpi_tab'])){
-				}
-				break;
-			case 4 :
-				showInfocomForm($CFG_GLPI["root_doc"]."/front/infocom.form.php",$type,$_POST["ID"],1,$_POST["withtemplate"]);
-				showContractAssociated($type,$_POST["ID"],$_POST["withtemplate"]);
-				break;
-			case 5 :
-				showDocumentAssociated($type,$_POST["ID"],$_POST["withtemplate"]);
-				break;
-			case 6:
-				showJobListForItem($type,$_POST["ID"]);
-				break;
-			case 7 :
-				plugin_genericobject_showDevice($_POST['target'],$type,$_POST["ID"]);
-				break;
-			case 10 :
-				showNotesForm($_POST['target'],$type,$_POST["ID"]);
-				break;
-			case 11 :
-				showDeviceReservations($_POST['target'],$type,$_POST["ID"]);
-				break;
-			case 12 :
-				showHistory($type,$_POST["ID"]);
-				break;
-			default :
-				if (!displayPluginAction($type,$_POST["ID"],$_POST['glpi_tab'])){
-				}
-				break;
-		}
+if (empty ($_POST["ID"])) {
+	switch ($_POST['glpi_tab']) {
+		default :
+			break;
 	}
+} else {
+	$commonitem = new CommonItem;
+	$commonitem->getFromDB($type, $_POST["ID"]);
+	switch ($_POST['glpi_tab']) {
+		case -1 :
+			if ($commonitem->obj->canUseDirectConnections()) {
+				showConnect($_POST['target'], $_POST["ID"], $type);
+			}
+
+			if ($commonitem->obj->canUseNetworkPorts()) {
+				showPortsAdd($_POST["ID"], $type);
+				showPorts($_POST["ID"], $type, $_POST["withtemplate"]);
+			}
+
+			if ($commonitem->obj->canUseInfocoms()) {
+				showInfocomForm($CFG_GLPI["root_doc"] . "/front/infocom.form.php", $type, $_POST["ID"], 1, $_POST["withtemplate"]);
+				showContractAssociated($type, $_POST["ID"], $_POST["withtemplate"]);
+			}
+			if ($commonitem->obj->canUseDocuments())
+				showDocumentAssociated($type, $_POST["ID"], $_POST["withtemplate"]);
+			if ($commonitem->obj->canUseTickets())
+				showJobListForItem($type, $_POST["ID"]);
+			if ($commonitem->obj->canUseNotes())
+				showNotesForm($_POST['target'], $type, $_POST["ID"]);
+			if ($commonitem->obj->canUseLoans())
+				showDeviceReservations($_POST['target'], $type, $_POST["ID"]);
+			if ($commonitem->obj->canUseHistory())
+				showHistory($type, $_POST["ID"]);
+			plugin_genericobject_showDevice($_POST['target'], $type, $_POST["ID"]);
+			if (!displayPluginAction($type, $_POST["ID"], $_POST['glpi_tab'])) {
+			}
+			break;
+		case 3 :
+			if ($commonitem->obj->canUseDirectConnections()) {
+				showConnect($_POST['target'], $_POST["ID"], $type);
+			}
+
+			if ($commonitem->obj->canUseNetworkPorts()) {
+				showPortsAdd($_POST["ID"], $type);
+				showPorts($_POST["ID"], $type, $_POST["withtemplate"]);
+			}
+			break;
+		case 4 :
+			showInfocomForm($CFG_GLPI["root_doc"] . "/front/infocom.form.php", $type, $_POST["ID"], 1, $_POST["withtemplate"]);
+			showContractAssociated($type, $_POST["ID"], $_POST["withtemplate"]);
+			break;
+		case 5 :
+			showDocumentAssociated($type, $_POST["ID"], $_POST["withtemplate"]);
+			break;
+		case 6 :
+			showJobListForItem($type, $_POST["ID"]);
+			break;
+		case 7 :
+			plugin_genericobject_showDevice($_POST['target'], $type, $_POST["ID"]);
+			break;
+		case 10 :
+			showNotesForm($_POST['target'], $type, $_POST["ID"]);
+			break;
+		case 11 :
+			showDeviceReservations($_POST['target'], $type, $_POST["ID"]);
+			break;
+		case 12 :
+			showHistory($type, $_POST["ID"]);
+			break;
+		default :
+			if (!displayPluginAction($type, $_POST["ID"], $_POST['glpi_tab'])) {
+			}
+			break;
+	}
+}
 ?>

@@ -32,6 +32,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
+$NEEDED_ITEMS = array("computer","ocsng","tracking","infocom");
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
@@ -52,12 +53,25 @@ elseif (!isset ($_SESSION["glpi_plugin_genericobject_device_type"])) {
 else {
 	$type = $_SESSION["glpi_plugin_genericobject_device_type"];
 }
-	
 
 $name = plugin_genericobject_getNameByID($type);
 $object = new CommonItem;
 $object->setType($type, true);
 
+//Manage direct connections
+if (isset($_GET["disconnect"]) && isset($_GET["dID"]) && isset($_REQUEST["ID"])) {
+   $object->obj->check($_GET["dID"],"w");
+   Disconnect($_REQUEST["ID"]);
+   glpi_header($_SERVER['HTTP_REFERER']);
+}
+else if(isset($_POST["connect"])&&isset($_POST["item"])&&$_POST["item"]>0) {
+   $object->obj->check($_REQUEST["ID"],"w");
+   Connect($_POST["sID"],$_POST["item"],$type);
+   glpi_header($CFG_GLPI["root_doc"]."/plugins/genericobject/front/plugin_genericobject.object.form.php?ID=".$_POST["sID"]);
+}	
+//End manage direct connections
+
+//Manage standard events
 if (isset ($_POST["add"])) {
 	$object->obj->add($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
@@ -70,10 +84,20 @@ elseif (isset ($_POST["restore"])) {
 	$object->obj->restore($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }
+else if (isset($_REQUEST["purge"]))
+{
+      $input["ID"]=$_REQUEST["ID"];
+
+   $object->obj->check($input['ID'],'w');
+
+   $object->obj->delete($input,1);
+   glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$type] . "?device_type=" . $type);
+}
 elseif (isset ($_POST["delete"])) {
 	$object->obj->delete($_POST);
 	glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$type] . "?device_type=" . $type);
 }
+//End manage standard events
 elseif (isset ($_POST["add_type_link"])) {
 	plugin_genericobject_addDeviceLink($type, $_POST["source_id"], $_POST["type"], $_POST["FK_device"]);
 	glpi_header($_SERVER["HTTP_REFERER"]);
