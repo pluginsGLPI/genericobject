@@ -94,7 +94,7 @@ function plugin_init_genericobject() {
 
 	$plugin = new Plugin;
 
-	if ($plugin->isActivated("genericobject")) {
+	if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
 		//Include all inc files
 		foreach (glob(GLPI_ROOT . '/plugins/genericobject/inc/*.php') as $file)
 			include_once ($file);
@@ -149,7 +149,7 @@ function plugin_version_genericobject() {
 	global $LANG;
 	return array (
 		'name' => $LANG["genericobject"]["title"][1],
-		'version' => '1.0.0',
+		'version' => '1.1.0',
 		'author' => 'Walid Nouh',
 		'homepage' => 'http://glpi-project.org',
 		'minGlpiVersion' => '0.72.1', // For compatibility / no install in version < 0.72

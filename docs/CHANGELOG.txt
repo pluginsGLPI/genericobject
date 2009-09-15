@@ -31,5 +31,11 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 1.1.0
+ #1690 Enable direct connexions & network ports
+ #1707 Purge not working
+ #1709 Delete infocom, contracts & reservations when an objet is deleted
+ #1712 Error when datainjection is not available
+
 Version 1.0
   * Initial version
