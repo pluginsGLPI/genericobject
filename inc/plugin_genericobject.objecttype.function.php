@@ -495,4 +495,5 @@ function plugin_genericobject_deleteNetworking($device_type) {
       }
    
 }
+
 ?>

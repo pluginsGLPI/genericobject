@@ -74,16 +74,30 @@ function plugin_genericobject_getNextRanking($device_type)
  */
 function plugin_genericobject_addNewField($device_type,$name)
 {
-	$type_field = new PluginGenericObjectField;
-		$input["name"] = $name;
-		$input["device_type"] = $device_type;
-		$input["rank"] = plugin_genericobject_getNextRanking($device_type);
-		$input["mandatory"] = 0;
-		$input["unique"] = 0;
-		$input["entity_restrict"] = 0;
-		$type_field->add($input);
+	if (!plugin_genericobject_fieldExists($device_type,$name)) {
+      $type_field = new PluginGenericObjectField;
+         $input["name"] = $name;
+         $input["device_type"] = $device_type;
+         $input["rank"] = plugin_genericobject_getNextRanking($device_type);
+         $input["mandatory"] = 0;
+         $input["unique"] = 0;
+         $input["entity_restrict"] = 0;
+         $type_field->add($input);
+	}
 }
 
+function plugin_genericobject_fieldExists($device_type,$name) {
+	global $DB;
+   $query = "SELECT ID FROM `glpi_plugin_genericobject_type_fields` " .
+         "WHERE `device_type`='$device_type' AND `name`='$name'";
+   $result = $DB->query($query);
+   if (!$DB->numrows($result)) {
+   	return false;
+   }
+   else {
+   	return true;
+   }
+}
 function plugin_genericobject_deleteAllFieldsByType($device_type)
 {
 	global $DB;
@@ -95,4 +109,23 @@ function plugin_genericobject_setMandatoryField($device_type,$field)
 {
 	
 }
+
+function plugin_genericobject_checkNecessaryFieldsDelete($device_type,$field) {
+   $type = new PluginGenericObjectType;
+   $type->getFromDBByType($device_type);
+   
+   if ($type->fields['use_network_ports'] && 'location'==$field) {
+      return false;
+   }
+   
+   if ($type->fields['use_direct_connections']) {
+      foreach(array('FK_users','FK_groups','state','location') as $tmp_field) {
+         if ($tmp_field==$field) {
+            return false;
+         }
+      } 
+   }
+   return true;
+}
+
 ?>

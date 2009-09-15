@@ -64,5 +64,11 @@ class PluginGenericObjectField extends CommonDBTM{
  	{
  		return $this->fields["mandatory"];
  	}   
+
+   function post_addItem($newID, $input) {
+   	$table = plugin_genericobject_getTableNameByID($input["device_type"]);
+      plugin_genericobject_addFieldInDB($table, $this->fields["name"], $this->fields["name"]);
+      
+   }
 }
 ?>

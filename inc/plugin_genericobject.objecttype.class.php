@@ -310,18 +310,27 @@ class PluginGenericObjectType extends CommonDBTM{
 
 	function prepareInputForUpdate($input)
 	{
-		$this->getFromDB($input["ID"]);
-		if (isset($input["status"]) && $input["status"])
+      $this->getFromDB($input["ID"]);
+		if (isset($input["status"]) && $input["status"]) {
 			plugin_genericobject_registerOneType($this->fields);
+		}
 			
-		if (isset($input["use_template"]))
-			if ($input["use_template"])
-				plugin_genericobject_enableTemplateManagement($this->fields["name"]);	
-			else
-				plugin_genericobject_disableTemplateManagement($this->fields["name"]);	
-		return $input;
+		if (isset($input["use_template"])) {
+         if ($input["use_template"]) {
+         	plugin_genericobject_enableTemplateManagement($this->fields["name"]);
+         }
+         else {
+         	plugin_genericobject_disableTemplateManagement($this->fields["name"]);
+         }
+		}
+		
+      return $input;
 	}
 
+   function post_updateItem($input,$updates,$history=1) {
+     $this->checkNecessaryFieldsUpdate();	
+   }
+   
 	function pre_deleteItem($ID)
 	{
 		$this->getFromDB($ID);
@@ -350,5 +359,22 @@ class PluginGenericObjectType extends CommonDBTM{
 		plugin_genericobject_removeDataInjectionModels($this->fields["device_type"]);
 		return true;
 	}
+
+function checkNecessaryFieldsUpdate() {
+   $commonitem = new CommonItem;
+   $commonitem->setType($this->fields["device_type"],true);
+   
+   if ($this->fields['use_network_ports'] && !$commonitem->getField('location')) {
+      plugin_genericobject_addNewField($this->fields["device_type"],'location');
+   }
+   
+   if ($this->fields['use_direct_connections']) {
+      foreach(array('FK_users','FK_groups','state','location') as $field) {
+         if (!$commonitem->getField($field)) {
+           plugin_genericobject_addNewField($this->fields["device_type"],$field); 
+         }
+      } 
+   }
+}
 }
 ?>

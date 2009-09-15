@@ -1,4 +1,5 @@
 <?php
+
 /*
  ----------------------------------------------------------------------
  GLPI - Gestionnaire Libre de Parc Informatique
@@ -33,83 +34,75 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (!isset($_REQUEST["ID"]))
+if (!isset ($_REQUEST["ID"]))
 	$_REQUEST["ID"] = '';
 
 $type = new PluginGenericObjectType;
 
-$extraparams = array();
+$extraparams = array ();
 if (isset ($_GET["select"]) && $_GET["select"] == "all")
 	$extraparams["selected"] = "checked";
 
-if (isset($_GET["action"]))
-{
+if (isset ($_GET["action"])) {
 	$type->getFromDB($_REQUEST["ID"]);
 	plugin_genericobject_registerOneType($type->fields);
 	plugin_genericobject_includeLocales($type->fields["name"]);
-	plugin_genericobject_changeFieldOrder($_GET["field"],$type->fields["device_type"],$_GET["action"]);
+	plugin_genericobject_changeFieldOrder($_GET["field"], $type->fields["device_type"], $_GET["action"]);
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
-if (isset($_POST["add"]))
-{
+if (isset ($_POST["add"])) {
 	$type->add($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);	
-}	
-elseif (isset($_POST["update"]))
-{
+	glpi_header($_SERVER["HTTP_REFERER"]);
+}
+elseif (isset ($_POST["update"])) {
 	$type->update($_POST);
-	glpi_header($_SERVER["HTTP_REFERER"]);	
+   glpi_header($_SERVER["HTTP_REFERER"]);
 }
-elseif (isset($_POST["delete"]))
-{
+elseif (isset ($_POST["delete"])) {
 	$type->delete($_POST);
-	glpi_header($CFG_GLPI["root_doc"] . '/'.$SEARCH_PAGES[PLUGIN_GENERICOBJECT_TYPE]);	
+	glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[PLUGIN_GENERICOBJECT_TYPE]);
 }
-elseif (isset($_POST["delete_field"]))
-{
+elseif (isset ($_POST["delete_field"])) {
 	$type->getFromDB($_POST["ID"]);
 	plugin_genericobject_registerOneType($type->fields);
 	plugin_genericobject_includeLocales($type->fields["name"]);
 
 	$type_field = new PluginGenericObjectField;
-	foreach($_POST["fields"] as $field => $value)
-		if ($value == 1)
-		{
-			$type_field->deleteByFieldByDeviceTypeAndName($type->fields["device_type"],$field);
-			$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
-			plugin_genericobject_deleteFieldFromDB($table,$field,$type->fields["name"]);
-			addMessageAfterRedirect($LANG['genericobject']['fields'][5],true);
-		}
-	
-	plugin_genericobject_reorderFields($type->fields["device_type"]);	
+	foreach ($_POST["fields"] as $field => $value) {
+         if ($value == 1 && plugin_genericobject_checkNecessaryFieldsDelete($type->fields["device_type"], $field)) {
+            $type_field->deleteByFieldByDeviceTypeAndName($type->fields["device_type"], $field);
+            $table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
+            plugin_genericobject_deleteFieldFromDB($table, $field, $type->fields["name"]);
+            addMessageAfterRedirect($LANG['genericobject']['fields'][5], true);
+         }
+	}
+
+	plugin_genericobject_reorderFields($type->fields["device_type"]);
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
-elseif (isset($_POST["add_field"]))
-{
-	if ($_POST["new_field"])
-	{
+elseif (isset ($_POST["add_field"])) {
+	if ($_POST["new_field"]) {
 		$type->getFromDB($_POST["ID"]);
 		plugin_genericobject_registerOneType($type->fields);
 		plugin_genericobject_includeLocales($type->fields["name"]);
 
-		plugin_genericobject_addNewField($type->fields["device_type"],$_POST["new_field"]);
-		$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
-		plugin_genericobject_addFieldInDB($table,$_POST["new_field"],$type->fields["name"]);
+		plugin_genericobject_addNewField($type->fields["device_type"], $_POST["new_field"]);
+		//$table = plugin_genericobject_getTableNameByID($type->fields["device_type"]);
+		//plugin_genericobject_addFieldInDB($table, $_POST["new_field"], $type->fields["name"]);
 		addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
 	}
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
-elseif (isset($_POST["update_links_types"]))
-{
+elseif (isset ($_POST["update_links_types"])) {
 	$type->getFromDB($_POST["ID"]);
 	plugin_genericobject_deleteAllLinkedDeviceByType($type->fields["device_type"]);
-	foreach($_POST["link_device_type"] as $tmp => $destination_type)
-		plugin_genericobject_addNewLinkedDeviceType($type->fields["device_type"],$destination_type);
+	foreach ($_POST["link_device_type"] as $tmp => $destination_type)
+		plugin_genericobject_addNewLinkedDeviceType($type->fields["device_type"], $destination_type);
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
 
-commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'],"plugins","genericobject","type");
-$type->showForm($_SERVER["PHP_SELF"],$_REQUEST["ID"],$extraparams);
+commonHeader($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject", "type");
+$type->showForm($_SERVER["PHP_SELF"], $_REQUEST["ID"], $extraparams);
 
 commonFooter();
 ?>
