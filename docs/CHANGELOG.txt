@@ -36,6 +36,7 @@ Version 1.1.0
  #1707 Purge not working
  #1709 Delete infocom, contracts & reservations when an objet is deleted
  #1712 Error when datainjection is not available
+ #1713 Remove spaces in object types
 
 Version 1.0
   * Initial version

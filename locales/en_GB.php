@@ -55,6 +55,7 @@ $LANG['genericobject']['config'][10] = "injection file plugin";
 $LANG['genericobject']['config'][11] = "PDF plugin";
 $LANG['genericobject']['config'][12] = "order plugin";
 $LANG['genericobject']['config'][13] = "item's uninstallation plugin";
+$LANG['genericobject']['config'][14] = "Network connections";
 
 $LANG['genericobject']['fields'][1] = "Fields associated with the object";
 $LANG['genericobject']['fields'][2] = "Name in DB";

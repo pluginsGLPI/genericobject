@@ -32,7 +32,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-$NEEDED_ITEMS = array("computer","ocsng","tracking","infocom");
+$NEEDED_ITEMS = array("computer","ocsng","tracking","infocom","reservation");
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
