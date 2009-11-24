@@ -31,6 +31,9 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 1.1.3
+ #1762 SQL error with tplname field
+
 Version 1.1.2
  #1659 Integration with geniventorynumber plugin
  #1734 Error with reservations
