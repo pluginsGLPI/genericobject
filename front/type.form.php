@@ -51,6 +51,7 @@ if (isset ($_GET["action"])) {
 	glpi_header($_SERVER['HTTP_REFERER']);
 }
 if (isset ($_POST["add"])) {
+	$_POST['itemtype'] = $_POST['name'];
 	$type->add($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 	exit();

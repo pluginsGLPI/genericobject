@@ -49,9 +49,11 @@ if (isset ($_REQUEST["itemtype"])) {
 elseif (!isset ($_SESSION["glpi_plugin_genericobject_itemtype"])) {
    $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
    $type = $_SESSION["glpi_plugin_genericobject_itemtype"];	
+
 }
 else {
 	$type = $_SESSION["glpi_plugin_genericobject_itemtype"];
+	
 }
 
 $name = plugin_genericobject_getNameByID($type);
@@ -81,6 +83,7 @@ else if (isset($_GET["unglobalize"]))
 
 //Manage standard events
 if (isset ($_POST["add"])) {
+	//var_dump($_POST);
 	$object->add($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }

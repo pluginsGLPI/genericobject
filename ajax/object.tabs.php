@@ -62,8 +62,11 @@ if (empty ($_POST["id"])) {
 	}
 } else {
 	
-	$commonitem = new PluginGenericobjectObject($type);
+	$commonitem = new PluginGenericobjectObject;
 	$commonitem->getFromDB($_POST["id"]);
+	
+	//echo $commonitem->getType();
+			
 	switch ($_POST['glpi_tab']) {
 		case -1 :
 			/*if ($commonitem->canUseDirectConnections()) {
@@ -97,7 +100,7 @@ if (empty ($_POST["id"])) {
 			}
 			if ($commonitem->canUseLoans()) {
 				//showDeviceReservations($_POST['target'], $type, $_POST["id"]);
-				Reservation::showForItem($commonitem, $_POST["id"]);
+				Reservation::showForItem('PluginGenericobjectObject', $_POST["id"]);
 			}
 			if ($commonitem->canUseHistory()) {
 				//showHistory($type, $_POST["id"]);
@@ -143,7 +146,7 @@ if (empty ($_POST["id"])) {
 			break;
 		case 11 :
 			//showDeviceReservations($_POST['target'], $type, $_POST["id"]);
-			Reservation::showForItem($commonitem, $_POST["id"]);
+			Reservation::showForItem('PluginGenericobjectObject', $_POST["id"]);
 			break;
 		case 12 :
 			//showHistory($type, $_POST["id"]);

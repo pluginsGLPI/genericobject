@@ -39,7 +39,7 @@
  * @return the classname associated with the object
  */
 function plugin_genericobject_getObjectTypeByName($name) {
-	return $classname = 'PluginGenericObject' . ucfirst($name);
+	return $classname = 'PluginGenericobject' . ucfirst($name);
 }
 
 /**

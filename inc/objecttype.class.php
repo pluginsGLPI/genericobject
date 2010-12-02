@@ -50,7 +50,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 	function getFromDBByType($itemtype) {
 		global $DB;
-		$query = "SELECT * FROM `" . $this->table . "` WHERE itemtype=$itemtype";
+		$query = "SELECT * FROM `" . $this->table . "` WHERE itemtype='$itemtype'";
 		$result = $DB->query($query);
 		if ($DB->numrows($result) > 0)
 			$this->fields = $DB->fetch_array($result);
@@ -312,16 +312,16 @@ class PluginGenericobjectType extends CommonDBTM {
 		plugin_genericobject_addTable($this->input["name"]."s");
 
 		//Write object class on the filesystem
-		plugin_genericobject_addClassFile($this->input["name"], plugin_genericobject_getObjectClassByName($this->input["name"]), $this->input["itemtype"]);
+		plugin_genericobject_addClassFile($this->input["name"], plugin_genericobject_getObjectClassByName($this->input["name"]), $this->input["name"]);
 
 		//Create rights for this new object
 		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["id"], true);
 
 		//Add default field 'name' for the object
-		plugin_genericobject_addNewField($this->input["itemtype"], "name");
+		plugin_genericobject_addNewField($this->input["name"], "name");
 
 		//Add new link device table
-		plugin_genericobject_addLinkTable($this->input["itemtype"]."s");
+		plugin_genericobject_addLinkTable($this->input["name"]."s");
 
 		plugin_change_profile_genericobject();
 		return true;

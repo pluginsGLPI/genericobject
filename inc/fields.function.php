@@ -39,7 +39,10 @@
 function plugin_genericobject_getFieldsByType($itemtype)
 {
 	global $DB;
-	$query = "SELECT * FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype=$itemtype ORDER BY rank ASC";
+	
+	$itemtype = strtolower(str_replace("PluginGenericobject", "", $itemtype));
+	
+	$query = "SELECT * FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype='$itemtype' ORDER BY rank ASC";
 	$result = $DB->query($query);
 	$fields = array();
 	
@@ -84,6 +87,7 @@ function plugin_genericobject_addNewField($itemtype,$name)
          $input["entity_restrict"] = 0;
          $type_field->add($input);
 	}
+	else exit("plugin_genericobject_addNewField".$itemtype);
 }
 
 function plugin_genericobject_fieldExists($itemtype,$name) {
@@ -101,7 +105,7 @@ function plugin_genericobject_fieldExists($itemtype,$name) {
 function plugin_genericobject_deleteAllFieldsByType($itemtype)
 {
 	global $DB;
-	$query = "DELETE FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype=$itemtype";
+	$query = "DELETE FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype='$itemtype'";
 	$DB->query($query);
 }
 

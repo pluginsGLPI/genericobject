@@ -58,7 +58,8 @@ if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
 if(!isset($_GET["withtemplate"])) $_GET["withtemplate"] = "";
 
 
-
+//echo $type->getType();
+	
 		switch($_POST['glpi_tab']){
 			case -1:
 					$type->showBehaviourForm($_POST['target'],$_POST["id"]);
@@ -79,6 +80,7 @@ if(!isset($_GET["withtemplate"])) $_GET["withtemplate"] = "";
 				break;		
 			case 5 :
 				$type->getFromDB($_POST["id"]);
+				
 				plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
 			break;
 			case 12 :

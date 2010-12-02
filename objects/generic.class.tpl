@@ -37,7 +37,7 @@
  */
 class %%CLASSNAME%% extends PluginGenericobjectObject {
 	function __construct() {
-		parent::__construct(%%DEVICETYPE%%);
+		parent::__construct("%%DEVICETYPE%%");
 	}
 }
 ?>

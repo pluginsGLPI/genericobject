@@ -60,9 +60,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 	function setType($itemtype) {
 		$this->type = $itemtype;
-		//$this->type = "PluginGenericobject".ucfirst(plugin_genericobject_getNameByID($itemtype));
+		$this->type = plugin_genericobject_getObjectTypeByName($itemtype);
 		$this->table = plugin_genericobject_getTableNameByID($itemtype);
-		$this->type_infos = plugin_genericobject_getObjectTypeConfiguration($this->type);
+		$this->type_infos = plugin_genericobject_getObjectTypeConfiguration($itemtype);
 		$this->entity_assign = $this->type_infos['use_entity'];
 		$this->may_be_recursive = $this->type_infos['use_recursivity'];
 		$this->dohistory = $this->type_infos['use_history'];
@@ -190,7 +190,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 		
 
 		$this->showFormHeader($options);
-		echo "<input type='hidden' name='itemtype' value='" . $this->type . "'>";
+		echo "<input type='hidden' name='itemtype' value='" . strtolower(str_replace("PluginGenericobject", "", $this->type)) . "'>";
 
 		if ($this->type_infos["use_entity"])
 			echo "<input type='hidden' name='entities_id' value='" . $this->fields["entities_id"] . "'>";
@@ -289,7 +289,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
 				case 'dropdown' :
 					if (plugin_genericobject_isDropdownTypeSpecific($name)) {
-						$device_name = plugin_genericobject_getNameByID($this->type);
+						$type = strtolower(str_replace("PluginGenericobject", "", $this->type));
+						$device_name = plugin_genericobject_getNameByID($type);
 						$table = plugin_genericobject_getDropdownTableName($device_name, $name);
 					} else
 						$table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];

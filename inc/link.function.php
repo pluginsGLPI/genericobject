@@ -69,7 +69,7 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 function plugin_genericobject_getLinksByType($itemtype)
 {
 	global $DB;
-	$query = "SELECT destination_type FROM `glpi_plugin_genericobject_type_links` WHERE itemtype=$itemtype";
+	$query = "SELECT destination_type FROM `glpi_plugin_genericobject_type_links` WHERE itemtype='$itemtype'";
 	$result = $DB->query($query);
 	$types = array();
 	while ($datas = $DB->fetch_array($result))

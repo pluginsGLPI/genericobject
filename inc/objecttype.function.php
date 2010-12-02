@@ -82,7 +82,7 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 
 	$object_type = new PluginGenericObjectType;
 	$object_type->getFromDB($ID);
-
+	
 	$object_table = plugin_genericobject_getTableNameByID($object_type->fields["itemtype"]);
 	$fields_in_db = plugin_genericobject_getFieldsByType($object_type->fields["itemtype"]);
 
@@ -294,6 +294,28 @@ function plugin_genericobject_deleteDropdownAjaxfile($name, $field) {
 		"/".$name.$field.".tabs.php");
 }
 
+function plugin_genericobject_deleteSpecificDropdownFiles($itemtype)
+{
+	global $DB;
+	$name = plugin_genericobject_getNameByID($itemtype);
+	$types = plugin_genericobject_getDropdownSpecificFields();
+
+	foreach($types as $type => $tmp)	{
+		if (file_exists(GENERICOBJECT_AJAX_PATH . "/".$name.$type.".tabs.php"))
+		unlink(GENERICOBJECT_AJAX_PATH .
+			"/".$name.$type.".tabs.php");
+			
+		if (file_exists(GENERICOBJECT_FRONT_PATH . "/".$name.$type.".form.php"))
+		unlink(GENERICOBJECT_FRONT_PATH .
+			"/".$name.$type.".form.php");
+			
+		if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$name."_".$type.".class.php"))
+		unlink(GENERICOBJECT_CLASS_PATH .
+			"/".$name."_".$type.".class.php");
+	}
+		
+}
+
 function plugin_genericobject_deleteDropdownTable($name, $field) {
 	global $DB;
 	if (TableExists(plugin_genericobject_getDropdownTableName($name, $field)))
@@ -403,6 +425,9 @@ function plugin_genericobject_getDropdownSpecificFields() {
 
 function plugin_genericobject_getDropdownSpecific(& $dropdowns, $type, $check_entity = false) {
 	global $GENERICOBJECT_AVAILABLE_FIELDS;
+	
+	//var_dump($type);
+	
 	$specific_types = plugin_genericobject_getDropdownSpecificFields();
 	$table = plugin_genericobject_getTableNameByName($type["name"]);
 
@@ -485,12 +510,13 @@ function plugin_genericobject_deleteSpecificDropdownTables($itemtype)
 function plugin_genericobject_addLinkTable($itemtype)
 {
 	global $DB;
-	$name = plugin_genericobject_getNameByID($itemtype);
+	$name = $itemtype;
+	//$name = plugin_genericobject_getNameByID($itemtype);
 	$query = "CREATE TABLE IF NOT EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."` (
 	  `id` int(11) NOT NULL auto_increment,
 	  `source_id` int(11) NOT NULL default '0',
 	  `items_id` int(11) NOT NULL default '0',
-	  `itemtype` int(11) NOT NULL default '0',
+	  `itemtype` VARCHAR( 255 ) NOT NULL,
 	  PRIMARY KEY  (`id`),
 	  UNIQUE KEY `source_id` (`source_id`,`items_id`,`itemtype`),
 	  KEY `source_id_2` (`source_id`),

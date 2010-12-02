@@ -81,7 +81,7 @@ function plugin_genericobject_install() {
 	if (!TableExists('glpi_plugin_genericobject_types')) {
 		$query = "CREATE TABLE `glpi_plugin_genericobject_types` (
 		                  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-		                  `itemtype` INT( 11 ) NOT NULL DEFAULT 0 ,
+		                  `itemtype` VARCHAR( 255 ) NOT NULL DEFAULT 0 ,
 		                  `state` INT( 2 ) NOT NULL DEFAULT 0 ,
 		                  `status` INT ( 1 )NOT NULL DEFAULT 0 ,
 		                  `name` VARCHAR( 255 )  collate utf8_unicode_ci NOT NULL ,
@@ -140,7 +140,7 @@ function plugin_genericobject_install() {
 	if (!TableExists("glpi_plugin_genericobject_type_fields")) {
 		$query = "CREATE TABLE `glpi_plugin_genericobject_type_fields` (
 		            `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-		            `itemtype` INT( 11 ) NOT NULL DEFAULT 0 ,
+		            `itemtype` VARCHAR( 255 ) NOT NULL DEFAULT 0 ,
 		            `name` VARCHAR( 255 )   collate utf8_unicode_ci NOT NULL DEFAULT '' ,
 		            `rank` INT( 11 ) NOT NULL DEFAULT 0 ,
 		            `mandatory` INT( 1 ) NOT NULL ,
@@ -153,7 +153,7 @@ function plugin_genericobject_install() {
 	if (!TableExists("glpi_plugin_genericobject_type_links")) {
 		$query = "CREATE TABLE `glpi_plugin_genericobject_type_links` (
 		                  `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
-		                  `itemtype` INT( 11 ) NOT NULL ,
+		                  `itemtype` VARCHAR( 255 ) NOT NULL ,
 		                  `destination_type` INT( 11 ) NOT NULL ,
 		                  PRIMARY KEY ( `id` )
 		                  ) ENGINE = MYISAM COMMENT = 'Device type links definitions';";
