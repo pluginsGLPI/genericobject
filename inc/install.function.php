@@ -39,7 +39,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 include_once (GLPI_ROOT . "/inc/includes.php");
-include_once ("plugin_genericobject.objecttype.function.php");
+include_once ("objecttype.function.php");
 
 function plugin_genericobject_haveRight($module, $right) {
 	$matches = array (
@@ -196,7 +196,7 @@ function plugin_genericobject_uninstall() {
 
 	//For each type
 	foreach (plugin_genericobject_getAllTypes() as $tmp => $value) {
-
+		
 		//Delete loans
 		plugin_genericobject_deleteLoans($value["itemtype"]);
 
@@ -225,12 +225,17 @@ function plugin_genericobject_uninstall() {
 
 		//Drop itemtype link table
 		plugin_genericobject_deleteLinkTable($value["itemtype"]);
-
+		
+		plugin_genericobject_deleteSpecificDropdownFiles($value["itemtype"]);
+		
 		plugin_genericobject_deleteSpecificDropdownTables($value["itemtype"]);
 
 		//Drop type table
 		$DB->query("DROP TABLE IF EXISTS `" .
 		plugin_genericobject_getTableNameByName($value["name"]) . "`");
+		
+		if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"))
+			unlink(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php");	
 	}
 
 	//Delete plugin's table
