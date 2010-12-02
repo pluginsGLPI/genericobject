@@ -98,8 +98,8 @@ function plugin_genericobject_profileForTypeExists($profileID,$device_name)
  */
 function plugin_genericobject_createFirstAccess()
 {
-	if (!plugin_genericobject_profileExists($_SESSION["glpiactiveprofile"]["ID"]))
-		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["ID"],true);
+	if (!plugin_genericobject_profileExists($_SESSION["glpiactiveprofile"]["id"]))
+		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["id"],true);
 }
 
 /**
@@ -117,7 +117,7 @@ function plugin_genericobject_deleteTypeFromProfile($name)
 function plugin_change_profile_genericobject()
 {
 	$prof=new PluginGenericObjectProfile();
-	if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['ID']))
+	if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['id']))
 		$_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
 	else
 		unset($_SESSION["glpi_plugin_genericobject_profile"]);

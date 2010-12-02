@@ -87,11 +87,11 @@ $GENERICOBJECT_AVAILABLE_FIELDS['category']['linkfield']='category';
 $GENERICOBJECT_AVAILABLE_FIELDS['category']['input_type']='dropdown';
 $GENERICOBJECT_AVAILABLE_FIELDS['category']['dropdown_type']='type_specific';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['name']=$LANG['entity'][0];
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['table']='glpi_entities';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['field']='completename';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['linkfield']='FK_entities';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_entities']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['name']=$LANG['entity'][0];
+$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['table']='glpi_entities';
+$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['field']='completename';
+$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['linkfield']='entities_id';
+$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['input_type']='dropdown';
 
 /*
 $GENERICOBJECT_AVAILABLE_FIELDS['recursive']['name']=$LANG['entity'][9];
@@ -122,35 +122,35 @@ $GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['input_type']='dropdown_yesn
 $GENERICOBJECT_AVAILABLE_FIELDS['helpdesk_visible']['datatype']='bool';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['name']=$LANG['common'][15];
-$GENERICOBJECT_AVAILABLE_FIELDS['location']['table']='glpi_dropdown_locations';
+$GENERICOBJECT_AVAILABLE_FIELDS['location']['table']='glpi_locations';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['field']='completename';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['linkfield']='location';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['input_type']='dropdown';
 $GENERICOBJECT_AVAILABLE_FIELDS['location']['entity']='entity_restrict';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['name']=$LANG['joblist'][0];
-$GENERICOBJECT_AVAILABLE_FIELDS['state']['table']='glpi_dropdown_state';
+$GENERICOBJECT_AVAILABLE_FIELDS['state']['table']='glpi_states';
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['linkfield']='state';
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['input_type']='dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_users']['name']=$LANG['common'][34];
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_users']['table']='glpi_users';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_users']['field']='name';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_users']['linkfield']='FK_users';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_users']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['user']['name']=$LANG['common'][34];
+$GENERICOBJECT_AVAILABLE_FIELDS['user']['table']='glpi_users';
+$GENERICOBJECT_AVAILABLE_FIELDS['user']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['user']['linkfield']='users_id';
+$GENERICOBJECT_AVAILABLE_FIELDS['user']['input_type']='dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_groups']['name']=$LANG['common'][35];
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_groups']['table']='glpi_groups';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_groups']['field']='name';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_groups']['linkfield']='FK_groups';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_groups']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['group']['name']=$LANG['common'][35];
+$GENERICOBJECT_AVAILABLE_FIELDS['group']['table']='glpi_groups';
+$GENERICOBJECT_AVAILABLE_FIELDS['group']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['group']['linkfield']='groups_id';
+$GENERICOBJECT_AVAILABLE_FIELDS['group']['input_type']='dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['name']=$LANG['common'][5];
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['table']='glpi_dropdown_manufacturer';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['field']='name';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['linkfield']='FK_glpi_enterprise';
-$GENERICOBJECT_AVAILABLE_FIELDS['FK_glpi_enterprise']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['manufacturer']['name']=$LANG['common'][5];
+$GENERICOBJECT_AVAILABLE_FIELDS['manufacturer']['table']='glpi_manufacturers';
+$GENERICOBJECT_AVAILABLE_FIELDS['manufacturer']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['manufacturer']['linkfield']='manufacturers_id';
+$GENERICOBJECT_AVAILABLE_FIELDS['manufacturer']['input_type']='dropdown';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['name']=$LANG['common'][10];
 $GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['table']='glpi_users';
@@ -159,7 +159,7 @@ $GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['linkfield']='tech_num';
 $GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['input_type']='dropdown';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['domain']['name']=$LANG['setup'][89];
-$GENERICOBJECT_AVAILABLE_FIELDS['domain']['table']='glpi_dropdown_domain';
+$GENERICOBJECT_AVAILABLE_FIELDS['domain']['table']='glpi_domains';
 $GENERICOBJECT_AVAILABLE_FIELDS['domain']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['domain']['linkfield']='domain';
 $GENERICOBJECT_AVAILABLE_FIELDS['domain']['input_type']='dropdown';

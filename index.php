@@ -46,7 +46,7 @@ $datas = plugin_genericobject_getAllTypes();
 foreach($datas as $ID => $value)
 {
 	if (plugin_genericobject_haveRight($value["name"],'r'))
-		echo "<tr class='tab_bg_1'><td align='center'><a href=\"./front/plugin_genericobject.search.php?device_type=".$value["device_type"]."\">".plugin_genericobject_getObjectLabel($value["name"])."</a></td></tr>";
+		echo "<tr class='tab_bg_1'><td align='center'><a href=\"./front/search.php?itemtype=".$value["itemtype"]."\">".plugin_genericobject_getObjectLabel($value["name"])."</a></td></tr>";
 }
 	
 

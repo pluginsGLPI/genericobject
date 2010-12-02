@@ -36,18 +36,18 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 	$object_type = new PluginGenericObjectType;
 	$object_type->getFromDB($ID);
 	
-	$links = plugin_genericobject_getLinksByType($object_type->fields["device_type"]);
+	$links = plugin_genericobject_getLinksByType($object_type->fields["itemtype"]);
 
 	echo "<form name='form_links' method='post' action=\"$target\">";
 	echo "<div class='center'>";
 	echo "<table class='tab_cadre_fixe'>";
-	echo "<input type='hidden' name='ID' value='$ID'>";
+	echo "<input type='hidden' name='id' value='$ID'>";
 	echo "<tr class='tab_bg_1'><th>";
 	echo $LANG['genericobject']['links'][1]."</th></tr>";
 
 	echo "<tr class='tab_bg_1'>";
 	echo "<td align='center'>";
-	echo "<select name='link_device_type[]' multiple size='10' width='40'>";
+	echo "<select name='link_itemtype[]' multiple size='10' width='40'>";
 	$commonitem = new CommonItem;
 	
 	foreach($GENERICOBJECT_LINK_TYPES as $link)
@@ -66,10 +66,10 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 	echo "</table></div></form>";
 }
 
-function plugin_genericobject_getLinksByType($device_type)
+function plugin_genericobject_getLinksByType($itemtype)
 {
 	global $DB;
-	$query = "SELECT destination_type FROM `glpi_plugin_genericobject_type_links` WHERE device_type=$device_type";
+	$query = "SELECT destination_type FROM `glpi_plugin_genericobject_type_links` WHERE itemtype=$itemtype";
 	$result = $DB->query($query);
 	$types = array();
 	while ($datas = $DB->fetch_array($result))
@@ -89,10 +89,10 @@ function plugin_genericobject_getLinksByTypeAndID($name,$device_id)
 	return $types;	
 }
 
-function plugin_genericobject_linkedDeviceTypeExists($device_type,$destination_type)
+function plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type)
 {
 	global $DB;
-	$query = "SELECT COUNT(*) FROM `glpi_plugin_genericobject_type_links` WHERE device_type='$device_type' AND destination_type='$destination_type'";
+	$query = "SELECT COUNT(*) FROM `glpi_plugin_genericobject_type_links` WHERE itemtype='$itemtype' AND destination_type='$destination_type'";
 	$result = $DB->query($query);
 	if ($DB->result($result,0,0))
 		return true;
@@ -100,29 +100,29 @@ function plugin_genericobject_linkedDeviceTypeExists($device_type,$destination_t
 		return false;	
 }
 
-function plugin_genericobject_addNewLinkedDeviceType($device_type,$destination_type)
+function plugin_genericobject_addNewLinkedDeviceType($itemtype,$destination_type)
 {
-	if (!plugin_genericobject_linkedDeviceTypeExists($device_type,$destination_type))
+	if (!plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type))
 	{
 		$link_type = new PluginGenericObjectLink;
-		$input["device_type"] = $device_type;
+		$input["itemtype"] = $itemtype;
 		$input["destination_type"] = $destination_type;
 		$link_type->add($input);
 	}
 }
 
-function plugin_genericobject_deleteAllLinkedDeviceByType($device_type)
+function plugin_genericobject_deleteAllLinkedDeviceByType($itemtype)
 {
 	global $DB;
-	$DB->query("DELETE FROM `glpi_plugin_genericobject_type_links` WHERE device_type='$device_type'");
+	$DB->query("DELETE FROM `glpi_plugin_genericobject_type_links` WHERE itemtype='$itemtype'");
 }
 
-function plugin_genericobject_addDeviceLink($source_type,$source_id,$device_type,$device_id)
+function plugin_genericobject_addDeviceLink($source_type,$source_id,$itemtype,$items_id)
 {
 	global $DB;
 	$name = plugin_genericobject_getNameByID($source_type);
 	$table = plugin_genericobject_getLinkDeviceTableName($name);
-	$query = "INSERT INTO `$table` (`ID`, `source_id`, `device_type`, `FK_device`) VALUES (NULL, $source_id, $device_type,$device_id)";
+	$query = "INSERT INTO `$table` (`id`, `source_id`, `itemtype`, `items_id`) VALUES (NULL, $source_id, $itemtype,$items_id)";
 	$DB->query($query);
 }
 
@@ -131,6 +131,6 @@ function plugin_genericobject_deleteDeviceLink($source_type,$link_id)
 	global $DB;
 	$name = plugin_genericobject_getNameByID($source_type);
 	$table = plugin_genericobject_getLinkDeviceTableName($name);
-	$DB->query("DELETE FROM `$table` WHERE ID=$link_id");
+	$DB->query("DELETE FROM `$table` WHERE id=$link_id");
 }
 ?>

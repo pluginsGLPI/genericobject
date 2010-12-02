@@ -33,13 +33,13 @@
 
 /**
  * Get all fields for an object type
- * @device_type the object type
+ * @itemtype the object type
  * @return an array with all the fields for this type
  */
-function plugin_genericobject_getFieldsByType($device_type)
+function plugin_genericobject_getFieldsByType($itemtype)
 {
 	global $DB;
-	$query = "SELECT * FROM `glpi_plugin_genericobject_type_fields` WHERE device_type=$device_type ORDER BY rank ASC";
+	$query = "SELECT * FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype=$itemtype ORDER BY rank ASC";
 	$result = $DB->query($query);
 	$fields = array();
 	
@@ -54,13 +54,13 @@ function plugin_genericobject_getFieldsByType($device_type)
 
 /**
  * Get next available field display ranking for a type
- * @type the device_type
+ * @type the itemtype
  * @return the next available ranking
  */
-function plugin_genericobject_getNextRanking($device_type)
+function plugin_genericobject_getNextRanking($itemtype)
 {
 	global $DB;
-	$query = "SELECT MAX(rank) as cpt FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type'";
+	$query = "SELECT MAX(rank) as cpt FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype='$itemtype'";
 	$result = $DB->query($query);
 	if ($DB->result($result,0,"cpt") != null)
 		return $DB->result($result,0,"cpt") + 1;
@@ -70,15 +70,15 @@ function plugin_genericobject_getNextRanking($device_type)
 
 /**
  * Add a new field for an object (into object's device table)
- * @device_type the object type
+ * @itemtype the object type
  */
-function plugin_genericobject_addNewField($device_type,$name)
+function plugin_genericobject_addNewField($itemtype,$name)
 {
-	if (!plugin_genericobject_fieldExists($device_type,$name)) {
+	if (!plugin_genericobject_fieldExists($itemtype,$name)) {
       $type_field = new PluginGenericObjectField;
          $input["name"] = $name;
-         $input["device_type"] = $device_type;
-         $input["rank"] = plugin_genericobject_getNextRanking($device_type);
+         $input["itemtype"] = $itemtype;
+         $input["rank"] = plugin_genericobject_getNextRanking($itemtype);
          $input["mandatory"] = 0;
          $input["unique"] = 0;
          $input["entity_restrict"] = 0;
@@ -86,10 +86,10 @@ function plugin_genericobject_addNewField($device_type,$name)
 	}
 }
 
-function plugin_genericobject_fieldExists($device_type,$name) {
+function plugin_genericobject_fieldExists($itemtype,$name) {
 	global $DB;
-   $query = "SELECT ID FROM `glpi_plugin_genericobject_type_fields` " .
-         "WHERE `device_type`='$device_type' AND `name`='$name'";
+   $query = "SELECT id FROM `glpi_plugin_genericobject_type_fields` " .
+         "WHERE `itemtype`='$itemtype' AND `name`='$name'";
    $result = $DB->query($query);
    if (!$DB->numrows($result)) {
    	return false;
@@ -98,28 +98,28 @@ function plugin_genericobject_fieldExists($device_type,$name) {
    	return true;
    }
 }
-function plugin_genericobject_deleteAllFieldsByType($device_type)
+function plugin_genericobject_deleteAllFieldsByType($itemtype)
 {
 	global $DB;
-	$query = "DELETE FROM `glpi_plugin_genericobject_type_fields` WHERE device_type=$device_type";
+	$query = "DELETE FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype=$itemtype";
 	$DB->query($query);
 }
 
-function plugin_genericobject_setMandatoryField($device_type,$field)
+function plugin_genericobject_setMandatoryField($itemtype,$field)
 {
 	
 }
 
-function plugin_genericobject_checkNecessaryFieldsDelete($device_type,$field) {
+function plugin_genericobject_checkNecessaryFieldsDelete($itemtype,$field) {
    $type = new PluginGenericObjectType;
-   $type->getFromDBByType($device_type);
+   $type->getFromDBByType($itemtype);
    
-   if ($type->fields['use_network_ports'] && 'location'==$field) {
+   if ($type->fields['use_network_ports'] && 'locations_id'==$field) {
       return false;
    }
    
    if ($type->fields['use_direct_connections']) {
-      foreach(array('FK_users','FK_groups','state','location') as $tmp_field) {
+      foreach(array('users_id','groups_id','	states_id','locations_id') as $tmp_field) {
          if ($tmp_field==$field) {
             return false;
          }

@@ -31,27 +31,36 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-class PluginGenericObjectType extends CommonDBTM {
-
+class PluginGenericobjectType extends CommonDBTM {
 	function __construct() {
 		$this->table = "glpi_plugin_genericobject_types";
 		$this->type = PLUGIN_GENERICOBJECT_TYPE;
 		$this->dohistory = true;
 	}
+	
+	function canCreate() {
+      //return plugin_genericobject_haveRight('objecttype', 'w');
+		return true;
+   }
 
-	function getFromDBByType($device_type) {
+   function canView() {
+      //return plugin_genericobject_haveRight('objecttype', 'r');
+		return true;
+   }
+
+	function getFromDBByType($itemtype) {
 		global $DB;
-		$query = "SELECT * FROM `" . $this->table . "` WHERE device_type=$device_type";
+		$query = "SELECT * FROM `" . $this->table . "` WHERE itemtype=$itemtype";
 		$result = $DB->query($query);
 		if ($DB->numrows($result) > 0)
 			$this->fields = $DB->fetch_array($result);
 	}
 
-	function defineTabs($ID, $withtemplate) {
+	function defineTabs($options=array()) {
 		global $LANG;
 		$ong = array ();
 		$ong[1] = $LANG['title'][26];
-		if ($ID > 0) {
+		if (isset($this->fields['id']) && $this->fields['id'] > 0) {
 			$ong[2] = $LANG['genericobject']['config'][3];
 			$ong[3] = $LANG['rulesengine'][12];
 			//$ong[4] = $LANG['genericobject']['config'][4];
@@ -62,7 +71,7 @@ class PluginGenericObjectType extends CommonDBTM {
 		return $ong;
 	}
 
-	function showForm($target, $ID, $extraparams = array ()) {
+	function showForm($ID, $options=array()) {
 		global $LANG;
 		if ($ID > 0) {
 			$this->check($ID, 'r');
@@ -72,14 +81,16 @@ class PluginGenericObjectType extends CommonDBTM {
 			$use_cache = false;
 			$this->getEmpty();
 		}
-
-		plugin_genericobject_includeLocales($this->fields["name"]);
-		$this->showTabs($ID, '', $_SESSION['glpi_tab'], $extraparams);
+		
+		$this->fields['id'] = $ID;
+		
 		$canedit = $this->can($ID, 'w');
 
-		echo "<form name='form' method='post' action=\"$target\">";
-		echo "<div class='center' id='tabsbody'>";
-		echo "<table class='tab_cadre_fixe' >";
+		plugin_genericobject_includeLocales($this->fields["name"]);
+		
+		$this->showTabs($options);
+		$this->showFormHeader($options);
+		
 		echo "<tr class='tab_bg_1'><th colspan='2'>";
 		echo $LANG['common'][2] . " $ID";
 		echo "</th></tr>";
@@ -88,8 +99,9 @@ class PluginGenericObjectType extends CommonDBTM {
 		echo "<td>" . $LANG['genericobject']['common'][1] . "</td>";
 		echo "<td>";
 		if (!$ID)
-			autocompletionTextField("name", "glpi_plugin_genericobject_types", "name");
-		else {
+			//autocompletionTextField("name", "glpi_plugin_genericobject_types", "name");
+			autocompletionTextField($this, 'name', array('value' => $this->fields["name"]));
+      else {
 			echo "<input type='hidden' name='name' value='" . $this->fields["name"] . "'>";
 			echo $this->fields["name"];
 		}
@@ -111,10 +123,10 @@ class PluginGenericObjectType extends CommonDBTM {
 		if (!$ID) {
 			$next = plugin_genericobject_getNextDeviceType();
 			echo $next;
-			echo "<input type='hidden' name='device_type' value='" . $next . "'>";
+			echo "<input type='hidden' name='itemtype' value='" . $next . "'>";
 		} else {
-			echo $this->fields["device_type"];
-			echo "<input type='hidden' name='device_type' value='" . $this->fields["device_type"] . "'>";
+			echo $this->fields["itemtype"];
+			echo "<input type='hidden' name='itemtype' value='" . $this->fields["itemtype"] . "'>";
 		}
 
 		echo "</td>";
@@ -126,7 +138,8 @@ class PluginGenericObjectType extends CommonDBTM {
 		if (!$ID)
 			echo $LANG['choice'][0];
 		else
-			dropdownYesNo("status", $this->fields["status"]);
+			Alert::dropdownYesNo(array('name'=>"status",
+												'value'=> $this->fields["status"]));
 		echo "</td>";
 		echo "</tr>";
 
@@ -137,7 +150,7 @@ class PluginGenericObjectType extends CommonDBTM {
 			if (empty ($ID) || $ID < 0) {
 				echo "<input type='submit' name='add' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
 			} else {
-				echo "<input type='hidden' name='ID' value=\"$ID\">\n";
+				echo "<input type='hidden' name='id' value=\"$ID\">\n";
 				echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . "\" class='submit'>";
 				echo "&nbsp<input type='submit' name='delete' value=\"" . $LANG['buttons'][6] . "\" class='submit'>";
 			}
@@ -163,7 +176,6 @@ class PluginGenericObjectType extends CommonDBTM {
 		}
 
 		$canedit = $this->can($ID, 'w');
-
 		echo "<form name='behaviour' method='post' action=\"$target\">";
 		echo "<div class='center'>";
 		echo "<table class='tab_cadre_fixe' >";
@@ -209,14 +221,19 @@ class PluginGenericObjectType extends CommonDBTM {
 						echo "<input type='hidden' name='use_recursivity' value='0'>\n";
 						echo $LANG['choice'][0];
 					} else
-						dropdownYesNo($right, $this->fields[$right]);
+						//dropdownYesNo($right, $this->fields[$right]);
+						Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
+						/*Alert::dropdownYesNo(array('name'=>"status",
+												'value'=> $this->fields["status"]));*/
 					break;
 				case 'use_plugin_datainjection' :
 					if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
                   usePlugin("datainjection");
 						$infos = plugin_version_datainjection();
 						if ($infos['version'] >= '1.7.0') {
-							dropdownYesNo($right, $this->fields[$right]);
+							Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
 						}
 					} else {
 						echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
@@ -224,7 +241,8 @@ class PluginGenericObjectType extends CommonDBTM {
 					break;
 				case 'use_plugin_pdf' :
 					if ($plugin->isInstalled("pdf") && $plugin->isActivated("pdf")) {
-						dropdownYesNo($right, $this->fields[$right]);
+						Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
 					}
 						
 					else
@@ -232,7 +250,8 @@ class PluginGenericObjectType extends CommonDBTM {
 					break;
 				case 'use_plugin_order' :
 					if ($plugin->isInstalled("order") && $plugin->isActivated("order")) {
-						dropdownYesNo($right, $this->fields[$right]);
+						Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
 					}
 					else
 						echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
@@ -241,21 +260,20 @@ class PluginGenericObjectType extends CommonDBTM {
                if ($plugin->isInstalled("geninventorynumber") && $plugin->isActivated("geninventorynumber")) {
                   $infos = plugin_version_geninventorynumber();
                   if ($infos['version'] >= '1.3.0') {
-                     dropdownYesNo($right, $this->fields[$right]);
+                     Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
                   }
                }
                else
                   echo "<input type='hidden' name='use_plugin_geninventorynumber' value='0'>\n";
                break;
-				default :
-					dropdownYesNo($right, $this->fields[$right]);
-					break;
 				case 'use_plugin_uninstall' :
 					if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
                   usePlugin("uninstall");
 						$infos = plugin_version_uninstall();
 						if ($infos['version'] >= '1.2.1') {
-							dropdownYesNo($right, $this->fields[$right]);
+							Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
 						}
 					} else {
 						echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
@@ -263,7 +281,9 @@ class PluginGenericObjectType extends CommonDBTM {
 
 					break;
 				default :
-					dropdownYesNo($right, $this->fields[$right]);
+					//dropdownYesNo($right, $this->fields[$right]);
+					Alert::dropdownYesNo(array('name'=>$right,
+												'value'=> $this->fields[$right]));
 					break;
 			}
 			echo "</td>";
@@ -274,7 +294,7 @@ class PluginGenericObjectType extends CommonDBTM {
 			echo "<tr>";
 			echo "<td class='tab_bg_2' colspan='2' align='center'>";
 
-			echo "<input type='hidden' name='ID' value=\"$ID\">\n";
+			echo "<input type='hidden' name='id' value=\"$ID\">\n";
 			echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . "\" class='submit'>";
 			echo "</td>";
 			echo "</tr>";
@@ -287,28 +307,28 @@ class PluginGenericObjectType extends CommonDBTM {
 		return $input;
 	}
 
-	function post_addItem($ID, $input) {
+	function post_addItem() {
 		//Add new type table
-		plugin_genericobject_addTable($input["name"]);
+		plugin_genericobject_addTable($this->input["name"]."s");
 
 		//Write object class on the filesystem
-		plugin_genericobject_addClassFile($input["name"], plugin_genericobject_getObjectClassByName($input["name"]), $input["device_type"]);
+		plugin_genericobject_addClassFile($this->input["name"], plugin_genericobject_getObjectClassByName($this->input["name"]), $this->input["itemtype"]);
 
 		//Create rights for this new object
-		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["ID"], true);
+		plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["id"], true);
 
 		//Add default field 'name' for the object
-		plugin_genericobject_addNewField($input["device_type"], "name");
+		plugin_genericobject_addNewField($this->input["itemtype"], "name");
 
 		//Add new link device table
-		plugin_genericobject_addLinkTable($input["device_type"]);
+		plugin_genericobject_addLinkTable($this->input["itemtype"]."s");
 
 		plugin_change_profile_genericobject();
 		return true;
 	}
 
 	function prepareInputForUpdate($input) {
-		$this->getFromDB($input["ID"]);
+		$this->getFromDB($input["id"]);
 		if (isset ($input["status"]) && $input["status"]) {
 			plugin_genericobject_registerOneType($this->fields);
 		}
@@ -316,32 +336,33 @@ class PluginGenericObjectType extends CommonDBTM {
 		return $input;
 	}
 
-	function post_updateItem($input, $updates, $history = 1) {
+	function post_updateItem($history = 1) {
 		global $GENINVENTORYNUMBER_INVENTORY_TYPES;
       $this->checkNecessaryFieldsUpdate();
-      if (in_array('use_plugin_geninventorynumber',$updates)) {
+      if (in_array('use_plugin_geninventorynumber',$this->updates)) {
       	if ($input['use_plugin_geninventorynumber']) {
-      		plugin_geninventorynumber_registerType($this->fields["device_type"],'otherserial');
-            array_push($GENINVENTORYNUMBER_INVENTORY_TYPES,$this->fields["device_type"]);
+      		plugin_geninventorynumber_registerType($this->fields["itemtype"],'otherserial');
+            array_push($GENINVENTORYNUMBER_INVENTORY_TYPES,$this->fields["itemtype"]);
       	}
          else {
-         	plugin_geninventorynumber_unRegisterType($this->fields["device_type"],'otherserial');
-            unset($GENINVENTORYNUMBER_INVENTORY_TYPES[$this->fields["device_type"]]);
+         	plugin_geninventorynumber_unRegisterType($this->fields["itemtype"],'otherserial');
+            unset($GENINVENTORYNUMBER_INVENTORY_TYPES[$this->fields["itemtype"]]);
          }
       }
 	}
 
-	function pre_deleteItem($ID) {
-		$this->getFromDB($ID);
+	function pre_deleteItem() {
+		
+		$this->getFromDB($this->fields["id"]);
 
 		//Delete loans associated with this type
-		plugin_genericobject_deleteLoans($this->fields["device_type"]);
+		plugin_genericobject_deleteLoans($this->fields["itemtype"]);
 
 		//Delete all tables related to the type (dropdowns)
-		plugin_genericobject_deleteSpecificDropdownTables($this->fields["device_type"]);
+		plugin_genericobject_deleteSpecificDropdownTables($this->fields["itemtype"]);
 
 		//Delete relation table
-		plugin_genericobject_deleteLinkTable($this->fields["device_type"]);
+		plugin_genericobject_deleteLinkTable($this->fields["itemtype"]."s");
 
 		//Remove class from the filesystem
 		plugin_genericobject_deleteClassFile($this->fields["name"]);
@@ -350,42 +371,43 @@ class PluginGenericObjectType extends CommonDBTM {
 		plugin_genericobject_deleteTypeFromProfile($this->fields["name"]);
 
 		//Table type table in DB
-		plugin_genericobject_deleteTable($this->fields["name"]);
+		plugin_genericobject_deleteTable($this->fields["name"]."s");
 
 		//Remove fields from the type_fields table
-		plugin_genericobject_deleteAllFieldsByType($this->fields["device_type"]);
+		plugin_genericobject_deleteAllFieldsByType($this->fields["itemtype"]);
 
-		plugin_genericobject_removeDataInjectionModels($this->fields["device_type"]);
+		plugin_genericobject_removeDataInjectionModels($this->fields["itemtype"]);
 		return true;
 	}
 
 	function checkNecessaryFieldsUpdate() {
-		$commonitem = new CommonItem;
-		$commonitem->setType($this->fields["device_type"], true);
+		$commonitem = new PluginGenericobjectObject($this->fields["itemtype"]);
+		//$commonitem->setType($this->fields["itemtype"], true);
 
-		if ($this->fields['use_network_ports'] && !$commonitem->getField('location')) {
-			plugin_genericobject_addNewField($this->fields["device_type"], 'location');
+		if ($this->fields['use_network_ports'] && !$commonitem->getField('locations_id')) {
+			
+			plugin_genericobject_addNewField($this->fields["itemtype"], 'locations_id');
 		}
 
-      if ($this->fields['use_loans'] && !$commonitem->getField('location')) {
-         plugin_genericobject_addNewField($this->fields["device_type"], 'location');
+      if ($this->fields['use_loans'] && !$commonitem->getField('locations_id')) {
+         plugin_genericobject_addNewField($this->fields["itemtype"], 'locations_id');
          
       }
 
-     if ($this->fields['use_plugin_geninventorynumber'] && !$commonitem->getField('otherserial')) {
-         plugin_genericobject_addNewField($this->fields["device_type"], 'otherserial');
+     if ($this->fields['use_plugin_geninventorynumber'] && !$commonitem->getField('otherserial')) {/***/
+         plugin_genericobject_addNewField($this->fields["itemtype"], 'otherserial');
          
       }
 
-		if ($this->fields['use_direct_connections']) {
+		if ($this->fields['use_direct_connections']) { /***/
 			foreach (array (
-					'FK_users',
-					'FK_groups',
-					'state',
-					'location'
+					'users_id',
+					'groups_id',
+					'states_id',
+					'locations_id'
 				) as $field) {
 				if (!$commonitem->getField($field)) {
-					plugin_genericobject_addNewField($this->fields["device_type"], $field);
+					plugin_genericobject_addNewField($this->fields["itemtype"], $field);
 				}
 			}
 		}

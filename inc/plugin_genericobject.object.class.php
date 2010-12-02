@@ -32,7 +32,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-class PluginGenericObject extends CommonDBTM {
+class PluginGenericobjectObject extends CommonDBTM {
 
 	//Object type configuration
 	private $type_infos = array ();
@@ -40,29 +40,41 @@ class PluginGenericObject extends CommonDBTM {
 	//Internal field counter
 	private $cpt = 0;
 
-	function __construct($device_type = 0) {
-		if ($device_type)
-			$this->setType($device_type);
+
+	function canCreate() {
+		return true;
+   }
+
+   function canView() {
+		return true;
+   }
+	
+	function __construct($itemtype = 0) {
+		if ($itemtype) {
+			$this->setType($itemtype);
+			$_SESSION["glpi_plugin_genericobject_itemtype"] = $itemtype;
+		}
 		else
-			$this->setType($_SESSION["plugin_genericobject_device_type"]);
+			$this->setType($_SESSION["glpi_plugin_genericobject_itemtype"]);
 	}
 
-	function setType($device_type) {
-		$this->type = $device_type;
-		$this->table = plugin_genericobject_getTableNameByID($device_type);
+	function setType($itemtype) {
+		$this->type = $itemtype;
+		//$this->type = "PluginGenericobject".ucfirst(plugin_genericobject_getNameByID($itemtype));
+		$this->table = plugin_genericobject_getTableNameByID($itemtype);
 		$this->type_infos = plugin_genericobject_getObjectTypeConfiguration($this->type);
 		$this->entity_assign = $this->type_infos['use_entity'];
 		$this->may_be_recursive = $this->type_infos['use_recursivity'];
 		$this->dohistory = $this->type_infos['use_history'];
 	}
 
-	function defineTabs($ID, $withtemplate) {
+	function defineTabs($options=array()) {
 		global $LANG;
 		$ong = array ();
 
 		$ong[1] = $LANG['title'][26];
 
-		if ($ID > 0) {
+		if ($this->fields['id'] > 0) {
 
 			if ($this->canUseDirectConnections() || $this->canUseNetworkPorts())
 				$ong[3] = $LANG['title'][27];
@@ -153,7 +165,7 @@ class PluginGenericObject extends CommonDBTM {
 		displayTitle('', plugin_genericobject_getObjectLabel($name), plugin_genericobject_getObjectLabel($name));
 	}
 
-	function showForm($target, $ID, $withtemplate = '', $previsualisation = false) {
+	function showForm($ID, $options=array(), $previsualisation = false) {
 		global $LANG;
 
 		if ($previsualisation) {
@@ -169,15 +181,19 @@ class PluginGenericObject extends CommonDBTM {
 				$this->getEmpty();
 			}
 
-			$this->showTabs($ID, '', $_SESSION['glpi_tab']);
+			$this->showTabs($options);
+			
 			$canedit = $this->can($ID, 'w');
 		}
+		
+		$this->fields['id'] = $ID;
+		
 
-		echo "<form name='form' method='post' action=\"$target?device_type=" . $this->type . "\">";
-		echo "<input type='hidden' name='device_type' value='" . $this->type . "'>";
+		$this->showFormHeader($options);
+		echo "<input type='hidden' name='itemtype' value='" . $this->type . "'>";
 
 		if ($this->type_infos["use_entity"])
-			echo "<input type='hidden' name='FK_entities' value='" . $this->fields["FK_entities"] . "'>";
+			echo "<input type='hidden' name='entities_id' value='" . $this->fields["entities_id"] . "'>";
 
 		if (!$previsualisation)
 			echo "<div class='center' id='tabsbody'>";
@@ -185,7 +201,7 @@ class PluginGenericObject extends CommonDBTM {
 			echo "<div class='center'>";
 
 		echo "<table class='tab_cadre_fixe' >";
-		$this->showFormHeader($ID, $withtemplate, 2);
+
 
 		foreach (plugin_genericobject_getFieldsByType($this->type) as $field => $tmp) {
 			$value = $this->fields[$field];
@@ -194,7 +210,7 @@ class PluginGenericObject extends CommonDBTM {
 		$this->closeColumn();
 
 		if (!$previsualisation)
-			$this->displayActionButtons($ID, $withtemplate, $canedit);
+			$this->displayActionButtons($ID, $_GET['withtemplate'], $canedit);
 
 		echo "</table></div></form>";
 		if (!$previsualisation) {
@@ -212,7 +228,7 @@ class PluginGenericObject extends CommonDBTM {
 			if (empty ($ID) || $ID < 0 || $withtemplate == 2) {
 				echo "<input type='submit' name='add' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
 			} else {
-				echo "<input type='hidden' name='ID' value=\"$ID\">\n";
+				echo "<input type='hidden' name='id' value=\"$ID\">\n";
 				echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . "\" class='submit'>";
 
 				if (!$this->fields["deleted"]) {
@@ -232,7 +248,7 @@ class PluginGenericObject extends CommonDBTM {
 	function getAllTabs() {
 		global $LANG;
 		foreach (getAllDatasFromTable($this->table) as $ID => $value)
-			$tabs[$value["device_type"]] = $LANG["genericobject"][$value["name"]][1];
+			$tabs[$value["itemtype"]] = $LANG["genericobject"][$value["name"]][1];
 
 		return $tabs;
 	}
@@ -256,7 +272,8 @@ class PluginGenericObject extends CommonDBTM {
 				case 'text' :
 					if ($canedit) {
 						$table = plugin_genericobject_getObjectTableNameByName($name);
-						autocompletionTextField($name, $table, $GENERICOBJECT_AVAILABLE_FIELDS[$name]['field'], $value);
+						//autocompletionTextField($name, $table, $GENERICOBJECT_AVAILABLE_FIELDS[$name]['field'], $value);
+						autocompletionTextField($this, $name);
 					} else
 						echo $value;
 					break;
@@ -267,7 +284,8 @@ class PluginGenericObject extends CommonDBTM {
 						echo convDate($value);
 					break;
             case 'dropdown_global' :
-               globalManagementDropdown($_SERVER['PHP_SELF'],'',$this->fields['ID'],$this->fields['is_global'],2);
+               Dropdown::showGlobalSwitch($_SERVER['PHP_SELF'],'',$this->fields['id'],$this->fields['is_global'],2);
+					
                break;
 				case 'dropdown' :
 					if (plugin_genericobject_isDropdownTypeSpecific($name)) {
@@ -277,14 +295,36 @@ class PluginGenericObject extends CommonDBTM {
 						$table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
 
 					if ($canedit) {
-						$entity_restrict = $this->fields["FK_entities"];
-                  switch ($table) {
+						$entity_restrict = $this->fields["entities_id"];
+						switch ($table) {
                   	default :
-                        dropdownValue($table, $name, $value, 1, $entity_restrict);
+								//echo $table;
+							
+								if (isset($device_name)) $object_name = "PluginGenericobject".ucfirst($device_name).ucfirst($name);
+								else $object_name = ucfirst($name);
+								
+                        //dropdownValue($table, $name, $value, 1, $entity_restrict);
+								Dropdown::show($object_name, array(
+											'value' => $value,
+											'name' => $name,
+											'entity' => $entity_restrict)
+											);								
                         break;
                      case 'glpi_users' :
-                        dropdownUsers($name,$value,'all',0,1,$entity_restrict);
-                        break;      
+                        //dropdownUsers($name,$value,'all',0,1,$entity_restrict);
+								User::dropdown(array('name'   => $name,
+                           'value'  => $value,
+                           'right'  => 'all',
+                           'entity' => $entity_restrict));
+                        break;   
+							/*case 'glpi_entities' :
+
+                        User::dropdown(array('name'   => $name,
+                           'value'  => $value,
+                           'right'  => 'all',
+                           'entity' => $entity_restrict));
+
+                        break;   */
                   }
 						
 					} else
@@ -292,7 +332,9 @@ class PluginGenericObject extends CommonDBTM {
 					break;
 				case 'dropdown_yesno' :
 					if ($canedit)
-						dropdownYesNo($name, $value);
+						//dropdownYesNo($name, $value);
+						Alert::dropdownYesNo(array("name" => $name, 
+																"value" => $value));
 					else
 						echo getYesNo($value);
 					break;
@@ -350,17 +392,17 @@ class PluginGenericObject extends CommonDBTM {
 		return $input;
 	}
 
-	function post_addItem($newID, $input) {
+	function post_addItem() {
 		global $DB;
 		// Manage add from template
-		if (isset ($input["_oldID"])) {
+		if (isset ($this->input["_oldID"])) {
 			// ADD Infocoms
 			$ic = new Infocom();
-			if ($ic->getFromDBforDevice($this->type, $input["_oldID"])) {
-				$ic->fields["FK_device"] = $newID;
-				unset ($ic->fields["ID"]);
-				if (isset ($ic->fields["num_immo"])) {
-					$ic->fields["num_immo"] = autoName($ic->fields["num_immo"], "num_immo", 1, INFOCOM_TYPE, $input['FK_entities']);
+			if ($ic->getFromDBforDevice($this->type, $this->input["_oldID"])) {
+				$ic->fields["items_id"] = $this->fields['id'];
+				unset ($ic->fields["id"]);
+				if (isset ($ic->fields["immo_number"])) {
+					$ic->fields["immo_number"] = autoName($ic->fields["immo_number"], "immo_number", 1, INFOCOM_TYPE, $this->input['entities_id']);
 				}
 				if (empty ($ic->fields['use_date'])) {
 					unset ($ic->fields['use_date']);
@@ -372,87 +414,89 @@ class PluginGenericObject extends CommonDBTM {
 			}
 
 			// ADD Contract
-			$query = "SELECT FK_contract 
-							FROM glpi_contract_device 
-							WHERE FK_device='" . $input["_oldID"] . "' AND device_type='" . $this->type . "';";
+			$query = "SELECT contracts_id 
+							FROM glpi_contracts_items 
+							WHERE items_id='" . $input["_oldID"] . "' AND itemtype='" . $this->type . "';";
 			$result = $DB->query($query);
 			if ($DB->numrows($result) > 0) {
 				while ($data = $DB->fetch_array($result))
-					addDeviceContract($data["FK_contract"], $this->type, $newID);
+					addDeviceContract($data["contracts_id"], $this->type, $newID);
 			}
 
 			// ADD Documents
-			$query = "SELECT FK_doc 
-							FROM glpi_doc_device 
-							WHERE FK_device='" . $input["_oldID"] . "' AND device_type='" . $this->type . "';";
+			$query = "SELECT documents_id 
+							FROM glpi_documents_items 
+							WHERE items_id='" . $input["_oldID"] . "' AND itemtype='" . $this->type . "';";
 			$result = $DB->query($query);
 			if ($DB->numrows($result) > 0) {
 				while ($data = $DB->fetch_array($result))
-					addDeviceDocument($data["FK_doc"], $this->type, $newID);
+					addDeviceDocument($data["documents_id"], $this->type, $newID);
 			}
 		}
 	}
 
-	function cleanDBonPurge($ID) {
+	function cleanDBonPurge() {
 		global $DB, $CFG_GLPI;
+		
+		$ID = $this->fields['id'];
 
-		$job = new Job();
+		//$job = new Job();
 		$query = "SELECT * 
-		         FROM glpi_tracking 
-		         WHERE computer = '$ID'  AND device_type='" . $this->type . "'";
+		         FROM glpi_tickets 
+		         WHERE items_id = '".$this->fields['id']."'  AND itemtype='" . $this->type . "'";
 		$result = $DB->query($query);
 
 		if ($DB->numrows($result))
 			while ($data = $DB->fetch_array($result)) {
 				if ($CFG_GLPI["keep_tracking_on_delete"] == 1) {
-					$query = "UPDATE glpi_tracking SET computer = '0', device_type='0' WHERE ID='" . $data["ID"] . "';";
+					$query = "UPDATE glpi_tickets SET items_id = '0', itemtype='0' WHERE id='" . $data["id"] . "';";
 					$DB->query($query);
-				} else
+				} /*else
 					$job->delete(array (
-						"ID" => $data["ID"]
-					));
+						"id" => $data["id"]
+					));*/
 			}
 
-		$query = "SELECT ID 
-		         FROM `glpi_networking_ports` 
-		         WHERE on_device = '$ID' AND device_type = '" . $this->type . "'";
+		$query = "SELECT id 
+		         FROM `glpi_networkports` 
+		         WHERE items_id = '".$this->fields['id']."' AND itemtype = '" . $this->type . "'";
 		$result = $DB->query($query);
 		while ($data = $DB->fetch_array($result)) {
-			$q = "DELETE FROM `glpi_networking_wire` WHERE end1 = '" . $data["ID"] . "' OR end2 = '" . $data["ID"] . "'";
+			$q = "DELETE FROM `glpi_networkports_networkports` WHERE networkports_id_1 = '" . $data["id"] . "' OR 	networkports_id_2 = '" . $data["id"] . "'";
 			$DB->query($q);
 		}
 
 
-		$query2 = "DELETE FROM `glpi_networking_ports` WHERE on_device = '$ID' AND device_type = '" . $this->type . "'";
+		$query2 = "DELETE FROM `glpi_networkports` WHERE items_id = '$ID' AND itemtype = '" . $this->type . "'";
 		$DB->query($query2);
 
-		$query = "SELECT * FROM `glpi_connect_wire` WHERE type='" . $this->type . "' AND end1='$ID'";
+		$query = "SELECT * FROM `glpi_computers_items` WHERE itemtype='" . $this->type . "' AND items_id ='$ID'";
 		if ($result = $DB->query($query)) {
 			if ($DB->numrows($result) > 0) {
 				while ($data = $DB->fetch_array($result)) {
 					// Disconnect without auto actions
-					Disconnect($data["ID"], 1, false);
+					Disconnect($data["id"], 1, false);
 				}
 			}
 		}
 
-		$query = "SELECT ID FROM `glpi_reservation_item` WHERE device_type='" . $this->type . "' AND id_device='$ID'";
+		$query = "SELECT ID FROM `glpi_reservationsitems` WHERE itemtype='" . $this->type . "' AND items_id='$ID'";
 		if ($result = $DB->query($query)) {
 			if ($DB->numrows($result) > 0) {
 				$rr = new ReservationItem();
 				$rr->delete(array (
-					"ID" => $DB->result($result, 0, "ID")
+					"id" => $DB->result($result, 0, "id")
 				));
 			}
 		}
 
-		$query = "DELETE FROM `glpi_infocoms` WHERE FK_device = '$ID' AND device_type='" . $this->type . "'";
+		$query = "DELETE FROM `glpi_infocoms` WHERE items_id = '$ID' AND itemtype='" . $this->type . "'";
       $DB->query($query);
 
-		$query = "DELETE FROM `glpi_contract_device` WHERE FK_device = '$ID' AND device_type='" . $this->type . "'";
+		$query = "DELETE FROM `glpi_contracts_items` WHERE items_id = '$ID' AND itemtype='" . $this->type . "'";
 		$DB->query($query);
 
-		$query = "DELETE FROM `glpi_doc_device` WHERE (FK_device = '$ID' AND device_type='" . $this->type . "')";
+		$query = "DELETE FROM `glpi_documents_items` WHERE (items_id = '$ID' AND itemtype='" . $this->type . "')";
 		$DB->query($query);
 
 	}

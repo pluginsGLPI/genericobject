@@ -44,9 +44,11 @@ function plugin_genericobject_showPrevisualisationForm($type) {
 		$name = plugin_genericobject_getNameByID($type);
 		echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
 	
-		$object = new CommonItem;
-		$object->setType($type, true);
-		$object->obj->showForm('', '', '', true);
+		//$object = new $type();
+		//$_SESSION["glpi_plugin_genericobject_itemtype"] = $type;
+		$object = new PluginGenericobjectObject($type);
+		//$object->setType($type, true);
+		$object->showForm('', '', '', true);
 	}
 	else
 		echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";
@@ -55,13 +57,13 @@ function plugin_genericobject_showPrevisualisationForm($type) {
 /**
  * Change object field's order
  * @param field the field to move up/down
- * @param device_type object device type
+ * @param itemtype object item type
  * @param action up/down
  */
-function plugin_genericobject_changeFieldOrder($field,$device_type,$action){
+function plugin_genericobject_changeFieldOrder($field,$itemtype,$action){
 		global $DB;
 
-		$sql ="SELECT ID, rank FROM glpi_plugin_genericobject_type_fields WHERE device_type='$device_type' AND name='$field'";
+		$sql ="SELECT id, rank FROM glpi_plugin_genericobject_type_fields WHERE itemtype='$itemtype' AND name='$field'";
 
 		if ($result = $DB->query($sql)){
 			if ($DB->numrows($result)==1){
@@ -72,10 +74,10 @@ function plugin_genericobject_changeFieldOrder($field,$device_type,$action){
 				$sql2="";
 				switch ($action){
 					case "up":
-						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type' AND rank < '$current_rank' ORDER BY rank DESC LIMIT 1";
+						$sql2 ="SELECT id, rank FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype='$itemtype' AND rank < '$current_rank' ORDER BY rank DESC LIMIT 1";
 					break;
 					case "down":
-						$sql2 ="SELECT ID, rank FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type' AND rank > '$current_rank' ORDER BY rank ASC LIMIT 1";
+						$sql2 ="SELECT id, rank FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype='$itemtype' AND rank > '$current_rank' ORDER BY rank ASC LIMIT 1";
 					break;
 					default :
 						return false;
@@ -85,8 +87,8 @@ function plugin_genericobject_changeFieldOrder($field,$device_type,$action){
 				if ($result2 = $DB->query($sql2)){
 					if ($DB->numrows($result2)==1){
 						list($other_ID,$new_rank)=$DB->fetch_array($result2);
-						$query="UPDATE `glpi_plugin_genericobject_type_fields` SET rank='$new_rank' WHERE ID ='$ID'";
-						$query2="UPDATE `glpi_plugin_genericobject_type_fields` SET rank='$current_rank' WHERE ID ='$other_ID'";
+						$query="UPDATE `glpi_plugin_genericobject_type_fields` SET rank='$new_rank' WHERE id ='$ID'";
+						$query2="UPDATE `glpi_plugin_genericobject_type_fields` SET rank='$current_rank' WHERE id ='$other_ID'";
 						return ($DB->query($query)&&$DB->query($query2));
 					}
 				}
@@ -97,30 +99,30 @@ function plugin_genericobject_changeFieldOrder($field,$device_type,$action){
 
 /**
  * Reorder all fields for a type
- * @param device_type the object type
+ * @param itemtype the object type
  */
-function plugin_genericobject_reorderFields($device_type)
+function plugin_genericobject_reorderFields($itemtype)
 {
 	global $DB;
-	$query = "SELECT ID FROM `glpi_plugin_genericobject_type_fields` WHERE device_type='$device_type' ORDER BY rank ASC";
+	$query = "SELECT id FROM `glpi_plugin_genericobject_type_fields` WHERE itemtype='$itemtype' ORDER BY rank ASC";
 	$result = $DB->query($query);
 	$i = 0;
 	while ($datas = $DB->fetch_array($result))
 	{
-		$query = "UPDATE `glpi_plugin_genericobject_type_fields` SET rank=$i WHERE device_type='$device_type' AND ID=".$datas["ID"];
+		$query = "UPDATE `glpi_plugin_genericobject_type_fields` SET rank=$i WHERE itemtype='$itemtype' AND id=".$datas["id"];
 		$DB->query($query);
 		$i++;	
 	}	
 }
 
-function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$entity,$add=0)
+function plugin_genericobject_showTemplateByDeviceType($target,$itemtype,$entity,$add=0)
 {
 	global $LANG,$DB,$GENERICOBJECT_LINK_TYPES;
-	$name = plugin_genericobject_getNameByID($device_type);
-	$commonitem = new CommonItem;
-	$commonitem->setType($device_type,true);
+	$name = plugin_genericobject_getNameByID($itemtype);
+	$commonitem = new PluginGenericobjectObject($itemtype);
+	//$commonitem->setType($itemtype,true);
 	$title = plugin_genericobject_getObjectLabel($name);
-	$query = "SELECT * FROM `".$commonitem->obj->table."` WHERE is_template = '1' AND FK_entities='" . $_SESSION["glpiactive_entity"] . "' ORDER by tplname";
+	$query = "SELECT * FROM `".$commonitem->getTable()."` WHERE is_template = '1' AND entities_id='" . $_SESSION["glpiactive_entity"] . "' ORDER by tplname";
 	if ($result = $DB->query($query)) {
 
 		echo "<div class='center'><table class='tab_cadre' width='50%'>";
@@ -134,7 +136,7 @@ function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$ent
 
 			echo "<tr>";
 			echo "<td align='center' class='tab_bg_1'>";
-			echo "<a href=\"$target?device_type=$device_type&ID=-1&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;" . $LANG['common'][31] . "&nbsp;&nbsp;&nbsp;</a></td>";
+			echo "<a href=\"$target?itemtype=$itemtype&id=-1&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;" . $LANG['common'][31] . "&nbsp;&nbsp;&nbsp;</a></td>";
 			echo "</tr>";
 		}
 	
@@ -142,29 +144,29 @@ function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$ent
 
 			$templname = $data["tplname"];
 			if ($_SESSION["glpiview_ID"]||empty($data["tplname"])){
-            			$templname.= "(".$data["ID"].")";
+            			$templname.= "(".$data["id"].")";
 			}
 			echo "<tr>";
 			echo "<td align='center' class='tab_bg_1'>";
 			
-			if (haveTypeRight($device_type, "w") && !$add) {
-				echo "<a href=\"$target?device_type=$device_type&ID=" . $data["ID"] . "&amp;withtemplate=1\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
+			if (haveTypeRight($itemtype, "w") && !$add) {
+				echo "<a href=\"$target?itemtype=$itemtype&id=" . $data["id"] . "&amp;withtemplate=1\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
 
 				echo "<td align='center' class='tab_bg_2'>";
-				echo "<strong><a href=\"$target?device_type=$device_type&ID=" . $data["ID"] . "&amp;purge=purge&amp;withtemplate=1\">" . $LANG['buttons'][6] . "</a></strong>";
+				echo "<strong><a href=\"$target?itemtype=$itemtype&id=" . $data["id"] . "&amp;purge=purge&amp;withtemplate=1\">" . $LANG['buttons'][6] . "</a></strong>";
 				echo "</td>";
 			} else {
-				echo "<a href=\"$target?device_type=$device_type&ID=" . $data["ID"] . "&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
+				echo "<a href=\"$target?itemtype=$itemtype&id=" . $data["id"] . "&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
 			}
 
 			echo "</tr>";
 
 		}
 
-		if (haveTypeRight($device_type, "w") &&!$add) {
+		if (haveTypeRight($itemtype, "w") &&!$add) {
 			echo "<tr>";
 			echo "<td colspan='2' align='center' class='tab_bg_2'>";
-			echo "<strong><a href=\"$target?device_type=$device_type&withtemplate=1\">" . $LANG['common'][9] . "</a></strong>";
+			echo "<strong><a href=\"$target?itemtype=$itemtype&withtemplate=1\">" . $LANG['common'][9] . "</a></strong>";
 			echo "</td>";
 			echo "</tr>";
 		}
@@ -174,25 +176,25 @@ function plugin_genericobject_showTemplateByDeviceType($target,$device_type,$ent
 	
 }
 
-function plugin_genericobject_showDevice($target,$device_type,$device_id) {
+function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
 	global $DB,$CFG_GLPI, $LANG,$INFOFORM_PAGES,$LINK_ID_TABLE,$GENERICOBJECT_LINK_TYPES;
 	
-	$name = plugin_genericobject_getNameByID($device_type);
+	$name = plugin_genericobject_getNameByID($itemtype);
 	
 	if (!haveTypeRight($name,"r"))	return false;
 	
 	$rand=mt_rand();
 	
-	$commonitem = new CommonItem;
-	if ($commonitem->getFromDB($device_type,$device_id)){
-		$obj = $commonitem->obj;
+	$commonitem = new PluginGenericobjectObject($itemtype);
+	if ($commonitem->getFromDB($item_id)){
+		$obj = $commonitem;
 		
-		$canedit=$obj->can($device_id,'w'); 
+		$canedit=$obj->can($item_id,'w'); 
 
-		$query = "SELECT DISTINCT device_type 
+		$query = "SELECT DISTINCT itemtype 
 				FROM `".plugin_genericobject_getLinkDeviceTableName($name)."` 
-				WHERE source_id = '$device_id' 
-				ORDER BY device_type";
+				WHERE source_id = '$item_id' 
+				ORDER BY itemtype";
 		
 		$result = $DB->query($query);
 		$number = $DB->numrows($result);
@@ -220,36 +222,36 @@ function plugin_genericobject_showDevice($target,$device_type,$device_id) {
 	
 		$ci=new CommonItem();
 		while ($i < $number) {
-			$type=$DB->result($result, $i, "device_type");
+			$type=$DB->result($result, $i, "itemtype");
 			if (haveTypeRight($type,"r")){
 				$column="name";
 				if ($type==TRACKING_TYPE) $column="ID";
 				if ($type==KNOWBASE_TYPE) $column="question";
 
-				$query = "SELECT ".$LINK_ID_TABLE[$type].".*, ".plugin_genericobject_getLinkDeviceTableName($name).".ID AS IDD "
+				$query = "SELECT ".$LINK_ID_TABLE[$type].".*, ".plugin_genericobject_getLinkDeviceTableName($name).".id AS IDD "
 					." FROM `".plugin_genericobject_getLinkDeviceTableName($name)."`, `".$LINK_ID_TABLE[$type]."`, `".$obj->table."`"
-					." WHERE ".$LINK_ID_TABLE[$type].".ID = ".plugin_genericobject_getLinkDeviceTableName($name).".FK_device 
-					AND ".plugin_genericobject_getLinkDeviceTableName($name).".device_type='$type' 
-					AND ".plugin_genericobject_getLinkDeviceTableName($name).".source_id = '$device_id' ";
+					." WHERE ".$LINK_ID_TABLE[$type].".id = ".plugin_genericobject_getLinkDeviceTableName($name).".items_id 
+					AND ".plugin_genericobject_getLinkDeviceTableName($name).".itemtype='$type' 
+					AND ".plugin_genericobject_getLinkDeviceTableName($name).".source_id = '$item_id' ";
 					$query.=getEntitiesRestrictRequest(" AND ",$LINK_ID_TABLE[$type],'','',isset($CFG_GLPI["recursive_type"][$type])); 
 
 					if (in_array($LINK_ID_TABLE[$type],$CFG_GLPI["template_tables"])){
 						$query.=" AND ".$LINK_ID_TABLE[$type].".is_template='0'";
 				}
-				$query.=" ORDER BY ".$obj->table.".FK_entities, ".$LINK_ID_TABLE[$type].".$column";
+				$query.=" ORDER BY ".$obj->table.".entities_id, ".$LINK_ID_TABLE[$type].".$column";
 
 				if ($result_linked=$DB->query($query))
 					if ($DB->numrows($result_linked)){
 						$ci->setType($type);
 						initNavigateListItems($type,plugin_genericobject_getObjectLabel($name)." = ".$obj->fields['name']);
 						while ($data=$DB->fetch_assoc($result_linked)){
-							addToNavigateListItems($type,$data["ID"]);
+							addToNavigateListItems($type,$data["id"]);
 							$ID="";
-							if ($type==TRACKING_TYPE) $data["name"]=$LANG['job'][38]." ".$data["ID"];
+							if ($type==TRACKING_TYPE) $data["name"]=$LANG['job'][38]." ".$data["id"];
 							if ($type==KNOWBASE_TYPE) $data["name"]=$data["question"];
 							
-							if($_SESSION["glpiview_ID"]||empty($data["name"])) $ID= " (".$data["ID"].")";
-							$item_name= "<a href=\"".$CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$type]."?ID=".$data["ID"]."&device_type=$type\">"
+							if($_SESSION["glpiview_ID"]||empty($data["name"])) $ID= " (".$data["id"].")";
+							$item_name= "<a href=\"".$CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$type]."?id=".$data["id"]."&itemtype=$type\">"
 								.$data["name"]."$ID</a>";
 	
 							echo "<tr class='tab_bg_1'>";
@@ -266,7 +268,7 @@ function plugin_genericobject_showDevice($target,$device_type,$device_id) {
 							echo "<td class='center' ".(isset($data['deleted'])&&$data['deleted']?"class='tab_bg_2_2'":"").">".$item_name."</td>";
 
 							if (isMultiEntitiesMode())
-								echo "<td class='center'>".getDropdownName("glpi_entities",$data['FK_entities'])."</td>";
+								echo "<td class='center'>".getDropdownName("glpi_entities",$data['entities_id'])."</td>";
 							
 							echo "<td class='center'>".(isset($data["serial"])? "".$data["serial"]."" :"-")."</td>";
 							echo "<td class='center'>".(isset($data["otherserial"])? "".$data["otherserial"]."" :"-")."</td>";
@@ -281,8 +283,8 @@ function plugin_genericobject_showDevice($target,$device_type,$device_id) {
 		if ($canedit)	{
 			echo "<tr class='tab_bg_1'><td colspan='".(3+$colsup)."' class='center'>";
 	
-			echo "<input type='hidden' name='source_id' value='$device_id'>";
-			dropdownAllItems("FK_device",0,0,($obj->fields['recursive']?-1:$obj->fields['FK_entities']),plugin_genericobject_getLinksByType($device_type));		
+			echo "<input type='hidden' name='source_id' value='$itemtype'>";
+			dropdownAllItems("items_id",0,0,($obj->fields['recursive']?-1:$obj->fields['entities_id']),plugin_genericobject_getLinksByType($itemtype));		
 			echo "</td>";
 			echo "<td colspan='2' class='center' class='tab_bg_2'>";
 			echo "<input type='submit' name='add_type_link' value=\"".$LANG['buttons'][8]."\" class='submit'>";
@@ -291,9 +293,9 @@ function plugin_genericobject_showDevice($target,$device_type,$device_id) {
 			
 			echo "<div class='center'>";
 			echo "<table width='80%' class='tab_glpi'>";
-			echo "<tr><td><img src=\"".$CFG_GLPI["root_doc"]."/pics/arrow-left.png\" alt=''></td><td class='center'><a onclick= \"if ( markCheckboxes('link_type_form$rand') ) return false;\" href='".$_SERVER['PHP_SELF']."?ID=$device_id&amp;select=all'>".$LANG['buttons'][18]."</a></td>";
+			echo "<tr><td><img src=\"".$CFG_GLPI["root_doc"]."/pics/arrow-left.png\" alt=''></td><td class='center'><a onclick= \"if ( markCheckboxes('link_type_form$rand') ) return false;\" href='".$_SERVER['PHP_SELF']."?id=$item_id&amp;select=all'>".$LANG['buttons'][18]."</a></td>";
 			
-			echo "<td>/</td><td class='center'><a onclick= \"if ( unMarkCheckboxes('link_type_form$rand') ) return false;\" href='".$_SERVER['PHP_SELF']."?ID=$device_id&amp;select=none'>".$LANG['buttons'][19]."</a>";
+			echo "<td>/</td><td class='center'><a onclick= \"if ( unMarkCheckboxes('link_type_form$rand') ) return false;\" href='".$_SERVER['PHP_SELF']."?id=$item_id&amp;select=none'>".$LANG['buttons'][19]."</a>";
 			echo "</td>";
 			echo "<td align='left' width='80%'>";
 			echo "<input type='submit' name='delete_type_link' value=\"".$LANG['buttons'][6]."\" class='submit'>";

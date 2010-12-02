@@ -64,20 +64,21 @@ class PluginGenericObjectProfile extends CommonDBTM {
 		
 		if (!empty ($types)) {
 			foreach ($types as $tmp => $profile) {
-				$name = plugin_genericobject_getNameByID($profile['device_type']);
+				$name = plugin_genericobject_getNameByID($profile['itemtype']);
 
 				plugin_genericobject_includeLocales($name);
 				echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".plugin_genericobject_getObjectLabel($profile['name'])."</th></tr>";
 				echo "<tr class='tab_bg_2'>";
 				echo "<td>" . plugin_genericobject_getObjectLabel($profile['name']) . ":</td><td>";
-				dropdownNoneReadWrite($name, $this->fields[$profile['name']], 1, 1, 1);
+				Profile::dropdownNoneReadWrite($name, $this->fields[$profile['name']], 1, 1, 1);
 				echo "</td>";
 				echo "</tr>";
 				if ($profile["use_tickets"])
 				{
 					echo "<tr class='tab_bg_2'>";
 					echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
-					dropdownYesNo($name."_open_ticket", $this->fields[$name.'_open_ticket']);
+					//dropdownYesNo($name."_open_ticket", $this->fields[$name.'_open_ticket']);
+					Dropdown::showYesNo($name."_open_ticket", $this->fields[$name.'_open_ticket']);
 					echo "</td>";
 					echo "</tr>";
 				}

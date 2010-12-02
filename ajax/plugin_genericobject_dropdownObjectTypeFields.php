@@ -39,8 +39,8 @@ include (GLPI_ROOT."/inc/includes.php");
 header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
-if (isset($_POST["action"])&&isset($_POST["device_type"])&&!empty($_POST["device_type"])){
-	echo "<input type='hidden' name='device_type' value='".$_POST["device_type"]."'>";
+if (isset($_POST["action"])&&isset($_POST["itemtype"])&&!empty($_POST["itemtype"])){
+	echo "<input type='hidden' name='itemtype' value='".$_POST["itemtype"]."'>";
 	switch($_POST["action"]){
 		case "move_field":
 			echo "<select name='move_type'>";

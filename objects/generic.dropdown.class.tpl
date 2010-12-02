@@ -1,4 +1,5 @@
 <?php
+
 /*
  ----------------------------------------------------------------------
  GLPI - Gestionnaire Libre de Parc Informatique
@@ -27,49 +28,16 @@
  ------------------------------------------------------------------------
 */
 
-// Original Author of file: Walid Nouh
+// Original Author of file: GenericObject plugin
 // Purpose of file:
 // ----------------------------------------------------------------------
-class PluginGenericObjectField extends CommonDBTM{
-	
-    function __construct() {
-    	$this->table="glpi_plugin_genericobject_type_fields";
-    	$this->type=-1;
-    }  
-    
-    function deleteByFieldByDeviceTypeAndName($itemtype,$name)
-    {
-    	global $DB;
-    	$query = "DELETE FROM `".$this->table."` " .
-    			"WHERE itemtype='$itemtype' AND name='$name'";
-    	$DB->query($query);		
-    }
- 
- 	function getID()
- 	{
- 		return $this->fields["id"];
- 	}
- 	
- 	function getName($with_comment=0)
- 	{
- 		return $this->fields["name"];
- 	}
- 	
- 	function getRank()
- 	{
- 		return $this->fields["rank"];
- 	}
- 	
- 	function getMandatory()
- 	{
- 		return $this->fields["mandatory"];
- 	}   
 
-   function post_addItem() {		
-      $name = plugin_genericobject_getNameByID($this->input["itemtype"]);
-      $table = plugin_genericobject_getTableNameByName($name);
-      plugin_genericobject_addFieldInDB($table, $this->fields["name"], $name);
-      
-   }
+/**
+ * This class is automatically managed by genericobject plugin. Do not modify it !
+ */
+class %%CLASSNAME%% extends CommonDropdown {
+	function __construct() {
+		//parent::__construct(%%DEVICETYPE%%);
+	}
 }
 ?>

@@ -48,7 +48,7 @@ function plugin_genericobject_getObjectTypeByName($name) {
  * @return the classname associated with the object
  */
 function plugin_genericobject_getObjectTableNameByName($name) {
-	return 'glpi_plugin_genericobject_' . $name;
+	return 'glpi_plugin_genericobject_' . $name."s";
 }
 
 /**
@@ -66,7 +66,7 @@ function plugin_genericobject_getObjectIdentifierByName($name) {
  * @return the class associated with the object
  */
 function plugin_genericobject_getObjectClassByName($name) {
-	return 'PluginGenericObject' . ucfirst($name);
+	return 'PluginGenericobject' . ucfirst($name);
 }
 
 /**
@@ -90,10 +90,10 @@ function plugin_genericobject_getAllTypes($all = false) {
  */
 function plugin_genericobject_getIDByName($name) {
 	global $DB;
-	$query = "SELECT device_type FROM `glpi_plugin_genericobject_types` WHERE name='$name'";
+	$query = "SELECT itemtype FROM `glpi_plugin_genericobject_types` WHERE name='$name'";
 	$result = $DB->query($query);
 	if ($DB->numrows($result))
-		return $DB->result($result, 0, "device_type");
+		return $DB->result($result, 0, "itemtype");
 	else
 		return 0;
 }
@@ -103,9 +103,9 @@ function plugin_genericobject_getIDByName($name) {
  * @param ID the internal ID
  * @return the name associated with the ID
  */
-function plugin_genericobject_getNameByID($device_type) {
+function plugin_genericobject_getNameByID($itemtype) {
 	global $DB;
-	$query = "SELECT name FROM `glpi_plugin_genericobject_types` WHERE device_type='$device_type'";
+	$query = "SELECT name FROM `glpi_plugin_genericobject_types` WHERE itemtype='$itemtype'";
 	$result = $DB->query($query);
 	if ($DB->numrows($result))
 		return $DB->result($result, 0, "name");
@@ -119,11 +119,7 @@ function plugin_genericobject_getNameByID($device_type) {
  * @return the table
  */
 function plugin_genericobject_getTableNameByID($ID) {
-	global $LINK_ID_TABLE;
-	if (isset ($LINK_ID_TABLE[$ID]))
-		return $LINK_ID_TABLE[$ID];
-	else
-		return false;
+	return plugin_genericobject_getTableNameByName(plugin_genericobject_getNameByID($ID));
 }
 
 /**
@@ -132,8 +128,7 @@ function plugin_genericobject_getTableNameByID($ID) {
  * @return the table
  */
 function plugin_genericobject_getTableNameByName($name) {
-	global $LINK_ID_TABLE;
-	return 'glpi_plugin_genericobject_' . $name;
+	return 'glpi_plugin_genericobject_' . $name."s";
 }
 
 /**
@@ -159,11 +154,12 @@ function plugin_genericobject_registerOneType($type) {
 			$ORDER_TYPE_TABLES,$ORDER_MODEL_TABLES, $ORDER_TEMPLATE_TABLES,
          $UNINSTALL_TYPES,$GENERICOBJECT_PDF_TYPES,$GENINVENTORYNUMBER_INVENTORY_TYPES;
 	$name = $type["name"];
-	$typeID = $type["device_type"];
+	$typeID = $type["itemtype"];
 
 	$tablename = plugin_genericobject_getObjectTableNameByName($name);
 	//If table doesn't exists, do not try to register !
 	if (TableExists($tablename) && !defined($typeID)) {
+			
 		$object_identifier = plugin_genericobject_getObjectIdentifierByName($name);
 
 		$db_fields = $DB->list_fields($tablename);
@@ -171,7 +167,7 @@ function plugin_genericobject_registerOneType($type) {
 		plugin_genericobject_includeLocales($name);
 		plugin_genericobject_includeClass($name);
 
-		registerPluginType('genericobject', $object_identifier, $typeID, array (
+		/*registerPluginType('genericobject', $object_identifier, $typeID, array (
 			'classname' => plugin_genericobject_getObjectClassByName($name),
 			'tablename' => $tablename,
 			'formpage' => 'front/plugin_genericobject.object.form.php',
@@ -183,10 +179,10 @@ function plugin_genericobject_registerOneType($type) {
 			'reservation_types' => ($type["use_loans"] ? true : false),
 			'recursive_type' => ($type["use_recursivity"] ? true : false),
 			'infocom_types' => ($type["use_infocoms"] ? true : false),
-			'linkuser_types' => (($type["use_tickets"] && isset ($db_fields["FK_users"])) ? true : false),
-			'linkgroup_types' => (($type["use_tickets"] && isset ($db_fields["FK_groups"])) ? true : false),
+			'linkuser_types' => (($type["use_tickets"] && isset ($db_fields["users_id"])) ? true : false),
+			'linkgroup_types' => (($type["use_tickets"] && isset ($db_fields["groups_id"])) ? true : false),
 			
-		));
+		));*/
 
 		array_push($GENERICOBJECT_LINK_TYPES, $typeID);
       
@@ -235,12 +231,12 @@ function plugin_genericobject_registerOneType($type) {
 		//End integration with order plugin
 		
 		if ($type["use_template"]) {
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name] = 'front/plugin_genericobject.template.php?device_type=' . $typeID . '&amp;add=0';
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.template.php?device_type=' . $typeID . '&amp;add=1';
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['template'][$name] = 'front/template.php?itemtype=' . $typeID . '&amp;add=0';
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/template.php?itemtype=' . $typeID . '&amp;add=1';
 		} else
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/plugin_genericobject.object.form.php?device_type=' . $typeID;
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name] = 'front/object.form.php?itemtype=' . $typeID;
 
-		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/plugin_genericobject.search.php?device_type=' . $typeID;
+		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/search.php?itemtype=' . $typeID;
 
         if ($type['use_plugin_uninstall'] && $plugin->isActivated('uninstall')) {
            usePlugin("uninstall");
@@ -274,7 +270,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 
 		$search_options[$ID][80]['table'] = 'glpi_entities';
 		$search_options[$ID][80]['field'] = 'completename';
-		$search_options[$ID][80]['linkfield'] = 'FK_entities';
+		$search_options[$ID][80]['linkfield'] = 'entities_id';
 		$search_options[$ID][80]['name'] = $LANG["entity"][0];
 
       $search_options[$ID][30]['table'] = $table;
@@ -326,13 +322,13 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 }
 
 /**
- * Get an object type configuration by device_type
- * @param device_type the object device type
+ * Get an object type configuration by itemtype
+ * @param itemtype the object device type
  * @return an array which contains all the type's configuration
  */
-function plugin_genericobject_getObjectTypeConfiguration($device_type) {
+function plugin_genericobject_getObjectTypeConfiguration($itemtype) {
 	$objecttype = new PluginGenericObjectType;
-	$objecttype->getFromDBByType($device_type);
+	$objecttype->getFromDBByType($itemtype);
 	return $objecttype->fields;
 }
 
@@ -372,10 +368,10 @@ function plugin_genericobject_includeLocales($name) {
  */
 function plugin_genericobject_includeClass($name) {
 	//If class comes directly with the plugin
-	if (file_exists(GLPI_ROOT . "/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php")) {
-		include_once (GLPI_ROOT . "/plugins/genericobject/objects/$name/plugin_genericobject.$name.class.php");
+	if (file_exists(GLPI_ROOT . "/plugins/genericobject/objects/$name/$name.class.php")) {
+		include_once (GLPI_ROOT . "/plugins/genericobject/objects/$name/$name.class.php");
 	} else {
-		include_once (GENERICOBJECT_CLASS_PATH . '/plugin_genericobject.' . $name . '.class.php');
+		include_once (GENERICOBJECT_CLASS_PATH . '/' . $name . '.class.php');
 	}
 
 }

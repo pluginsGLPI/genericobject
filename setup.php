@@ -40,14 +40,22 @@ include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.profi
 include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.profile.function.php");
 include_once (GLPI_ROOT . "/plugins/genericobject/inc/plugin_genericobject.commmon.function.php");
 
+define("PLUGIN_GENERICOBJECT_TYPE", "PluginGenericobjectType");
+
 define("GENERICOBJECT_OBJECTTYPE_STATE_DRAFT", 0);
 define("GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED", 1);
 
 define("GENERICOBJECT_OBJECTTYPE_STATUS_INACTIVE", 0);
 define("GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE", 1);
 
-define("GENERICOBJECT_CLASS_PATH", GLPI_PLUGIN_DOC_DIR . "/genericobject/classes");
+define("GENERICOBJECT_CLASS_PATH", GLPI_ROOT . "/plugins/genericobject/inc");
 define("GENERICOBJECT_CLASS_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/generic.class.tpl");
+
+define("GENERICOBJECT_CLASS_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/generic.dropdown.class.tpl");
+define("GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/front.form.tpl");
+define("GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/ajax.tabs.tpl");
+define("GENERICOBJECT_FRONT_PATH", GLPI_ROOT . "/plugins/genericobject/front");
+define("GENERICOBJECT_AJAX_PATH", GLPI_ROOT . "/plugins/genericobject/ajax");
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
@@ -57,8 +65,8 @@ function plugin_init_genericobject() {
 		"object_type",
 		"table",
 		"deleted",
-		"ID",
-		"FK_entities",
+		"id",
+		"entities_id",
 		"recursive",
 		"is_template",
 		"notes",
@@ -66,10 +74,10 @@ function plugin_init_genericobject() {
 	);
 
 	$GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS = array (
-		"ID",
+		"id",
 		"name",
 		"notes",
-		"FK_entities",
+		"entities_id",
 		"recursive",
       "is_template"
 	);
@@ -90,6 +98,11 @@ function plugin_init_genericobject() {
 	);
 
 	$GENERICOBJECT_PDF_TYPES = array ();
+	
+	Plugin::registerClass('PluginGenericObjectType', array(
+      'classname'  => 'PluginGenericObjectType',
+      'tablename'  => 'glpi_plugin_genericobject_types'
+		));
 
 	$plugin = new Plugin;
 
@@ -106,15 +119,7 @@ function plugin_init_genericobject() {
 		foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file)
 			include_once ($file);
 
-		// Params : plugin name - string type - ID - Array of attributes
-		registerPluginType('genericobject', 'PLUGIN_GENERICOBJECT_TYPE', 4850, array (
-			'classname' => 'PluginGenericObjectType',
-			'tablename' => 'glpi_plugin_genericobject_types',
-			'formpage' => 'front/plugin_genericobject.objecttype.form.php',
-			'searchpage' => 'front/plugin_genericobject.objecttype.php',
-			'typename' => $LANG['genericobject']['config'][6],
-			'massiveaction_noupdate' => true
-		));
+
 
 		$PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
@@ -123,13 +128,13 @@ function plugin_init_genericobject() {
 
 		// Display a menu entry ?
 		$PLUGIN_HOOKS['menu_entry']['genericobject'] = true;
-		$PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/plugin_genericobject.objecttype.php';
+		$PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
 
 		// Config page
 		if (haveRight('config', 'w')) {
-			$PLUGIN_HOOKS['config_page']['genericobject'] = 'front/plugin_genericobject.objecttype.php';
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type'] = 'front/plugin_genericobject.objecttype.form.php';
-			$PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/plugin_genericobject.objecttype.php';
+			$PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type'] = 'front/type.form.php';
+			$PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
 		}
 
 		$PLUGIN_HOOKS['change_profile']['genericobject'] = 'plugin_change_profile_genericobject';
@@ -139,6 +144,7 @@ function plugin_init_genericobject() {
 		$PLUGIN_HOOKS['headings']['genericobject'] = 'plugin_get_headings_genericobject';
 		$PLUGIN_HOOKS['headings_action']['genericobject'] = 'plugin_headings_actions_genericobject';
 
+		
 		plugin_genericobject_registerNewTypes();
 	}
 }
@@ -148,7 +154,7 @@ function plugin_version_genericobject() {
 	global $LANG;
 	return array (
 		'name' => $LANG["genericobject"]["title"][1],
-		'version' => '1.1.1',
+		'version' => '1.1.3',
 		'author' => 'Walid Nouh',
 		'homepage' => 'https://forge.indepnet.net/projects/show/genericobject',
 		'minGlpiVersion' => '0.72.1', // For compatibility / no install in version < 0.72

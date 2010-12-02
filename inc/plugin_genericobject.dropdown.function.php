@@ -42,7 +42,8 @@ function plugin_genericobject_dropdownState($name,$value=0) {
 	global $LANG;
 	$state[GENERICOBJECT_OBJECTTYPE_STATE_DRAFT] = $LANG['genericobject']['state'][1];
 	$state[GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED] = $LANG['genericobject']['state'][2];
-	return dropdownArrayValues($name,$state,$value);	
+	//return dropdownArrayValues($name,$state,$value);	
+	return Dropdown::showFromArray($name,$value);	
 }
 
 function plugin_genericobject_dropdownFields($name,$used=array())
@@ -53,6 +54,8 @@ function plugin_genericobject_dropdownFields($name,$used=array())
 	foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values)
 		if(!in_array($field,$used))
 			$dropdown_types[$field] = $values['name']." (".$field.")";
-	return dropdownArrayValues($name,$dropdown_types);
+			
+	//return dropdownArrayValues($name,$dropdown_types);
+	Dropdown::showFromArray($name,$dropdown_types);
 }
 ?>

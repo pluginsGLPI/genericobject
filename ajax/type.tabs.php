@@ -37,16 +37,16 @@ header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
 
-useplugin('genericobject',true);
+//useplugin('genericobject',true);
 
-if(!isset($_POST["ID"])) {
+if(!isset($_POST["id"])) {
 	exit();
 }
 
 $type = new PluginGenericObjectType;
-if ($_POST["ID"] != '')
+if ($_POST["id"] != '')
 {
-	$type->getFromDB($_POST["ID"]);
+	$type->getFromDB($_POST["id"]);
 	
 	plugin_genericobject_registerOneType($type->fields);
 	plugin_genericobject_includeLocales($type->fields["name"]);
@@ -55,31 +55,35 @@ if ($_POST["ID"] != '')
 if(!isset($_POST["sort"])) $_POST["sort"] = "";
 if(!isset($_POST["order"])) $_POST["order"] = "";
 if(!isset($_POST["withtemplate"])) $_POST["withtemplate"] = "";
+if(!isset($_GET["withtemplate"])) $_GET["withtemplate"] = "";
+
+
 
 		switch($_POST['glpi_tab']){
 			case -1:
-					$type->showBehaviourForm($_POST['target'],$_POST["ID"]);
-					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["ID"]);
-					plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["ID"]);
-					$type->getFromDB($_POST["ID"]);
-					plugin_genericobject_showPrevisualisationForm($type->fields["device_type"]);
-					showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);
+					$type->showBehaviourForm($_POST['target'],$_POST["id"]);
+					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["id"]);
+					plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["id"]);
+					$type->getFromDB($_POST["id"]);
+					plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
+					showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["id"]);
 				break;
 			case 2 :
-					$type->showBehaviourForm($_POST['target'],$_POST["ID"]);
+					$type->showBehaviourForm($_POST['target'],$_POST["id"]);
 				break;		
 			case 3 :
-					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["ID"]);
+					plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["id"]);
 				break;		
 			case 4 :
-				plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["ID"]);
+				plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["id"]);
 				break;		
 			case 5 :
-				$type->getFromDB($_POST["ID"]);
-				plugin_genericobject_showPrevisualisationForm($type->fields["device_type"]);
+				$type->getFromDB($_POST["id"]);
+				plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
 			break;
 			case 12 :
-				showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["ID"]);
+				
+				Log::showForItem($type);
 				break;
 		}
 ?>

@@ -36,77 +36,79 @@ $NEEDED_ITEMS = array("computer","ocsng","tracking","infocom","reservation");
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (!isset ($_REQUEST["ID"])) {
-	$_REQUEST["ID"] = '';
+if (!isset ($_REQUEST["id"])) {
+	$_REQUEST["id"] = '';
 }
 if (!isset ($_GET["withtemplate"])) {
 	$_GET["withtemplate"] = '';
 }
 
-if (isset ($_REQUEST["device_type"])) {
-	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
+if (isset ($_REQUEST["itemtype"])) {
+	$type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
 }
-elseif (!isset ($_SESSION["glpi_plugin_genericobject_device_type"])) {
-   $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
-   $type = $_SESSION["glpi_plugin_genericobject_device_type"];	
+elseif (!isset ($_SESSION["glpi_plugin_genericobject_itemtype"])) {
+   $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
+   $type = $_SESSION["glpi_plugin_genericobject_itemtype"];	
 }
 else {
-	$type = $_SESSION["glpi_plugin_genericobject_device_type"];
+	$type = $_SESSION["glpi_plugin_genericobject_itemtype"];
 }
 
 $name = plugin_genericobject_getNameByID($type);
-$object = new CommonItem;
-$object->setType($type, true);
+$object = new PluginGenericobjectObject($type);
+/*$object = new CommonItem;
+$object->setType($type, true);*/
 
 //Manage direct connections
-if (isset($_GET["disconnect"]) && isset($_GET["dID"]) && isset($_REQUEST["ID"])) {
-   $object->obj->check($_GET["dID"],"w");
-   Disconnect($_REQUEST["ID"]);
+if (isset($_GET["disconnect"]) && isset($_GET["dID"]) && isset($_REQUEST["id"])) {
+   $object->check($_GET["dID"],"w");
+   Disconnect($_REQUEST["id"]);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 else if(isset($_POST["connect"])&&isset($_POST["item"])&&$_POST["item"]>0) {
-   $object->obj->check($_REQUEST["ID"],"w");
+   $object->check($_REQUEST["id"],"w");
    Connect($_POST["sID"],$_POST["item"],$type);
-   glpi_header($CFG_GLPI["root_doc"]."/plugins/genericobject/front/plugin_genericobject.object.form.php?ID=".$_POST["sID"]);
+   glpi_header($CFG_GLPI["root_doc"]."/plugins/genericobject/front/object.form.php?ID=".$_POST["sID"]);
 }	
 //End manage direct connections
 else if (isset($_GET["unglobalize"]))
 {
-   $object->obj->check($_REQUEST["ID"],'w');
+   $object->check($_REQUEST["id"],'w');
 
-   unglobalizeDevice($type,$_REQUEST["ID"]);
-   glpi_header($CFG_GLPI["root_doc"]."/plugins/genericobject/front/plugin_genericobject.object.form.php?ID=".$_REQUEST["ID"]);
+   unglobalizeDevice($type,$_REQUEST["id"]);
+   glpi_header($CFG_GLPI["root_doc"]."/plugins/genericobject/front/object.form.php?ID=".$_REQUEST["ID"]);
 }
 
 //Manage standard events
 if (isset ($_POST["add"])) {
-	$object->obj->add($_POST);
+	$object->add($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }
 elseif (isset ($_POST["update"])) {
-	$object->obj->update($_POST);
+	$object->update($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }
 elseif (isset ($_POST["restore"])) {
-	$object->obj->restore($_POST);
+	$object->restore($_POST);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }
 else if (isset($_REQUEST["purge"]))
 {
-      $input["ID"]=$_REQUEST["ID"];
+      $input["id"]=$_REQUEST["id"];
 
-   $object->obj->check($input['ID'],'w');
+   $object->check($input['id'],'w');
 
-   $object->obj->delete($input,1);
-   glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$type] . "?device_type=" . $type);
+   $object->delete($input,1);
+   glpi_header($CFG_GLPI["root_doc"] . '/plugins/genericobject/front/search.php' . "?itemtype=" . $type);
 }
 elseif (isset ($_POST["delete"])) {
-	$object->obj->delete($_POST);
-	glpi_header($CFG_GLPI["root_doc"] . '/' . $SEARCH_PAGES[$type] . "?device_type=" . $type);
+	$object->delete($_POST);
+	glpi_header($CFG_GLPI["root_doc"] . '/plugins/genericobject/front/search.php' . "?itemtype=" . $type);
+	exit();
 }
 //End manage standard events
 elseif (isset ($_POST["add_type_link"])) {
-	plugin_genericobject_addDeviceLink($type, $_POST["source_id"], $_POST["type"], $_POST["FK_device"]);
+	plugin_genericobject_addDeviceLink($type, $_POST["source_id"], $_POST["type"], $_POST["items_id"]);
 	glpi_header($_SERVER["HTTP_REFERER"]);
 }
 elseif (isset ($_POST["delete_type_link"])) {
@@ -118,8 +120,8 @@ elseif (isset ($_POST["delete_type_link"])) {
 }
 
 commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
-$object->obj->title($name);
-$object->obj->showForm($_SERVER["PHP_SELF"], $_REQUEST["ID"], $_GET["withtemplate"]);
+$object->title($name);
+$object->showForm($_REQUEST["id"]);
 
 commonFooter();
 ?>

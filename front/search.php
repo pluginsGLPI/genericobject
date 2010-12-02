@@ -34,18 +34,21 @@ $NEEDED_ITEMS = array("search");
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (isset($_REQUEST['device_type']))
-	$_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST['device_type'];
+if (isset($_REQUEST['itemtype']))
+	$_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST['itemtype'];
 
-$name=plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_device_type"]);
+$name=plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]);
 
 commonHeader(plugin_genericobject_getObjectLabel($name),$_SERVER['PHP_SELF'],"plugins","genericobject",$name);
 
-plugin_genericobject_checkRight(plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_device_type"]),'r');
+plugin_genericobject_checkRight(plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]),'r');
  
-manageGetValuesInSearch($_SESSION["glpi_plugin_genericobject_device_type"]);
-searchForm($_SESSION["glpi_plugin_genericobject_device_type"], $_GET);
-showList($_SESSION["glpi_plugin_genericobject_device_type"], $_GET);
-
+//Search::Show("PluginGenericObject");
+PluginGenericobjectSearchext::Show("PluginGenericobjectObject");
+/*
+manageGetValuesInSearch($_SESSION["glpi_plugin_genericobject_itemtype"]);
+searchForm($_SESSION["glpi_plugin_genericobject_itemtype"], $_GET);
+showList($_SESSION["glpi_plugin_genericobject_itemtype"], $_GET);
+*/
 commonFooter();
 ?>

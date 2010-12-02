@@ -39,7 +39,7 @@
  */
 function plugin_genericobject_getNextDeviceType() {
 	global $DB;
-	$query = "SELECT MAX(device_type) as cpt FROM `glpi_plugin_genericobject_types`";
+	$query = "SELECT MAX(itemtype) as cpt FROM `glpi_plugin_genericobject_types`";
 	$result = $DB->query($query);
 	if (!$DB->result($result, 0, "cpt"))
 		$cpt = 4090;
@@ -52,16 +52,16 @@ function plugin_genericobject_getNextDeviceType() {
  * Write on the the class file for the new object type
  * @param name the name of the object type
  * @param classname the name of the new object
- * @param device_type the object device type
+ * @param itemtype the object device type
  * @return nothing
  */
-function plugin_genericobject_addClassFile($name, $classname, $device_type) {
+function plugin_genericobject_addClassFile($name, $classname, $itemtype) {
 	$DBf_handle = fopen(GENERICOBJECT_CLASS_TEMPLATE, "rt");
 	$template_file = fread($DBf_handle, filesize(GENERICOBJECT_CLASS_TEMPLATE));
 	fclose($DBf_handle);
 	$template_file = str_replace("%%CLASSNAME%%", $classname, $template_file);
-	$template_file = str_replace("%%DEVICETYPE%%", $device_type, $template_file);
-	$DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/plugin_genericobject.$name.class.php", "w");
+	$template_file = str_replace("%%DEVICETYPE%%", $itemtype, $template_file);
+	$DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/$name.class.php", "w");
 	fwrite($DBf_handle, $template_file);
 	fclose($DBf_handle);
 }
@@ -72,9 +72,9 @@ function plugin_genericobject_addClassFile($name, $classname, $device_type) {
  * @return nothing
  */
 function plugin_genericobject_deleteClassFile($name) {
-	if (file_exists(GENERICOBJECT_CLASS_PATH . "/plugin_genericobject.$name.class.php"))
+	if (file_exists(GENERICOBJECT_CLASS_PATH . "/$name.class.php"))
 		unlink(GENERICOBJECT_CLASS_PATH .
-		"/plugin_genericobject.$name.class.php");
+		"/$name.class.php");
 }
 
 function plugin_genericobject_showObjectFieldsForm($target, $ID) {
@@ -83,8 +83,8 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 	$object_type = new PluginGenericObjectType;
 	$object_type->getFromDB($ID);
 
-	$object_table = plugin_genericobject_getTableNameByID($object_type->fields["device_type"]);
-	$fields_in_db = plugin_genericobject_getFieldsByType($object_type->fields["device_type"]);
+	$object_table = plugin_genericobject_getTableNameByID($object_type->fields["itemtype"]);
+	$fields_in_db = plugin_genericobject_getFieldsByType($object_type->fields["itemtype"]);
 
 	foreach ($GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS as $autofield)
 		$used_fields[$autofield] = $autofield;
@@ -97,7 +97,7 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 	echo "<form name='form_fields' method='post' action=\"$target\">";
 	echo "<div class='center'>";
 	echo "<table class='tab_cadre_fixe' >";
-	echo "<input type='hidden' name='ID' value='$ID'>";
+	echo "<input type='hidden' name='id' value='$ID'>";
 	echo "<tr class='tab_bg_1'><th colspan='7'>";
 	echo $LANG['genericobject']['fields'][1] . " : " . plugin_genericobject_getObjectLabel($object_type->fields["name"]);
 	echo "</th></tr>";
@@ -120,8 +120,8 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 		$used_fields[$value->getName()] = $value->getName();
 		$index++;
 	}
-	echo "<tr><td><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/arrow-left.png\" alt=''></td><td class='center'><a onclick= \"if ( markCheckboxes('form_fields') ) return false;\" href='" . $target . "?ID=$ID&amp;select=all'>" . $LANG['buttons'][18] . "</a>";
-	echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . $target . "?ID=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
+	echo "<tr><td><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/arrow-left.png\" alt=''></td><td class='center'><a onclick= \"if ( markCheckboxes('form_fields') ) return false;\" href='" . $target . "?id=$ID&amp;select=all'>" . $LANG['buttons'][18] . "</a>";
+	echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . $target . "?id=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
 	echo "</td><td colspan='5' align='left' width='75%'>";
 
 	echo "<select name=\"massiveaction\" id='massiveaction'>";
@@ -132,7 +132,7 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 
 	$params = array (
 		'action' => '__VALUE__',
-		'device_type' => $object_type->fields["device_type"],		
+		'itemtype' => $object_type->fields["itemtype"],		
 	);
 
 	ajaxUpdateItemOnSelectEvent("massiveaction", "show_massiveaction", $CFG_GLPI["root_doc"] . "/plugins/genericobject/ajax/plugin_genericobject_dropdownObjectTypeFields.php", $params);
@@ -162,6 +162,9 @@ function plugin_genericobject_deleteFieldFromDB($table, $field, $name) {
 		$DB->query("ALTER TABLE `$table` DROP `$field`;");
 		if (plugin_genericobject_isDropdownTypeSpecific($field))
 			plugin_genericobject_deleteDropdownTable($name, $field);
+			plugin_genericobject_deleteDropdownClassfile($name, $field);
+			plugin_genericobject_deleteDropdownFrontfile($name, $field);
+			plugin_genericobject_deleteDropdownAjaxfile($name, $field);
 	}
 
 }
@@ -170,6 +173,7 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 	global $DB, $GENERICOBJECT_AVAILABLE_FIELDS;
 	$query = "ALTER TABLE `$table` ADD `$field` ";
 	if (!FieldExists($table, $field)) {
+		
 		switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
 			case 'dropdown_yesno' :
          case 'dropdown_global' :
@@ -184,8 +188,12 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 				break;
 			case 'dropdown' :
 				$query .= "INT ( 11 ) NOT NULL DEFAULT 0";
-				if (plugin_genericobject_isDropdownTypeSpecific($field))
+				if (plugin_genericobject_isDropdownTypeSpecific($field)) {
 					plugin_genericobject_addDropdownTable($name, $field);
+					plugin_genericobject_addDropdownClassfile($name, $field);
+					plugin_genericobject_addDropdownFrontfile($name, $field);
+					plugin_genericobject_addDropdownAjaxfile($name, $field);
+				}
 				break;
 			case 'integer' :
 				$query .= "INT ( 11 ) NOT NULL DEFAULT 0";
@@ -197,34 +205,93 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 	}
 }
 
+function plugin_genericobject_addDropdownClassfile($name, $field) {
+	$tablename = plugin_genericobject_getDropdownTableName($name, $field);
+	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
+	
+	if (TableExists($tablename)) {
+		
+		$DBf_handle = fopen(GENERICOBJECT_CLASS_DROPDOWN_TEMPLATE, "rt");
+		$template_file = fread($DBf_handle, filesize(GENERICOBJECT_CLASS_DROPDOWN_TEMPLATE));
+		fclose($DBf_handle);
+		$template_file = str_replace("%%CLASSNAME%%", $classname, $template_file);
+		//$template_file = str_replace("%%DEVICETYPE%%", $itemtype, $template_file);
+		$DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/".$name."_".$field.".class.php", "w");
+		fwrite($DBf_handle, $template_file);
+		fclose($DBf_handle);
+	}
+} 
+
+function plugin_genericobject_addDropdownFrontfile($name, $field) {
+	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
+	
+	$DBf_handle = fopen(GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE, "rt");
+	$template_file = fread($DBf_handle, filesize(GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE));
+	fclose($DBf_handle);
+	$template_file = str_replace("%%OBJECT%%", $classname, $template_file);
+	$DBf_handle = fopen(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".form.php", "w");
+	fwrite($DBf_handle, $template_file);
+	fclose($DBf_handle);
+}
+
+function plugin_genericobject_addDropdownAjaxfile($name, $field) {
+	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
+	
+	$DBf_handle = fopen(GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE, "rt");
+	$template_file = fread($DBf_handle, filesize(GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE));
+	fclose($DBf_handle);
+	$template_file = str_replace("%%OBJECT%%", $classname, $template_file);
+	$DBf_handle = fopen(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php", "w");
+	fwrite($DBf_handle, $template_file);
+	fclose($DBf_handle);
+}
+
 function plugin_genericobject_addDropdownTable($name, $field) {
 	global $DB;
 	if (!TableExists(plugin_genericobject_getDropdownTableName($name, $field))) {
 		if (!plugin_genericobject_isDropdownEntityRestrict($field)) {
 			$query = "CREATE TABLE `" . plugin_genericobject_getDropdownTableName($name, $field) . "` (
-							  `ID` int(11) NOT NULL auto_increment,
+							  `id` int(11) NOT NULL auto_increment,
 							  `name` varchar(255) collate utf8_unicode_ci default NULL,
 							  `comments` text collate utf8_unicode_ci,
-							  PRIMARY KEY  (`ID`),
+							  PRIMARY KEY  (`id`),
 							  KEY `name` (`name`)
 							) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		} else {
 			$query = "CREATE TABLE IF NOT EXISTS `" . plugin_genericobject_getDropdownTableName($name, $field) . "` (
-						  `ID` int(11) NOT NULL auto_increment,
-						  `FK_entities` int(11) NOT NULL default '0',
+						  `id` int(11) NOT NULL auto_increment,
+						  `entities_id` int(11) NOT NULL default '0',
 						  `name` varchar(255) collate utf8_unicode_ci default NULL,
 						  `parentID` int(11) NOT NULL default '0',
 						  `completename` text collate utf8_unicode_ci,
 						  `comments` text collate utf8_unicode_ci,
 						  `level` int(11) NOT NULL default '0',
-						  PRIMARY KEY  (`ID`),
-						  UNIQUE KEY `name` (`name`,`parentID`,`FK_entities`),
+						  PRIMARY KEY  (`id`),
+						  UNIQUE KEY `name` (`name`,`parentID`,`entities_id`),
 						  KEY `parentID` (`parentID`),
-						  KEY `FK_entities` (`FK_entities`)
+						  KEY `entities_id` (`entities_id`)
 						) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		}
 		$DB->query($query);
 	}
+}
+
+function plugin_genericobject_deleteDropdownClassfile($name, $field) {
+	if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$name."_".$field.".class.php"))
+		unlink(GENERICOBJECT_CLASS_PATH .
+		"/".$name."_".$field.".class.php");
+}
+
+function plugin_genericobject_deleteDropdownFrontfile($name, $field) {
+	if (file_exists(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".form.php"))
+		unlink(GENERICOBJECT_FRONT_PATH .
+		"/".$name.$field.".form.php");
+}
+
+function plugin_genericobject_deleteDropdownAjaxfile($name, $field) {
+	if (file_exists(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php"))
+		unlink(GENERICOBJECT_AJAX_PATH .
+		"/".$name.$field.".tabs.php");
 }
 
 function plugin_genericobject_deleteDropdownTable($name, $field) {
@@ -242,20 +309,20 @@ function plugin_genericobject_deleteDropdownTable($name, $field) {
 function plugin_genericobject_addTable($name) {
 	global $DB;
 	$query = "CREATE TABLE `glpi_plugin_genericobject_$name` (
-					`ID` INT( 11 ) NOT NULL AUTO_INCREMENT,
+					`id` INT( 11 ) NOT NULL AUTO_INCREMENT,
 			 		`name` VARCHAR( 255 ) NOT NULL ,
-					`FK_entities` INT( 11 ) NOT NULL DEFAULT 0,
+					`entities_id` INT( 11 ) NOT NULL DEFAULT 0,
 					`object_type` INT( 11 ) NOT NULL DEFAULT 0,
 					`deleted` INT( 1 ) NOT NULL DEFAULT 0,
 			 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
                `is_template` INT ( 1 ) NOT NULL DEFAULT 0,
 			 		`comments` TEXT NULL  ,
 			 		`notes` TEXT NULL  ,
-			 		PRIMARY KEY ( `ID` ) 
+			 		PRIMARY KEY ( `id` ) 
 					) ENGINE = MYISAM COMMENT = '$name table';";
 	$DB->query($query);
 
-	$query = "INSERT INTO `glpi_display` (`ID`, `type`, `num`, `rank`, `FK_users`) VALUES
+	$query = "INSERT INTO `glpi_display` (`id`, `itemtype`, `num`, `rank`, `users_id`) VALUES
 					(NULL, " . plugin_genericobject_getIDByName($name) . ", 2, 1, 0);";
 	$DB->query($query);
 
@@ -269,7 +336,7 @@ function plugin_genericobject_addTable($name) {
 function plugin_genericobject_deleteTable($name) {
 	global $DB;
 	$type = plugin_genericobject_getIDByName($name);
-	$DB->query("DELETE FROM `glpi_display` WHERE type='$type'");
+	$DB->query("DELETE FROM `glpi_display` WHERE itemtype='$type'");
 	$DB->query("DROP TABLE IF EXISTS `glpi_plugin_genericobject_$name`");
 }
 
@@ -392,21 +459,21 @@ function plugin_genericobject_displayFieldDefinition($target, $ID, $field, $inde
 
 	echo "<td width='10'>";
 	if (!$readonly && $index > 2)
-		echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;ID=" . $ID . "\"><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_up.png\" alt=''></a>";
+		echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;id=" . $ID . "\"><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_up.png\" alt=''></a>";
 	echo "</td>";
 
 	echo "<td width='10'>";
 	if (!$readonly && $index > 1 && $index < $total)
-		echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;ID=" . $ID . "\"><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
+		echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;id=" . $ID . "\"><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
 	echo "</td>";
 
 	echo "</tr>";
 }
 
-function plugin_genericobject_deleteSpecificDropdownTables($device_type)
+function plugin_genericobject_deleteSpecificDropdownTables($itemtype)
 {
 	global $DB;
-	$name = plugin_genericobject_getNameByID($device_type);
+	$name = plugin_genericobject_getNameByID($itemtype);
 	$types = plugin_genericobject_getDropdownSpecificFields();
 
 	foreach($types as $type => $tmp)	{
@@ -415,31 +482,31 @@ function plugin_genericobject_deleteSpecificDropdownTables($device_type)
 		
 }
 
-function plugin_genericobject_addLinkTable($device_type)
+function plugin_genericobject_addLinkTable($itemtype)
 {
 	global $DB;
-	$name = plugin_genericobject_getNameByID($device_type);
+	$name = plugin_genericobject_getNameByID($itemtype);
 	$query = "CREATE TABLE IF NOT EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."` (
-	  `ID` int(11) NOT NULL auto_increment,
+	  `id` int(11) NOT NULL auto_increment,
 	  `source_id` int(11) NOT NULL default '0',
-	  `FK_device` int(11) NOT NULL default '0',
-	  `device_type` int(11) NOT NULL default '0',
-	  PRIMARY KEY  (`ID`),
-	  UNIQUE KEY `source_id` (`source_id`,`FK_device`,`device_type`),
+	  `items_id` int(11) NOT NULL default '0',
+	  `itemtype` int(11) NOT NULL default '0',
+	  PRIMARY KEY  (`id`),
+	  UNIQUE KEY `source_id` (`source_id`,`items_id`,`itemtype`),
 	  KEY `source_id_2` (`source_id`),
-	  KEY `FK_device` (`FK_device`,`device_type`)
+	  KEY `items_id` (`items_id`,`itemtype`)
 	) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 	$DB->query($query);
 }
 
-function plugin_genericobject_deleteLinkTable($device_type)
+function plugin_genericobject_deleteLinkTable($itemtype)
 {
 	global $DB;
-	$name = plugin_genericobject_getNameByID($device_type);
+	$name = plugin_genericobject_getNameByID($itemtype);
 	$DB->query("DROP TABLE IF EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."`");
 }
 	
-function plugin_genericobject_removeDataInjectionModels($device_type)
+function plugin_genericobject_removeDataInjectionModels($itemtype)
 {
 	global $DB;
 		$plugin = new Plugin;
@@ -448,9 +515,9 @@ function plugin_genericobject_removeDataInjectionModels($device_type)
 		{
 			$query = "DELETE FROM `glpi_plugin_datainjection_models`, `glpi_plugin_datainjection_mappings`, `glpi_plugin_datainjection_infos` " .
                "USING `glpi_plugin_datainjection_models`, `glpi_plugin_datainjection_mappings`, `glpi_plugin_datainjection_infos` " .
-                  "WHERE glpi_plugin_datainjection_models.device_type=".$device_type." " .
-                        "AND glpi_plugin_datainjection_mappings.model_id=glpi_plugin_datainjection_models.ID " .
-                           "AND glpi_plugin_datainjection_infos.model_id=glpi_plugin_datainjection_models.ID";
+                  "WHERE glpi_plugin_datainjection_models.itemtype=".$itemtype." " .
+                        "AND glpi_plugin_datainjection_mappings.model_id=glpi_plugin_datainjection_models.id " .
+                           "AND glpi_plugin_datainjection_infos.model_id=glpi_plugin_datainjection_models.id";
          
          $DB->query ($query);
 		}
@@ -458,40 +525,40 @@ function plugin_genericobject_removeDataInjectionModels($device_type)
 }
 
 /**
- * Delete all loans associated with a device_type
+ * Delete all loans associated with a itemtype
  */
-function plugin_genericobject_deleteLoans($device_type)
+function plugin_genericobject_deleteLoans($itemtype)
 {
    global $DB;
    
    $query = "DELETE FROM  `glpi_reservation_item`, `glpi_reservation_resa` " .
             "USING `glpi_reservation_item`, `glpi_reservation_resa` " .
-               "WHERE `glpi_reservation_item`.`device_type`='$device_type' " .
-                  "AND `glpi_reservation_item`.`ID`=`glpi_reservation_resa`.`id_item`";
+               "WHERE `glpi_reservation_item`.`itemtype`='$itemtype' " .
+                  "AND `glpi_reservation_item`.`id`=`glpi_reservation_resa`.`id_item`";
    $DB->query($query); 
 }
 
 
-function plugin_genericobject_deleteNetworking($device_type) {
+function plugin_genericobject_deleteNetworking($itemtype) {
 	    global $DB;
-        $query = "SELECT ID 
-               FROM glpi_networking_ports 
-               WHERE device_type = '" . $device_type . "'";
+        $query = "SELECT id 
+               FROM glpi_networkports 
+               WHERE itemtype = '" . $itemtype . "'";
       $result = $DB->query($query);
       while ($data = $DB->fetch_array($result)) {
-         $q = "DELETE FROM glpi_networking_wire WHERE end1 = '" . $data["ID"] . "' OR end2 = '" . $data["ID"] . "'";
+         $q = "DELETE FROM glpi_networkports_networkports WHERE networkports_id_1 = '" . $data["id"] . "' OR networkports_id_2 = '" . $data["id"] . "'";
          $result2 = $DB->query($q);
       }
 
-      $query2 = "DELETE FROM glpi_networking_ports WHERE device_type = '" . $device_type . "'";
+      $query2 = "DELETE FROM glpi_networkports WHERE itemtype = '" . $itemtype . "'";
       $result2 = $DB->query($query2);
 
-      $query = "SELECT ID FROM glpi_connect_wire WHERE type='" . $device_type."'";
+      $query = "SELECT id FROM glpi_computers_items WHERE itemtype='" . $itemtype."'";
       if ($result = $DB->query($query)) {
          if ($DB->numrows($result) > 0) {
             while ($data = $DB->fetch_array($result)) {
                // Disconnect without auto actions
-               Disconnect($data["ID"], 1, false);
+               Disconnect($data["id"], 1, false);
             }
          }
       }

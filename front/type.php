@@ -1,5 +1,4 @@
 <?php
-
 /*
  ----------------------------------------------------------------------
  GLPI - Gestionnaire Libre de Parc Informatique
@@ -28,24 +27,21 @@
  ------------------------------------------------------------------------
 */
 
-// Original Author of file: Walid Nouh
+// Original Author of file: BALPE Dévi
 // Purpose of file:
 // ----------------------------------------------------------------------
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (!isset($_SESSION["glpi_plugin_genericobject_device_type"]))
-	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
-elseif (isset($_REQUEST["device_type"]))
-	$type = $_SESSION["glpi_plugin_genericobject_device_type"] = $_REQUEST["device_type"];
-else
-	$type = $_SESSION["glpi_plugin_genericobject_device_type"];
-	
-$type = $_SESSION["glpi_plugin_genericobject_device_type"];
+commonHeader($LANG['genericobject']['title'][2],$_SERVER['PHP_SELF'],"plugins","genericobject","type");
 
-$name = plugin_genericobject_getNameByID($type);
+checkRight("config","w");
 
-commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
-plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$_GET["device_type"]],$_GET["device_type"],$_SESSION["glpiactive_entity"],$_GET["add"]);
+Search::Show(PLUGIN_GENERICOBJECT_TYPE);
+/*
+manageGetValuesInSearch(PLUGIN_GENERICOBJECT_TYPE);
+searchForm(PLUGIN_GENERICOBJECT_TYPE, $_GET);
+showList(PLUGIN_GENERICOBJECT_TYPE, $_GET);
+*/
 commonFooter();
 ?>
