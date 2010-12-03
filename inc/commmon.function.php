@@ -247,6 +247,8 @@ function plugin_genericobject_registerOneType($type) {
 		foreach (plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name) {
 			array_push($CFG_GLPI["specif_entities_tables"], $table);
 			//array_push($CFG_GLPI["dropdowntree_tables"], $table);
+			
+			//$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name.$field] = "front/$name.$field.php";
 		}
 
 	}

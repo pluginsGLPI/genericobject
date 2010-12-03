@@ -267,7 +267,7 @@ function plugin_genericobject_addDropdownTable($name, $field) {
 			$query = "CREATE TABLE `" . plugin_genericobject_getDropdownTableName($name, $field) . "` (
 							  `id` int(11) NOT NULL auto_increment,
 							  `name` varchar(255) collate utf8_unicode_ci default NULL,
-							  `comments` text collate utf8_unicode_ci,
+							  `comment` text collate utf8_unicode_ci,
 							  PRIMARY KEY  (`id`),
 							  KEY `name` (`name`)
 							) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
@@ -278,7 +278,7 @@ function plugin_genericobject_addDropdownTable($name, $field) {
 						  `name` varchar(255) collate utf8_unicode_ci default NULL,
 						  `parentID` int(11) NOT NULL default '0',
 						  `completename` text collate utf8_unicode_ci,
-						  `comments` text collate utf8_unicode_ci,
+						  `comment` text collate utf8_unicode_ci,
 						  `level` int(11) NOT NULL default '0',
 						  PRIMARY KEY  (`id`),
 						  UNIQUE KEY `name` (`name`,`parentID`,`entities_id`),

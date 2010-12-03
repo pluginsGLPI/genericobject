@@ -42,11 +42,15 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
 	function canCreate() {
-		return true;
+		//return true;
+		$type = strtolower(str_replace("PluginGenericobject", "", $this->type));
+		return plugin_genericobject_haveRight($type, 'w');
    }
 
    function canView() {
-		return true;
+		//return true;
+		$type = strtolower(str_replace("PluginGenericobject", "", $this->type));
+		return plugin_genericobject_haveRight($type, 'r');
    }
 	
 	function __construct($itemtype = 0) {
@@ -299,11 +303,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 						$entity_restrict = $this->fields["entities_id"];
 						switch ($table) {
                   	default :
-								//echo $table;
-							
 								if (isset($device_name)) $object_name = "PluginGenericobject".ucfirst($device_name).ucfirst($name);
 								else $object_name = ucfirst($name);
-								
+						
                         //dropdownValue($table, $name, $value, 1, $entity_restrict);
 								Dropdown::show($object_name, array(
 											'value' => $value,
@@ -318,14 +320,6 @@ class PluginGenericobjectObject extends CommonDBTM {
                            'right'  => 'all',
                            'entity' => $entity_restrict));
                         break;   
-							/*case 'glpi_entities' :
-
-                        User::dropdown(array('name'   => $name,
-                           'value'  => $value,
-                           'right'  => 'all',
-                           'entity' => $entity_restrict));
-
-                        break;   */
                   }
 						
 					} else
