@@ -162,9 +162,10 @@ function plugin_genericobject_deleteFieldFromDB($table, $field, $name) {
 		$DB->query("ALTER TABLE `$table` DROP `$field`;");
 		if (plugin_genericobject_isDropdownTypeSpecific($field))
 			plugin_genericobject_deleteDropdownTable($name, $field);
-			plugin_genericobject_deleteDropdownClassfile($name, $field);
-			plugin_genericobject_deleteDropdownFrontfile($name, $field);
-			plugin_genericobject_deleteDropdownAjaxfile($name, $field);
+			plugin_genericobject_deleteDropdownClassFile($name, $field);
+			plugin_genericobject_deleteDropdownFrontFile($name, $field);
+			plugin_genericobject_deleteDropdownFrontformFile($name, $field);
+			plugin_genericobject_deleteDropdownAjaxFile($name, $field);
 	}
 
 }
@@ -190,9 +191,10 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 				$query .= "INT ( 11 ) NOT NULL DEFAULT 0";
 				if (plugin_genericobject_isDropdownTypeSpecific($field)) {
 					plugin_genericobject_addDropdownTable($name, $field);
-					plugin_genericobject_addDropdownClassfile($name, $field);
-					plugin_genericobject_addDropdownFrontfile($name, $field);
-					plugin_genericobject_addDropdownAjaxfile($name, $field);
+					plugin_genericobject_addDropdownClassFile($name, $field);
+					plugin_genericobject_addDropdownFrontFile($name, $field);
+					plugin_genericobject_addDropdownFrontformFile($name, $field);
+					plugin_genericobject_addDropdownAjaxFile($name, $field);
 				}
 				break;
 			case 'integer' :
@@ -205,7 +207,7 @@ function plugin_genericobject_addFieldInDB($table, $field, $name) {
 	}
 }
 
-function plugin_genericobject_addDropdownClassfile($name, $field) {
+function plugin_genericobject_addDropdownClassFile($name, $field) {
 	$tablename = plugin_genericobject_getDropdownTableName($name, $field);
 	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
 	
@@ -216,17 +218,17 @@ function plugin_genericobject_addDropdownClassfile($name, $field) {
 		fclose($DBf_handle);
 		$template_file = str_replace("%%CLASSNAME%%", $classname, $template_file);
 		//$template_file = str_replace("%%DEVICETYPE%%", $itemtype, $template_file);
-		$DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/".$name."_".$field.".class.php", "w");
+		$DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/".$name.$field.".class.php", "w");
 		fwrite($DBf_handle, $template_file);
 		fclose($DBf_handle);
 	}
 } 
 
-function plugin_genericobject_addDropdownFrontfile($name, $field) {
+function plugin_genericobject_addDropdownFrontformFile($name, $field) {
 	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
 	
-	$DBf_handle = fopen(GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE, "rt");
-	$template_file = fread($DBf_handle, filesize(GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE));
+	$DBf_handle = fopen(GENERICOBJECT_FRONTFORM_DROPDOWN_TEMPLATE, "rt");
+	$template_file = fread($DBf_handle, filesize(GENERICOBJECT_FRONTFORM_DROPDOWN_TEMPLATE));
 	fclose($DBf_handle);
 	$template_file = str_replace("%%OBJECT%%", $classname, $template_file);
 	$DBf_handle = fopen(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".form.php", "w");
@@ -234,7 +236,19 @@ function plugin_genericobject_addDropdownFrontfile($name, $field) {
 	fclose($DBf_handle);
 }
 
-function plugin_genericobject_addDropdownAjaxfile($name, $field) {
+function plugin_genericobject_addDropdownFrontFile($name, $field) {
+	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
+	
+	$DBf_handle = fopen(GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE, "rt");
+	$template_file = fread($DBf_handle, filesize(GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE));
+	fclose($DBf_handle);
+	$template_file = str_replace("%%OBJECT%%", $classname, $template_file);
+	$DBf_handle = fopen(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".php", "w");
+	fwrite($DBf_handle, $template_file);
+	fclose($DBf_handle);
+}
+
+function plugin_genericobject_addDropdownAjaxFile($name, $field) {
 	$classname = "PluginGenericobject".ucfirst($name).ucfirst($field);
 	
 	$DBf_handle = fopen(GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE, "rt");
@@ -276,19 +290,25 @@ function plugin_genericobject_addDropdownTable($name, $field) {
 	}
 }
 
-function plugin_genericobject_deleteDropdownClassfile($name, $field) {
-	if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$name."_".$field.".class.php"))
+function plugin_genericobject_deleteDropdownClassFile($name, $field) {
+	if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$name.$field.".class.php"))
 		unlink(GENERICOBJECT_CLASS_PATH .
-		"/".$name."_".$field.".class.php");
+		"/".$name.$field.".class.php");
 }
 
-function plugin_genericobject_deleteDropdownFrontfile($name, $field) {
+function plugin_genericobject_deleteDropdownFrontformFile($name, $field) {
 	if (file_exists(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".form.php"))
 		unlink(GENERICOBJECT_FRONT_PATH .
 		"/".$name.$field.".form.php");
 }
 
-function plugin_genericobject_deleteDropdownAjaxfile($name, $field) {
+function plugin_genericobject_deleteDropdownFrontFile($name, $field) {
+	if (file_exists(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".form.php"))
+		unlink(GENERICOBJECT_FRONT_PATH .
+		"/".$name.$field.".php");
+}
+
+function plugin_genericobject_deleteDropdownAjaxFile($name, $field) {
 	if (file_exists(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php"))
 		unlink(GENERICOBJECT_AJAX_PATH .
 		"/".$name.$field.".tabs.php");
@@ -301,17 +321,10 @@ function plugin_genericobject_deleteSpecificDropdownFiles($itemtype)
 	$types = plugin_genericobject_getDropdownSpecificFields();
 
 	foreach($types as $type => $tmp)	{
-		if (file_exists(GENERICOBJECT_AJAX_PATH . "/".$name.$type.".tabs.php"))
-		unlink(GENERICOBJECT_AJAX_PATH .
-			"/".$name.$type.".tabs.php");
-			
-		if (file_exists(GENERICOBJECT_FRONT_PATH . "/".$name.$type.".form.php"))
-		unlink(GENERICOBJECT_FRONT_PATH .
-			"/".$name.$type.".form.php");
-			
-		if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$name."_".$type.".class.php"))
-		unlink(GENERICOBJECT_CLASS_PATH .
-			"/".$name."_".$type.".class.php");
+		plugin_genericobject_deleteDropdownAjaxFile($name, $type);
+		plugin_genericobject_deleteDropdownFrontFile($name, $type);
+		plugin_genericobject_deleteDropdownFrontformFile($name, $type);
+		plugin_genericobject_deleteDropdownClassFile($name, $type);
 	}
 		
 }
@@ -363,7 +376,8 @@ function plugin_genericobject_deleteTable($name) {
 }
 
 function plugin_genericobject_getDropdownTableName($name, $field) {
-	return "glpi_dropdown_plugin_genericobject_" . $name . "_" . $field;
+	$table_name = "glpi_plugin_genericobject_" . $name . $field;
+	return getPlural($table_name);
 }
 
 function plugin_genericobject_getLinkDeviceTableName($name)
@@ -426,8 +440,6 @@ function plugin_genericobject_getDropdownSpecificFields() {
 function plugin_genericobject_getDropdownSpecific(& $dropdowns, $type, $check_entity = false) {
 	global $GENERICOBJECT_AVAILABLE_FIELDS;
 	
-	//var_dump($type);
-	
 	$specific_types = plugin_genericobject_getDropdownSpecificFields();
 	$table = plugin_genericobject_getTableNameByName($type["name"]);
 
@@ -435,7 +447,8 @@ function plugin_genericobject_getDropdownSpecific(& $dropdowns, $type, $check_en
 	{
 		if (FieldExists($table, $field)) {
 			if (!$check_entity || ($check_entity && plugin_genericobject_isDropdownEntityRestrict($field)))
-				$dropdowns[plugin_genericobject_getDropdownTableName($type["name"], $field)] = plugin_genericobject_getObjectLabel($type["name"]) . ' : ' . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+				//$dropdowns[plugin_genericobject_getDropdownTableName($type["name"], $field)] = plugin_genericobject_getObjectLabel($type["name"]) . ' : ' . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+				$dropdowns["PluginGenericobject".ucfirst($type["name"]).$field] = plugin_genericobject_getObjectLabel($type["name"]) . ' : ' . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
 		}
 	}
 }

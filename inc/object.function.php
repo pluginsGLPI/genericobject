@@ -163,7 +163,8 @@ function plugin_genericobject_showTemplateByDeviceType($target,$itemtype,$entity
 
 		}
 
-		if (haveTypeRight($itemtype, "w") &&!$add) {
+		//if (haveTypeRight($itemtype, "w") &&!$add) {
+		if (haveRight($itemtype, "w") &&!$add) {
 			echo "<tr>";
 			echo "<td colspan='2' align='center' class='tab_bg_2'>";
 			echo "<strong><a href=\"$target?itemtype=$itemtype&withtemplate=1\">" . $LANG['common'][9] . "</a></strong>";
@@ -181,11 +182,14 @@ function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
 	
 	$name = plugin_genericobject_getNameByID($itemtype);
 	
-	if (!haveTypeRight($name,"r"))	return false;
+	if (!haveRight($name,"r"))	return false;
+	//if (!haveTypeRight($name,"r"))	return false;
 	
 	$rand=mt_rand();
 	
 	$commonitem = new PluginGenericobjectObject($itemtype);
+	
+	
 	if ($commonitem->getFromDB($item_id)){
 		$obj = $commonitem;
 		
@@ -223,7 +227,8 @@ function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
 		$ci=new CommonItem();
 		while ($i < $number) {
 			$type=$DB->result($result, $i, "itemtype");
-			if (haveTypeRight($type,"r")){
+			//if (haveTypeRight($type,"r")){
+			if (haveRight($type,"r")){
 				$column="name";
 				if ($type==TRACKING_TYPE) $column="ID";
 				if ($type==KNOWBASE_TYPE) $column="question";

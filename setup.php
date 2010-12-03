@@ -52,7 +52,8 @@ define("GENERICOBJECT_CLASS_PATH", GLPI_ROOT . "/plugins/genericobject/inc");
 define("GENERICOBJECT_CLASS_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/generic.class.tpl");
 
 define("GENERICOBJECT_CLASS_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/generic.dropdown.class.tpl");
-define("GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/front.form.tpl");
+define("GENERICOBJECT_FRONTFORM_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/front.form.tpl");
+define("GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/front.tpl");
 define("GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE", GLPI_ROOT . "/plugins/genericobject/objects/ajax.tabs.tpl");
 define("GENERICOBJECT_FRONT_PATH", GLPI_ROOT . "/plugins/genericobject/front");
 define("GENERICOBJECT_AJAX_PATH", GLPI_ROOT . "/plugins/genericobject/ajax");

@@ -108,7 +108,8 @@ if (empty ($_POST["id"])) {
 			}
 			
 			plugin_genericobject_showDevice($_POST['target'], $type, $_POST["id"]);
-			if (!displayPluginAction($type, $_POST["id"], $_POST['glpi_tab'])) {
+			//if (!displayPluginAction($type, $_POST["id"], $_POST['glpi_tab'])) {
+			if (!Plugin::displayAction($commonitem, $_POST['glpi_tab'])) {
 			}
 			break;
 		case 3 :
