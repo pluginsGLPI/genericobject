@@ -31,12 +31,14 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 
-$LANG['genericobject']['title'][1]="Gestion d'objets";
-$LANG['genericobject']['title'][2]="Types d'objets";
+$LANG['genericobject']['title'][1] = "Gestion d'objets";
+$LANG['genericobject']['title'][2] = "Types d'objets";
 
-$LANG['genericobject']['common'][1]="Identifiant interne";
-$LANG['genericobject']['common'][2]="Type interne";
-$LANG['genericobject']['common'][3]="Etat";
+$LANG['genericobject']['common'][1] = "Identifiant interne";
+$LANG['genericobject']['common'][2] = "Type interne";
+$LANG['genericobject']['common'][3] = "Etat";
+
+$LANG['genericobject']['install'][0] = "Erreur : les dossiers '/inc', '/front' et '/ajax' du plugin doivent être en écriture pour le serveur web.";
 
 $LANG['genericobject']['profile'][0] = "Gestion des droits";
 $LANG['genericobject']['profile'][1] = "Associer des tickets à cet objet d'inventaire";

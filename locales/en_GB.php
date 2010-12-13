@@ -38,6 +38,8 @@ $LANG['genericobject']['common'][1]="Internal identifier";
 $LANG['genericobject']['common'][2]="Internal type";
 $LANG['genericobject']['common'][3]="State";
 
+$LANG['genericobject']['install'][0] = "Error: directories '/inc', '/head' and '/ajax' of plugin must be writable by the web server.";
+
 $LANG['genericobject']['profile'][0] = "Rights management";
 $LANG['genericobject']['profile'][1] = "Associate tickets to this object";
 $LANG['genericobject']['setup'][1] = "Cannot use this plugin for the hepldesk";

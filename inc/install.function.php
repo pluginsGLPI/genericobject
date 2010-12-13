@@ -72,8 +72,24 @@ function plugin_genericobject_haveRight($module, $right) {
 		return false;
 }
 
+function check_directories() {
+	global $LANG;
+	
+	$go_dir = "../plugins/genericobject/";
+	
+	if (!is_writable($go_dir.'inc/') || !is_writable($go_dir.'front/') || !is_writable($go_dir.'ajax/')) {
+		AddMessageAfterRedirect($LANG['genericobject']['install'][0]);
+		return false;
+	}	
+	return true;
+}
+
+
 function plugin_genericobject_install() {
 	global $DB;
+	
+	//check directories rights
+	if (!check_directories()) return false;
 
 	$plugin = new Plugin;
 
