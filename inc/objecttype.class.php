@@ -125,7 +125,7 @@ class PluginGenericobjectType extends CommonDBTM {
 			echo $next;
 			echo "<input type='hidden' name='itemtype' value='" . $next . "'>";
 		} else {
-			echo $this->fields["itemtype"];
+			//echo $this->fields["itemtype"];
 			echo "<input type='hidden' name='itemtype' value='" . $this->fields["itemtype"] . "'>";
 		}
 
