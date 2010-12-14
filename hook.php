@@ -42,18 +42,18 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
 	$sopt[1]['name'] = $LANG["common"][22];
 	$sopt[1]['datatype']='itemlink';
 
-	$sopt[2]['table'] = 'glpi_plugin_genericobject_types';
+	/*$sopt[2]['table'] = 'glpi_plugin_genericobject_types';
 	$sopt[2]['field'] = 'itemtype';
 	$sopt[2]['linkfield'] = '';
 	$sopt[2]['name'] = $LANG["genericobject"]["common"][2];
-	$sopt[2]['datatype']='itemlink';
+	$sopt[2]['datatype']='itemlink';*/
 
 	$sopt[5]['table'] = 'glpi_plugin_genericobject_types';
 	$sopt[5]['field'] = 'status';
 	$sopt[5]['linkfield'] = 'status';
 	$sopt[5]['name'] = $LANG['joblist'][0];
 
-	$sopt[6]['table'] = 'glpi_plugin_genericobject_types';
+	/*$sopt[6]['table'] = 'glpi_plugin_genericobject_types';
 	$sopt[6]['field'] = 'use_tickets';
 	$sopt[6]['linkfield'] = '';
 	$sopt[6]['name'] = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][31];
@@ -111,12 +111,14 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
 	$sopt[15]['field'] = 'use_loans';
 	$sopt[15]['linkfield'] = '';
 	$sopt[15]['name'] = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][17];
-	$sopt[15]['datatype'] = 'bool';
+	$sopt[15]['datatype'] = 'bool';*/
 	
 	$types = plugin_genericobject_getAllTypes();
 	
 	foreach ($types as $type => $params)
 		$sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
+		
+	//echo "<pre>";var_dump($sopt);echo "</pre>";
 		
 	return $sopt;
 
@@ -367,6 +369,31 @@ function plugin_uninstall_addUninstallTypes($uninstal_types)
 			$uninstal_types[] = $type["itemtype"];
 	*/
 	return $uninstal_types;		
+}
+
+function plugin_genericobject_giveItem($itemtype,$ID,$data,$num,$meta=0) {
+	$searchopt=&Search::getOptions($itemtype);
+	
+	$NAME="ITEM_";
+	if ($meta) {
+		$NAME="META_";
+	}
+	$table=$searchopt[$ID]["table"];
+	$field=$searchopt[$ID]["field"];
+	$linkfield=$searchopt[$ID]["linkfield"];
+	
+	if ($table == "glpi_plugin_genericobject_types") return;
+
+	//echo $field;
+	switch ($field) {
+		case 'name':	
+			$out  = "<a id='ticket".$data[$NAME.$num]."' href=\"object.form.php?id=".$data['id'];
+			$out .= "\">".$data[$NAME.$num];
+			$out .= "</a>";
+			break;
+	}
+	
+	return $out;
 }
 
 ?>
