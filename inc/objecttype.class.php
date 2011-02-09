@@ -117,7 +117,7 @@ class PluginGenericobjectType extends CommonDBTM {
 		echo "</td>";
 		echo "</tr>";
 
-		echo "<tr class='tab_bg_1'>";
+		/*echo "<tr class='tab_bg_1'>";
 		echo "<td>" . $LANG['genericobject']['common'][2] . "</td>";
 		echo "<td>";
 		if (!$ID) {
@@ -130,7 +130,7 @@ class PluginGenericobjectType extends CommonDBTM {
 		}
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>";*/
 
 		echo "<tr class='tab_bg_1'>";
 		echo "<td>" . $LANG['common'][60] . "</td>";
