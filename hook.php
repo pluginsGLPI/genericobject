@@ -255,7 +255,7 @@ function plugin_headings_genericobject($item, $withtemplate) {
 					plugin_genericobject_createAccess($item->getField('id'));
 					
 				$prof = new PluginGenericObjectProfile();
-				$prof->showForm($CFG_GLPI["root_doc"] . "/plugins/genericobject/front/plugin_genericobject.profile.php", $item->getField('id'));
+				$prof->showForm($CFG_GLPI["root_doc"] . "/plugins/genericobject/front/profile.php", $item->getField('id'));
 			} else {
 				echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'><td align='center'>";
 				echo $LANG['genericobject']['setup'][1];

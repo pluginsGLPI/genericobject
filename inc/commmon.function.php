@@ -183,7 +183,7 @@ function plugin_genericobject_registerOneType($type) {
 			'linkgroup_types' => (($type["use_tickets"] && isset ($db_fields["groups_id"])) ? true : false),
 			
 		));*/
-
+      printCleanArray($IMPORT_PRIMARY_TYPES);
 		array_push($GENERICOBJECT_LINK_TYPES, $typeID);
       
       if ($type['use_network_ports']) {
@@ -200,8 +200,8 @@ function plugin_genericobject_registerOneType($type) {
       if ($type["use_plugin_datainjection"] && $plugin->isActivated("datainjection")) {
           //usePlugin("datainjection");
          $PLUGIN_HOOKS['datainjection'][$name] = "plugin_genericobject_datainjection_variables";
-			array_push($IMPORT_PRIMARY_TYPES, $typeID);
-			array_push($IMPORT_TYPES, $typeID);
+			$IMPORT_PRIMARY_TYPES[] = $typeID;
+			$IMPORT_TYPES[] = $typeID;
 		}
 		//End integration with datainjection plugin
 
@@ -220,13 +220,13 @@ function plugin_genericobject_registerOneType($type) {
       //Integration with order management plugin
 		if ($type["use_plugin_order"] && $plugin->isActivated("order")) {
 			//usePlugin("order");
-			array_push($ORDER_AVAILABLE_TYPES, $typeID);
+			$ORDER_AVAILABLE_TYPES[] = $typeID;
 			if (isset ($db_fields["type"]))
 				$ORDER_TYPE_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'type');
 			if (isset ($db_fields["model"]))
 				$ORDER_MODEL_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'model');
 			if ($type["use_template"])
-				array_push($ORDER_TEMPLATE_TABLES,$typeID);
+				$ORDER_TEMPLATE_TABLES[] = $typeID;
 		}
 		//End integration with order plugin
 		
