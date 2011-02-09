@@ -158,7 +158,7 @@ function plugin_version_genericobject() {
 		'version' => '1.1.3',
 		'author' => 'Walid Nouh',
 		'homepage' => 'https://forge.indepnet.net/projects/show/genericobject',
-		'minGlpiVersion' => '0.72.1', // For compatibility / no install in version < 0.72
+		'minGlpiVersion' => '0.78.0',
 
 		
 	);
@@ -166,10 +166,10 @@ function plugin_version_genericobject() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-	if (GLPI_VERSION >= '0.72.1') {
+	if (GLPI_VERSION >= '0.78') {
 		return true;
 	} else {
-		echo "GLPI >= 0.72.1 is needed";
+		echo "GLPI >= 0.78 is needed";
 	}
 }
 

@@ -229,7 +229,7 @@ class PluginGenericobjectType extends CommonDBTM {
 					break;
 				case 'use_plugin_datainjection' :
 					if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
-                  usePlugin("datainjection");
+                  //usePlugin("datainjection");
 						$infos = plugin_version_datainjection();
 						if ($infos['version'] >= '1.7.0') {
 							Alert::dropdownYesNo(array('name'=>$right,
@@ -269,7 +269,7 @@ class PluginGenericobjectType extends CommonDBTM {
                break;
 				case 'use_plugin_uninstall' :
 					if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
-                  usePlugin("uninstall");
+                  //usePlugin("uninstall");
 						$infos = plugin_version_uninstall();
 						if ($infos['version'] >= '1.2.1') {
 							Alert::dropdownYesNo(array('name'=>$right,

@@ -198,7 +198,7 @@ function plugin_genericobject_registerOneType($type) {
 
 		//Integration with datainjection plugin
       if ($type["use_plugin_datainjection"] && $plugin->isActivated("datainjection")) {
-          usePlugin("datainjection");
+          //usePlugin("datainjection");
          $PLUGIN_HOOKS['datainjection'][$name] = "plugin_genericobject_datainjection_variables";
 			array_push($IMPORT_PRIMARY_TYPES, $typeID);
 			array_push($IMPORT_TYPES, $typeID);
@@ -207,7 +207,7 @@ function plugin_genericobject_registerOneType($type) {
 
       //Integration with geninventorynumber plugin
       if ($type["use_plugin_geninventorynumber"] && $plugin->isActivated("geninventorynumber")) {
-          usePlugin("geninventorynumber");
+          //usePlugin("geninventorynumber");
          $infos = plugin_version_geninventorynumber();
          if ($infos['version'] >= '1.3.0') {
             array_push($GENINVENTORYNUMBER_INVENTORY_TYPES, $typeID);	
@@ -219,7 +219,7 @@ function plugin_genericobject_registerOneType($type) {
 
       //Integration with order management plugin
 		if ($type["use_plugin_order"] && $plugin->isActivated("order")) {
-			usePlugin("order");
+			//usePlugin("order");
 			array_push($ORDER_AVAILABLE_TYPES, $typeID);
 			if (isset ($db_fields["type"]))
 				$ORDER_TYPE_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'type');
@@ -239,7 +239,7 @@ function plugin_genericobject_registerOneType($type) {
 		$PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/search.php?itemtype=' . $typeID;
 
         if ($type['use_plugin_uninstall'] && $plugin->isActivated('uninstall')) {
-           usePlugin("uninstall");
+           //usePlugin("uninstall");
            $UNINSTALL_TYPES[] = $typeID;
         }
 
