@@ -106,8 +106,8 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
 	echo "<th width='10'></th>";
 	echo "<th>" . $LANG['genericobject']['fields'][2] . "</th>";
 	echo "<th>" . $LANG['genericobject']['fields'][3] . "</th>";
-	echo "<th width='10'>" . $LANG['genericobject']['fields'][7] . "</th>";
-	echo "<th width='10'>" . $LANG['genericobject']['fields'][8] . "</th>";
+	/*echo "<th width='10'>" . $LANG['genericobject']['fields'][7] . "</th>";
+	echo "<th width='10'>" . $LANG['genericobject']['fields'][8] . "</th>";*/
 	echo "<th width='10'></th>";
 	echo "<th width='10'></th>";
 	echo "</tr>";
@@ -488,12 +488,12 @@ function plugin_genericobject_displayFieldDefinition($target, $ID, $field, $inde
 	echo "</td>";
 	echo "<td>" . $field . "</td>";
 	echo "<td>" . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'] . "</td>";
-	echo "<td width='10'>";
+	/*echo "<td width='10'>";
 	echo "<input type='checkbox' name='mandatory[" . $field . "]' value='1'>";
 	echo "</td>";
 	echo "<td width='10'>";
 	echo "<input type='checkbox' name='unique[" . $field . "]' value='1'>";
-	echo "</td>";
+	echo "</td>";*/
 
 	echo "<td width='10'>";
 	if (!$readonly && $index > 2)
