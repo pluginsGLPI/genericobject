@@ -270,50 +270,50 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 		$type = plugin_genericobject_getObjectIdentifierByName($name);
 		$ID = plugin_genericobject_getIDByName($name);
 		$fields = $DB->list_fields($table);
-		$i = 1;
+		$i = 2;
 
-		$search_options[$ID][80]['table'] = 'glpi_entities';
-		$search_options[$ID][80]['field'] = 'completename';
-		$search_options[$ID][80]['linkfield'] = 'entities_id';
-		$search_options[$ID][80]['name'] = $LANG["entity"][0];
+		$search_options[80]['table'] = 'glpi_entities';
+		$search_options[80]['field'] = 'completename';
+		$search_options[80]['linkfield'] = 'entities_id';
+		$search_options[80]['name'] = $LANG["entity"][0];
 
-      $search_options[$ID][30]['table'] = $table;
-      $search_options[$ID][30]['field'] = 'ID';
-      $search_options[$ID][30]['linkfield'] = '';
-      $search_options[$ID][30]['name'] = $LANG["common"][2];
+      $search_options[30]['table'] = $table;
+      $search_options[30]['field'] = 'ID';
+      $search_options[30]['linkfield'] = '';
+      $search_options[30]['name'] = $LANG["common"][2];
 
 		if (!empty ($fields)) {
-			$search_options[$ID]['common'] = plugin_genericobject_getObjectLabel($name);
+			$search_options['common'] = plugin_genericobject_getObjectLabel($name);
 			foreach ($fields as $field_values) {
 				$field_name = $field_values['Field'];
 				if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name])) {
-					$search_options[$ID][$i]['linkfield'] = '';
+					$search_options[$i]['linkfield'] = '';
 
 					switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['input_type']) {
 						case 'date' :
 						case 'text' :
                   case 'multitext' :
-							$search_options[$ID][$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+							$search_options[$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
 							break;
 						case 'dropdown' :
 							if (plugin_genericobject_isDropdownTypeSpecific($field_name))
-								$search_options[$ID][$i]['table'] = plugin_genericobject_getDropdownTableName($name, $field_name);
+								$search_options[$i]['table'] = plugin_genericobject_getDropdownTableName($name, $field_name);
 							else
-								$search_options[$ID][$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
+								$search_options[$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
 
-							$search_options[$ID][$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
+							$search_options[$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
 							break;
 						case 'dropdown_yesno' :
                   case 'dropdown_global' :
-							$search_options[$ID][$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
-							$search_options[$ID][$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
+							$search_options[$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
+							$search_options[$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
 							break;
 					}
                
-					$search_options[$ID][$i]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['field'];
-					$search_options[$ID][$i]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['name'];
+					$search_options[$i]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['field'];
+					$search_options[$i]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['name'];
 					if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype']))
-						$search_options[$ID][$i]['datatype'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype'];
+						$search_options[$i]['datatype'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype'];
 
 					$i++;
 				}
