@@ -63,7 +63,7 @@ class PluginGenericobjectType extends CommonDBTM {
 		if (isset($this->fields['id']) && $this->fields['id'] > 0) {
 			$ong[2] = $LANG['genericobject']['config'][3];
 			$ong[3] = $LANG['rulesengine'][12];
-			//$ong[4] = $LANG['genericobject']['config'][4];
+			$ong[4] = $LANG['genericobject']['config'][4];
 			$ong[5] = $LANG['genericobject']['config'][7];
 			$ong[12] = $LANG['title'][38];
 		}
@@ -230,6 +230,7 @@ class PluginGenericobjectType extends CommonDBTM {
 				case 'use_plugin_datainjection' :
 					if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
                   //usePlugin("datainjection");
+                  Plugin::load("datainjection");
 						$infos = plugin_version_datainjection();
 						if ($infos['version'] >= '1.7.0') {
 							Alert::dropdownYesNo(array('name'=>$right,
@@ -270,6 +271,7 @@ class PluginGenericobjectType extends CommonDBTM {
 				case 'use_plugin_uninstall' :
 					if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
                   //usePlugin("uninstall");
+                  Plugin::load("uninstall");
 						$infos = plugin_version_uninstall();
 						if ($infos['version'] >= '1.2.1') {
 							Alert::dropdownYesNo(array('name'=>$right,
