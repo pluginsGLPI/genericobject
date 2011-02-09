@@ -270,7 +270,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 		$type = plugin_genericobject_getObjectIdentifierByName($name);
 		$ID = plugin_genericobject_getIDByName($name);
 		$fields = $DB->list_fields($table);
-		$i = 2;
+		$i = 1;
 
 		$search_options[80]['table'] = 'glpi_entities';
 		$search_options[80]['field'] = 'completename';

@@ -97,6 +97,7 @@ function plugin_genericobject_install() {
 	if (!TableExists('glpi_plugin_genericobject_types')) {
 		$query = "CREATE TABLE `glpi_plugin_genericobject_types` (
 		                  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+		                  `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
 		                  `itemtype` VARCHAR( 255 ) NOT NULL DEFAULT 0 ,
 		                  `state` INT( 2 ) NOT NULL DEFAULT 0 ,
 		                  `status` INT ( 1 )NOT NULL DEFAULT 0 ,
