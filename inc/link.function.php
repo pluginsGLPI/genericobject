@@ -50,7 +50,8 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 	echo "<select name='link_itemtype[]' multiple size='10' width='40'>";
    
 	foreach($GENERICOBJECT_LINK_TYPES as $key => $link) {
-		echo "<option value='$key' ".(in_array($key,$links)?"selected":"").">" . $link::getTypeName(). "</option>\n";
+//		echo "<option value='$key' ".(in_array($key,$links)?"selected":"").">" . $link::getTypeName(). "</option>\n";
+		echo "<option value='$key' ".(in_array($key,$links)?"selected":"").">" . call_user_func(array($link, 'getTypeName')). "</option>\n";
 	}
 	echo "</select>";
 	echo "</td></tr>";
