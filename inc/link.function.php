@@ -35,9 +35,9 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 	global $LANG,$CFG_GLPI, $GENERICOBJECT_LINK_TYPES;
 	$object_type = new PluginGenericObjectType;
 	$object_type->getFromDB($ID);
-	
+   	
 	$links = plugin_genericobject_getLinksByType($object_type->fields["itemtype"]);
-
+	
 	echo "<form name='form_links' method='post' action=\"$target\">";
 	echo "<div class='center'>";
 	echo "<table class='tab_cadre_fixe'>";
@@ -48,12 +48,9 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 	echo "<tr class='tab_bg_1'>";
 	echo "<td align='center'>";
 	echo "<select name='link_itemtype[]' multiple size='10' width='40'>";
-	$commonitem = new CommonDBTM;
-	
-	foreach($GENERICOBJECT_LINK_TYPES as $link)
-	{
-		$commonitem->setType($link);
-		echo "<option value='$link' ".(in_array($link,$links)?"selected":"").">" . $commonitem->getType() . "</option>\n";
+   
+	foreach($GENERICOBJECT_LINK_TYPES as $key => $link) {
+		echo "<option value='$key' ".(in_array($key,$links)?"selected":"").">" . $link::getTypeName(). "</option>\n";
 	}
 	echo "</select>";
 	echo "</td></tr>";
@@ -106,7 +103,7 @@ function plugin_genericobject_addNewLinkedDeviceType($itemtype,$destination_type
 	{
 		$link_type = new PluginGenericObjectLink;
 		$input["itemtype"] = $itemtype;
-		$input["destination_type"] = $destination_type;
+		echo $input["destination_type"] = $destination_type;
 		$link_type->add($input);
 	}
 }
