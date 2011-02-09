@@ -48,7 +48,7 @@ function plugin_genericobject_showPrevisualisationForm($type) {
 		//$_SESSION["glpi_plugin_genericobject_itemtype"] = $type;
 		$object = new PluginGenericobjectObject($type);
 		//$object->setType($type, true);
-		$object->showForm('', '', '', true);
+		$object->showForm('', null, true);
 	}
 	else
 		echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";

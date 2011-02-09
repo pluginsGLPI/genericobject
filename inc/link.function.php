@@ -48,7 +48,7 @@ function plugin_genericobject_showDeviceTypeLinks($target,$ID)
 	echo "<tr class='tab_bg_1'>";
 	echo "<td align='center'>";
 	echo "<select name='link_itemtype[]' multiple size='10' width='40'>";
-	$commonitem = new CommonItem;
+	$commonitem = new CommonDBTM;
 	
 	foreach($GENERICOBJECT_LINK_TYPES as $link)
 	{
