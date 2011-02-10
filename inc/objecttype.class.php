@@ -311,7 +311,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    function post_addItem() {
       //Add new type table
-      plugin_genericobject_addTable($this->input["name"]."s");
+      plugin_genericobject_addTable(getPlural($this->input["name"]));
 
       //Write object class on the filesystem
       plugin_genericobject_addClassFile($this->input["name"], plugin_genericobject_getObjectClassByName($this->input["name"]), $this->input["name"]);
@@ -323,7 +323,7 @@ class PluginGenericobjectType extends CommonDBTM {
       plugin_genericobject_addNewField($this->input["name"], "name");
 
       //Add new link device table
-      plugin_genericobject_addLinkTable($this->input["name"]."s");
+      plugin_genericobject_addLinkTable(getPlural($this->input["name"]));
 
       plugin_change_profile_genericobject();
       return true;
