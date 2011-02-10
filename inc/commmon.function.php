@@ -48,7 +48,7 @@ function plugin_genericobject_getObjectTypeByName($name) {
  * @return the classname associated with the object
  */
 function plugin_genericobject_getObjectTableNameByName($name) {
-   return 'glpi_plugin_genericobject_' . $name."s";
+   return 'glpi_plugin_genericobject_' . getPlural($name);
 }
 
 /**
@@ -128,7 +128,7 @@ function plugin_genericobject_getTableNameByID($ID) {
  * @return the table
  */
 function plugin_genericobject_getTableNameByName($name) {
-   return 'glpi_plugin_genericobject_' . $name."s";
+   return 'glpi_plugin_genericobject_' . getPlural($name);
 }
 
 /**

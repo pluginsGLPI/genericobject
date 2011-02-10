@@ -364,7 +364,7 @@ class PluginGenericobjectType extends CommonDBTM {
       plugin_genericobject_deleteSpecificDropdownTables($this->fields["itemtype"]);
 
       //Delete relation table
-      plugin_genericobject_deleteLinkTable($this->fields["itemtype"]."s");
+      plugin_genericobject_deleteLinkTable(getPlural($this->fields["itemtype"]));
 
       //Remove class from the filesystem
       plugin_genericobject_deleteClassFile($this->fields["name"]);
@@ -373,7 +373,7 @@ class PluginGenericobjectType extends CommonDBTM {
       plugin_genericobject_deleteTypeFromProfile($this->fields["name"]);
 
       //Table type table in DB
-      plugin_genericobject_deleteTable($this->fields["name"]."s");
+      plugin_genericobject_deleteTable(getPlural($this->fields["name"]));
 
       //Remove fields from the type_fields table
       plugin_genericobject_deleteAllFieldsByType($this->fields["itemtype"]);
