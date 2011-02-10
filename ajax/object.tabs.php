@@ -92,7 +92,7 @@ if (empty ($_POST["id"])) {
 			}
 			if ($commonitem->canUseTickets()) {
 				//showJobListForItem($type, $_POST["id"]);
-				Ticket::showListForItem('PluginGenericobjectObject', $_POST["id"]);
+				Ticket::showListForItem($type, $_POST["id"]);
 			}
 			if ($commonitem->canUseNotes()) {
 				//showNotesForm($_POST['target'], $type, $_POST["id"]);
@@ -136,7 +136,7 @@ if (empty ($_POST["id"])) {
 			break;
 		case 6 :
 			//showJobListForItem($type, $_POST["id"]);
-			Ticket::showListForItem('PluginGenericobjectObject', $_POST["id"]);
+			Ticket::showListForItem($type, $_POST["id"]);
 			break;
 		case 7 :
 			plugin_genericobject_showDevice($_POST['target'], $type, $_POST["id"]);
