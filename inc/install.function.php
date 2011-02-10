@@ -121,7 +121,7 @@ function plugin_genericobject_install() {
 		                  `use_plugin_uninstall` INT ( 1 ) NOT NULL DEFAULT 0 ,
                         `use_plugin_geninventorynumber` INT ( 1 ) NOT NULL DEFAULT 0 ,
 		                  PRIMARY KEY ( `id` ) 
-		                  ) ENGINE = MYISAM COMMENT = 'Object types definition table';";
+		                  ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		$DB->query($query);
 
 		$query = "INSERT INTO `glpi_display` (`id`, `type`, `num`, `rank`, `users_id`) VALUES
@@ -163,7 +163,7 @@ function plugin_genericobject_install() {
 		            `mandatory` INT( 1 ) NOT NULL ,
 		            `entity_restrict` INT( 1 ) NOT NULL ,
 		            `unique` INT( 1 ) NOT NULL
-		            ) ENGINE = MYISAM  COMMENT = 'Field type description';";
+		            ) ENGINE = MYISAM  COMMENT = 'Field type description' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		$DB->query($query);
 	}
 
@@ -173,7 +173,7 @@ function plugin_genericobject_install() {
 		                  `itemtype` VARCHAR( 255 ) NOT NULL ,
 		                  `destination_type` INT( 11 ) NOT NULL ,
 		                  PRIMARY KEY ( `id` )
-		                  ) ENGINE = MYISAM COMMENT = 'Device type links definitions';";
+		                  ) ENGINE = MYISAM COMMENT = 'Device type links definitions'  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		$DB->query($query);
 	}
 

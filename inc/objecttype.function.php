@@ -354,7 +354,7 @@ function plugin_genericobject_addTable($name) {
 			 		`comments` TEXT NULL  ,
 			 		`notepad` TEXT NULL  ,
 			 		PRIMARY KEY ( `id` ) 
-					) ENGINE = MYISAM COMMENT = '$name table';";
+					) ENGINE = MYISAM COMMENT = '$name table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 	$DB->query($query);
 
 	$query = "INSERT INTO `glpi_display` (`id`, `itemtype`, `num`, `rank`, `users_id`) VALUES
