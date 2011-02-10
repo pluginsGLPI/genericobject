@@ -425,21 +425,21 @@ class PluginGenericobjectObject extends CommonDBTM {
          // ADD Contract
          $query = "SELECT contracts_id 
                      FROM glpi_contracts_items 
-                     WHERE items_id='" . $input["_oldID"] . "' AND itemtype='" . $this->type . "';";
+                     WHERE items_id='" . $this->input["_oldID"] . "' AND itemtype='" . $this->type . "';";
          $result = $DB->query($query);
          if ($DB->numrows($result) > 0) {
             while ($data = $DB->fetch_array($result))
-               addDeviceContract($data["contracts_id"], $this->type, $newID);
+               addDeviceContract($data["contracts_id"], $this->type, $this->input['newID']);
          }
 
          // ADD Documents
          $query = "SELECT documents_id 
                      FROM glpi_documents_items 
-                     WHERE items_id='" . $input["_oldID"] . "' AND itemtype='" . $this->type . "';";
+                     WHERE items_id='" . $this->input["_oldID"] . "' AND itemtype='" . $this->type . "';";
          $result = $DB->query($query);
          if ($DB->numrows($result) > 0) {
             while ($data = $DB->fetch_array($result))
-               addDeviceDocument($data["documents_id"], $this->type, $newID);
+               addDeviceDocument($data["documents_id"], $this->type, $this->input['newID']);
          }
       }
    }
