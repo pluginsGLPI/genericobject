@@ -10,7 +10,7 @@
 
  LICENSE
 
-	This file is part of GLPI.
+   This file is part of GLPI.
 
     GLPI is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,17 +34,24 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (!isset($_SESSION["glpi_plugin_genericobject_itemtype"]))
-	$type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
-elseif (isset($_REQUEST["itemtype"]))
-	$type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
-else
-	$type = $_SESSION["glpi_plugin_genericobject_itemtype"];
-	
+if (!isset($_SESSION["glpi_plugin_genericobject_itemtype"])) {
+   $type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
+}
+elseif (isset($_REQUEST["itemtype"])) {
+   $type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
+}
+else {
+   $type = $_SESSION["glpi_plugin_genericobject_itemtype"];
+}
+   
 $type = $_SESSION["glpi_plugin_genericobject_itemtype"];
 
 $name = plugin_genericobject_getNameByID($type);
-commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", "genericobject", $name);
-plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/plugins/genericobject/front"./*$INFOFORM_PAGES[$_GET["itemtype"]]*/plugin_genericobject_getNameByID($_GET["itemtype"]).".form.php",$_GET["itemtype"],$_SESSION["glpiactive_entity"],$_GET["add"]);
+commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", 
+             "genericobject", $name);
+plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/plugins/genericobject/front".
+                                              plugin_genericobject_getNameByID($_GET["itemtype"]).
+                                              ".form.php",$_GET["itemtype"],
+                                              $_SESSION["glpiactive_entity"],$_GET["add"]);
 commonFooter();
 ?>

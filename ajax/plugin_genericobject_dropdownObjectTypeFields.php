@@ -40,19 +40,21 @@ header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
 if (isset($_POST["action"])&&isset($_POST["itemtype"])&&!empty($_POST["itemtype"])){
-	echo "<input type='hidden' name='itemtype' value='".$_POST["itemtype"]."'>";
-	switch($_POST["action"]){
-		case "move_field":
-			echo "<select name='move_type'>";
-			echo "<option value='after' selected>".$LANG['buttons'][47]."</option>";
-			echo "<option value='before'>".$LANG['buttons'][46]."</option>";
-			echo "</select>&nbsp;";
-			dropdownRules($_POST['sub_type'],"ranking");
-			echo "<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"".$LANG['buttons'][2]."\" >";
-		break;
-		case "delete":
-			echo "<input type=\"submit\" name=\"delete_field\" class=\"submit\" value=\"".$LANG['buttons'][2]."\" >";
-		break;
-	}
+   echo "<input type='hidden' name='itemtype' value='".$_POST["itemtype"]."'>";
+   switch($_POST["action"]){
+      case "move_field":
+         echo "<select name='move_type'>";
+         echo "<option value='after' selected>".$LANG['buttons'][47]."</option>";
+         echo "<option value='before'>".$LANG['buttons'][46]."</option>";
+         echo "</select>&nbsp;";
+         dropdownRules($_POST['sub_type'],"ranking");
+         echo "<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"".
+                  $LANG['buttons'][2]."\" >";
+      break;
+      case "delete":
+         echo "<input type=\"submit\" name=\"delete_field\" class=\"submit\" value=\"".
+               $LANG['buttons'][2]."\" >";
+      break;
+   }
 }
 ?>

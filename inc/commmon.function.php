@@ -90,7 +90,7 @@ function plugin_genericobject_getAllTypes($all = false) {
  */
 function plugin_genericobject_getIDByName($name) {
    global $DB;
-   $query = "SELECT itemtype FROM `glpi_plugin_genericobject_types` WHERE name='$name'";
+   $query = "SELECT `itemtype` FROM `glpi_plugin_genericobject_types` WHERE `name`='$name'";
    $result = $DB->query($query);
    if ($DB->numrows($result))
       return $DB->result($result, 0, "itemtype");
@@ -105,7 +105,7 @@ function plugin_genericobject_getIDByName($name) {
  */
 function plugin_genericobject_getNameByID($itemtype) {
    global $DB;
-   $query = "SELECT name FROM `glpi_plugin_genericobject_types` WHERE itemtype='$itemtype'";
+   $query = "SELECT `name` FROM `glpi_plugin_genericobject_types` WHERE `itemtype`='$itemtype'";
    $result = $DB->query($query);
    if ($DB->numrows($result))
       return $DB->result($result, 0, "name");
@@ -273,13 +273,13 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
       $fields = $DB->list_fields($table);
       $i = 5000;
 
-      $search_options[4080]['table'] = 'glpi_entities';
-      $search_options[4080]['field'] = 'completename';
-      $search_options[4080]['linkfield'] = 'entities_id';
-      $search_options[4080]['name'] = $LANG["entity"][0];     
+      $search_options[80]['table'] = 'glpi_entities';
+      $search_options[80]['field'] = 'completename';
+      $search_options[80]['linkfield'] = 'entities_id';
+      $search_options[80]['name'] = $LANG["entity"][0];     
 
       $search_options[4030]['table'] = $table;
-      $search_options[4030]['field'] = 'ID';
+      $search_options[4030]['field'] = 'id';
       $search_options[4030]['linkfield'] = '';
       $search_options[4030]['name'] = $LANG["common"][2];
 
@@ -349,7 +349,8 @@ function plugin_genericobject_includeLocales($name) {
    global $CFG_GLPI, $LANG;
 
    $prefix = GLPI_ROOT . "/plugins/genericobject/objects/" . $name . "/" . $name;
-   if (isset ($_SESSION["glpilanguage"]) && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
+   if (isset ($_SESSION["glpilanguage"]) 
+          && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
       include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
 
    } else

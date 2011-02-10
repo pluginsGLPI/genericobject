@@ -9,7 +9,7 @@
 
  LICENSE
 
-	This file is part of GLPI.
+   This file is part of GLPI.
 
     GLPI is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,16 +30,17 @@
 // Original Author of file: BALPE Dévi
 // Purpose of file:
 // ----------------------------------------------------------------------
-$NEEDED_ITEMS = array("search");
+
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
 if (isset($_REQUEST['itemtype']))
-	$_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST['itemtype'];
+   $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST['itemtype'];
 
 $name=plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]);
 
-commonHeader(plugin_genericobject_getObjectLabel($name),$_SERVER['PHP_SELF'],"plugins","genericobject",$name);
+commonHeader(plugin_genericobject_getObjectLabel($name),$_SERVER['PHP_SELF'],
+             "plugins","genericobject",$name);
 
 plugin_genericobject_checkRight($name,'r');
  

@@ -133,8 +133,8 @@ function plugin_genericobject_showTemplateByDeviceType($target,$itemtype,$entity
    //$commonitem->setType($itemtype,true);
    $title = plugin_genericobject_getObjectLabel($name);
    $query = "SELECT * FROM `".$commonitem->getTable()."` " .
-            "WHERE is_template = '1' AND entities_id='" . 
-               $_SESSION["glpiactive_entity"] . "' ORDER by tplname";
+            "WHERE `is_template` = '1' AND `entities_id`='" . 
+               $_SESSION["glpiactive_entity"] . "' ORDER BY `template_name`";
    if ($result = $DB->query($query)) {
 
       echo "<div class='center'><table class='tab_cadre' width='50%'>";
@@ -155,8 +155,8 @@ function plugin_genericobject_showTemplateByDeviceType($target,$itemtype,$entity
    
       while ($data = $DB->fetch_array($result)) {
 
-         $templname = $data["tplname"];
-         if ($_SESSION["glpiview_ID"]||empty($data["tplname"])){
+         $templname = $data["template_name"];
+         if ($_SESSION["glpiview_ID"]||empty($data["template_name"])){
                      $templname.= "(".$data["id"].")";
          }
          echo "<tr>";

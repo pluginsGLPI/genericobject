@@ -42,13 +42,16 @@ echo "<table class='tab_cadre_fixe'>";
 echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
 
 $datas = plugin_genericobject_getAllTypes();
-	  	
+      
 foreach($datas as $ID => $value)
 {
-	if (plugin_genericobject_haveRight($value["name"],'r'))
-		echo "<tr class='tab_bg_1'><td align='center'><a href=\"./front/search.php?itemtype=".$value["itemtype"]."\">".plugin_genericobject_getObjectLabel($value["name"])."</a></td></tr>";
+   if (plugin_genericobject_haveRight($value["name"],'r')) {
+      echo "<tr class='tab_bg_1'><td align='center'>"; 
+      echo "<a href=\"./front/search.php?itemtype=".$value["itemtype"]."\">".
+         plugin_genericobject_getObjectLabel($value["name"])."</a></td></tr>";
+   }
 }
-	
+   
 
 echo "</table></div>";
 

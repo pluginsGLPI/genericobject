@@ -61,7 +61,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $ong = array ();
       $ong[1] = $LANG['title'][26];
       if (isset($this->fields['id']) && $this->fields['id'] > 0) {
-         $ong[2] = $LANG['genericobject']['config'][3];
          $ong[3] = $LANG['rulesengine'][12];
          //$ong[4] = $LANG['genericobject']['config'][4];
          $ong[5] = $LANG['genericobject']['config'][7];
@@ -88,19 +87,16 @@ class PluginGenericobjectType extends CommonDBTM {
 
       plugin_genericobject_includeLocales($this->fields["name"]);
       
+      $options['colspan'] = 1;
       $this->showTabs($options);
       $this->showFormHeader($options);
-      
-      echo "<tr class='tab_bg_1'><th colspan='2'>";
-      echo $LANG['common'][2] . " $ID";
-      echo "</th></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . $LANG['genericobject']['common'][1] . "</td>";
       echo "<td>";
-      if (!$ID)
-         //autocompletionTextField("name", "glpi_plugin_genericobject_types", "name");
+      if (!$ID) {
          autocompletionTextField($this, 'name', array('value' => $this->fields["name"]));
+      }
       else {
          echo "<input type='hidden' name='name' value='" . $this->fields["name"] . "'>";
          echo $this->fields["name"];
@@ -117,48 +113,20 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "</td>";
       echo "</tr>";
 
-      /*echo "<tr class='tab_bg_1'>";
-      echo "<td>" . $LANG['genericobject']['common'][2] . "</td>";
-      echo "<td>";
-      if (!$ID) {
-         $next = plugin_genericobject_getNextDeviceType();
-         echo $next;
-         echo "<input type='hidden' name='itemtype' value='" . $next . "'>";
-      } else {
-         //echo $this->fields["itemtype"];
-         echo "<input type='hidden' name='itemtype' value='" . $this->fields["itemtype"] . "'>";
-      }
-
-      echo "</td>";
-      echo "</tr>";*/
-
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . $LANG['common'][60] . "</td>";
       echo "<td>";
-      if (!$ID)
+      if (!$ID) {
          echo $LANG['choice'][0];
-      else
-         Alert::dropdownYesNo(array('name'=>"status",
-                                    'value'=> $this->fields["status"]));
+      }
+      else {
+         Alert::dropdownYesNo(array('name'=>"status", 'value'=> $this->fields["status"]));
+      }
       echo "</td>";
       echo "</tr>";
 
-      if ($canedit) {
-         echo "<tr>";
-         echo "<td class='tab_bg_2' colspan='4' align='center'>";
+      $this->showFormButtons($options);
 
-         if (empty ($ID) || $ID < 0) {
-            echo "<input type='submit' name='add' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
-         } else {
-            echo "<input type='hidden' name='id' value=\"$ID\">\n";
-            echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . "\" class='submit'>";
-            echo "&nbsp<input type='submit' name='delete' value=\"" . $LANG['buttons'][6] . "\" class='submit'>";
-         }
-         echo "</td>";
-         echo "</tr>";
-      }
-
-      echo "</table></div></form>";
       echo "<div id='tabcontent'></div>";
       echo "<script type='text/javascript'>loadDefaultTab();</script>";
 
@@ -314,7 +282,9 @@ class PluginGenericobjectType extends CommonDBTM {
       plugin_genericobject_addTable(getPlural($this->input["name"]));
 
       //Write object class on the filesystem
-      plugin_genericobject_addClassFile($this->input["name"], plugin_genericobject_getObjectClassByName($this->input["name"]), $this->input["name"]);
+      plugin_genericobject_addClassFile($this->input["name"], 
+                                        plugin_genericobject_getObjectClassByName($this->input["name"]), 
+                                        $this->input["name"]);
 
       //Create rights for this new object
       plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["id"], true);
@@ -413,6 +383,93 @@ class PluginGenericobjectType extends CommonDBTM {
             }
          }
       }
+   }
+   
+   function getSearchOptions() {
+      global $LANG;
+      $sopt['common'] = $LANG["genericobject"]["title"][1];
+   
+      $sopt[1]['table']       = $this->getTable();
+      $sopt[1]['field']       = 'name';
+      $sopt[1]['linkfield']   = '';
+      $sopt[1]['name']        = $LANG["common"][22];
+      $sopt[1]['datatype']    = 'itemlink';
+
+      $sopt[5]['table']       = $this->getTable();
+      $sopt[5]['field']       = 'status';
+      $sopt[5]['linkfield']   = 'status';
+      $sopt[5]['name']        = $LANG['joblist'][0];
+   
+      $sopt[6]['table']       = $this->getTable();
+      $sopt[6]['field']       = 'use_tickets';
+      $sopt[6]['linkfield']   = '';
+      $sopt[6]['name']        = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['Menu'][31];
+      $sopt[6]['datatype']    = 'bool';
+   
+      $sopt[7]['table']       = $this->getTable();
+      $sopt[7]['field']       = 'use_deleted';
+      $sopt[7]['linkfield']   = '';
+      $sopt[7]['name']        = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['ocsconfig'][49];
+      $sopt[7]['datatype']    = 'bool';
+   
+      $sopt[8]['table']       = $this->getTable();
+      $sopt[8]['field']       = 'use_notes';
+      $sopt[8]['linkfield']   = '';
+      $sopt[8]['name']        = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['title'][37];
+      $sopt[8]['datatype']    = 'bool';
+   
+      $sopt[9]['table']       = $this->getTable();
+      $sopt[9]['field']       = 'use_history';
+      $sopt[9]['linkfield']   = '';
+      $sopt[9]['name']        = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['title'][38];
+      $sopt[9]['datatype']    = 'bool';
+   
+      $sopt[10]['table']      = $this->getTable();
+      $sopt[10]['field']      = 'use_entity';
+      $sopt[10]['linkfield']  = '';
+      $sopt[10]['name']       = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['Menu'][37];
+      $sopt[10]['datatype']   = 'bool';
+   
+      $sopt[11]['table']      = $this->getTable();
+      $sopt[11]['field']      = 'use_recursivity';
+      $sopt[11]['linkfield']  = '';
+      $sopt[11]['name']       = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['entity'][9];
+      $sopt[11]['datatype']   = 'bool';
+   
+      $sopt[12]['table']      = $this->getTable();
+      $sopt[12]['field']      = 'use_template';
+      $sopt[12]['linkfield']  = '';
+      $sopt[12]['name']       = $LANG['genericobject']['config'][1]." ".
+                                                               $LANG['common'][14];
+      $sopt[12]['datatype']   = 'bool';
+   
+      $sopt[13]['table']      = $this->getTable();
+      $sopt[13]['field']      = 'use_infocoms';
+      $sopt[13]['linkfield']  = '';
+      $sopt[13]['name']       = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['financial'][3];
+      $sopt[13]['datatype']   = 'bool';
+   
+      $sopt[14]['table']      = $this->getTable();
+      $sopt[14]['field']      = 'use_documents';
+      $sopt[14]['linkfield']  = '';
+      $sopt[14]['name']       = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['Menu'][27];
+      $sopt[14]['datatype']   = 'bool';
+   
+      $sopt[15]['table']      = $this->getTable();
+      $sopt[15]['field']      = 'use_loans';
+      $sopt[15]['linkfield']  = '';
+      $sopt[15]['name']       = $LANG['genericobject']['config'][1]." ".
+                                                              $LANG['Menu'][17];
+      $sopt[15]['datatype']   = 'bool';
+      return $sopt;
    }
 }
 ?>

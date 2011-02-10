@@ -199,14 +199,17 @@ class PluginGenericobjectObject extends CommonDBTM {
       echo "<input type='hidden' name='itemtype' value='" . 
          strtolower(str_replace("PluginGenericobject", "", $this->type)) . "'>";
 
-      if ($this->type_infos["use_entity"])
+      if ($this->type_infos["use_entity"]) {
          echo "<input type='hidden' name='entities_id' value='" . 
             $this->fields["entities_id"] . "'>";
+      }
 
-      if (!$previsualisation)
+      if (!$previsualisation) {
          echo "<div class='center' id='tabsbody'>";
-      else
+      }
+      else {
          echo "<div class='center'>";
+      }
 
       echo "<table class='tab_cadre_fixe' >";
 
@@ -278,24 +281,29 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->startColumn();
          switch ($GENERICOBJECT_AVAILABLE_FIELDS[$name]['input_type']) {
             case 'multitext' :
-               if ($canedit)
+               if ($canedit) {
                   echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value . 
                      "</textarea>";
-               else
+               }
+               else {
                   echo $value;
+               }
                break;
             case 'text' :
                if ($canedit) {
                   $table = plugin_genericobject_getObjectTableNameByName($name);
                   autocompletionTextField($this, $name);
-               } else
+               } else {
                   echo $value;
+               }
                break;
             case 'date' :
-               if ($canedit)
+               if ($canedit) {
                   showDateFormItem($name, $value, false, true);
-               else
+               }
+               else {
                   echo convDate($value);
+               }
                break;
             case 'dropdown_global' :
                Dropdown::showGlobalSwitch($_SERVER['PHP_SELF'],'',$this->fields['id'],
@@ -320,31 +328,28 @@ class PluginGenericobjectObject extends CommonDBTM {
                         else $object_name = ucfirst($name);
                   
                         //dropdownValue($table, $name, $value, 1, $entity_restrict);
-                        Dropdown::show($object_name, array(
-                                 'value' => $value,
-                                 'name' => $name,
-                                 'entity' => $entity_restrict)
-                                 );                      
+                        Dropdown::show($object_name, array('value' => $value, 'name' => $name,
+                                                           'entity' => $entity_restrict));
                         break;
                      case 'glpi_users' :
-                        //dropdownUsers($name,$value,'all',0,1,$entity_restrict);
-                        User::dropdown(array('name'   => $name,
-                           'value'  => $value,
-                           'right'  => 'all',
-                           'entity' => $entity_restrict));
+                        User::dropdown(array('name'   => $name, 'value'  => $value, 
+                                             'right'  => 'all', 'entity' => $entity_restrict));
                         break;   
                   }
                   
-               } else
+               } else {
                   echo getDropdownName($table, $value);
+               }
                break;
             case 'dropdown_yesno' :
-               if ($canedit)
+               if ($canedit) {
                   //dropdownYesNo($name, $value);
                   Alert::dropdownYesNo(array("name" => $name, 
                                                 "value" => $value));
-               else
+               }
+               else {
                   echo getYesNo($value);
+               }
                break;
          }
          $this->endColumn();
@@ -425,7 +430,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          // ADD Contract
          $query = "SELECT contracts_id 
                      FROM glpi_contracts_items 
-                     WHERE items_id='" . $this->input["_oldID"] . "' AND itemtype='" . $this->type . "';";
+                     WHERE items_id='" . $this->input["_oldID"] . "' 
+                        AND itemtype='" . $this->type . "';";
          $result = $DB->query($query);
          if ($DB->numrows($result) > 0) {
             while ($data = $DB->fetch_array($result))
@@ -435,7 +441,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          // ADD Documents
          $query = "SELECT documents_id 
                      FROM glpi_documents_items 
-                     WHERE items_id='" . $this->input["_oldID"] . "' AND itemtype='" . $this->type . "';";
+                     WHERE items_id='" . $this->input["_oldID"] . "' AND itemtype='" . 
+                        $this->type . "';";
          $result = $DB->query($query);
          if ($DB->numrows($result) > 0) {
             while ($data = $DB->fetch_array($result))
