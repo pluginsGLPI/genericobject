@@ -241,7 +241,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . 
                      "\" class='submit'>";
 
-            if (!$this->fields["deleted"]) {
+            if (!$this->fields["is_deleted"]) {
                echo "&nbsp<input type='submit' name='delete' value=\"" . $LANG['buttons'][6] . 
                   "\" class='submit'>";
             } else {

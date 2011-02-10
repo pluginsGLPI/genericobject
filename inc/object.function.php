@@ -294,8 +294,8 @@ function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
                      }
                      echo "<td class='center'>".$ci->getType()."</td>";
                      
-                     echo "<td class='center' ".(isset($data['deleted'])
-                                                   && $data['deleted']?"class='tab_bg_2_2'":"").">".
+                     echo "<td class='center' ".(isset($data['is_deleted'])
+                                                   && $data['is_deleted']?"class='tab_bg_2_2'":"").">".
                                                    $item_name."</td>";
 
                      if (isMultiEntitiesMode())

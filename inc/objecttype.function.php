@@ -348,7 +348,7 @@ function plugin_genericobject_addTable($name) {
 			 		`name` VARCHAR( 255 ) NOT NULL ,
 					`entities_id` INT( 11 ) NOT NULL DEFAULT 0,
 					`object_type` INT( 11 ) NOT NULL DEFAULT 0,
-					`deleted` INT( 1 ) NOT NULL DEFAULT 0,
+					`is_deleted` INT( 1 ) NOT NULL DEFAULT 0,
 			 		`recursive` INT ( 1 ) NOT NULL DEFAULT 0,
                `is_template` INT ( 1 ) NOT NULL DEFAULT 0,
 			 		`comments` TEXT NULL  ,
