@@ -111,7 +111,7 @@ function plugin_genericobject_install() {
                         ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
 
-      $query = "INSERT INTO `glpi_displaypreferences` (`id`, `type`, `num`, `rank`, `users_id`) " .
+      $query = "INSERT INTO `glpi_displaypreferences` (`id`, `itemtype`, `num`, `rank`, `users_id`) " .
                "VALUES (NULL, 4850, 10, 6, 0), (NULL, 4850, 9, 5, 0), (NULL, 4850, 8, 4, 0),
                        (NULL, 4850, 7, 3, 0), (NULL, 4850, 6, 2, 0), (NULL, 4850, 2, 1, 0),
                        (NULL, 4090, 4, 1, 0), (NULL, 4850, 11, 7, 0), (NULL, 4850, 12, 8, 0),
@@ -191,7 +191,7 @@ function plugin_genericobject_uninstall() {
    //include_once (GLPI_ROOT . "/inc/computer.class.php");
    //include_once (GLPI_ROOT . "/inc/computer.function.php");
    //Delete search display preferences
-   $query = "DELETE FROM `glpi_displaypreferences` WHERE type='4850';";
+   $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='4850';";
    $DB->query($query);
 
    //For each type
@@ -206,7 +206,7 @@ function plugin_genericobject_uninstall() {
       plugin_genericobject_deleteNetworking($value["itemtype"]);
 
       //Delete search display preferences
-      $query = "DELETE FROM `glpi_displaypreferences` WHERE type='" . $value["itemtype"] . "';";
+      $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='" . $value["itemtype"] . "';";
       $DB->query($query);
 
       //Delete link tables
