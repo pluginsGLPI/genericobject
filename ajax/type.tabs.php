@@ -67,7 +67,7 @@ if(!isset($_GET["withtemplate"])) $_GET["withtemplate"] = "";
                PluginGenericObjectLink::plugin_genericobject_showDeviceTypeLinks($_POST['target'],$_POST["id"]);
                $type->getFromDB($_POST["id"]);
                plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
-               showHistory(PLUGIN_GENERICOBJECT_TYPE,$_POST["id"]);
+               Log::showForItem($type);
             break;
          case 2 :
                $type->showBehaviourForm($_POST['target'],$_POST["id"]);

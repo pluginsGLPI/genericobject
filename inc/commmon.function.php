@@ -183,7 +183,8 @@ function plugin_genericobject_registerOneType($type) {
          'linkgroup_types' => (($type["use_tickets"] && isset ($db_fields["groups_id"])) ? true : false),
          
       ));*/
-      array_push($GENERICOBJECT_LINK_TYPES, $typeID);
+      
+      array_push($GENERICOBJECT_LINK_TYPES, "PluginGenericObject".$typeID);
       
       if ($type['use_network_ports']) {
          array_push($CFG_GLPI["netport_types"],$typeID);
