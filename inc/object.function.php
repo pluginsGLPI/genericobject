@@ -319,7 +319,7 @@ function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
    
          echo "<input type='hidden' name='source_id' value='$itemtype'>";
          dropdownAllItems("items_id",0,0,($obj->fields['recursive']?-1:$obj->fields['entities_id']),
-                          plugin_genericobject_getLinksByType($itemtype));     
+                          PluginGenericObjectLink::plugin_genericobject_getLinksByType($itemtype));     
          echo "</td>";
          echo "<td colspan='2' class='center' class='tab_bg_2'>";
          echo "<input type='submit' name='add_type_link' value=\"".$LANG['buttons'][8]."\" class='submit'>";

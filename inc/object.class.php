@@ -95,7 +95,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ong[6] = $LANG['title'][28];
          }
 
-         $linked_types = plugin_genericobject_getLinksByType($this->type);
+         $linked_types = PluginGenericObjectLink::plugin_genericobject_getLinksByType($this->type);
          if (!empty ($linked_types)) {
             $ong[7] = $LANG['setup'][620];
          }
