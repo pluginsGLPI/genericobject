@@ -9,7 +9,7 @@
 
  LICENSE
 
-	This file is part of GLPI.
+   This file is part of GLPI.
 
     GLPI is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 class PluginGenericObjectLink extends CommonDBTM{
-	
+   
     function __construct() {
-    	$this->table="glpi_plugin_genericobject_type_links";
-    	$this->type=-1;
+      $this->table="glpi_plugin_genericobject_type_links";
+      $this->type=-1;
     }     
 }
 ?>
