@@ -181,7 +181,7 @@ function plugin_genericobject_install() {
    plugin_init_genericobject();
 
    //Init profiles
-   plugin_change_profile_genericobject();
+   PluginGenericobjectProfile::plugin_change_profile_genericobject();
    return true;
 }
 

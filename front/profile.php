@@ -37,7 +37,7 @@ $prof=new PluginGenericobjectProfile();
 /* save profile */
 if (isset ($_POST['update_user_profile'])) {
    $prof->saveProfileToDB($_POST);
-   plugin_change_profile_genericobject();
+   PluginGenericobjectProfile::plugin_change_profile_genericobject();
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 ?>

@@ -58,6 +58,7 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
 
 }*/
 
+
 function plugin_genericobject_getSearchOption() {
    global $LANG;
    $sopt = array ();
@@ -265,14 +266,5 @@ function plugin_genericobject_giveItem($itemtype,$ID,$data,$num,$meta=0) {
    return $out;
 }
 
-
-function plugin_change_profile_genericobject() {
-   $prof=new PluginGenericobjectProfile();
-   if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['id']))
-      $_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
-   else
-      unset($_SESSION["glpi_plugin_genericobject_profile"]);
-
-}
 
 ?>

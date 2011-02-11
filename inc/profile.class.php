@@ -221,5 +221,14 @@ class PluginGenericobjectProfile extends CommonDBTM {
       $DB->query($query);
    }
    
+   public static function plugin_change_profile_genericobject() {
+      $prof=new PluginGenericobjectProfile();
+      if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['id']))
+         $_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
+      else
+         unset($_SESSION["glpi_plugin_genericobject_profile"]);
+
+   }
+   
 }
 ?>

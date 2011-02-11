@@ -297,7 +297,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Add new link device table
       self::plugin_genericobject_addLinkTable(getPlural($this->input["name"]));
 
-      plugin_change_profile_genericobject();
+      PluginGenericobjectProfile::plugin_change_profile_genericobject();
       return true;
    }
 

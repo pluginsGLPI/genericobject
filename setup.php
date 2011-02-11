@@ -107,7 +107,7 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       /* load changeprofile function */
-      $PLUGIN_HOOKS['change_profile']['genericobject'] = 'plugin_genericobject_changeprofile';
+      $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile', 'plugin_change_profile_genericobject');
 
       // Display a menu entry ?
       $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
@@ -120,7 +120,6 @@ function plugin_init_genericobject() {
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
       }
 
-      $PLUGIN_HOOKS['change_profile']['genericobject']   = 'plugin_change_profile_genericobject';
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
 
       // Onglets management
