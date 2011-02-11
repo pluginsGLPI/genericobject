@@ -49,7 +49,7 @@ if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
    plugin_genericobject_registerOneType($type->fields);
    plugin_genericobject_includeLocales($type->fields["name"]);
-   plugin_genericobject_changeFieldOrder($_GET["field"], $type->fields["itemtype"], $_GET["action"]);
+   PluginGenericobjectObject::plugin_genericobject_changeFieldOrder($_GET["field"], $type->fields["itemtype"], $_GET["action"]);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 if (isset ($_POST["add"])) {
@@ -70,20 +70,20 @@ if (isset ($_POST["add"])) {
    plugin_genericobject_registerOneType($type->fields);
    plugin_genericobject_includeLocales($type->fields["name"]);
 
-   $type_field = new PluginGenericObjectField;
+   $type_field = new PluginGenericobjectField;
    foreach ($_POST["fields"] as $field => $value) {
            
          if ($value == 1 
-               && plugin_genericobject_checkNecessaryFieldsDelete($type->fields["itemtype"],
+               && PluginGenericobjectField::plugin_genericobject_checkNecessaryFieldsDelete($type->fields["itemtype"],
                                                                   $field)) {
             $type_field->deleteByFieldByDeviceTypeAndName($type->fields["itemtype"], $field);
             $table = plugin_genericobject_getTableNameByID($type->fields["itemtype"]);
-            plugin_genericobject_deleteFieldFromDB($table, $field, $type->fields["name"]);
+            PluginGenericobjectType::plugin_genericobject_deleteFieldFromDB($table, $field, $type->fields["name"]);
             addMessageAfterRedirect($LANG['genericobject']['fields'][5], true);
          }
    }
 
-   plugin_genericobject_reorderFields($type->fields["itemtype"]);
+   PluginGenericobjectObject::plugin_genericobject_reorderFields($type->fields["itemtype"]);
    glpi_header($_SERVER['HTTP_REFERER']);
    exit();
 } elseif (isset ($_POST["add_field"])) {
@@ -92,10 +92,10 @@ if (isset ($_POST["add"])) {
       plugin_genericobject_registerOneType($type->fields);
       plugin_genericobject_includeLocales($type->fields["name"]);
 
-      plugin_genericobject_addNewField($type->fields["itemtype"], $_POST["new_field"]);
+      PluginGenericobjectField::plugin_genericobject_addNewField($type->fields["itemtype"], $_POST["new_field"]);
       
       $table = plugin_genericobject_getTableNameByID($type->fields["itemtype"]);
-      plugin_genericobject_addFieldInDB($table, $_POST["new_field"], $type->fields["name"]);
+      PluginGenericobjectField::plugin_genericobject_addFieldInDB($table, $_POST["new_field"], $type->fields["name"]);
       
       addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
    }
@@ -103,9 +103,9 @@ if (isset ($_POST["add"])) {
    exit();
 } elseif (isset ($_POST["update_links_types"])) {
    $type->getFromDB($_POST["id"]);
-   plugin_genericobject_deleteAllLinkedDeviceByType($type->fields["itemtype"]);
+   PluginGenericobjectLink::plugin_genericobject_deleteAllLinkedDeviceByType($type->fields["itemtype"]);
    foreach ($_POST["link_itemtype"] as $tmp => $destination_type)
-      plugin_genericobject_addNewLinkedDeviceType($type->fields["itemtype"], $destination_type);
+      PluginGenericobjectLink::plugin_genericobject_addNewLinkedDeviceType($type->fields["itemtype"], $destination_type);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 

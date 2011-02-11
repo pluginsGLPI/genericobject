@@ -106,9 +106,9 @@ function plugin_headings_genericobject($item, $withtemplate) {
          $profile = new profile;
          $profile->getFromDB($item->getField('id'));
          if ($profile->fields["interface"] != "helpdesk") {
-               plugin_genericobject_createAccess($item->getField('id'));
+               PluginGenericobjectProfile::plugin_genericobject_createAccess($item->getField('id'));
                
-            $prof = new PluginGenericObjectProfile();
+            $prof = new PluginGenericobjectProfile();
             $prof->showForm($CFG_GLPI["root_doc"] . "/plugins/genericobject/front/profile.php", 
                             $item->getField('id'));
          } else {
@@ -139,7 +139,7 @@ function plugin_genericobject_getDropdown() {
    if ($plugin->isActivated("genericobject"))
    {
       foreach (plugin_genericobject_getAllTypes() as $tmp => $values)
-         plugin_genericobject_getDropdownSpecific($dropdowns,$values);
+         PluginGenericobjectType::plugin_genericobject_getDropdownSpecific($dropdowns,$values);
    }
 
    return $dropdowns;   
@@ -152,7 +152,7 @@ function plugin_genericobject_getDatabaseRelations(){
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
       foreach (plugin_genericobject_getAllTypes(true) as $tmp => $values) {
-         plugin_genericobject_getDatabaseRelationsSpecificDropdown($dropdowns,$values);
+         PluginGenericobjectType::plugin_genericobject_getDatabaseRelationsSpecificDropdown($dropdowns,$values);
          if ($values["use_entity"]) {
             $dropdowns["glpi_entities"][plugin_genericobject_getObjectTableNameByName($values["name"])] = "entities_id";
          }
@@ -174,7 +174,7 @@ function plugin_genericobject_datainjection_variables()
    $types = plugin_genericobject_getAllTypes();
    foreach ($types as $tmp => $value) {
       $name = plugin_genericobject_getNameByID($value["itemtype"]);
-      $fields = plugin_genericobject_getFieldsByType($value["itemtype"]);
+      $fields = PluginGenericobjectField::plugin_genericobject_getFieldsByType($value["itemtype"]);
       foreach ($fields as $field => $object) {
          switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
                case 'date':
@@ -185,11 +185,11 @@ function plugin_genericobject_datainjection_variables()
                      plugin_genericobject_getObjectTableNameByName($name);
                   break;
                case 'dropdown' :
-                  if (plugin_genericobject_isDropdownTypeSpecific($field)) {
+                  if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field)) {
                      $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
-                        plugin_genericobject_getDropdownTableName($name,$field);
+                        PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name,$field);
                      $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
-                        plugin_genericobject_getDropdownTableName($name,$field);   
+                        PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name,$field);   
                   } else {
                       $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
                          $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
@@ -263,6 +263,16 @@ function plugin_genericobject_giveItem($itemtype,$ID,$data,$num,$meta=0) {
    }
    
    return $out;
+}
+
+
+function plugin_change_profile_genericobject() {
+   $prof=new PluginGenericobjectProfile();
+   if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['id']))
+      $_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
+   else
+      unset($_SESSION["glpi_plugin_genericobject_profile"]);
+
 }
 
 ?>

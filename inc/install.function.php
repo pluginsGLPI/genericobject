@@ -39,7 +39,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 include_once (GLPI_ROOT . "/inc/includes.php");
-include_once ("objecttype.function.php");
+include_once (GLPI_ROOT."/plugins/genericobject/inc/profile.class.php");
 
 function plugin_genericobject_haveRight($module, $right) {
    $matches = array (
@@ -156,7 +156,7 @@ function plugin_genericobject_install() {
       $DB->query($query);
    }
 
-   plugin_genericobject_createFirstAccess();
+   PluginGenericobjectProfile::plugin_genericobject_createFirstAccess();
 
    if (!FieldExists('glpi_plugin_genericobject_types', 'use_network_ports')) {
       $DB->query("ALTER TABLE `glpi_plugin_genericobject_types` " .
@@ -198,12 +198,12 @@ function plugin_genericobject_uninstall() {
    foreach (plugin_genericobject_getAllTypes() as $tmp => $value) {
       
       //Delete loans
-      plugin_genericobject_deleteLoans($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteLoans($value["itemtype"]);
 
       //Delete if exists datainjection models
-      plugin_genericobject_removeDataInjectionModels($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_removeDataInjectionModels($value["itemtype"]);
 
-      plugin_genericobject_deleteNetworking($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteNetworking($value["itemtype"]);
 
       //Delete search display preferences
       $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='" . $value["itemtype"] . "';";
@@ -219,11 +219,11 @@ function plugin_genericobject_uninstall() {
       }
 
       //Drop itemtype link table
-      plugin_genericobject_deleteLinkTable($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteLinkTable($value["itemtype"]);
       
-      plugin_genericobject_deleteSpecificDropdownFiles($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownFiles($value["itemtype"]);
       
-      plugin_genericobject_deleteSpecificDropdownTables($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownTables($value["itemtype"]);
 
       //Drop type table
       $DB->query("DROP TABLE IF EXISTS `" .

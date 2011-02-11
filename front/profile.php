@@ -33,7 +33,7 @@ include (GLPI_ROOT."/inc/includes.php");
 include (GLPI_ROOT."/plugins/genericobject/hook.php");
 checkRight("profile","r");
 
-$prof=new PluginGenericObjectProfile();
+$prof=new PluginGenericobjectProfile();
 /* save profile */
 if (isset ($_POST['update_user_profile'])) {
    $prof->saveProfileToDB($_POST);

@@ -30,7 +30,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-class PluginGenericObjectConfig extends CommonDBTM{
+class PluginGenericobjectConfig extends CommonDBTM{
 	
     function __construct() {
     	$this->table="glpi_plugin_genericobject_types";

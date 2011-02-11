@@ -184,7 +184,7 @@ function plugin_genericobject_registerOneType($type) {
          
       ));*/
       
-      array_push($GENERICOBJECT_LINK_TYPES, "PluginGenericObject".$typeID);
+      array_push($GENERICOBJECT_LINK_TYPES, "PluginGenericobject".$typeID);
       
       if ($type['use_network_ports']) {
          array_push($CFG_GLPI["netport_types"],$typeID);
@@ -225,9 +225,9 @@ function plugin_genericobject_registerOneType($type) {
          Plugin::load("order");
          $ORDER_AVAILABLE_TYPES[] = $typeID;
          if (isset ($db_fields["type"]))
-            $ORDER_TYPE_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'type');
+            $ORDER_TYPE_TABLES[$typeID] = PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name,'type');
          if (isset ($db_fields["model"]))
-            $ORDER_MODEL_TABLES[$typeID] = plugin_genericobject_getDropdownTableName($name,'model');
+            $ORDER_MODEL_TABLES[$typeID] = PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name,'model');
          if ($type["use_template"])
             $ORDER_TEMPLATE_TABLES[] = $typeID;
       }
@@ -247,7 +247,7 @@ function plugin_genericobject_registerOneType($type) {
         }
 
       // Later, when per entity and tree dropdowns will be managed !
-      foreach (plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name) {
+      foreach (PluginGenericobjectType::plugin_genericobject_getSpecificDropdownsTablesByType($typeID) as $table => $name) {
          array_push($CFG_GLPI["specif_entities_tables"], $table);
          //array_push($CFG_GLPI["dropdowntree_tables"], $table);
          
@@ -297,8 +297,8 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
                      $search_options[$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
                      break;
                   case 'dropdown' :
-                     if (plugin_genericobject_isDropdownTypeSpecific($field_name))
-                        $search_options[$i]['table'] = plugin_genericobject_getDropdownTableName($name, $field_name);
+                     if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field_name))
+                        $search_options[$i]['table'] = PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name, $field_name);
                      else
                         $search_options[$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
 
@@ -332,7 +332,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
  * @return an array which contains all the type's configuration
  */
 function plugin_genericobject_getObjectTypeConfiguration($itemtype) {
-   $objecttype = new PluginGenericObjectType;
+   $objecttype = new PluginGenericobjectType;
    $objecttype->getFromDBByType($itemtype);
    return $objecttype->fields;
 }

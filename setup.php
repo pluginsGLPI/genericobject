@@ -34,11 +34,10 @@
 // Original Author of file:
 // Purpose of file:
 // ----------------------------------------------------------------------
-include_once (GLPI_ROOT . "/inc/profile.class.php");
+
+include_once (GLPI_ROOT . "/plugins/genericobject/inc/common.function.php");
 include_once (GLPI_ROOT . "/plugins/genericobject/inc/install.function.php");
-include_once (GLPI_ROOT . "/plugins/genericobject/inc/profile.class.php");
-include_once (GLPI_ROOT . "/plugins/genericobject/inc/profile.function.php");
-include_once (GLPI_ROOT . "/plugins/genericobject/inc/commmon.function.php");
+include_once (GLPI_ROOT . "/plugins/genericobject/inc/dropdown.function.php");
 
 define("PLUGIN_GENERICOBJECT_TYPE", "PluginGenericobjectType");
 
@@ -68,6 +67,12 @@ function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS, 
           $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, $GENERICOBJECT_LINK_TYPES, 
           $GENERICOBJECT_PDF_TYPES;
+          
+   Plugin::registerClass('PluginGenericobjectProfile');
+   Plugin::registerClass('PluginGenericobjectField');
+   Plugin::registerClass('PluginGenericobjectType');
+   Plugin::registerClass('PluginGenericobjectObject');
+   Plugin::registerClass('PluginGenericobjectLink');
 
    $GENERICOBJECT_BLACKLISTED_FIELDS = array ("object_type", "table", "deleted", "id", "entities_id",
                                               "recursive", "is_template", "notes", "template_name");
@@ -81,25 +86,22 @@ function plugin_init_genericobject() {
 
    $GENERICOBJECT_PDF_TYPES = array ();
    
-   Plugin::registerClass('PluginGenericObjectType', 
-                         array('classname'  => 'PluginGenericObjectType',
+   Plugin::registerClass('PluginGenericobjectType', 
+                         array('classname'  => 'PluginGenericobjectType',
                                'tablename'  => 'glpi_plugin_genericobject_types'));
 
    $plugin = new Plugin;
 
-   if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
-      //Include all inc files
-      foreach (glob(GLPI_ROOT . '/plugins/genericobject/inc/*.php') as $file)
-         include_once ($file);
-
+   if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
       //Include all constant's locales files
       foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/locales/*.php') as $file)
          include_once ($file);
 
       //Include all fields contants files
-      foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file)
+      foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) 
          include_once ($file);
-
+      
+      include_once (GLPI_ROOT . "/plugins/genericobject/inc/field.constant.php");
 
 
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;

@@ -31,7 +31,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-global $GENERICOBJECT_AVAILABLE_FIELDS;
+global $GENERICOBJECT_AVAILABLE_FIELDS, $LANG;
 
 $GENERICOBJECT_AVAILABLE_FIELDS['name']['name']=$LANG['common'][16];
 $GENERICOBJECT_AVAILABLE_FIELDS['name']['field']='name';

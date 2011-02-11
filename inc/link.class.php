@@ -30,7 +30,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-class PluginGenericObjectLink extends CommonDBTM{
+class PluginGenericobjectLink extends CommonDBTM{
    
     function __construct() {
       $this->table="glpi_plugin_genericobject_type_links";
@@ -41,7 +41,7 @@ class PluginGenericObjectLink extends CommonDBTM{
    public static function plugin_genericobject_showDeviceTypeLinks($target,$ID)
    {
       global $LANG,$CFG_GLPI, $GENERICOBJECT_LINK_TYPES;
-      $object_type = new PluginGenericObjectType;
+      $object_type = new PluginGenericobjectType;
       $object_type->getFromDB($ID);
          
       $links = self::plugin_genericobject_getLinksByType($object_type->fields["itemtype"]);
@@ -88,7 +88,7 @@ class PluginGenericObjectLink extends CommonDBTM{
    public static function plugin_genericobject_getLinksByTypeAndID($name,$device_id)
    {
       global $DB;
-      $query = "SELECT * FROM `".self::plugin_genericobject_getLinkDeviceTableName($name)."` " .
+      $query = "SELECT * FROM `".PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name)."` " .
             "WHERE source_id=$device_id";
       $result = $DB->query($query);
       $types = array();
@@ -113,7 +113,7 @@ class PluginGenericObjectLink extends CommonDBTM{
    {
       if (!self::plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type))
       {
-         $link_type = new PluginGenericObjectLink;
+         $link_type = new PluginGenericobjectLink;
          $input["itemtype"] = $itemtype;
          echo $input["destination_type"] = $destination_type;
          $link_type->add($input);
@@ -130,7 +130,7 @@ class PluginGenericObjectLink extends CommonDBTM{
    {
       global $DB;
       $name = plugin_genericobject_getNameByID($source_type);
-      $table = self::plugin_genericobject_getLinkDeviceTableName($name);
+      $table = PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name);
       $query = "INSERT INTO `$table` (`id`, `source_id`, `itemtype`, `items_id`) " .
                "VALUES (NULL, $source_id, $itemtype,$items_id)";
       $DB->query($query);
@@ -140,7 +140,7 @@ class PluginGenericObjectLink extends CommonDBTM{
    {
       global $DB;
       $name = plugin_genericobject_getNameByID($source_type);
-      $table = plugin_genericobject_getLinkDeviceTableName($name);
+      $table = PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name);
       $DB->query("DELETE FROM `$table` WHERE id=$link_id");
    }
 }

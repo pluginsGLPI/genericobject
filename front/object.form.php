@@ -114,7 +114,7 @@ elseif (isset ($_POST["delete"])) {
 }
 //End manage standard events
 elseif (isset ($_POST["add_type_link"])) {
-   plugin_genericobject_addDeviceLink($type, $_POST["source_id"], $_POST["type"], 
+   PluginGenericobjectLink::plugin_genericobject_addDeviceLink($type, $_POST["source_id"], $_POST["type"], 
                                       $_POST["items_id"]);
    glpi_header($_SERVER["HTTP_REFERER"]);
 }
@@ -122,7 +122,7 @@ elseif (isset ($_POST["delete_type_link"])) {
    if (isset ($_POST["item"]))
       foreach ($_POST["item"] as $item => $value)
          if ($value == 1)
-            plugin_genericobject_deleteDeviceLink($type, $item);
+            PluginGenericobjectLink::plugin_genericobject_deleteDeviceLink($type, $item);
    glpi_header($_SERVER["HTTP_REFERER"]);
 }
 

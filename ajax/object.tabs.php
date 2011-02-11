@@ -108,7 +108,7 @@ if (empty ($_POST["id"])) {
             Log::showForItem($commonitem);
          }
          
-         plugin_genericobject_showDevice($_POST['target'], $type, $_POST["id"]);
+         PluginGenericobjectObject::plugin_genericobject_showDevice($_POST['target'], $type, $_POST["id"]);
          //if (!displayPluginAction($type, $_POST["id"], $_POST['glpi_tab'])) {
          if (!Plugin::displayAction($commonitem, $_POST['glpi_tab'])) {
          }
@@ -140,7 +140,7 @@ if (empty ($_POST["id"])) {
          Ticket::showListForItem($type, $_POST["id"]);
          break;
       case 7 :
-         plugin_genericobject_showDevice($_POST['target'], $type, $_POST["id"]);
+         PluginGenericobjectObject::plugin_genericobject_showDevice($_POST['target'], $type, $_POST["id"]);
          break;
       case 10 :
          //showNotesForm($_POST['target'], $type, $_POST["id"]);

@@ -44,12 +44,7 @@ commonHeader(plugin_genericobject_getObjectLabel($name),$_SERVER['PHP_SELF'],
 
 plugin_genericobject_checkRight($name,'r');
  
-//Search::Show("PluginGenericObject");
 PluginGenericobjectSearchext::Show("PluginGenericobjectObject");
-/*
-manageGetValuesInSearch($_SESSION["glpi_plugin_genericobject_itemtype"]);
-searchForm($_SESSION["glpi_plugin_genericobject_itemtype"], $_GET);
-showList($_SESSION["glpi_plugin_genericobject_itemtype"], $_GET);
-*/
+
 commonFooter();
 ?>

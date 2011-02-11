@@ -38,7 +38,7 @@ if(!isset($_POST["id"]) || $_POST['id'] == '') {
    exit();
 }
 
-$type = new PluginGenericObjectType;
+$type = new PluginGenericobjectType;
 if ($_POST["id"] != '') {
    $type->getFromDB($_POST["id"]);
    
@@ -62,11 +62,11 @@ if(!isset($_POST["withtemplate"])) {
 switch($_POST['glpi_tab']){
       case -1:
          $type->showBehaviourForm($_POST['target'],$_POST["id"]);
-         plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["id"]);
-         PluginGenericObjectLink::plugin_genericobject_showDeviceTypeLinks($_POST['target'],
+         PluginGenericobjectType::plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["id"]);
+         PluginGenericobjectLink::plugin_genericobject_showDeviceTypeLinks($_POST['target'],
                                                                            $_POST["id"]);
          $type->getFromDB($_POST["id"]);
-         plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
+         PluginGenericobjectObject::plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
          Log::showForItem($type);
         break;
         
@@ -75,17 +75,17 @@ switch($_POST['glpi_tab']){
          break;
          
       case 3 :
-         plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["id"]);
+         PluginGenericobjectType::plugin_genericobject_showObjectFieldsForm($_POST['target'],$_POST["id"]);
          break;
                
       case 4 :
-         PluginGenericObjectLink::plugin_genericobject_showDeviceTypeLinks($_POST['target'],
+         PluginGenericobjectLink::plugin_genericobject_showDeviceTypeLinks($_POST['target'],
                                                                            $_POST["id"]);
          break; 
          
       case 5 :
          $type->getFromDB($_POST["id"]);
-         plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
+         PluginGenericobjectObject::plugin_genericobject_showPrevisualisationForm($type->fields["itemtype"]);
       break;
       
       case 12 :
