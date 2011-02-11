@@ -73,8 +73,7 @@ function plugin_init_genericobject() {
                                               "recursive", "is_template", "notes", "template_name");
 
    $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS = array ("id", "name", "notes", "entities_id",
-                                                        "recursive", "is_template"
-   );
+                                                        "recursive", "is_template");
 
    $GENERICOBJECT_LINK_TYPES = array ('Computer', 'Software', 'SoftwareLicense', 'Monitor',
                                       'Printer', 'Peripheral', 'Phone', 'NetworkEquipment', 
@@ -109,22 +108,22 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['change_profile']['genericobject'] = 'plugin_genericobject_changeprofile';
 
       // Display a menu entry ?
-      $PLUGIN_HOOKS['menu_entry']['genericobject'] = true;
+      $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
 
       // Config page
       if (haveRight('config', 'w')) {
-         $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type'] = 'front/type.form.php';
+         $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
       }
 
-      $PLUGIN_HOOKS['change_profile']['genericobject'] = 'plugin_change_profile_genericobject';
+      $PLUGIN_HOOKS['change_profile']['genericobject']   = 'plugin_change_profile_genericobject';
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
 
       // Onglets management
-      $PLUGIN_HOOKS['headings']['genericobject'] = 'plugin_get_headings_genericobject';
-      $PLUGIN_HOOKS['headings_action']['genericobject'] = 'plugin_headings_actions_genericobject';
+      $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
+      $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
       
       plugin_genericobject_registerNewTypes();
@@ -134,15 +133,10 @@ function plugin_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    global $LANG;
-   return array (
-      'name' => $LANG["genericobject"]["title"][1],
-      'version' => '1.2.0',
-      'author' => 'Alexandre Delaunay & Walid Nouh',
-      'homepage' => 'https://forge.indepnet.net/projects/show/genericobject',
-      'minGlpiVersion' => '0.78.0',
-
-      
-   );
+   return array ('name' => $LANG["genericobject"]["title"][1], 'version' => '1.2.0',
+                 'author' => 'Alexandre Delaunay & Walid Nouh',
+                 'homepage' => 'https://forge.indepnet.net/projects/show/genericobject',
+                 'minGlpiVersion' => '0.78.0');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect

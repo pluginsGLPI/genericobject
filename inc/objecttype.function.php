@@ -299,14 +299,12 @@ function plugin_genericobject_addDropdownTable($name, $field) {
 
 function plugin_genericobject_deleteDropdownClassFile($name, $field) {
    if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$name.$field.".class.php"))
-      unlink(GENERICOBJECT_CLASS_PATH .
-      "/".$name.$field.".class.php");
+      unlink(GENERICOBJECT_CLASS_PATH ."/".$name.$field.".class.php");
 }
 
 function plugin_genericobject_deleteDropdownFrontformFile($name, $field) {
    if (file_exists(GENERICOBJECT_FRONT_PATH . "/".$name.$field.".form.php"))
-      unlink(GENERICOBJECT_FRONT_PATH .
-      "/".$name.$field.".form.php");
+      unlink(GENERICOBJECT_FRONT_PATH ."/".$name.$field.".form.php");
 }
 
 function plugin_genericobject_deleteDropdownFrontFile($name, $field) {
@@ -317,8 +315,7 @@ function plugin_genericobject_deleteDropdownFrontFile($name, $field) {
 
 function plugin_genericobject_deleteDropdownAjaxFile($name, $field) {
    if (file_exists(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php"))
-      unlink(GENERICOBJECT_AJAX_PATH .
-      "/".$name.$field.".tabs.php");
+      unlink(GENERICOBJECT_AJAX_PATH ."/".$name.$field.".tabs.php");
 }
 
 function plugin_genericobject_deleteSpecificDropdownFiles($itemtype)
@@ -340,7 +337,7 @@ function plugin_genericobject_deleteDropdownTable($name, $field) {
    global $DB;
    if (TableExists(plugin_genericobject_getDropdownTableName($name, $field)))
       $DB->query("DROP TABLE `" .
-      plugin_genericobject_getDropdownTableName($name, $field) . "`");
+                     plugin_genericobject_getDropdownTableName($name, $field) . "`");
 }
 
 /**
@@ -384,12 +381,10 @@ function plugin_genericobject_deleteTable($name) {
 }
 
 function plugin_genericobject_getDropdownTableName($name, $field) {
-   $table_name = "glpi_plugin_genericobject_" . $name . $field;
-   return getPlural($table_name);
+   return getPlural("glpi_plugin_genericobject_" . $name . $field);
 }
 
-function plugin_genericobject_getLinkDeviceTableName($name)
-{
+function plugin_genericobject_getLinkDeviceTableName($name) {
    return "glpi_plugin_genericobject_".$name."_device";
 }
 
@@ -441,9 +436,11 @@ function plugin_genericobject_getDropdownSpecificFields() {
    global $GENERICOBJECT_AVAILABLE_FIELDS;
    $specific_fields = array ();
 
-   foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values)
-      if (isset ($values["dropdown_type"]) && $values["dropdown_type"] == 'type_specific')
+   foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values) {
+      if (isset ($values["dropdown_type"]) && $values["dropdown_type"] == 'type_specific') {
          $specific_fields[$field] = $field;
+      }
+   }
 
    return $specific_fields;
 }
@@ -454,8 +451,7 @@ function plugin_genericobject_getDropdownSpecific(& $dropdowns, $type, $check_en
    $specific_types = plugin_genericobject_getDropdownSpecificFields();
    $table = plugin_genericobject_getTableNameByName($type["name"]);
 
-   foreach ($specific_types as $ID => $field)
-   {
+   foreach ($specific_types as $ID => $field) {
       if (FieldExists($table, $field)) {
          if (!$check_entity 
             || ($check_entity 
@@ -472,12 +468,14 @@ function plugin_genericobject_getDatabaseRelationsSpecificDropdown(& $dropdowns,
    $specific_types = plugin_genericobject_getDropdownSpecificFields();
    $table = plugin_genericobject_getTableNameByName($type["name"]);
 
-   foreach ($specific_types as $ID => $field)
-      if (TableExists($table) && FieldExists($table, $field))
+   foreach ($specific_types as $ID => $field) {
+      if (TableExists($table) && FieldExists($table, $field)) {
          $dropdowns[$table] = array (
             plugin_genericobject_getDropdownTableName($type["name"], $field) => 
                $GENERICOBJECT_AVAILABLE_FIELDS[$field]['linkfield']
          );
+      }
+   }
 }
 
 function plugin_genericobject_getSpecificDropdownsTablesByType($type) {
@@ -494,8 +492,9 @@ function plugin_genericobject_displayFieldDefinition($target, $ID, $field, $inde
 
    echo "<tr class='tab_bg_1' align='center'>";
    $sel = "";
-   if (isset ($_POST["selected"]))
+   if (isset ($_POST["selected"])) {
       $sel = "checked";
+   }
 
    echo "<td width='10'>";
    if (!$readonly) {
@@ -519,53 +518,51 @@ function plugin_genericobject_displayFieldDefinition($target, $ID, $field, $inde
    echo "</td>";
 
    echo "<td width='10'>";
-   if (!$readonly && $index > 1 && $index < $total)
+   if (!$readonly && $index > 1 && $index < $total) {
       echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;id=" . $ID . "\">"; 
       echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
+   }
    echo "</td>";
 
    echo "</tr>";
 }
 
-function plugin_genericobject_deleteSpecificDropdownTables($itemtype)
-{
+function plugin_genericobject_deleteSpecificDropdownTables($itemtype) {
    global $DB;
    $name = plugin_genericobject_getNameByID($itemtype);
    $types = plugin_genericobject_getDropdownSpecificFields();
 
    foreach($types as $type => $tmp) {
-      $DB->query("DROP TABLE IF EXISTS `" . plugin_genericobject_getDropdownTableName($name,$type)."`");
+      $DB->query("DROP TABLE IF EXISTS `" . plugin_genericobject_getDropdownTableName($name,
+                                                                                      $type)."`");
    }
       
 }
 
-function plugin_genericobject_addLinkTable($itemtype)
-{
+function plugin_genericobject_addLinkTable($itemtype) {
    global $DB;
    $name = $itemtype;
    //$name = plugin_genericobject_getNameByID($itemtype);
    $query = "CREATE TABLE IF NOT EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."` (
-     `id` int(11) NOT NULL auto_increment,
-     `source_id` int(11) NOT NULL default '0',
-     `items_id` int(11) NOT NULL default '0',
-     `itemtype` VARCHAR( 255 ) NOT NULL,
-     PRIMARY KEY  (`id`),
-     UNIQUE KEY `source_id` (`source_id`,`items_id`,`itemtype`),
-     KEY `source_id_2` (`source_id`),
-     KEY `items_id` (`items_id`,`itemtype`)
-   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+              `id` int(11) NOT NULL auto_increment,
+              `source_id` int(11) NOT NULL default '0',
+              `items_id` int(11) NOT NULL default '0',
+              `itemtype` VARCHAR( 255 ) NOT NULL,
+              PRIMARY KEY  (`id`),
+              UNIQUE KEY `source_id` (`source_id`,`items_id`,`itemtype`),
+              KEY `source_id_2` (`source_id`),
+              KEY `items_id` (`items_id`,`itemtype`)
+            ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
    $DB->query($query);
 }
 
-function plugin_genericobject_deleteLinkTable($itemtype)
-{
+function plugin_genericobject_deleteLinkTable($itemtype) {
    global $DB;
    $name = plugin_genericobject_getNameByID($itemtype);
    $DB->query("DROP TABLE IF EXISTS `".plugin_genericobject_getLinkDeviceTableName($name)."`");
 }
    
-function plugin_genericobject_removeDataInjectionModels($itemtype)
-{
+function plugin_genericobject_removeDataInjectionModels($itemtype) {
    global $DB;
       $plugin = new Plugin;
          //Delete if exists datainjection models
@@ -587,8 +584,7 @@ function plugin_genericobject_removeDataInjectionModels($itemtype)
 /**
  * Delete all loans associated with a itemtype
  */
-function plugin_genericobject_deleteLoans($itemtype)
-{
+function plugin_genericobject_deleteLoans($itemtype) {
    global $DB;
    
    $query = "DELETE FROM  `glpi_reservationitems`, `glpi_reservations` " .
@@ -601,9 +597,9 @@ function plugin_genericobject_deleteLoans($itemtype)
 
 function plugin_genericobject_deleteNetworking($itemtype) {
        global $DB;
-        $query = "SELECT id 
-               FROM glpi_networkports 
-               WHERE itemtype = '" . $itemtype . "'";
+        $query = "SELECT `id` 
+               FROM `glpi_networkports` 
+               WHERE `itemtype` = '" . $itemtype . "'";
       $result = $DB->query($query);
       while ($data = $DB->fetch_array($result)) {
          $q = "DELETE FROM `glpi_networkports_networkports` " .
@@ -612,10 +608,10 @@ function plugin_genericobject_deleteNetworking($itemtype) {
          $result2 = $DB->query($q);
       }
 
-      $query2 = "DELETE FROM glpi_networkports WHERE itemtype = '" . $itemtype . "'";
+      $query2 = "DELETE FROM `glpi_networkports` WHERE `itemtype` = '" . $itemtype . "'";
       $result2 = $DB->query($query2);
 
-      $query = "SELECT id FROM glpi_computers_items WHERE itemtype='" . $itemtype."'";
+      $query = "SELECT `id` FROM `glpi_computers_items` WHERE `itemtype`='" . $itemtype."'";
       if ($result = $DB->query($query)) {
          if ($DB->numrows($result) > 0) {
             while ($data = $DB->fetch_array($result)) {
