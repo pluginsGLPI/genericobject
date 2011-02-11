@@ -193,10 +193,9 @@ function plugin_genericobject_uninstall() {
    //Delete search display preferences
    $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='4850';";
    $DB->query($query);
-
+   
    //For each type
-   foreach (plugin_genericobject_getAllTypes() as $tmp => $value) {
-      
+   foreach (plugin_genericobject_getAllTypes(true) as $tmp => $value) {
       //Delete all tables and files related to the type (dropdowns)
       PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownFiles($value["itemtype"]);
       PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownTables($value["itemtype"]);
@@ -226,14 +225,16 @@ function plugin_genericobject_uninstall() {
       PluginGenericobjectType::plugin_genericobject_deleteLinkTable($value["itemtype"]);
       
       //Drop type table
-      $DB->query("DROP TABLE IF EXISTS `" .
-      plugin_genericobject_getTableNameByName($value["name"]) . "`");
+      $query = "DROP TABLE IF EXISTS `" .
+      plugin_genericobject_getTableNameByName($value["name"]) . "`";
+      $DB->query($query);
       
       if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"))
          unlink(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"); 
          
       //Remove class from the filesystem
       PluginGenericobjectType::plugin_genericobject_deleteClassFile($value["itemtype"]);
+      
    }
 
    //Delete plugin's table
@@ -248,7 +249,6 @@ function plugin_genericobject_uninstall() {
 
    plugin_init_genericobject();
    //cleanCache("GLPI_HEADER_" . $_SESSION["glpiID"]);
-
    return true;
 }
 ?>

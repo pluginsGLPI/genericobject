@@ -540,7 +540,7 @@ class PluginGenericobjectType extends CommonDBTM {
    
    
    public static function plugin_genericobject_getLinkDeviceTableName($name) {
-      return "glpi_plugin_genericobject_".$name."_device";
+      return "glpi_plugin_genericobject_".getPlural($name)."_device";
    }
    
    
@@ -790,7 +790,8 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function plugin_genericobject_deleteLinkTable($itemtype) {
       global $DB;
       $name = plugin_genericobject_getNameByID($itemtype);
-      $DB->query("DROP TABLE IF EXISTS `".self::plugin_genericobject_getLinkDeviceTableName($name)."`");
+      $query = "DROP TABLE IF EXISTS `".self::plugin_genericobject_getLinkDeviceTableName($name)."`";
+      $DB->query($query);
    }
    
    
