@@ -226,7 +226,8 @@ class PluginGenericobjectType extends CommonDBTM {
                   echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
                break;
             case 'use_plugin_geninventorynumber' :
-               if ($plugin->isInstalled("geninventorynumber") && $plugin->isActivated("geninventorynumber")) {
+               if ($plugin->isInstalled("geninventorynumber") 
+                      && $plugin->isActivated("geninventorynumber")) {
                   $infos = plugin_version_geninventorynumber();
                   if ($infos['version'] >= '1.3.0') {
                      Alert::dropdownYesNo(array('name'=>$right,
@@ -265,7 +266,8 @@ class PluginGenericobjectType extends CommonDBTM {
          echo "<td class='tab_bg_2' colspan='2' align='center'>";
 
          echo "<input type='hidden' name='id' value=\"$ID\">\n";
-         echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . "\" class='submit'>";
+         echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . 
+                  "\" class='submit'>";
          echo "</td>";
          echo "</tr>";
       }
@@ -311,6 +313,7 @@ class PluginGenericobjectType extends CommonDBTM {
    function post_updateItem($history = 1) {
       global $GENINVENTORYNUMBER_INVENTORY_TYPES;
       $this->checkNecessaryFieldsUpdate();
+      /*
       if (in_array('use_plugin_geninventorynumber',$this->updates)) {
          if ($input['use_plugin_geninventorynumber']) {
             plugin_geninventorynumber_registerType($this->fields["itemtype"],'otherserial');
@@ -320,7 +323,7 @@ class PluginGenericobjectType extends CommonDBTM {
             plugin_geninventorynumber_unRegisterType($this->fields["itemtype"],'otherserial');
             unset($GENINVENTORYNUMBER_INVENTORY_TYPES[$this->fields["itemtype"]]);
          }
-      }
+      }*/
    }
 
    function pre_deleteItem() {
@@ -366,18 +369,14 @@ class PluginGenericobjectType extends CommonDBTM {
          
       }
 
-     if ($this->fields['use_plugin_geninventorynumber'] && !$commonitem->getField('otherserial')) {/***/
+     if ($this->fields['use_plugin_geninventorynumber'] 
+            && !$commonitem->getField('otherserial')) {
          plugin_genericobject_addNewField($this->fields["itemtype"], 'otherserial');
          
       }
 
       if ($this->fields['use_direct_connections']) { /***/
-         foreach (array (
-               'users_id',
-               'groups_id',
-               'states_id',
-               'locations_id'
-            ) as $field) {
+         foreach (array ('users_id', 'groups_id', 'states_id', 'locations_id') as $field) {
             if (!$commonitem->getField($field)) {
                plugin_genericobject_addNewField($this->fields["itemtype"], $field);
             }
@@ -397,8 +396,9 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $sopt[5]['table']       = $this->getTable();
       $sopt[5]['field']       = 'status';
-      $sopt[5]['linkfield']   = 'status';
-      $sopt[5]['name']        = $LANG['joblist'][0];
+      $sopt[5]['linkfield']   = '';
+      $sopt[5]['name']        = $LANG['common'][60];
+      $sopt[5]['datatype']    = 'bool';
    
       $sopt[6]['table']       = $this->getTable();
       $sopt[6]['field']       = 'use_tickets';
