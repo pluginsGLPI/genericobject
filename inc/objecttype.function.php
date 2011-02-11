@@ -123,8 +123,12 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
       $used_fields[$value->getName()] = $value->getName();
       $index++;
    }
-   echo "<tr><td><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/arrow-left.png\" alt=''></td><td class='center'><a onclick= \"if ( markCheckboxes('form_fields') ) return false;\" href='" . $target . "?id=$ID&amp;select=all'>" . $LANG['buttons'][18] . "</a>";
-   echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . $target . "?id=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
+   echo "<tr><td><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/arrow-left.png\" alt=''>"; 
+   echo "</td><td class='center'>"; 
+   echo "<a onclick= \"if ( markCheckboxes('form_fields') ) return false;\" href='" . $target . 
+           "?id=$ID&amp;select=all'>" . $LANG['buttons'][18] . "</a>";
+   echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . 
+            $target . "?id=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
    echo "</td><td colspan='5' align='left' width='75%'>";
 
    echo "<select name=\"massiveaction\" id='massiveaction'>";
@@ -133,15 +137,11 @@ function plugin_genericobject_showObjectFieldsForm($target, $ID) {
    //echo "<option value=\"move_field\">" . $LANG['buttons'][20] . "</option>";
    echo "</select>";
 
-   $params = array (
-      'action' => '__VALUE__',
-      'itemtype' => $object_type->fields["itemtype"],    
-   );
+   $params = array ('action' => '__VALUE__', 'itemtype' => $object_type->fields["itemtype"]);
 
-   ajaxUpdateItemOnSelectEvent("massiveaction", "show_massiveaction", 
-                               $CFG_GLPI["root_doc"] . 
-                                  "/plugins/genericobject/ajax/plugin_genericobject_dropdownObjectTypeFields.php", 
-                               $params);
+   $url = $CFG_GLPI["root_doc"].
+            "/plugins/genericobject/ajax/plugin_genericobject_dropdownObjectTypeFields.php";
+   ajaxUpdateItemOnSelectEvent("massiveaction", "show_massiveaction", $url, $params);
 
    echo "<span id='show_massiveaction'>&nbsp;</span>\n";
 
