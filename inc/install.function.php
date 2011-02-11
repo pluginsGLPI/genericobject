@@ -197,6 +197,10 @@ function plugin_genericobject_uninstall() {
    //For each type
    foreach (plugin_genericobject_getAllTypes() as $tmp => $value) {
       
+      //Delete all tables and files related to the type (dropdowns)
+      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownFiles($value["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownTables($value["itemtype"]);
+
       //Delete loans
       PluginGenericobjectType::plugin_genericobject_deleteLoans($value["itemtype"]);
 
@@ -221,16 +225,15 @@ function plugin_genericobject_uninstall() {
       //Drop itemtype link table
       PluginGenericobjectType::plugin_genericobject_deleteLinkTable($value["itemtype"]);
       
-      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownFiles($value["itemtype"]);
-      
-      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownTables($value["itemtype"]);
-
       //Drop type table
       $DB->query("DROP TABLE IF EXISTS `" .
       plugin_genericobject_getTableNameByName($value["name"]) . "`");
       
       if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"))
          unlink(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"); 
+         
+      //Remove class from the filesystem
+      PluginGenericobjectType::plugin_genericobject_deleteClassFile($value["itemtype"]);
    }
 
    //Delete plugin's table

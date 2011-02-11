@@ -330,11 +330,12 @@ class PluginGenericobjectType extends CommonDBTM {
       
       $this->getFromDB($this->fields["id"]);
 
+      //Delete all tables and files related to the type (dropdowns)
+      self::plugin_genericobject_deleteSpecificDropdownTables($this->fields["itemtype"]);
+      PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownFiles($this->fields["itemtype"]);
+      
       //Delete loans associated with this type
       self::plugin_genericobject_deleteLoans($this->fields["itemtype"]);
-
-      //Delete all tables related to the type (dropdowns)
-      self::plugin_genericobject_deleteSpecificDropdownTables($this->fields["itemtype"]);
 
       //Delete relation table
       self::plugin_genericobject_deleteLinkTable(getPlural($this->fields["itemtype"]));
