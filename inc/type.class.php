@@ -330,15 +330,15 @@ class PluginGenericobjectType extends CommonDBTM {
       
       $this->getFromDB($this->fields["id"]);
 
+      //Delete relation table
+      self::plugin_genericobject_deleteLinkTable($this->fields["itemtype"]);
+
       //Delete all tables and files related to the type (dropdowns)
       self::plugin_genericobject_deleteSpecificDropdownTables($this->fields["itemtype"]);
       PluginGenericobjectType::plugin_genericobject_deleteSpecificDropdownFiles($this->fields["itemtype"]);
       
       //Delete loans associated with this type
       self::plugin_genericobject_deleteLoans($this->fields["itemtype"]);
-
-      //Delete relation table
-      self::plugin_genericobject_deleteLinkTable(getPlural($this->fields["itemtype"]));
 
       //Remove class from the filesystem
       self::plugin_genericobject_deleteClassFile($this->fields["name"]);
@@ -790,7 +790,7 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function plugin_genericobject_deleteLinkTable($itemtype) {
       global $DB;
       $name = plugin_genericobject_getNameByID($itemtype);
-      $query = "DROP TABLE IF EXISTS `".self::plugin_genericobject_getLinkDeviceTableName($name)."`";
+      $query = "DROP TABLE IF EXISTS `".self::plugin_genericobject_getLinkDeviceTableName($name)."`";                        ;
       $DB->query($query);
    }
    
