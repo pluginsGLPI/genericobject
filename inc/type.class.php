@@ -177,9 +177,10 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
      $plugin = new Plugin;
-
+      $odd=0;
       foreach ($use as $right => $label) {
-         echo "<tr class='tab_bg_1'>";
+         $odd++;
+         echo "<tr class='tab_bg_".(($odd%2)+1)."'>";
          echo "<td>" . $LANG['genericobject']['config'][1] . " " . $label . "</td>";
          echo "<td>";
 
