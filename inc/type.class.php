@@ -674,7 +674,7 @@ class PluginGenericobjectType extends CommonDBTM {
       global $GENERICOBJECT_AVAILABLE_FIELDS, $CFG_GLPI;
       $readonly = ($field == "name");
 
-      echo "<tr class='tab_bg_1' align='center'>";
+      echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
       $sel = "";
       if (isset ($_POST["selected"])) {
          $sel = "checked";
