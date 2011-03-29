@@ -174,7 +174,7 @@ class PluginGenericobjectSearchext extends Search {
 
       // Add select for all toview item
       foreach ($toview as $key => $val) {
-         $SELECT.= Search::addSelect($itemtype,$val,$key,0);
+         $SELECT.= Search::addSelect($itemtype2,$val,$key,0);
       }
 
 
