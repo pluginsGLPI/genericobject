@@ -305,6 +305,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                   echo convDate($value);
                }
                break;
+            case 'integer' :
+               if ($canedit) {
+                  echo "<input type='text' name='".$name."' value=\"".formatNumber($value, true, 0)."\" size='6'>";
+               } else
+                  echo $value;
+               break;
             case 'dropdown_global' :
                Dropdown::showGlobalSwitch($_SERVER['PHP_SELF'],'',$this->fields['id'],
                                           $this->fields['is_global'],2);
