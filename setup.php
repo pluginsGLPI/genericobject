@@ -64,7 +64,7 @@ define("GENERICOBJECT_AJAX_PATH", GLPI_ROOT . "/plugins/genericobject/ajax");
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS, 
           $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, $GENERICOBJECT_LINK_TYPES, 
-          $GENERICOBJECT_PDF_TYPES;
+          $GENERICOBJECT_AVAILABLE_FIELDS, $GENERICOBJECT_PDF_TYPES;
           
    Plugin::registerClass('PluginGenericobjectProfile');
    Plugin::registerClass('PluginGenericobjectField');
@@ -95,7 +95,7 @@ function plugin_init_genericobject() {
       foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/locales/*.php') as $file)
          include_once ($file);
 
-      //Include all fields contants files
+      //Include all fields constants files
       foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) 
          include_once ($file);
       
