@@ -74,7 +74,7 @@ $LANG['genericobject']['fields'][10] = "URL";
 $LANG['genericobject']['fields'][30] = "Date de création";
 $LANG['genericobject']['fields'][31] = "Date d'expiration";
 
-$LANG['genericobject']['links'][1] = "Laison avec d'autres objets";
+$LANG['genericobject']['links'][1] = "Liaison avec d'autres objets";
 $LANG['genericobject']['links'][2] = "Elément(s) associé(s)";
 
 
