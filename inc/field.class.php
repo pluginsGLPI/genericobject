@@ -88,7 +88,7 @@ class PluginGenericobjectField extends CommonDBTM{
             $input["entity_restrict"] = 0;
             $type_field->add($input);
       }
-      else exit("plugin_genericobject_addNewField".$itemtype);
+      else exit("plugin_genericobject_addNewField" .$itemtype." already exists");
    }
    
    
