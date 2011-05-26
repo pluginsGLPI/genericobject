@@ -294,6 +294,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
                   case 'date' :
                   case 'text' :
                   case 'multitext' :
+                  case 'integer' :
                      $search_options[$i]['table'] = plugin_genericobject_getObjectTableNameByName($name);
                      break;
                   case 'dropdown' :
