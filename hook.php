@@ -32,7 +32,7 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-/*
+
 function plugin_genericobject_getAddSearchOptions($itemtype) {
    global $LANG;
    $sopt = array ();
@@ -56,7 +56,7 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
       
    return $sopt;
 
-}*/
+}
 
 
 function plugin_genericobject_getSearchOption() {
@@ -88,14 +88,8 @@ function plugin_get_headings_genericobject($item, $withtemplate) {
    switch (get_class($item)) {
       case PROFILE_TYPE:
          $prof = new Profile();
-         if ($item->getField('id')>0 
-                && $prof->getFromDB($item->getField('id')) 
-                  && $prof->fields['interface']=='central') {
             return array(1 => $LANG["genericobject"]["title"][1]);
-         } else {
-            return array();
-         }
-         break;
+            break;
    }
    return false;
 }
@@ -106,17 +100,11 @@ function plugin_headings_genericobject($item, $withtemplate) {
       case PROFILE_TYPE :
          $profile = new profile;
          $profile->getFromDB($item->getField('id'));
-         if ($profile->fields["interface"] != "helpdesk") {
-               PluginGenericobjectProfile::plugin_genericobject_createAccess($item->getField('id'));
+         PluginGenericobjectProfile::plugin_genericobject_createAccess($item->getField('id'));
                
-            $prof = new PluginGenericobjectProfile();
-            $prof->showForm($CFG_GLPI["root_doc"] . "/plugins/genericobject/front/profile.php", 
-                            $item->getField('id'));
-         } else {
-            echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'><td align='center'>";
-            echo $LANG['genericobject']['setup'][1];
-            echo "</td></tr></table>";
-         }
+         $prof = new PluginGenericobjectProfile();
+         $prof->showForm($CFG_GLPI["root_doc"] . "/plugins/genericobject/front/profile.php", 
+                         $item->getField('id'));
          break;
    }   
 }
