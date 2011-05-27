@@ -42,12 +42,7 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
    $sopt[1]['linkfield'] = '';
    $sopt[1]['name'] = $LANG["common"][22];
    $sopt[1]['datatype']='itemlink';
-
-   $sopt[5]['table'] = 'glpi_plugin_genericobject_types';
-   $sopt[5]['field'] = 'status';
-   $sopt[5]['linkfield'] = 'status';
-   $sopt[5]['name'] = $LANG['joblist'][0];
-   
+ 
    $types = plugin_genericobject_getAllTypes();
    
    foreach ($types as $type => $params)
