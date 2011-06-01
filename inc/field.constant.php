@@ -134,11 +134,11 @@ $GENERICOBJECT_AVAILABLE_FIELDS['state']['field']='name';
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['linkfield']='state';
 $GENERICOBJECT_AVAILABLE_FIELDS['state']['input_type']='dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['user']['name']=$LANG['common'][34];
-$GENERICOBJECT_AVAILABLE_FIELDS['user']['table']='glpi_users';
-$GENERICOBJECT_AVAILABLE_FIELDS['user']['field']='name';
-$GENERICOBJECT_AVAILABLE_FIELDS['user']['linkfield']='users_id';
-$GENERICOBJECT_AVAILABLE_FIELDS['user']['input_type']='dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['name']=$LANG['common'][34];
+$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['table']='glpi_users';
+$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['field']='name';
+$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['linkfield']='users_id';
+$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['input_type']='dropdown';
 
 $GENERICOBJECT_AVAILABLE_FIELDS['group']['name']=$LANG['common'][35];
 $GENERICOBJECT_AVAILABLE_FIELDS['group']['table']='glpi_groups';

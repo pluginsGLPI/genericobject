@@ -84,10 +84,6 @@ function plugin_init_genericobject() {
 
    $GENERICOBJECT_PDF_TYPES = array ();
    
-   Plugin::registerClass('PluginGenericobjectType', 
-                         array('classname'  => 'PluginGenericobjectType',
-                               'tablename'  => 'glpi_plugin_genericobject_types'));
-
    $plugin = new Plugin;
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
@@ -124,6 +120,15 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
+   foreach ($types as $type => $params) {
+      $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
+      Plugin::registerClass('PluginGenericobject'.strtoupper($params["name"]), 
+                         array('classname'  => 'PluginGenericobject'.strtoupper($params["name"]),
+                               'tablename'  => 'glpi_plugin_genericobject_'.$params["name"].'s',
+                               'helpdesk_types'         => true,
+                               'linkuser_types' => true
+                               ));      
+      }
       
       plugin_genericobject_registerNewTypes();
    }

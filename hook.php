@@ -109,9 +109,8 @@ function plugin_genericobject_AssignToTicket($types){
    
    foreach (plugin_genericobject_getAllTypes() as $tmp => $value)
       if (plugin_genericobject_haveRight($value["name"].'_open_ticket',"1"))
-         $types[plugin_genericobject_getObjectClassByName($value['itemtype'])] = 
-            plugin_genericobject_getObjectLabel($value['name']);
-      
+         $types['PluginGenericobject'.strtoupper($value['itemtype'])] = 'PluginGenericobject'.
+            strtoupper(plugin_genericobject_getObjectLabel($value['name']));
    return $types;
 }
 
