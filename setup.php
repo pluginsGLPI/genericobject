@@ -120,6 +120,7 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
+   $types = plugin_genericobject_getAllTypes();
    foreach ($types as $type => $params) {
       $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
       Plugin::registerClass('PluginGenericobject'.strtoupper($params["name"]), 
