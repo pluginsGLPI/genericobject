@@ -122,7 +122,7 @@ function plugin_init_genericobject() {
 
    $types = plugin_genericobject_getAllTypes();
    foreach ($types as $type => $params) {
-      $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
+
       Plugin::registerClass('PluginGenericobject'.strtoupper($params["name"]), 
                          array('classname'  => 'PluginGenericobject'.strtoupper($params["name"]),
                                'tablename'  => 'glpi_plugin_genericobject_'.$params["name"].'s',
