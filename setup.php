@@ -120,14 +120,17 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
+   Plugin::registerClass('PluginGenericobjectType', 
+                         array('classname'  => 'PluginGenericobjectType',
+                               'tablename'  => 'glpi_plugin_genericobject_types'));
+
    $types = plugin_genericobject_getAllTypes();
    foreach ($types as $type => $params) {
 
-      Plugin::registerClass('PluginGenericobject'.strtoupper($params["name"]), 
-                         array('classname'  => 'PluginGenericobject'.strtoupper($params["name"]),
+      Plugin::registerClass('PluginGenericobject'.ucfirst($params["name"]), 
+                         array('classname'  => 'PluginGenericobject'.ucfirst($params["name"]),
                                'tablename'  => 'glpi_plugin_genericobject_'.$params["name"].'s',
                                'helpdesk_types'         => true,
-                               'helpdesk_visible_types' => true,
                                'linkgroup_types' => true,
                                'linkuser_types' => true
                                ));      
