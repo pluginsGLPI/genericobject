@@ -42,7 +42,7 @@ $name=plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_item
 commonHeader(plugin_genericobject_getObjectLabel($name),$_SERVER['PHP_SELF'],
              "plugins","genericobject",$name);
 
-plugin_genericobject_checkRight($name,'r');
+//plugin_genericobject_checkRight($name,'r');
  
 PluginGenericobjectSearchext::Show("PluginGenericobjectObject");
 
