@@ -48,7 +48,9 @@ define("GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE", 1);
 define("GENERICOBJECT_CLASS_PATH", GLPI_ROOT . "/plugins/genericobject/inc");
 define("GENERICOBJECT_CLASS_TEMPLATE", 
          GLPI_ROOT . "/plugins/genericobject/objects/generic.class.tpl");
-
+define("GENERICOBJECT_FORM_TEMPLATE", 
+         GLPI_ROOT . "/plugins/genericobject/objects/generic.form.tpl");
+         
 define("GENERICOBJECT_CLASS_DROPDOWN_TEMPLATE", 
          GLPI_ROOT . "/plugins/genericobject/objects/generic.dropdown.class.tpl");
 define("GENERICOBJECT_FRONTFORM_DROPDOWN_TEMPLATE", 

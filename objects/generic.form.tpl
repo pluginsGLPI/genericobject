@@ -4,13 +4,13 @@
  ----------------------------------------------------------------------
  GLPI - Gestionnaire Libre de Parc Informatique
  Copyright (C) 2003-2008 by the INDEPNET Development Team.
- 
+
  http://indepnet.net/   http://glpi-project.org/
  ----------------------------------------------------------------------
 
  LICENSE
 
-   This file is part of GLPI.
+	This file is part of GLPI.
 
     GLPI is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,30 +28,16 @@
  ------------------------------------------------------------------------
 */
 
-// Original Author of file: Walid Nouh
+// Original Author of file: GenericObject plugin
 // Purpose of file:
 // ----------------------------------------------------------------------
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT . "/inc/includes.php");
 
-if (!isset($_SESSION["glpi_plugin_genericobject_itemtype"])) {
-   $type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
-}
-elseif (isset($_REQUEST["itemtype"])) {
-   $type = $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST["itemtype"];
-}
-else {
-   $type = $_SESSION["glpi_plugin_genericobject_itemtype"];
-}
-   
-$type = $_SESSION["glpi_plugin_genericobject_itemtype"];
+/**
+ * This file is automatically managed by genericobject plugin. Do not modify it !
+ */
 
-$name = plugin_genericobject_getNameByID($type);
-commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", 
-             "genericobject", $name);
-PluginGenericobjectObject::plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/plugins/genericobject/front/".
-                                              plugin_genericobject_getNameByID($_GET["itemtype"]).
-                                              ".form.php",$_GET["itemtype"],
-                                              $_SESSION["glpiactive_entity"],$_GET["add"]);
-commonFooter();
+//define('GLPI_ROOT', '../../..');
+//include (GLPI_ROOT . "/inc/includes.php");
+
+include ("object.form.php");
 ?>

@@ -289,6 +289,11 @@ class PluginGenericobjectType extends CommonDBTM {
                                         plugin_genericobject_getObjectClassByName($this->input["name"]), 
                                         $this->input["name"]);
 
+	  //Write the form on the filesystem
+      self::plugin_genericobject_addFormFile($this->input["name"], 
+                                        plugin_genericobject_getObjectClassByName($this->input["name"]), 
+                                        $this->input["name"]);
+	  
       //Create rights for this new object
       PluginGenericobjectProfile::plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["id"], true);
 
@@ -330,7 +335,6 @@ class PluginGenericobjectType extends CommonDBTM {
    function pre_deleteItem() {
       
       $this->getFromDB($this->fields["id"]);
-
       //Delete relation table
       self::plugin_genericobject_deleteLinkTable($this->fields["itemtype"]);
 
@@ -343,6 +347,9 @@ class PluginGenericobjectType extends CommonDBTM {
 
       //Remove class from the filesystem
       self::plugin_genericobject_deleteClassFile($this->fields["name"]);
+
+      //Remove form from the filesystem
+      self::plugin_genericobject_deleteFormFile($this->fields["name"]);
 
       //Delete profile informations associated with this type
       PluginGenericobjectProfile::plugin_genericobject_deleteTypeFromProfile($this->fields["name"]);
@@ -522,6 +529,24 @@ class PluginGenericobjectType extends CommonDBTM {
       fclose($DBf_handle);
    }
    
+   /**
+    * Write on the the form file for the new object type
+    * @param name the name of the object type
+    * @param classname the name of the new object
+    * @param itemtype the object device type
+    * @return nothing
+    */
+   public static function plugin_genericobject_addFormFile($name, $classname, $itemtype) {
+      $DBf_handle = fopen(GENERICOBJECT_FORM_TEMPLATE, "rt");
+      $template_file = fread($DBf_handle, filesize(GENERICOBJECT_FORM_TEMPLATE));
+      fclose($DBf_handle);
+      $template_file = str_replace("%%CLASSNAME%%", $classname, $template_file);
+      $template_file = str_replace("%%DEVICETYPE%%", $itemtype, $template_file);
+      $DBf_handle = fopen(GENERICOBJECT_FRONT_PATH . "/$name.form.php", "w");
+      fwrite($DBf_handle, $template_file);
+      fclose($DBf_handle);
+   }
+      
    public static function plugin_genericobject_addLinkTable($itemtype) {
       global $DB;
       $name = $itemtype;
@@ -787,7 +812,17 @@ class PluginGenericobjectType extends CommonDBTM {
          "/$name.class.php");
    }
    
-   
+   /**
+    * Delete an used form file
+    * @param name the name of the object type
+    * @return nothing
+    */
+   public static function plugin_genericobject_deleteFormFile($name) {
+      if (file_exists(GENERICOBJECT_FRONT_PATH . "/$name.form.php"))
+         unlink(GENERICOBJECT_FRONT_PATH .
+         "/$name.form.php");
+   }
+      
    public static function plugin_genericobject_deleteLinkTable($itemtype) {
       global $DB;
       $name = plugin_genericobject_getNameByID($itemtype);
