@@ -55,7 +55,7 @@ else {
    
 }
 
-$name = PluginGenericobjectObject::getNameByID($type);
+$name = PluginGenericobjectType::getNameByID($type);
 $object = new PluginGenericobjectObject($type);
 /*$object = new CommonItem;
 $object->setType($type, true);*/

@@ -48,7 +48,7 @@ class PluginGenericobjectField extends CommonDBTM {
    }   
 
    function post_addItem() {
-      $name  = PluginGenericobjectObject::getNameByID($this->input["itemtype"]);
+      $name  = PluginGenericobjectType::getNameByID($this->input["itemtype"]);
       $table = PluginGenericobjectType::getTableNameByName($name);
       self::addFieldInDB($table, $this->fields["name"], $name);
    }

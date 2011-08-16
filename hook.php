@@ -134,7 +134,7 @@ function plugin_genericobject_getDatabaseRelations(){
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
       foreach (PluginGenericobjectType::getTypes(true) as $tmp => $values) {
-         PluginGenericobjectType::plugin_genericobject_getDatabaseRelationsSpecificDropdown($dropdowns,$values);
+         PluginGenericobjectType::getDatabaseRelationsSpecificDropdown($dropdowns,$values);
          if ($values["use_entity"]) {
             $dropdowns["glpi_entities"][PluginGenericobjectType::getTableByName($values["name"])] = "entities_id";
          }
@@ -155,7 +155,7 @@ function plugin_genericobject_datainjection_variables()
    
    $types = PluginGenericobjectType::getTypes();
    foreach ($types as $tmp => $value) {
-      $name = PluginGenericobjectObject::getNameByID($value["itemtype"]);
+      $name = PluginGenericobjectType::getNameByID($value["itemtype"]);
       $fields = PluginGenericobjectField::plugin_genericobject_getFieldsByType($value["itemtype"]);
       foreach ($fields as $field => $object) {
          switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
@@ -169,9 +169,9 @@ function plugin_genericobject_datainjection_variables()
                case 'dropdown' :
                   if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field)) {
                      $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
-                        PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name,$field);
+                        PluginGenericobjectType::getDropdownTableName($name,$field);
                      $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
-                        PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name,$field);   
+                        PluginGenericobjectType::getDropdownTableName($name,$field);   
                   } else {
                       $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
                          $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
@@ -260,7 +260,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
 
    if (TableExists($table)) {
       $type = PluginGenericobjectType::getIdentifierByName($name);
-      $ID = PluginGenericobjectObject::getIDByName($name);
+      $ID = PluginGenericobjectType::getIDByName($name);
       $fields = $DB->list_fields($table);
       $i = 5000;
 
@@ -290,7 +290,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
                      break;
                   case 'dropdown' :
                      if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field_name))
-                        $search_options[$i]['table'] = PluginGenericobjectType::plugin_genericobject_getDropdownTableName($name, $field_name);
+                        $search_options[$i]['table'] = PluginGenericobjectType::getDropdownTableName($name, $field_name);
                      else
                         $search_options[$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
 

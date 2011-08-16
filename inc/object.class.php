@@ -100,11 +100,6 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ong[7] = $LANG['setup'][620];
          }
 
-         /*
-               if ($this->type_infos["use_links"] && haveRight("link", "r")) {
-                  $ong[7] = $LANG['title'][34];
-               }
-         */
          if ($this->type_infos["use_notes"] && haveRight("notes", "r")) {
             $ong[10] = $LANG['title'][37];
          }
@@ -319,8 +314,8 @@ class PluginGenericobjectObject extends CommonDBTM {
             case 'dropdown' :
                if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($name)) {
                   $type = strtolower(str_replace("PluginGenericobject", "", $this->type));
-                  $device_name = PluginGenericobjectObject::getNameByID($type);
-                  $table = PluginGenericobjectType::plugin_genericobject_getDropdownTableName($device_name, $name);
+                  $device_name = PluginGenericobjectType::getNameByID($type);
+                  $table = PluginGenericobjectType::getDropdownTableName($device_name, $name);
                } else
                   $table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
 
@@ -541,7 +536,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       
       if (plugin_genericobject_haveTypeRight($type,'r'))
       {
-         $name = PluginGenericobjectObject::getNameByID($type);
+         $name = PluginGenericobjectType::getNameByID($type);
          echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
       
          //$object = new $type();
@@ -559,7 +554,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    public static function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
       global $DB,$CFG_GLPI, $LANG,$INFOFORM_PAGES,$LINK_ID_TABLE,$GENERICOBJECT_LINK_TYPES;
       
-      $name = PluginGenericobjectObject::getNameByID($itemtype);
+      $name = PluginGenericobjectType::getNameByID($itemtype);
       
       if (!haveRight($name,"r")) return false;
       //if (!haveTypeRight($name,"r")) return false;
@@ -788,10 +783,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
 
-   public static function plugin_genericobject_showTemplateByDeviceType($target,$itemtype,$entity,$add=0)
-   {
+   public static function plugin_genericobject_showTemplateByDeviceType($target, $itemtype, $entity, 
+                                                                        $add=0) {
       global $LANG,$DB,$GENERICOBJECT_LINK_TYPES;
-      $name = PluginGenericobjectObject::getNameByID($itemtype);
+      $name = PluginGenericobjectType::getNameByID($itemtype);
       $commonitem = new PluginGenericobjectObject($itemtype);
       //$commonitem->setType($itemtype,true);
       $title = PluginGenericobjectObject::getLabel($name);
@@ -857,42 +852,26 @@ class PluginGenericobjectObject extends CommonDBTM {
       
    }
 
-   /**
-    * Get an internal ID by the object name
-    * @param name the object's name
-    * @return the object's ID
-    */
-   function getIDByName($name) {
-      global $DB;
-      $query = "SELECT `itemtype` FROM `glpi_plugin_genericobject_types` WHERE `name`='$name'";
-      $result = $DB->query($query);
-      if ($DB->numrows($result))
-         return $DB->result($result, 0, "itemtype");
-      else
-         return 0;
-   }
+
    
-   /**
-    * Get object name by ID
-    * @param ID the internal ID
-    * @return the name associated with the ID
-    */
-   function getNameByID($itemtype) {
-      global $DB;
-      $query = "SELECT `name` FROM `glpi_plugin_genericobject_types` WHERE `itemtype`='$itemtype'";
-      $result = $DB->query($query);
-      if ($DB->numrows($result))
-         return $DB->result($result, 0, "name");
-      else
-         return "";
-   }
-   
-   function getLabel($name) {
+   static function getLabel($name) {
       global $LANG;
       if (isset ($LANG['genericobject'][$name][1])) {
          return $LANG['genericobject'][$name][1];
       } else {
          return $name;
       }
+   }
+   
+   static function uninstall() {
+      global $DB;
+      
+      $tables = array ("glpi_displaypreferences", "glpi_documents_items", "glpi_bookmarks",
+                       "glpi_logs");
+      foreach ($tables as $table) {
+         $query = "DELETE FROM `$table` WHERE `itemtype`='".__CLASS__."'";
+         $DB->query($query);
+      }
+
    }
 }

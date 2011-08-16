@@ -42,23 +42,10 @@ if (!defined("GENERICOBJECT_FRONT_PATH")) {
 if (!defined("GENERICOBJECT_AJAX_PATH")) {
    define("GENERICOBJECT_AJAX_PATH", GENERICOBJECT_DIR . "/ajax");
 }
+if (!defined("GENERICOBJECT_CLASS_PATH")) {
+   define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DIR . "/inc");
+}
 define("PLUGIN_GENERICOBJECT_TYPE", "PluginGenericobjectType");
-
-
-define("GENERICOBJECT_CLASS_PATH", GLPI_ROOT . "/plugins/genericobject/inc");
-define("GENERICOBJECT_CLASS_TEMPLATE", 
-         GLPI_ROOT . "/plugins/genericobject/objects/generic.class.tpl");
-define("GENERICOBJECT_FORM_TEMPLATE", 
-         GLPI_ROOT . "/plugins/genericobject/objects/generic.form.tpl");
-         
-define("GENERICOBJECT_CLASS_DROPDOWN_TEMPLATE", 
-         GLPI_ROOT . "/plugins/genericobject/objects/generic.dropdown.class.tpl");
-define("GENERICOBJECT_FRONTFORM_DROPDOWN_TEMPLATE", 
-         GLPI_ROOT . "/plugins/genericobject/objects/front.form.tpl");
-define("GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE", 
-         GLPI_ROOT . "/plugins/genericobject/objects/front.tpl");
-define("GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE", 
-         GLPI_ROOT . "/plugins/genericobject/objects/ajax.tabs.tpl");
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
@@ -121,7 +108,7 @@ function plugin_init_genericobject() {
 
       Plugin::registerClass('PluginGenericobject'.ucfirst($params["name"]), 
                          array('helpdesk_types' => true, 'linkgroup_types' => true,
-                               'linkuser_types' => true));      
+                               'linkuser_types' => true));
       }
       
       PluginGenericobjectType::registerNewTypes();
@@ -164,7 +151,7 @@ function plugin_genericobject_haveTypeRight($type, $right) {
       case 'PluginGenericobjectType' :
          return haveRight("config", $right);
       default :
-         return PluginGenericobjectProfile::haveRight(PluginGenericobjectObject::getNameByID($type), $right);
+         return PluginGenericobjectProfile::haveRight(PluginGenericobjectType::getNameByID($type), $right);
    }
 
 }

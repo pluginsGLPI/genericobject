@@ -117,7 +117,7 @@ class PluginGenericobjectLink extends CommonDBTM{
    public static function addDeviceLink($source_type, $source_id, $itemtype, 
                                                              $items_id) {
       global $DB;
-      $name = PluginGenericobjectObject::getNameByID($source_type);
+      $name = PluginGenericobjectType::getNameByID($source_type);
       $table = PluginGenericobjectType::getLinkDeviceTableName($name);
       $query = "INSERT INTO `$table` (`id`, `source_id`, `itemtype`, `items_id`) " .
                "VALUES (NULL, $source_id, $itemtype,$items_id)";
@@ -127,7 +127,7 @@ class PluginGenericobjectLink extends CommonDBTM{
    public static function plugin_genericobject_deleteDeviceLink($source_type,$link_id)
    {
       global $DB;
-      $name = PluginGenericobjectObject::getNameByID($source_type);
+      $name = PluginGenericobjectType::getNameByID($source_type);
       $table = PluginGenericobjectType::getLinkDeviceTableName($name);
       $DB->query("DELETE FROM `$table` WHERE id=$link_id");
    }

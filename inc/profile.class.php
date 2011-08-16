@@ -62,7 +62,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       
       if (!empty ($types)) {
          foreach ($types as $tmp => $profile) {
-            $name = PluginGenericobjectObject::getNameByID($profile['itemtype']);
+            $name = PluginGenericobjectType::getNameByID($profile['itemtype']);
 
             PluginGenericobjectType::includeLocales($name);
             echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".

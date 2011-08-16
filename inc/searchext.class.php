@@ -54,7 +54,7 @@ class PluginGenericobjectSearchext extends Search {
 		
 		$itemtype2 = $itemtype;
 		if (isset($_SESSION["glpi_plugin_genericobject_itemtype"]))
-			$itemtype2 = "PluginGenericobject".ucfirst(PluginGenericobjectObject::getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]));
+			$itemtype2 = "PluginGenericobject".ucfirst(PluginGenericobjectType::getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]));
 
       // Default values of parameters
       $p['link']        = array();//

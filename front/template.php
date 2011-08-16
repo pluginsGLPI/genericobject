@@ -46,11 +46,11 @@ else {
    
 $type = $_SESSION["glpi_plugin_genericobject_itemtype"];
 
-$name = PluginGenericobjectObject::getNameByID($type);
+$name = PluginGenericobjectType::getNameByID($type);
 commonHeader(PluginGenericobjectObject::getLabel($name), $_SERVER['PHP_SELF'], "plugins", 
              "genericobject", $name);
 PluginGenericobjectObject::plugin_genericobject_showTemplateByDeviceType($CFG_GLPI["root_doc"]."/plugins/genericobject/front/".
-                                              PluginGenericobjectObject::getNameByID($_GET["itemtype"]).
+                                              PluginGenericobjectType::getNameByID($_GET["itemtype"]).
                                               ".form.php",$_GET["itemtype"],
                                               $_SESSION["glpiactive_entity"],$_GET["add"]);
 commonFooter();
