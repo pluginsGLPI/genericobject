@@ -33,17 +33,17 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 
-include_once (GLPI_ROOT . "/plugins/genericobject/inc/common.function.php");
-include_once (GLPI_ROOT . "/plugins/genericobject/inc/install.function.php");
-include_once (GLPI_ROOT . "/plugins/genericobject/inc/dropdown.function.php");
-
+if (!defined("GENERICOBJECT_DIR")) {
+   define("GENERICOBJECT_DIR",GLPI_ROOT . "/plugins/genericobject");
+}
+if (!defined("GENERICOBJECT_FRONT_PATH")) {
+   define("GENERICOBJECT_FRONT_PATH", GENERICOBJECT_DIR."/front");
+}
+if (!defined("GENERICOBJECT_AJAX_PATH")) {
+   define("GENERICOBJECT_AJAX_PATH", GENERICOBJECT_DIR . "/ajax");
+}
 define("PLUGIN_GENERICOBJECT_TYPE", "PluginGenericobjectType");
 
-define("GENERICOBJECT_OBJECTTYPE_STATE_DRAFT", 0);
-define("GENERICOBJECT_OBJECTTYPE_STATE_PUBLISHED", 1);
-
-define("GENERICOBJECT_OBJECTTYPE_STATUS_INACTIVE", 0);
-define("GENERICOBJECT_OBJECTTYPE_STATUS_ACTIVE", 1);
 
 define("GENERICOBJECT_CLASS_PATH", GLPI_ROOT . "/plugins/genericobject/inc");
 define("GENERICOBJECT_CLASS_TEMPLATE", 
@@ -59,8 +59,6 @@ define("GENERICOBJECT_FRONT_DROPDOWN_TEMPLATE",
          GLPI_ROOT . "/plugins/genericobject/objects/front.tpl");
 define("GENERICOBJECT_AJAX_DROPDOWN_TEMPLATE", 
          GLPI_ROOT . "/plugins/genericobject/objects/ajax.tabs.tpl");
-define("GENERICOBJECT_FRONT_PATH", GLPI_ROOT . "/plugins/genericobject/front");
-define("GENERICOBJECT_AJAX_PATH", GLPI_ROOT . "/plugins/genericobject/ajax");
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
@@ -68,12 +66,6 @@ function plugin_init_genericobject() {
           $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, $GENERICOBJECT_LINK_TYPES, 
           $GENERICOBJECT_AVAILABLE_FIELDS, $GENERICOBJECT_PDF_TYPES;
           
-   Plugin::registerClass('PluginGenericobjectProfile');
-   Plugin::registerClass('PluginGenericobjectField');
-   Plugin::registerClass('PluginGenericobjectType');
-   Plugin::registerClass('PluginGenericobjectObject');
-   Plugin::registerClass('PluginGenericobjectLink');
-
    $GENERICOBJECT_BLACKLISTED_FIELDS = array ("object_type", "table", "deleted", "id", "entities_id",
                                               "recursive", "is_template", "notes", "template_name");
 
@@ -94,8 +86,9 @@ function plugin_init_genericobject() {
          include_once ($file);
 
       //Include all fields constants files
-      foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) 
+      foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) {
          include_once ($file);
+      }
       
       include_once (GLPI_ROOT . "/plugins/genericobject/inc/field.constant.php");
 
@@ -103,7 +96,8 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       /* load changeprofile function */
-      $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile', 'plugin_change_profile_genericobject');
+      $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile', 
+                                                               'plugin_change_profile_genericobject');
 
       // Display a menu entry ?
       $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
@@ -122,42 +116,33 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
-   Plugin::registerClass('PluginGenericobjectType', 
-                         array('classname'  => 'PluginGenericobjectType',
-                               'tablename'  => 'glpi_plugin_genericobject_types'));
-
-   $types = plugin_genericobject_getAllTypes();
+   $types = PluginGenericobjectType::getTypes();
    foreach ($types as $type => $params) {
 
       Plugin::registerClass('PluginGenericobject'.ucfirst($params["name"]), 
-                         array('classname'  => 'PluginGenericobject'.ucfirst($params["name"]),
-                               'tablename'  => 'glpi_plugin_genericobject_'.$params["name"].'s',
-                               'helpdesk_types'         => true,
-                               'linkgroup_types' => true,
-                               'linkuser_types' => true
-                               ));      
+                         array('helpdesk_types' => true, 'linkgroup_types' => true,
+                               'linkuser_types' => true));      
       }
       
-      plugin_genericobject_registerNewTypes();
+      PluginGenericobjectType::registerNewTypes();
    }
 }
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    global $LANG;
-   return array ('name' => $LANG["genericobject"]["title"][1], 'version' => '1.2.0',
-                 'author' => 'Alexandre Delaunay & Walid Nouh',
-                 'homepage' => 'https://forge.indepnet.net/projects/show/genericobject',
-                 'minGlpiVersion' => '0.78.0');
+   return array ('name'           => $LANG["genericobject"]["title"][1], 'version' => '0.80.0',
+                 'author'         => 'Alexandre Delaunay & Walid Nouh',
+                 'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
+                 'minGlpiVersion' => '0.80');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-   if (GLPI_VERSION >= '0.78') {
-      return true;
-   } else {
-      echo "GLPI >= 0.78 is needed";
+   if (version_compare(GLPI_VERSION,'0.80','lt') || version_compare(GLPI_VERSION,'0.81','ge')) {
+      echo "This plugin requires GLPI 0.80";
    }
+   return true;
 }
 
 // Check configuration process for plugin : need to return true if succeeded
@@ -176,10 +161,10 @@ function plugin_genericobject_check_config($verbose = false) {
 
 function plugin_genericobject_haveTypeRight($type, $right) {
    switch ($type) {
-      case PLUGIN_GENERICOBJECT_TYPE :
+      case 'PluginGenericobjectType' :
          return haveRight("config", $right);
       default :
-         return plugin_genericobject_haveRight(plugin_genericobject_getNameByID($type), $right);
+         return PluginGenericobjectProfile::haveRight(PluginGenericobjectObject::getNameByID($type), $right);
    }
 
 }
@@ -187,7 +172,7 @@ function plugin_genericobject_haveTypeRight($type, $right) {
 function plugin_genericobject_checkRight($module, $right) {
    global $CFG_GLPI;
 
-   if (!plugin_genericobject_haveRight($module, $right)) {
+   if (!PluginGenericobjectProfile::haveRight($module, $right)) {
       // Gestion timeout session
       if (!isset ($_SESSION["glpiID"])) {
          glpi_header($CFG_GLPI["root_doc"] . "/index.php");
@@ -198,4 +183,3 @@ function plugin_genericobject_checkRight($module, $right) {
    }
    return true;
 }
-?>

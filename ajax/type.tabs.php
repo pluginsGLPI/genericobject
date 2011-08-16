@@ -42,8 +42,8 @@ $type = new PluginGenericobjectType;
 if ($_POST["id"] != '') {
    $type->getFromDB($_POST["id"]);
    
-   plugin_genericobject_registerOneType($type->fields);
-   plugin_genericobject_includeLocales($type->fields["name"]);
+   PluginGenericobjectType::registerOneType($type->fields);
+   PluginGenericobjectType::includeLocales($type->fields["name"]);
 }
 
 foreach (array ('sort', 'order') as $field) {

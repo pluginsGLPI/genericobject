@@ -44,13 +44,13 @@ class PluginGenericobjectObject extends CommonDBTM {
    function canCreate() {
       //return true;
       $type = strtolower(str_replace("PluginGenericobject", "", $this->type));
-      return plugin_genericobject_haveRight($type, 'w');
+      return PluginGenericobjectProfile::haveRight($type, 'w');
    }
 
    function canView() {
       //return true;
       $type = strtolower(str_replace("PluginGenericobject", "", $this->type));
-      return plugin_genericobject_haveRight($type, 'r');
+      return PluginGenericobjectProfile::haveRight($type, 'r');
    }
    
    function __construct($itemtype = 0) {
@@ -64,9 +64,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function setType($itemtype) {
       $this->type = $itemtype;
-      $this->type = plugin_genericobject_getObjectTypeByName($itemtype);
-      $this->table = plugin_genericobject_getTableNameByID($itemtype);
-      $this->type_infos = plugin_genericobject_getObjectTypeConfiguration($itemtype);
+      $this->type = PluginGenericobjectType::getTypeByName($itemtype);
+      $this->table = PluginGenericobjectType::getTableNameByID($itemtype);
+      $this->type_infos = PluginGenericobjectType::getObjectTypeConfiguration($itemtype);
       $this->entity_assign = $this->type_infos['use_entity'];
       $this->may_be_recursive = $this->type_infos['use_recursivity'];
       $this->dohistory = $this->type_infos['use_history'];
@@ -167,8 +167,8 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function title($name) {
-      displayTitle('', plugin_genericobject_getObjectLabel($name), 
-                   plugin_genericobject_getObjectLabel($name));
+      displayTitle('', PluginGenericobjectObject::getLabel($name), 
+                   PluginGenericobjectObject::getLabel($name));
    }
 
    function showForm($ID, $options=array(), $previsualisation = false) {
@@ -291,7 +291,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
             case 'text' :
                if ($canedit) {
-                  $table = plugin_genericobject_getObjectTableNameByName($name);
+                  $table = PluginGenericobjectType::getTableByName($name);
                   autocompletionTextField($this, $name);
                } else {
                   echo $value;
@@ -319,7 +319,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             case 'dropdown' :
                if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($name)) {
                   $type = strtolower(str_replace("PluginGenericobject", "", $this->type));
-                  $device_name = plugin_genericobject_getNameByID($type);
+                  $device_name = PluginGenericobjectObject::getNameByID($type);
                   $table = PluginGenericobjectType::plugin_genericobject_getDropdownTableName($device_name, $name);
                } else
                   $table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
@@ -541,7 +541,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       
       if (plugin_genericobject_haveTypeRight($type,'r'))
       {
-         $name = plugin_genericobject_getNameByID($type);
+         $name = PluginGenericobjectObject::getNameByID($type);
          echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
       
          //$object = new $type();
@@ -559,7 +559,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    public static function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
       global $DB,$CFG_GLPI, $LANG,$INFOFORM_PAGES,$LINK_ID_TABLE,$GENERICOBJECT_LINK_TYPES;
       
-      $name = plugin_genericobject_getNameByID($itemtype);
+      $name = PluginGenericobjectObject::getNameByID($itemtype);
       
       if (!haveRight($name,"r")) return false;
       //if (!haveTypeRight($name,"r")) return false;
@@ -575,7 +575,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $canedit=$obj->can($item_id,'w'); 
 
          $query = "SELECT DISTINCT itemtype 
-               FROM `".PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name)."` 
+               FROM `".PluginGenericobjectType::getLinkDeviceTableName($name)."` 
                WHERE source_id = '$item_id' 
                ORDER BY itemtype";
          
@@ -615,13 +615,13 @@ class PluginGenericobjectObject extends CommonDBTM {
                if ($type==KNOWBASE_TYPE) $column="question";
 
                $query = "SELECT ".$LINK_ID_TABLE[$type].".*, ".
-                           PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name).".id AS IDD "
-                       ." FROM `".PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name)."`, `".
+                           PluginGenericobjectType::getLinkDeviceTableName($name).".id AS IDD "
+                       ." FROM `".PluginGenericobjectType::getLinkDeviceTableName($name)."`, `".
                            $LINK_ID_TABLE[$type]."`, `".$obj->table."`"
                        ." WHERE ".$LINK_ID_TABLE[$type].".id = ".
-                     PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name).".items_id 
-                  AND ".PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name).".itemtype='$type' 
-                  AND ".PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name).".source_id = '$item_id' ";
+                     PluginGenericobjectType::getLinkDeviceTableName($name).".items_id 
+                  AND ".PluginGenericobjectType::getLinkDeviceTableName($name).".itemtype='$type' 
+                  AND ".PluginGenericobjectType::getLinkDeviceTableName($name).".source_id = '$item_id' ";
                   $query.=getEntitiesRestrictRequest(" AND ",$LINK_ID_TABLE[$type],'','',
                            isset($CFG_GLPI["recursive_type"][$type])); 
 
@@ -633,7 +633,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                if ($result_linked=$DB->query($query))
                   if ($DB->numrows($result_linked)){
                      $ci->setType($type);
-                     initNavigateListItems($type,plugin_genericobject_getObjectLabel($name)." = ".
+                     initNavigateListItems($type,PluginGenericobjectObject::getLabel($name)." = ".
                         $obj->fields['name']);
                      while ($data=$DB->fetch_assoc($result_linked)){
                         addToNavigateListItems($type,$data["id"]);
@@ -791,10 +791,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    public static function plugin_genericobject_showTemplateByDeviceType($target,$itemtype,$entity,$add=0)
    {
       global $LANG,$DB,$GENERICOBJECT_LINK_TYPES;
-      $name = plugin_genericobject_getNameByID($itemtype);
+      $name = PluginGenericobjectObject::getNameByID($itemtype);
       $commonitem = new PluginGenericobjectObject($itemtype);
       //$commonitem->setType($itemtype,true);
-      $title = plugin_genericobject_getObjectLabel($name);
+      $title = PluginGenericobjectObject::getLabel($name);
       $query = "SELECT * FROM `".$commonitem->getTable()."` " .
                "WHERE `is_template` = '1' AND `entities_id`='" . 
                   $_SESSION["glpiactive_entity"] . "' ORDER BY `template_name`";
@@ -857,5 +857,42 @@ class PluginGenericobjectObject extends CommonDBTM {
       
    }
 
+   /**
+    * Get an internal ID by the object name
+    * @param name the object's name
+    * @return the object's ID
+    */
+   function getIDByName($name) {
+      global $DB;
+      $query = "SELECT `itemtype` FROM `glpi_plugin_genericobject_types` WHERE `name`='$name'";
+      $result = $DB->query($query);
+      if ($DB->numrows($result))
+         return $DB->result($result, 0, "itemtype");
+      else
+         return 0;
+   }
+   
+   /**
+    * Get object name by ID
+    * @param ID the internal ID
+    * @return the name associated with the ID
+    */
+   function getNameByID($itemtype) {
+      global $DB;
+      $query = "SELECT `name` FROM `glpi_plugin_genericobject_types` WHERE `itemtype`='$itemtype'";
+      $result = $DB->query($query);
+      if ($DB->numrows($result))
+         return $DB->result($result, 0, "name");
+      else
+         return "";
+   }
+   
+   function getLabel($name) {
+      global $LANG;
+      if (isset ($LANG['genericobject'][$name][1])) {
+         return $LANG['genericobject'][$name][1];
+      } else {
+         return $name;
+      }
+   }
 }
-?>

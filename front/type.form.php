@@ -38,7 +38,7 @@ if (!isset ($_REQUEST["id"])) {
    $_REQUEST["id"] = '';
 }
 
-$type = new PluginGenericobjectType;
+$type = new PluginGenericobjectType();
 
 $extraparams = array ();
 if (isset ($_GET["select"]) && $_GET["select"] == "all") {
@@ -47,8 +47,8 @@ if (isset ($_GET["select"]) && $_GET["select"] == "all") {
 
 if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
-   plugin_genericobject_registerOneType($type->fields);
-   plugin_genericobject_includeLocales($type->fields["name"]);
+   PluginGenericobjectType::registerOneType($type->fields);
+   PluginGenericobjectType::includeLocales($type->fields["name"]);
    PluginGenericobjectObject::plugin_genericobject_changeFieldOrder($_GET["field"], $type->fields["itemtype"], $_GET["action"]);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
@@ -67,8 +67,8 @@ if (isset ($_POST["add"])) {
    exit();
 } elseif (isset ($_POST["delete_field"])) {
    $type->getFromDB($_POST["id"]);
-   plugin_genericobject_registerOneType($type->fields);
-   plugin_genericobject_includeLocales($type->fields["name"]);
+   PluginGenericobjectType::registerOneType($type->fields);
+   PluginGenericobjectType::includeLocales($type->fields["name"]);
 
    $type_field = new PluginGenericobjectField;
    foreach ($_POST["fields"] as $field => $value) {
@@ -77,7 +77,7 @@ if (isset ($_POST["add"])) {
                && PluginGenericobjectField::plugin_genericobject_checkNecessaryFieldsDelete($type->fields["itemtype"],
                                                                   $field)) {
             $type_field->deleteByFieldByDeviceTypeAndName($type->fields["itemtype"], $field);
-            $table = plugin_genericobject_getTableNameByID($type->fields["itemtype"]);
+            $table = PluginGenericobjectType::getTableNameByID($type->fields["itemtype"]);
             PluginGenericobjectType::plugin_genericobject_deleteFieldFromDB($table, $field, $type->fields["name"]);
             addMessageAfterRedirect($LANG['genericobject']['fields'][5], true);
          }
@@ -89,13 +89,13 @@ if (isset ($_POST["add"])) {
 } elseif (isset ($_POST["add_field"])) {
    if ($_POST["new_field"]) {
       $type->getFromDB($_POST["id"]);
-      plugin_genericobject_registerOneType($type->fields);
-      plugin_genericobject_includeLocales($type->fields["name"]);
+      PluginGenericobjectType::registerOneType($type->fields);
+      PluginGenericobjectType::includeLocales($type->fields["name"]);
 
-      PluginGenericobjectField::plugin_genericobject_addNewField($type->fields["itemtype"], $_POST["new_field"]);
+      PluginGenericobjectField::addNewField($type->fields["itemtype"], $_POST["new_field"]);
       
-      $table = plugin_genericobject_getTableNameByID($type->fields["itemtype"]);
-      PluginGenericobjectField::plugin_genericobject_addFieldInDB($table, $_POST["new_field"], $type->fields["name"]);
+      $table = PluginGenericobjectType::getTableNameByID($type->fields["itemtype"]);
+      PluginGenericobjectField::addFieldInDB($table, $_POST["new_field"], $type->fields["name"]);
       
       addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
    }

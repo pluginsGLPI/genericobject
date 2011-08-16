@@ -30,10 +30,7 @@
     Purpose of file:
     ----------------------------------------------------------------------*/
 class PluginGenericobjectProfile extends CommonDBTM {
-   function __construct() {
-      $this->table = "glpi_plugin_genericobject_profiles";
-      $this->type = -1;
-   }
+
    /* if profile deleted */
    function cleanProfiles($ID) {
       global $DB;
@@ -58,18 +55,20 @@ class PluginGenericobjectProfile extends CommonDBTM {
       echo "<form action='" . $target . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
-      echo "<tr><th colspan='2' align='center'><strong>" . $LANG["genericobject"]['profile'][0] . " " . $this->fields["name"] . "</strong></th></tr>";
+      echo "<tr><th colspan='2' align='center'><strong>"; 
+      echo $LANG["genericobject"]['profile'][0] . " " . $this->fields["name"] . "</strong></th></tr>";
 
-      $types = plugin_genericobject_getAllTypes(true);
+      $types = PluginGenericobjectType::getTypes(true);
       
       if (!empty ($types)) {
          foreach ($types as $tmp => $profile) {
-            $name = plugin_genericobject_getNameByID($profile['itemtype']);
+            $name = PluginGenericobjectObject::getNameByID($profile['itemtype']);
 
-            plugin_genericobject_includeLocales($name);
-            echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".plugin_genericobject_getObjectLabel($profile['name'])."</th></tr>";
+            PluginGenericobjectType::includeLocales($name);
+            echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".
+               PluginGenericobjectObject::getLabel($profile['name'])."</th></tr>";
             echo "<tr class='tab_bg_2'>";
-            echo "<td>" . plugin_genericobject_getObjectLabel($profile['name']) . ":</td><td>";
+            echo "<td>" . PluginGenericobjectObject::getLabel($profile['name']) . ":</td><td>";
             Profile::dropdownNoneReadWrite($name, $this->fields[$profile['name']], 1, 1, 1);
             echo "</td>";
             echo "</tr>";
@@ -77,7 +76,6 @@ class PluginGenericobjectProfile extends CommonDBTM {
             {
                echo "<tr class='tab_bg_2'>";
                echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
-               //dropdownYesNo($name."_open_ticket", $this->fields[$name.'_open_ticket']);
                Dropdown::showYesNo($name."_open_ticket", $this->fields[$name.'_open_ticket']);
                echo "</td>";
                echo "</tr>";
@@ -104,7 +102,9 @@ class PluginGenericobjectProfile extends CommonDBTM {
       $profile->getFromDB($ID);
 
       $prof_datas = array ();
-      $query = "SELECT `device_name`, `right`, `open_ticket` FROM `" . $this->table . "` WHERE name='" . $profile->fields["name"] . "'";
+      $query = "SELECT `device_name`, `right`, `open_ticket` " .
+               "FROM `" . $this->table . "` " .
+               "WHERE name='" . $profile->fields["name"] . "'";
       $result = $DB->query($query);
       while ($prof = $DB->fetch_array($result))
       {
@@ -124,7 +124,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       global $DB;
       $this->getProfilesFromDB($params["ID"]);
       
-      $types = plugin_genericobject_getAllTypes();
+      $types = PluginGenericobjectType::getTypes();
       if (!empty ($types)) {
          foreach ($types as $tmp => $profile) {
             $query = "UPDATE `".$this->table."` " .
@@ -147,7 +147,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
     */
    public static function plugin_genericobject_createFirstAccess() {
       if (!self::plugin_genericobject_profileExists($_SESSION["glpiactiveprofile"]["id"]))
-         self::plugin_genericobject_createAccess($_SESSION["glpiactiveprofile"]["id"],true);
+         self::createAccess($_SESSION["glpiactiveprofile"]["id"],true);
    }
    
    
@@ -160,7 +160,8 @@ class PluginGenericobjectProfile extends CommonDBTM {
       global $DB;
       $profile = new Profile;
       $profile->getFromDB($profileID);
-      $query = "SELECT COUNT(*) as cpt FROM `glpi_plugin_genericobject_profiles` WHERE name='".$profile->fields["name"]."'";
+      $query = "SELECT COUNT(*) as cpt FROM `".getTableForItemType(__CLASS__)."` " .
+               "WHERE name='".$profile->fields["name"]."'";
       $result = $DB->query($query);
       if ($DB->result($result,0,"cpt") > 0)
          return true;
@@ -173,17 +174,18 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @param profileID the profile ID
     * @return nothing
     */
-   public static function plugin_genericobject_createAccess($profileID,$first=false) {
-      $types = plugin_genericobject_getAllTypes(true);
+   public static function createAccess($profileID,$first=false) {
+      $types          = PluginGenericobjectType::getTypes(true);
       $plugin_profile = new PluginGenericobjectProfile;
-      $profile = new Profile;
+      $profile        = new Profile;
+      
       $profile->getFromDB($profileID);
       foreach ($types as $tmp => $value) {
          if (!self::plugin_genericobject_profileForTypeExists($profileID,$value["name"])) {
             $input["device_name"] = $value["name"];
-            $input["right"] = ($first?'w':'');
+            $input["right"]       = ($first?'w':'');
             $input["open_ticket"] = ($first?1:0);
-            $input["name"] = $profile->fields["name"];
+            $input["name"]        = $profile->fields["name"];
             $plugin_profile->add($input);
          }
       }
@@ -200,8 +202,9 @@ class PluginGenericobjectProfile extends CommonDBTM {
       global $DB;
       $profile = new Profile;
       $profile->getFromDB($profileID);
-      $query = "SELECT COUNT(*) as cpt FROM `glpi_plugin_genericobject_profiles` WHERE name='".$profile->fields["name"]."' " .
-            "AND device_name='$device_name'";
+      $query = "SELECT COUNT(*) as cpt FROM `".getTableForItemType(__CLASS__)."` " .
+               "WHERE name='".$profile->fields["name"]."' " .
+               "AND device_name='$device_name'";
       $result = $DB->query($query);
       if ($DB->result($result,0,"cpt") > 0)
          return true;
@@ -214,10 +217,10 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @param name the name of the type
     * @return nothing
     */
-   public static function plugin_genericobject_deleteTypeFromProfile($name)
+   public static function deleteTypeFromProfile($name)
    {
       global $DB;
-      $query = "DELETE FROM `glpi_plugin_genericobject_profiles` WHERE device_name='$name'";
+      $query = "DELETE FROM `".getTableForItemType(__CLASS__)."` WHERE device_name='$name'";
       $DB->query($query);
    }
    
@@ -230,5 +233,38 @@ class PluginGenericobjectProfile extends CommonDBTM {
 
    }
    
+   function haveRight($module, $right) {
+      $matches = array ("" => array ("", "r", "w"), "r" => array ("r", "w"), "w" => array ("w"),
+                        "1" => array ("1"), "0" => array ("0", "1"));
+   
+      if (isset ($_SESSION["glpi_plugin_genericobject_profile"][$module]) 
+            && in_array($_SESSION["glpi_plugin_genericobject_profile"][$module], $matches[$right])) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   static function install(Migration $migration) {
+      global $DB;
+      if (!TableExists(getTableForItemType(__CLASS__))) {
+         $query = "CREATE TABLE `".getTableForItemType(__CLASS__)."` (
+                           `id` int(11) NOT NULL auto_increment,
+                           `name` varchar(255) collate utf8_unicode_ci default NULL,
+                           `device_name` VARCHAR( 255 ) default NULL,
+                           `right` char(1) default NULL,
+                           `open_ticket` char(1) NOT NULL DEFAULT 0,
+                           PRIMARY KEY  (`id`),
+                           KEY `name` (`name`)
+                           ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+         $DB->query($query) or die($DB->error());
+      }
+      self::plugin_genericobject_createFirstAccess();
+   }
+   
+   static function uninstall() {
+      global $DB;
+      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
+      $DB->query($query) or die($DB->error());
+   } 
 }
-?>

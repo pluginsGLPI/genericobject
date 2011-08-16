@@ -37,9 +37,9 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (isset($_REQUEST['itemtype']))
    $_SESSION["glpi_plugin_genericobject_itemtype"] = $_REQUEST['itemtype'];
 
-$name=plugin_genericobject_getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]);
+$name=PluginGenericobjectObject::getNameByID($_SESSION["glpi_plugin_genericobject_itemtype"]);
 
-commonHeader(plugin_genericobject_getObjectLabel($name),$_SERVER['PHP_SELF'],
+commonHeader(PluginGenericobjectObject::getLabel($name),$_SERVER['PHP_SELF'],
              "plugins","genericobject",$name);
 
 //plugin_genericobject_checkRight($name,'r');

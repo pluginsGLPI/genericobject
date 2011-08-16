@@ -55,7 +55,7 @@ else {
    
 }
 
-$name = plugin_genericobject_getNameByID($type);
+$name = PluginGenericobjectObject::getNameByID($type);
 $object = new PluginGenericobjectObject($type);
 /*$object = new CommonItem;
 $object->setType($type, true);*/
@@ -114,7 +114,7 @@ elseif (isset ($_POST["delete"])) {
 }
 //End manage standard events
 elseif (isset ($_POST["add_type_link"])) {
-   PluginGenericobjectLink::plugin_genericobject_addDeviceLink($type, $_POST["source_id"], $_POST["type"], 
+   PluginGenericobjectLink::addDeviceLink($type, $_POST["source_id"], $_POST["type"], 
                                       $_POST["items_id"]);
    glpi_header($_SERVER["HTTP_REFERER"]);
 }
@@ -126,7 +126,7 @@ elseif (isset ($_POST["delete_type_link"])) {
    glpi_header($_SERVER["HTTP_REFERER"]);
 }
 
-commonHeader(plugin_genericobject_getObjectLabel($name), $_SERVER['PHP_SELF'], "plugins", 
+commonHeader(PluginGenericobjectObject::getLabel($name), $_SERVER['PHP_SELF'], "plugins", 
              "genericobject", $name);
 $object->title($name);
 $object->showForm($_REQUEST["id"]);

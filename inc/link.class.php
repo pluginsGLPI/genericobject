@@ -32,16 +32,9 @@
 // ----------------------------------------------------------------------
 class PluginGenericobjectLink extends CommonDBTM{
    
-    function __construct() {
-      $this->table="glpi_plugin_genericobject_type_links";
-      $this->type=-1;
-    }
-   
-   
-   public static function plugin_genericobject_showDeviceTypeLinks($target,$ID)
-   {
-      global $LANG,$CFG_GLPI, $GENERICOBJECT_LINK_TYPES;
-      $object_type = new PluginGenericobjectType;
+   public static function plugin_genericobject_showDeviceTypeLinks($target,$ID) {
+      global $LANG, $CFG_GLPI, $GENERICOBJECT_LINK_TYPES;
+      $object_type = new PluginGenericobjectType();
       $object_type->getFromDB($ID);
          
       $links = self::plugin_genericobject_getLinksByType($object_type->fields["itemtype"]);
@@ -73,11 +66,21 @@ class PluginGenericobjectLink extends CommonDBTM{
       echo "</table></div></form>";
    }
 
-   public static function plugin_genericobject_getLinksByType($itemtype)
-   {
+   public static function plugin_genericobject_getLinksByType($itemtype) {
       global $DB;
-      $query = "SELECT destination_type FROM `glpi_plugin_genericobject_type_links` " .
-               "WHERE itemtype='$itemtype'";
+      $query  = "SELECT destination_type FROM `".getTableForItemType(__CLASS__)."` " .
+                "WHERE itemtype='$itemtype'";
+      $result = $DB->query($query);
+      $types  = array();
+      while ($datas = $DB->fetch_array($result))
+         $types[] = $datas["destination_type"];
+      return $types; 
+   }
+
+   public static function plugin_genericobject_getLinksByTypeAndID($name, $device_id) {
+      global $DB;
+      $query  = "SELECT * FROM `".PluginGenericobjectType::getLinkDeviceTableName($name)."` " .
+                 "WHERE `source_id`='$device_id'";
       $result = $DB->query($query);
       $types = array();
       while ($datas = $DB->fetch_array($result))
@@ -85,22 +88,9 @@ class PluginGenericobjectLink extends CommonDBTM{
       return $types; 
    }
 
-   public static function plugin_genericobject_getLinksByTypeAndID($name,$device_id)
-   {
+   public static function plugin_genericobject_linkedDeviceTypeExists($itemtype, $destination_type) {
       global $DB;
-      $query = "SELECT * FROM `".PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name)."` " .
-            "WHERE source_id=$device_id";
-      $result = $DB->query($query);
-      $types = array();
-      while ($datas = $DB->fetch_array($result))
-         $types[] = $datas["destination_type"];
-      return $types; 
-   }
-
-   public static function plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type)
-   {
-      global $DB;
-      $query = "SELECT COUNT(*) FROM `glpi_plugin_genericobject_type_links` " .
+      $query = "SELECT COUNT(*) FROM `".getTableForItemType(__CLASS__)."` " .
                "WHERE itemtype='$itemtype' AND destination_type='$destination_type'";
       $result = $DB->query($query);
       if ($DB->result($result,0,0))
@@ -109,10 +99,9 @@ class PluginGenericobjectLink extends CommonDBTM{
          return false;  
    }
 
-   public static function plugin_genericobject_addNewLinkedDeviceType($itemtype,$destination_type)
-   {
-      if (!self::plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type))
-      {
+   public static function plugin_genericobject_addNewLinkedDeviceType($itemtype, 
+                                                                      $destination_type) {
+      if (!self::plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type)) {
          $link_type = new PluginGenericobjectLink;
          $input["itemtype"] = $itemtype;
          echo $input["destination_type"] = $destination_type;
@@ -120,17 +109,16 @@ class PluginGenericobjectLink extends CommonDBTM{
       }
    }
 
-   public static function plugin_genericobject_deleteAllLinkedDeviceByType($itemtype)
-   {
+   public static function plugin_genericobject_deleteAllLinkedDeviceByType($itemtype) {
       global $DB;
-      $DB->query("DELETE FROM `glpi_plugin_genericobject_type_links` WHERE itemtype='$itemtype'");
+      $DB->query("DELETE FROM `".getTableForItemType(__CLASS__)."` WHERE itemtype='$itemtype'");
    }
 
-   public static function plugin_genericobject_addDeviceLink($source_type,$source_id,$itemtype,$items_id)
-   {
+   public static function addDeviceLink($source_type, $source_id, $itemtype, 
+                                                             $items_id) {
       global $DB;
-      $name = plugin_genericobject_getNameByID($source_type);
-      $table = PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name);
+      $name = PluginGenericobjectObject::getNameByID($source_type);
+      $table = PluginGenericobjectType::getLinkDeviceTableName($name);
       $query = "INSERT INTO `$table` (`id`, `source_id`, `itemtype`, `items_id`) " .
                "VALUES (NULL, $source_id, $itemtype,$items_id)";
       $DB->query($query);
@@ -139,9 +127,29 @@ class PluginGenericobjectLink extends CommonDBTM{
    public static function plugin_genericobject_deleteDeviceLink($source_type,$link_id)
    {
       global $DB;
-      $name = plugin_genericobject_getNameByID($source_type);
-      $table = PluginGenericobjectType::plugin_genericobject_getLinkDeviceTableName($name);
+      $name = PluginGenericobjectObject::getNameByID($source_type);
+      $table = PluginGenericobjectType::getLinkDeviceTableName($name);
       $DB->query("DELETE FROM `$table` WHERE id=$link_id");
+   }
+   
+   static function install(Migration $migration) {
+      global $DB;
+
+      if (!TableExists(getTableForItemType(__CLASS__))) {
+         $query = "CREATE TABLE `".getTableForItemType(__CLASS__)."` (
+                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+                           `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
+                           `destination_type` INT( 11 ) NOT NULL DEFAULT '0',
+                           PRIMARY KEY ( `id` )
+                           ) ENGINE = MYISAM COMMENT = 'Device type links definitions' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+         $DB->query($query);
+      }
+   }
+   
+   static function uninstall() {
+      global $DB;
+      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
+      $DB->query($query) or die ($DB->error());
    }
 }
 ?>
