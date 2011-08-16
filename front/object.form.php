@@ -122,7 +122,7 @@ elseif (isset ($_POST["delete_type_link"])) {
    if (isset ($_POST["item"]))
       foreach ($_POST["item"] as $item => $value)
          if ($value == 1)
-            PluginGenericobjectLink::plugin_genericobject_deleteDeviceLink($type, $item);
+            PluginGenericobjectLink::deleteDeviceLink($type, $item);
    glpi_header($_SERVER["HTTP_REFERER"]);
 }
 

@@ -121,7 +121,7 @@ function plugin_genericobject_getDropdown() {
    if ($plugin->isActivated("genericobject"))
    {
       foreach (PluginGenericobjectType::getTypes() as $tmp => $values)
-         PluginGenericobjectType::plugin_genericobject_getDropdownSpecific($dropdowns,$values);
+         PluginGenericobjectType::getDropdownSpecific($dropdowns,$values);
    }
 
    return $dropdowns;
@@ -156,7 +156,7 @@ function plugin_genericobject_datainjection_variables()
    $types = PluginGenericobjectType::getTypes();
    foreach ($types as $tmp => $value) {
       $name = PluginGenericobjectType::getNameByID($value["itemtype"]);
-      $fields = PluginGenericobjectField::plugin_genericobject_getFieldsByType($value["itemtype"]);
+      $fields = PluginGenericobjectField::getFieldsByType($value["itemtype"]);
       foreach ($fields as $field => $object) {
          switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
                case 'date':
@@ -167,7 +167,7 @@ function plugin_genericobject_datainjection_variables()
                      PluginGenericobjectType::getTableByName($name);
                   break;
                case 'dropdown' :
-                  if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field)) {
+                  if (PluginGenericobjectType::isDropdownTypeSpecific($field)) {
                      $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
                         PluginGenericobjectType::getDropdownTableName($name,$field);
                      $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
@@ -289,7 +289,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
                      $search_options[$i]['table'] = PluginGenericobjectType::getTableByName($name);
                      break;
                   case 'dropdown' :
-                     if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field_name))
+                     if (PluginGenericobjectType::isDropdownTypeSpecific($field_name))
                         $search_options[$i]['table'] = PluginGenericobjectType::getDropdownTableName($name, $field_name);
                      else
                         $search_options[$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
@@ -374,7 +374,7 @@ function plugin_genericobject_uninstall() {
       //Delete if exists datainjection models
       PluginGenericobjectType::removeDataInjectionModels($value["itemtype"]);
 
-      PluginGenericobjectType::plugin_genericobject_deleteNetworking($value["itemtype"]);
+      PluginGenericobjectType::deleteNetworking($value["itemtype"]);
 
       //Delete search display preferences
       $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='" . $value["itemtype"] . "';";

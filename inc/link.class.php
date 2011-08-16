@@ -32,12 +32,12 @@
 // ----------------------------------------------------------------------
 class PluginGenericobjectLink extends CommonDBTM{
    
-   public static function plugin_genericobject_showDeviceTypeLinks($target,$ID) {
+   public static function showDeviceTypeLinks($target,$ID) {
       global $LANG, $CFG_GLPI, $GENERICOBJECT_LINK_TYPES;
       $object_type = new PluginGenericobjectType();
       $object_type->getFromDB($ID);
          
-      $links = self::plugin_genericobject_getLinksByType($object_type->fields["itemtype"]);
+      $links = self::getLinksByType($object_type->fields["itemtype"]);
       
       echo "<form name='form_links' method='post' action=\"$target\">";
       echo "<div class='center'>";
@@ -66,7 +66,7 @@ class PluginGenericobjectLink extends CommonDBTM{
       echo "</table></div></form>";
    }
 
-   public static function plugin_genericobject_getLinksByType($itemtype) {
+   public static function getLinksByType($itemtype) {
       global $DB;
       $query  = "SELECT destination_type FROM `".getTableForItemType(__CLASS__)."` " .
                 "WHERE itemtype='$itemtype'";
@@ -77,7 +77,7 @@ class PluginGenericobjectLink extends CommonDBTM{
       return $types; 
    }
 
-   public static function plugin_genericobject_getLinksByTypeAndID($name, $device_id) {
+   public static function getLinksByTypeAndID($name, $device_id) {
       global $DB;
       $query  = "SELECT * FROM `".PluginGenericobjectType::getLinkDeviceTableName($name)."` " .
                  "WHERE `source_id`='$device_id'";
@@ -88,7 +88,7 @@ class PluginGenericobjectLink extends CommonDBTM{
       return $types; 
    }
 
-   public static function plugin_genericobject_linkedDeviceTypeExists($itemtype, $destination_type) {
+   public static function linkedDeviceTypeExists($itemtype, $destination_type) {
       global $DB;
       $query = "SELECT COUNT(*) FROM `".getTableForItemType(__CLASS__)."` " .
                "WHERE itemtype='$itemtype' AND destination_type='$destination_type'";
@@ -99,9 +99,8 @@ class PluginGenericobjectLink extends CommonDBTM{
          return false;  
    }
 
-   public static function plugin_genericobject_addNewLinkedDeviceType($itemtype, 
-                                                                      $destination_type) {
-      if (!self::plugin_genericobject_linkedDeviceTypeExists($itemtype,$destination_type)) {
+   public static function addNewLinkedDeviceType($itemtype, $destination_type) {
+      if (!self::linkedDeviceTypeExists($itemtype,$destination_type)) {
          $link_type = new PluginGenericobjectLink;
          $input["itemtype"] = $itemtype;
          echo $input["destination_type"] = $destination_type;
@@ -109,13 +108,12 @@ class PluginGenericobjectLink extends CommonDBTM{
       }
    }
 
-   public static function plugin_genericobject_deleteAllLinkedDeviceByType($itemtype) {
+   public static function deleteAllLinkedDeviceByType($itemtype) {
       global $DB;
       $DB->query("DELETE FROM `".getTableForItemType(__CLASS__)."` WHERE itemtype='$itemtype'");
    }
 
-   public static function addDeviceLink($source_type, $source_id, $itemtype, 
-                                                             $items_id) {
+   public static function addDeviceLink($source_type, $source_id, $itemtype,  $items_id) {
       global $DB;
       $name = PluginGenericobjectType::getNameByID($source_type);
       $table = PluginGenericobjectType::getLinkDeviceTableName($name);
@@ -124,8 +122,7 @@ class PluginGenericobjectLink extends CommonDBTM{
       $DB->query($query);
    }
 
-   public static function plugin_genericobject_deleteDeviceLink($source_type,$link_id)
-   {
+   public static function deleteDeviceLink($source_type,$link_id) {
       global $DB;
       $name = PluginGenericobjectType::getNameByID($source_type);
       $table = PluginGenericobjectType::getLinkDeviceTableName($name);

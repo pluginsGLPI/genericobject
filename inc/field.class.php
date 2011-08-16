@@ -58,11 +58,11 @@ class PluginGenericobjectField extends CommonDBTM {
     * @itemtype the object type
     */
    public static function addNewField($itemtype, $name) {
-      if (!self::plugin_genericobject_fieldExists($itemtype, $name)) {
+      if (!self::fieldExists($itemtype, $name)) {
          $type_field                  = new PluginGenericobjectField;
             $input["name"]            = $name;
             $input["itemtype"]        = $itemtype;
-            $input["rank"]            = self::plugin_genericobject_getNextRanking($itemtype);
+            $input["rank"]            = self::getNextRanking($itemtype);
             $input["mandatory"]       = 0;
             $input["unique"]          = 0;
             $input["entity_restrict"] = 0;
@@ -72,7 +72,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
    }
    
-   public static function plugin_genericobject_fieldExists($itemtype,$name) {
+   public static function fieldExists($itemtype,$name) {
       global $DB;
       $query = "SELECT `id` FROM `".getTableForItemType(__CLASS__)."` " .
                "WHERE `itemtype`='$itemtype' AND `name`='$name'";
@@ -90,7 +90,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @type the itemtype
     * @return the next available ranking
     */
-   public static function plugin_genericobject_getNextRanking($itemtype) {
+   public static function getNextRanking($itemtype) {
       global $DB;
       $query  = "SELECT MAX(rank) as cpt FROM `".getTableForItemType(__CLASS__)."`" .
                 "WHERE itemtype='$itemtype'";
@@ -121,12 +121,12 @@ class PluginGenericobjectField extends CommonDBTM {
                break;
             case 'dropdown' :
                $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
-               if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($field)) {
-                  PluginGenericobjectType::plugin_genericobject_addDropdownTable($name, $field);
-                  PluginGenericobjectType::plugin_genericobject_addDropdownClassFile($name, $field);
-                  PluginGenericobjectType::plugin_genericobject_addDropdownFrontFile($name, $field);
-                  PluginGenericobjectType::plugin_genericobject_addDropdownFrontformFile($name, $field);
-                  PluginGenericobjectType::plugin_genericobject_addDropdownAjaxFile($name, $field);
+               if (PluginGenericobjectType::isDropdownTypeSpecific($field)) {
+                  PluginGenericobjectType::addDropdownTable($name, $field);
+                  PluginGenericobjectType::addDropdownClassFile($name, $field);
+                  PluginGenericobjectType::addDropdownFrontFile($name, $field);
+                  PluginGenericobjectType::addDropdownFrontformFile($name, $field);
+                  PluginGenericobjectType::addDropdownAjaxFile($name, $field);
                }
                break;
             case 'integer' :
@@ -145,7 +145,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @itemtype the object type
     * @return an array with all the fields for this type
     */
-   public static function plugin_genericobject_getFieldsByType($itemtype) {
+   public static function getFieldsByType($itemtype) {
       global $DB;
       
       $itemtype = strtolower(str_replace("PluginGenericobject", "", $itemtype));
@@ -162,7 +162,7 @@ class PluginGenericobjectField extends CommonDBTM {
       return $fields;
    }
    
-   public static function plugin_genericobject_checkNecessaryFieldsDelete($itemtype,$field) {
+   public static function checkNecessaryFieldsDelete($itemtype,$field) {
       $type = new PluginGenericobjectType;
       $type->getFromDBByType($itemtype);
       
@@ -184,10 +184,6 @@ class PluginGenericobjectField extends CommonDBTM {
       global $DB;
       $query = "DELETE FROM `".getTableForItemType(__CLASS__)."` WHERE itemtype='$itemtype'";
       $DB->query($query);
-   }
-
-   public static function plugin_genericobject_setMandatoryField($itemtype,$field) {
-      
    }
    
    static function install(Migration $migration) {

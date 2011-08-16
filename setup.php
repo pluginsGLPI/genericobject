@@ -84,7 +84,7 @@ function plugin_init_genericobject() {
 
       /* load changeprofile function */
       $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile', 
-                                                               'plugin_change_profile_genericobject');
+                                                               'changeProfile');
 
       // Display a menu entry ?
       $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;

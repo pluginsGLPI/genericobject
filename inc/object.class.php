@@ -95,7 +95,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ong[6] = $LANG['title'][28];
          }
 
-         $linked_types = PluginGenericobjectLink::plugin_genericobject_getLinksByType($this->type);
+         $linked_types = PluginGenericobjectLink::getLinksByType($this->type);
          if (!empty ($linked_types)) {
             $ong[7] = $LANG['setup'][620];
          }
@@ -209,7 +209,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       echo "<table class='tab_cadre_fixe' >";
 
 
-      foreach (PluginGenericobjectField::plugin_genericobject_getFieldsByType($this->type) as $field => $tmp) {
+      foreach (PluginGenericobjectField::getFieldsByType($this->type) as $field => $tmp) {
          $value = $this->fields[$field];
          $this->displayField($canedit, $field, $value);
       }
@@ -312,7 +312,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                
                break;
             case 'dropdown' :
-               if (PluginGenericobjectType::plugin_genericobject_isDropdownTypeSpecific($name)) {
+               if (PluginGenericobjectType::isDropdownTypeSpecific($name)) {
                   $type = strtolower(str_replace("PluginGenericobject", "", $this->type));
                   $device_name = PluginGenericobjectType::getNameByID($type);
                   $table = PluginGenericobjectType::getDropdownTableName($device_name, $name);
@@ -531,7 +531,7 @@ class PluginGenericobjectObject extends CommonDBTM {
     * Display object preview form
     * @param type the object type
     */
-   public static function plugin_genericobject_showPrevisualisationForm($type) {
+   public static function showPrevisualisationForm($type) {
       global $LANG;
       
       if (plugin_genericobject_haveTypeRight($type,'r'))
@@ -551,7 +551,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    
    
-   public static function plugin_genericobject_showDevice($target,$itemtype,$item_id) {
+   public static function showDevice($target,$itemtype,$item_id) {
       global $DB,$CFG_GLPI, $LANG,$INFOFORM_PAGES,$LINK_ID_TABLE,$GENERICOBJECT_LINK_TYPES;
       
       $name = PluginGenericobjectType::getNameByID($itemtype);
@@ -676,7 +676,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       
             echo "<input type='hidden' name='source_id' value='$itemtype'>";
             dropdownAllItems("items_id",0,0,($obj->fields['recursive']?-1:$obj->fields['entities_id']),
-                             PluginGenericobjectLink::plugin_genericobject_getLinksByType($itemtype));     
+                             PluginGenericobjectLink::getLinksByType($itemtype));     
             echo "</td>";
             echo "<td colspan='2' class='center' class='tab_bg_2'>";
             echo "<input type='submit' name='add_type_link' value=\"".$LANG['buttons'][8]."\" class='submit'>";
@@ -714,7 +714,7 @@ class PluginGenericobjectObject extends CommonDBTM {
     * Reorder all fields for a type
     * @param itemtype the object type
     */
-   public static function plugin_genericobject_reorderFields($itemtype)
+   public static function reorderFields($itemtype)
    {
       global $DB;
       $query = "SELECT id FROM `glpi_plugin_genericobject_type_fields` " .
@@ -737,7 +737,7 @@ class PluginGenericobjectObject extends CommonDBTM {
     * @param itemtype object item type
     * @param action up/down
     */
-   public static function plugin_genericobject_changeFieldOrder($field,$itemtype,$action){
+   public static function changeFieldOrder($field,$itemtype,$action){
          global $DB;
 
          $sql ="SELECT id, rank " .
@@ -783,7 +783,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
 
-   public static function plugin_genericobject_showTemplateByDeviceType($target, $itemtype, $entity, 
+   public static function showTemplateByDeviceType($target, $itemtype, $entity, 
                                                                         $add=0) {
       global $LANG,$DB,$GENERICOBJECT_LINK_TYPES;
       $name = PluginGenericobjectType::getNameByID($itemtype);

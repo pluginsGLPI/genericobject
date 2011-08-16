@@ -49,7 +49,7 @@ if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
    PluginGenericobjectType::registerOneType($type->fields);
    PluginGenericobjectType::includeLocales($type->fields["name"]);
-   PluginGenericobjectObject::plugin_genericobject_changeFieldOrder($_GET["field"], $type->fields["itemtype"], $_GET["action"]);
+   PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"], $_GET["action"]);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 if (isset ($_POST["add"])) {
@@ -74,16 +74,16 @@ if (isset ($_POST["add"])) {
    foreach ($_POST["fields"] as $field => $value) {
            
          if ($value == 1 
-               && PluginGenericobjectField::plugin_genericobject_checkNecessaryFieldsDelete($type->fields["itemtype"],
+               && PluginGenericobjectField::checkNecessaryFieldsDelete($type->fields["itemtype"],
                                                                   $field)) {
             $type_field->deleteByFieldByDeviceTypeAndName($type->fields["itemtype"], $field);
             $table = PluginGenericobjectType::getTableNameByID($type->fields["itemtype"]);
-            PluginGenericobjectType::plugin_genericobject_deleteFieldFromDB($table, $field, $type->fields["name"]);
+            PluginGenericobjectType::deleteFieldFromDB($table, $field, $type->fields["name"]);
             addMessageAfterRedirect($LANG['genericobject']['fields'][5], true);
          }
    }
 
-   PluginGenericobjectObject::plugin_genericobject_reorderFields($type->fields["itemtype"]);
+   PluginGenericobjectObject::reorderFields($type->fields["itemtype"]);
    glpi_header($_SERVER['HTTP_REFERER']);
    exit();
 } elseif (isset ($_POST["add_field"])) {
@@ -103,9 +103,9 @@ if (isset ($_POST["add"])) {
    exit();
 } elseif (isset ($_POST["update_links_types"])) {
    $type->getFromDB($_POST["id"]);
-   PluginGenericobjectLink::plugin_genericobject_deleteAllLinkedDeviceByType($type->fields["itemtype"]);
+   PluginGenericobjectLink::deleteAllLinkedDeviceByType($type->fields["itemtype"]);
    foreach ($_POST["link_itemtype"] as $tmp => $destination_type)
-      PluginGenericobjectLink::plugin_genericobject_addNewLinkedDeviceType($type->fields["itemtype"], $destination_type);
+      PluginGenericobjectLink::addNewLinkedDeviceType($type->fields["itemtype"], $destination_type);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 

@@ -119,8 +119,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       return true;
    }
 
-   function saveProfileToDB($params)
-   {
+   function saveProfileToDB($params) {
       global $DB;
       $this->getProfilesFromDB($params["ID"]);
       
@@ -145,8 +144,8 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @param profileID the profile ID
     * @return nothing
     */
-   public static function plugin_genericobject_createFirstAccess() {
-      if (!self::plugin_genericobject_profileExists($_SESSION["glpiactiveprofile"]["id"]))
+   public static function createFirstAccess() {
+      if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"]))
          self::createAccess($_SESSION["glpiactiveprofile"]["id"],true);
    }
    
@@ -156,7 +155,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @param profileID the profile ID
     * @return true if exists, no if not
     */
-   public static function plugin_genericobject_profileExists($profileID) {
+   public static function profileExists($profileID) {
       global $DB;
       $profile = new Profile;
       $profile->getFromDB($profileID);
@@ -181,7 +180,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       
       $profile->getFromDB($profileID);
       foreach ($types as $tmp => $value) {
-         if (!self::plugin_genericobject_profileForTypeExists($profileID,$value["name"])) {
+         if (!self::profileForTypeExists($profileID,$value["name"])) {
             $input["device_name"] = $value["name"];
             $input["right"]       = ($first?'w':'');
             $input["open_ticket"] = ($first?1:0);
@@ -197,8 +196,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @param device_name name of the type 
     * @return true if exists, no if not
     */
-   public static function plugin_genericobject_profileForTypeExists($profileID,$device_name)
-   {
+   public static function profileForTypeExists($profileID,$device_name) {
       global $DB;
       $profile = new Profile;
       $profile->getFromDB($profileID);
@@ -217,14 +215,13 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @param name the name of the type
     * @return nothing
     */
-   public static function deleteTypeFromProfile($name)
-   {
+   public static function deleteTypeFromProfile($name) {
       global $DB;
       $query = "DELETE FROM `".getTableForItemType(__CLASS__)."` WHERE device_name='$name'";
       $DB->query($query);
    }
    
-   public static function plugin_change_profile_genericobject() {
+   public static function changeProfile() {
       $prof=new PluginGenericobjectProfile();
       if($prof->getProfilesFromDB($_SESSION['glpiactiveprofile']['id']))
          $_SESSION["glpi_plugin_genericobject_profile"]=$prof->fields;
@@ -259,7 +256,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
                            ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
       }
-      self::plugin_genericobject_createFirstAccess();
+      self::createFirstAccess();
    }
    
    static function uninstall() {
