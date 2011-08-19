@@ -29,32 +29,29 @@
  */
 
 // ----------------------------------------------------------------------
-// Original Author of file:
+// Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
 
 define('GLPI_ROOT', '../..'); 
 include (GLPI_ROOT . "/inc/includes.php"); 
 
-commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'],"plugins","genericobject");
+commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
 
 echo "<table class='tab_cadre_fixe'>";
 echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
-
-$datas = PluginGenericobjectType::getTypes();
       
-foreach($datas as $ID => $value)
-{
-   if (PluginGenericobjectProfile::haveRight($value["name"],'r')) {
+$profile = new PluginGenericobjectProfile();
+
+foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
+   if ($profile->haveRight($value['itemtype'], 'r')) {
       echo "<tr class='tab_bg_1'><td align='center'>"; 
-      echo "<a href=\"./front/search.php?itemtype=".$value["itemtype"]."\">".
-         PluginGenericobjectObject::getLabel($value["name"])."</a></td></tr>";
+      echo "<a href='".getItemTypeSearchURL($value['itemtype'])."'>";
+      echo call_user_func(array($value['itemtype'], 'getTypeName'));
+      echo "</a></td></tr>";
    }
 }
-   
 
 echo "</table></div>";
 
 commonFooter();
-?>
-

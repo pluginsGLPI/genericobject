@@ -37,10 +37,10 @@ header_nocache();
 
 //useplugin('genericobject', true);
 if (!isset ($_POST["itemtype"])) {
-   $type = "";
+   $itemtype = "";
 }
 else {
-   $type = $_POST["itemtype"];
+   $itemtype = $_POST["itemtype"];
 }
 
 if (!isset ($_POST["id"])) {
@@ -63,101 +63,76 @@ if (empty ($_POST["id"])) {
    }
 } else {
    
-   $commonitem = new PluginGenericobjectObject;
-   $commonitem->getFromDB($_POST["id"]);
+   $item = new $itemtype();
+   $item->getFromDB($_POST["id"]);
    
-   //echo $commonitem->getType();
+   //echo $item->getType();
          
    switch ($_POST['glpi_tab']) {
       case -1 :
-         /*if ($commonitem->canUseDirectConnections()) {
-            //showConnect($_POST['target'], $_POST["id"], $type);
-            //Computer_Item::showForItem($commonitem);
-         }*/
          
-         if ($commonitem->canUseNetworkPorts()) {
-            /*showPortsAdd($_POST["id"], $type);
-            showPorts($_POST["id"], $type, $_POST["withtemplate"]);*/
-            NetworkPort::showForItem('PluginGenericobjectObject', $_POST["id"]);
+         if ($item->canUseNetworkPorts()) {
+            NetworkPort::showForItem($itemtype, $_POST["id"]);
          }
 
-         if ($commonitem->canUseInfocoms()) {
-            //showInfocomForm($CFG_GLPI["root_doc"] . "/front/infocom.form.php", $type, $_POST["id"], 1, $_POST["withtemplate"]);
-            Infocom::showForItem($commonitem);
-            //showContractAssociated($type, $_POST["id"], $_POST["withtemplate"]);
-            Contract::showAssociated($commonitem);
+         if ($item->canUseInfocoms()) {
+            Infocom::showForItem($item);
+            Contract::showAssociated($item);
          }
-         if ($commonitem->canUseDocuments()) {
-            //showDocumentAssociated($type, $_POST["id"], $_POST["withtemplate"]);
-            Document::showAssociated($commonitem);
+         if ($item->canUseDocuments()) {
+            Document::showAssociated($item);
          }
-         if ($commonitem->canUseTickets()) {
-            //showJobListForItem($type, $_POST["id"]);
-            Ticket::showListForItem($type, $_POST["id"]);
+         if ($item->canUseTickets()) {
+            Ticket::showListForItem($itemtype, $_POST["id"]);
          }
-         if ($commonitem->canUseNotes()) {
-            //showNotesForm($_POST['target'], $type, $_POST["id"]);
-            showNotesForm($_POST['target'], 'PluginGenericobjectObject', $_POST["id"]);
+         if ($item->canUseNotes()) {
+            showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
          }
-         if ($commonitem->canUseLoans()) {
-            //showDeviceReservations($_POST['target'], $type, $_POST["id"]);
-            Reservation::showForItem('PluginGenericobjectObject', $_POST["id"]);
+         if ($item->canUseLoans()) {
+            Reservation::showForItem($itemtype, $_POST["id"]);
          }
-         if ($commonitem->canUseHistory()) {
-            //showHistory($type, $_POST["id"]);
-            Log::showForItem($commonitem);
+         if ($item->canUseHistory()) {
+            Log::showForItem($item);
          }
          
-         PluginGenericobjectObject::showDevice($_POST['target'], $type, $_POST["id"]);
-         //if (!displayPluginAction($type, $_POST["id"], $_POST['glpi_tab'])) {
-         if (!Plugin::displayAction($commonitem, $_POST['glpi_tab'])) {
+         if (!Plugin::displayAction($item, $_POST['glpi_tab'])) {
          }
          break;
       case 3 :
-         /*if ($commonitem->canUseDirectConnections()) {
-            //showConnect($_POST['target'], $_POST["id"], $type);
-            Computer_Item::showForItem($commonitem);
+         /*if ($item->canUseDirectConnections()) {
+            //showConnect($_POST['target'], $_POST["id"], $itemtype);
+            Computer_Item::showForItem($item);
          }*/
 
-         if ($commonitem->canUseNetworkPorts()) {
-            /*showPortsAdd($_POST["id"], $type);
-            showPorts($_POST["id"], $type, $_POST["withtemplate"]);*/
-            NetworkPort::showForItem('PluginGenericobjectObject', $_POST["id"]);
+         if ($item->canUseNetworkPorts()) {
+            NetworkPort::showForItem($itemtype, $_POST["id"]);
          }
          break;
       case 4 :
-         //showInfocomForm($CFG_GLPI["root_doc"] . "/front/infocom.form.php", $type, $_POST["id"], 1, $_POST["withtemplate"]);
-         Infocom::showForItem($commonitem);
-         //showContractAssociated($type, $_POST["id"], $_POST["withtemplate"]);
-         Contract::showAssociated($commonitem);
+         Infocom::showForItem($item);
+         Contract::showAssociated($item);
          break;
       case 5 :
-         //showDocumentAssociated($type, $_POST["id"], $_POST["withtemplate"]);
-         Document::showAssociated($commonitem);
+         Document::showAssociated($item);
          break;
       case 6 :
-         //showJobListForItem($type, $_POST["id"]);
-         Ticket::showListForItem($type, $_POST["id"]);
+         Ticket::showListForItem($itemtype, $_POST["id"]);
          break;
       case 7 :
-         PluginGenericobjectObject::showDevice($_POST['target'], $type, $_POST["id"]);
+         //PluginGenericobjectObject::showDevice($_POST['target'], $itemtype, $_POST["id"]);
          break;
       case 10 :
-         //showNotesForm($_POST['target'], $type, $_POST["id"]);
          showNotesForm($_POST['target'], 'PluginGenericobjectObject', $_POST["id"]);
          break;
       case 11 :
-         //showDeviceReservations($_POST['target'], $type, $_POST["id"]);
-         Reservation::showForItem('PluginGenericobjectObject', $_POST["id"]);
+         Reservation::showForItem($itemtype, $_POST["id"]);
          break;
       case 12 :
-         //showHistory($type, $_POST["id"]);
-         Log::showForItem($commonitem);
+         Log::showForItem($item);
          break;
       default :
-         if (!Plugin::displayAction($commonitem, $_POST['glpi_tab'])) {
+         if (!Plugin::displayAction($item, $_POST['glpi_tab'])) {
          }
          break;
    }
 }
-?>

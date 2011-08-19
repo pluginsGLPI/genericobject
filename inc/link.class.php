@@ -33,7 +33,7 @@
 class PluginGenericobjectLink extends CommonDBTM{
    
    public static function showDeviceTypeLinks($target,$ID) {
-      global $LANG, $CFG_GLPI, $GENERICOBJECT_LINK_TYPES;
+      global $LANG, $CFG_GLPI, $CFG_GLPI;
       $object_type = new PluginGenericobjectType();
       $object_type->getFromDB($ID);
          
@@ -50,7 +50,7 @@ class PluginGenericobjectLink extends CommonDBTM{
       echo "<td align='center'>";
       echo "<select name='link_itemtype[]' multiple size='10' width='40'>";
       
-      foreach($GENERICOBJECT_LINK_TYPES as $key => $link) {
+      foreach($CFG_GLPI["link_types"] as $key => $link) {
          echo "<option value='$key' ".(in_array($key,$links)?"selected":"").">" . 
             call_user_func(array($link, 'getTypeName')). "</option>\n";
       }

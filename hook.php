@@ -37,18 +37,16 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
    global $LANG;
    $sopt = array ();
    
-   $sopt[1]['table'] = 'glpi_plugin_genericobject_types';
-   $sopt[1]['field'] = 'name';
+   $sopt[1]['table']     = 'glpi_plugin_genericobject_types';
+   $sopt[1]['field']     = 'name';
    $sopt[1]['linkfield'] = '';
-   $sopt[1]['name'] = $LANG["common"][22];
-   $sopt[1]['datatype']='itemlink';
+   $sopt[1]['name']      = $LANG["common"][22];
+   $sopt[1]['datatype']  = 'itemlink';
  
-   $types = PluginGenericobjectType::getTypes();
-   
-   foreach ($types as $type => $params)
+   foreach (PluginGenericobjectType::getTypes() as $type => $params) {
       $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
+   }
    
-      
    return $sopt;
 
 }
@@ -57,12 +55,9 @@ function plugin_genericobject_getAddSearchOptions($itemtype) {
 function plugin_genericobject_getSearchOption() {
    global $LANG;
    $sopt = array ();
-   
-   $types = PluginGenericobjectType::getTypes();
-   
-   foreach ($types as $type => $params)
+   foreach (PluginGenericobjectType::getTypes() as $type => $params) {
       $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
-      
+   }
    return $sopt;
 
 }
@@ -93,13 +88,9 @@ function plugin_headings_genericobject($item, $withtemplate) {
    global $CFG_GLPI,$LANG;
    switch (get_class($item)) {
       case PROFILE_TYPE :
-         $profile = new profile;
-         $profile->getFromDB($item->getField('id'));
-         PluginGenericobjectProfile::createAccess($item->getField('id'));
-               
+         PluginGenericobjectProfile::createAccess($item->getID());
          $prof = new PluginGenericobjectProfile();
-         $prof->showForm($CFG_GLPI["root_doc"] . "/plugins/genericobject/front/profile.php", 
-                         $item->getField('id'));
+         $prof->showForm($item->getID());
          break;
    }   
 }
@@ -107,9 +98,11 @@ function plugin_headings_genericobject($item, $withtemplate) {
 function plugin_genericobject_AssignToTicket($types){
    global $LANG;
    
-   foreach (PluginGenericobjectType::getTypes() as $tmp => $value)
-      if (PluginGenericobjectProfile::haveRight($value["name"].'_open_ticket',"1"))
-         $types['PluginGenericobject'.ucfirst($value['itemtype'])] = PluginGenericobjectObject::getLabel($value['name']);
+   foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
+      if (PluginGenericobjectProfile::haveRight($value["name"].'_open_ticket',"1")) {
+         $types[$value['itemtype']] = call_user_func(array($value['itemtype'], 'getTypeName'));
+      }
+   }
    return $types;
 }
 
@@ -118,8 +111,7 @@ function plugin_genericobject_getDropdown() {
    $dropdowns = array();
    
    $plugin = new Plugin();
-   if ($plugin->isActivated("genericobject"))
-   {
+   if ($plugin->isActivated("genericobject")) {
       foreach (PluginGenericobjectType::getTypes() as $tmp => $values)
          PluginGenericobjectType::getDropdownSpecific($dropdowns,$values);
    }
@@ -139,10 +131,9 @@ function plugin_genericobject_getDatabaseRelations(){
             $dropdowns["glpi_entities"][PluginGenericobjectType::getTableByName($values["name"])] = "entities_id";
          }
       }
-         
    }
 
-   return $dropdowns;   
+   return $dropdowns;
 }
 
 /**
@@ -350,13 +341,14 @@ function plugin_genericobject_install() {
    plugin_init_genericobject();
 
    //Init profiles
-   PluginGenericobjectProfile::plugin_change_profile_genericobject();
+   PluginGenericobjectProfile::changeProfile();
    return true;
 }
 
 function plugin_genericobject_uninstall() {
    global $DB;
-
+   
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 /*
    //Delete search display preferences
    $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='4850';";

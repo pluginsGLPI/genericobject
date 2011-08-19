@@ -42,6 +42,10 @@ $LANG['genericobject']['install'][0] = "Erreur : les dossiers '/inc', '/front' e
 
 $LANG['genericobject']['profile'][0] = "Gestion des droits";
 $LANG['genericobject']['profile'][1] = "Associer des tickets à cet objet d'inventaire";
+$LANG['genericobject']['profile'][2] = "Accès à l'objet";
+$LANG['genericobject']['profile'][3] = "Aucun type défini";
+
+
 $LANG['genericobject']['setup'][1] = "Plugin non utilisable depuis le helpdesk";
 
 $LANG['genericobject']['config'][1] = "Utiliser";

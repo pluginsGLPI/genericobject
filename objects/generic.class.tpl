@@ -36,8 +36,5 @@
  * This class is automatically managed by genericobject plugin. Do not modify it !
  */
 class %%CLASSNAME%% extends PluginGenericobjectObject {
-	function __construct() {
-		parent::__construct("%%DEVICETYPE%%");
-	}
 }
 ?>

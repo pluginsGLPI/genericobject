@@ -37,7 +37,6 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (!isset ($_REQUEST["id"])) {
    $_REQUEST["id"] = '';
 }
-
 $type = new PluginGenericobjectType();
 
 $extraparams = array ();
@@ -47,66 +46,21 @@ if (isset ($_GET["select"]) && $_GET["select"] == "all") {
 
 if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
-   PluginGenericobjectType::registerOneType($type->fields);
+   PluginGenericobjectType::registerOneType($type);
    PluginGenericobjectType::includeLocales($type->fields["name"]);
-   PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"], $_GET["action"]);
+   PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"], 
+                                               $_GET["action"]);
    glpi_header($_SERVER['HTTP_REFERER']);
 }
 if (isset ($_POST["add"])) {
-   $_POST['itemtype'] = $_POST['name'];
-   $type->add($_POST);
-   glpi_header($_SERVER["HTTP_REFERER"]);
-   exit();
+   $new_id = $type->add($_POST);
+   glpi_header(getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
 } elseif (isset ($_POST["update"])) {
    $type->update($_POST);
    glpi_header($_SERVER["HTTP_REFERER"]);
-   exit();
 } elseif (isset ($_POST["delete"])) {
    $type->delete($_POST);
-   glpi_header($CFG_GLPI["root_doc"]."/plugins/genericobject/front/type.php");
-   exit();
-} elseif (isset ($_POST["delete_field"])) {
-   $type->getFromDB($_POST["id"]);
-   PluginGenericobjectType::registerOneType($type->fields);
-   PluginGenericobjectType::includeLocales($type->fields["name"]);
-
-   $type_field = new PluginGenericobjectField;
-   foreach ($_POST["fields"] as $field => $value) {
-           
-         if ($value == 1 
-               && PluginGenericobjectField::checkNecessaryFieldsDelete($type->fields["itemtype"],
-                                                                  $field)) {
-            $type_field->deleteByFieldByDeviceTypeAndName($type->fields["itemtype"], $field);
-            $table = PluginGenericobjectType::getTableNameByID($type->fields["itemtype"]);
-            PluginGenericobjectType::deleteFieldFromDB($table, $field, $type->fields["name"]);
-            addMessageAfterRedirect($LANG['genericobject']['fields'][5], true);
-         }
-   }
-
-   PluginGenericobjectObject::reorderFields($type->fields["itemtype"]);
-   glpi_header($_SERVER['HTTP_REFERER']);
-   exit();
-} elseif (isset ($_POST["add_field"])) {
-   if ($_POST["new_field"]) {
-      $type->getFromDB($_POST["id"]);
-      PluginGenericobjectType::registerOneType($type->fields);
-      PluginGenericobjectType::includeLocales($type->fields["name"]);
-
-      PluginGenericobjectField::addNewField($type->fields["itemtype"], $_POST["new_field"]);
-      
-      $table = PluginGenericobjectType::getTableNameByID($type->fields["itemtype"]);
-      PluginGenericobjectField::addFieldInDB($table, $_POST["new_field"], $type->fields["name"]);
-      
-      addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
-   }
-   glpi_header($_SERVER['HTTP_REFERER']);
-   exit();
-} elseif (isset ($_POST["update_links_types"])) {
-   $type->getFromDB($_POST["id"]);
-   PluginGenericobjectLink::deleteAllLinkedDeviceByType($type->fields["itemtype"]);
-   foreach ($_POST["link_itemtype"] as $tmp => $destination_type)
-      PluginGenericobjectLink::addNewLinkedDeviceType($type->fields["itemtype"], $destination_type);
-   glpi_header($_SERVER['HTTP_REFERER']);
+   $type->redirectToList();
 }
 
 commonHeader($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject", 
@@ -114,4 +68,3 @@ commonHeader($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins"
 $type->showForm($_REQUEST["id"]);
 
 commonFooter();
-?>

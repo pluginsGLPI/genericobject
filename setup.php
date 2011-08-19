@@ -45,26 +45,22 @@ if (!defined("GENERICOBJECT_AJAX_PATH")) {
 if (!defined("GENERICOBJECT_CLASS_PATH")) {
    define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DIR . "/inc");
 }
-define("PLUGIN_GENERICOBJECT_TYPE", "PluginGenericobjectType");
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS, 
-          $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, $GENERICOBJECT_LINK_TYPES, 
+          $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, 
           $GENERICOBJECT_AVAILABLE_FIELDS, $GENERICOBJECT_PDF_TYPES;
           
-   $GENERICOBJECT_BLACKLISTED_FIELDS = array ("object_type", "table", "deleted", "id", "entities_id",
-                                              "recursive", "is_template", "notes", "template_name");
+   $GENERICOBJECT_BLACKLISTED_FIELDS = array ("itemtype", "table", "is_deleted", "id", 
+                                              "entities_id", "is_recursive", "is_template", 
+                                              "notepad", "template_name", "is_helpdesk_visible", 
+                                              "name", "comment");
 
    $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS = array ("id", "name", "notes", "entities_id",
                                                         "recursive", "is_template");
 
-   $GENERICOBJECT_LINK_TYPES = array ('Computer', 'Software', 'SoftwareLicense', 'Monitor',
-                                      'Printer', 'Peripheral', 'Phone', 'NetworkEquipment', 
-                                      'Contract', 'Contact', 'Supplier', 'Entity');
-
    $GENERICOBJECT_PDF_TYPES = array ();
-   
    $plugin = new Plugin;
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
@@ -147,11 +143,12 @@ function plugin_genericobject_check_config($verbose = false) {
 }
 
 function plugin_genericobject_haveTypeRight($type, $right) {
+   $profile = new PluginGenericobjectProfile();
    switch ($type) {
       case 'PluginGenericobjectType' :
          return haveRight("config", $right);
       default :
-         return PluginGenericobjectProfile::haveRight(PluginGenericobjectType::getNameByID($type), $right);
+         return $profile->haveRight(PluginGenericobjectType::getNameByID($type), $right);
    }
 
 }
@@ -159,7 +156,9 @@ function plugin_genericobject_haveTypeRight($type, $right) {
 function plugin_genericobject_checkRight($module, $right) {
    global $CFG_GLPI;
 
-   if (!PluginGenericobjectProfile::haveRight($module, $right)) {
+   $profile = new PluginGenericobjectProfile();
+
+   if (!$profile->haveRight($module, $right)) {
       // Gestion timeout session
       if (!isset ($_SESSION["glpiID"])) {
          glpi_header($CFG_GLPI["root_doc"] . "/index.php");

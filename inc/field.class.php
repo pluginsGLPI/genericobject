@@ -31,82 +31,146 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 class PluginGenericobjectField extends CommonDBTM {
-   
-    function deleteByFieldByDeviceTypeAndName($itemtype, $name) {
-      global $DB;
-      $query = "DELETE FROM `".$this->table."` " .
-               "WHERE `itemtype`='$itemtype' AND name='$name'";
-      $DB->query($query);
-    }
- 
-   function getRank() {
-      return $this->fields["rank"];
-   }
-   
-   function getMandatory() {
-      return $this->fields["mandatory"];
-   }   
 
-   function post_addItem() {
-      $name  = PluginGenericobjectType::getNameByID($this->input["itemtype"]);
-      $table = PluginGenericobjectType::getTableNameByName($name);
-      self::addFieldInDB($table, $this->fields["name"], $name);
-   }
-   
-   /**
-    * Add a new field for an object (into object's device table)
-    * @itemtype the object type
-    */
-   public static function addNewField($itemtype, $name) {
-      if (!self::fieldExists($itemtype, $name)) {
-         $type_field                  = new PluginGenericobjectField;
-            $input["name"]            = $name;
-            $input["itemtype"]        = $itemtype;
-            $input["rank"]            = self::getNextRanking($itemtype);
-            $input["mandatory"]       = 0;
-            $input["unique"]          = 0;
-            $input["entity_restrict"] = 0;
-            $type_field->add($input);
-      } else {
-         exit("addNewField" .$itemtype." already exists");
+   public static function showObjectFieldsForm($ID) {
+      global $LANG, $DB, $GENERICOBJECT_BLACKLISTED_FIELDS, $GENERICOBJECT_AVAILABLE_FIELDS, $CFG_GLPI, 
+             $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS;
+
+      $url          = getItemTypeFormURL(__CLASS__);
+      $object_type  = new PluginGenericobjectType();
+      $object_type->getFromDB($ID);
+      $fields_in_db = $DB->list_fields(getTableForItemType($object_type->fields["itemtype"]));
+      $used_fields  = array();
+      
+      foreach ($GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS as $autofield) {
+         $used_fields[$autofield] = $autofield;
       }
-   }
-   
-   public static function fieldExists($itemtype,$name) {
-      global $DB;
-      $query = "SELECT `id` FROM `".getTableForItemType(__CLASS__)."` " .
-               "WHERE `itemtype`='$itemtype' AND `name`='$name'";
-      $result = $DB->query($query);
-      if (!$DB->numrows($result)) {
-         return false;
+
+      foreach ($GENERICOBJECT_BLACKLISTED_FIELDS as $autofield) {
+         if (!in_array($autofield,$used_fields)) {
+            $used_fields[$autofield] = $autofield;
+         }
       }
-      else {
-         return true;
+
+      echo "<form name='form_fields' method='post' action=\"$url\">";
+      echo "<div class='center'>";
+      echo "<table class='tab_cadre_fixe' >";
+      echo "<input type='hidden' name='id' value='$ID'>";
+      echo "<tr class='tab_bg_1'><th colspan='7'>";
+      echo $LANG['genericobject']['fields'][1] . " : " . 
+         PluginGenericobjectObject::getLabel($object_type->fields["name"]);
+      echo "</th></tr>";
+
+      echo "<tr class='tab_bg_1'>";
+      echo "<th width='10'></th>";
+      echo "<th>" . $LANG['genericobject']['fields'][2] . "</th>";
+      echo "<th>" . $LANG['genericobject']['fields'][3] . "</th>";
+      echo "<th width='10'></th>";
+      echo "<th width='10'></th>";
+      echo "</tr>";
+
+      $index = 1;
+      $total = count($fields_in_db);
+
+      foreach ($fields_in_db as $field => $value) {
+         self::displayFieldDefinition($url, $ID, $field, $index, $total);
+         $index++;
+         $used_fields[$field] = $field; 
       }
+      
+      echo "<tr><td><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/arrow-left.png\" alt=''>"; 
+      echo "</td><td class='center'>"; 
+      
+      echo "<a onclick= \"if ( markCheckboxes('form_fields') ) return false;\" href='" . $url . 
+              "?id=$ID&amp;select=all'>" . $LANG['buttons'][18] . "</a>";
+      echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . 
+               $url . "?id=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
+      echo "</td><td colspan='5' align='left' width='75%'>";
+
+      echo "<select name=\"massiveaction\" id='massiveaction'>";
+      echo "<option value=\"-1\" selected>-----</option>";
+      echo "<option value=\"delete\">" . $LANG['buttons'][6] . "</option>";
+      //echo "<option value=\"move_field\">" . $LANG['buttons'][20] . "</option>";
+      echo "</select>";
+
+      $params = array ('action' => '__VALUE__', 'itemtype' => $object_type->fields["itemtype"]);
+
+      $ajax_page = $CFG_GLPI["root_doc"].
+               "/plugins/genericobject/ajax/plugin_genericobject_dropdownObjectTypeFields.php";
+      ajaxUpdateItemOnSelectEvent("massiveaction", "show_massiveaction", $ajax_page, $params);
+
+      echo "<span id='show_massiveaction'>&nbsp;</span>\n";
+
+      echo "</td></tr>";
+
+      echo "</table>";
+      echo "<br>";
+
+      echo "<table class='tab_cadre'>";
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>" . $LANG['genericobject']['fields'][4] . "</td>";
+      echo "<td align='left'>";
+      self::dropdownFields("new_field", $used_fields);
+      echo "</td>";
+      echo "<td>";
+      echo "<input type='submit' name='add_field' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
+      echo "</tr>";
+      echo "</table></div></form>";
    }
-   
-   /**
-    * Get next available field display ranking for a type
-    * @type the itemtype
-    * @return the next available ranking
-    */
-   public static function getNextRanking($itemtype) {
-      global $DB;
-      $query  = "SELECT MAX(rank) as cpt FROM `".getTableForItemType(__CLASS__)."`" .
-                "WHERE itemtype='$itemtype'";
-      $result = $DB->query($query);
-      if ($DB->result($result,0,"cpt") != null)
-         return $DB->result($result,0,"cpt") + 1;
-      else
-         return 0;
+
+   static function dropdownFields($name,$used=array()) {
+      global $GENERICOBJECT_AVAILABLE_FIELDS;
+      
+      $dropdown_types = array();
+      foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values) {
+         if(!in_array($field,$used)) {
+            $dropdown_types[$field] = $values['name']." (".$field.")";
+         }
+      }
+      //return dropdownArrayValues($name,$dropdown_types);
+      Dropdown::showFromArray($name,$dropdown_types);
    }
-   
-   
-   public static function addFieldInDB($table, $field, $name) {
+
+   public static function displayFieldDefinition($target, $ID, $field, $index, $total) {
+      global $GENERICOBJECT_AVAILABLE_FIELDS, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS;
+      $readonly = in_array($field, $GENERICOBJECT_BLACKLISTED_FIELDS);
+
+      echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
+      $sel = "";
+      if (isset ($_POST["selected"])) {
+         $sel = "checked";
+      }
+
+      echo "<td width='10'>";
+      if (!$readonly) {
+         echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
+      }
+      echo "</td>";
+      echo "<td>" . $field . "</td>";
+      echo "<td>" . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'] . "</td>";
+
+      echo "<td width='10'>";
+      if (!$readonly && $index > 2) {
+         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;id=" . $ID . "\">"; 
+         echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_up.png\" alt=''></a>";
+      }
+      echo "</td>";
+
+      echo "<td width='10'>";
+      if (!$readonly && $index > 1 && $index < $total) {
+         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;id=" . $ID . "\">"; 
+         echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
+      }
+      echo "</td>";
+
+      echo "</tr>";
+   }
+
+   public static function addNewField($table, $field, $name='') {
       global $DB, $GENERICOBJECT_AVAILABLE_FIELDS;
-      $query = "ALTER TABLE ".getTableForItemType(__CLASS__)." ADD `$field` ";
+
       if (!FieldExists($table, $field)) {
-         
+         $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
             case 'dropdown_yesno' :
             case 'dropdown_global' :
@@ -121,13 +185,14 @@ class PluginGenericobjectField extends CommonDBTM {
                break;
             case 'dropdown' :
                $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
+               /*
                if (PluginGenericobjectType::isDropdownTypeSpecific($field)) {
                   PluginGenericobjectType::addDropdownTable($name, $field);
                   PluginGenericobjectType::addDropdownClassFile($name, $field);
                   PluginGenericobjectType::addDropdownFrontFile($name, $field);
                   PluginGenericobjectType::addDropdownFrontformFile($name, $field);
                   PluginGenericobjectType::addDropdownAjaxFile($name, $field);
-               }
+               }*/
                break;
             case 'integer' :
                $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
@@ -139,7 +204,24 @@ class PluginGenericobjectField extends CommonDBTM {
          $DB->query($query);
       }
    }
+
+    static function deleteField($table, $field) {
+      global $DB;
+      if (FieldExists($table, $field)) {
+         $DB->query("ALTER TABLE `$table` DROP `$field`;");
+      }
+    }
    
+   static function changeFieldOrder($itemtype, $field, $action = 'up') {
+      global $DB;
+      $parent = array();
+      foreach ($DB->list_fields(getTableForItemType($itemtype)) as $field) {
+         if ($field['name'] == $field) {
+            
+         }
+         $parent = $field;
+      }
+   }
    /**
     * Get all fields for an object type
     * @itemtype the object type
@@ -148,16 +230,12 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function getFieldsByType($itemtype) {
       global $DB;
       
-      $itemtype = strtolower(str_replace("PluginGenericobject", "", $itemtype));
       $query    = "SELECT * FROM `".getTableForItemType(__CLASS__)."` " .
-                  "WHERE itemtype='$itemtype' ORDER BY rank ASC";
-      $result   = $DB->query($query);
-      $fields   = array();
-      
-      while ($datas = $DB->fetch_array($result)) {
-         $tmp                    = new PluginGenericobjectField;
-         $tmp->fields            = $datas;
-         $fields[$datas["name"]] = $tmp;
+                  "WHERE `itemtype`='$itemtype' ORDER BY `rank` ASC";
+      foreach ($DB->request($query) as $data) {
+         $tmp                    = new self();
+         $tmp->fields            = $data;
+         $fields[$data["name"]] = $tmp;
       }
       return $fields;
    }
@@ -166,29 +244,23 @@ class PluginGenericobjectField extends CommonDBTM {
       $type = new PluginGenericobjectType;
       $type->getFromDBByType($itemtype);
       
-      if ($type->fields['use_network_ports'] && 'locations_id' == $field) {
+      if ($type->canUseNetworkPorts() && 'locations_id' == $field) {
          return false;
       }
-      
+      /*
       if ($type->fields['use_direct_connections']) {
          foreach(array('users_id','groups_id',' states_id','locations_id') as $tmp_field) {
             if ($tmp_field == $field) {
                return false;
             }
          } 
-      }
+      }*/
       return true;
-   }
-   
-   public static function deleteAllFieldsByType($itemtype) {
-      global $DB;
-      $query = "DELETE FROM `".getTableForItemType(__CLASS__)."` WHERE itemtype='$itemtype'";
-      $DB->query($query);
    }
    
    static function install(Migration $migration) {
       global $DB;
-      
+/*      
       if (!TableExists(getTableForItemType(__CLASS__))) {
          $query = "CREATE TABLE `".getTableForItemType(__CLASS__)."` (
                      `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -201,11 +273,15 @@ class PluginGenericobjectField extends CommonDBTM {
                      ) ENGINE = MYISAM  COMMENT = 'Field type description' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die ($DB->error());
       }
+      */
    }
    
    static function uninstall() {
+/*
       global $DB;
       $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
       $DB->query($query) or die ($DB->error());
+*/
    }
+
 }

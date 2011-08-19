@@ -30,14 +30,12 @@
 
 define('GLPI_ROOT', '../../..'); 
 include (GLPI_ROOT."/inc/includes.php");
-include (GLPI_ROOT."/plugins/genericobject/hook.php");
 checkRight("profile","r");
 
-$prof=new PluginGenericobjectProfile();
 /* save profile */
 if (isset ($_POST['update_user_profile'])) {
+   $prof=new PluginGenericobjectProfile();
    $prof->saveProfileToDB($_POST);
-   PluginGenericobjectProfile::plugin_change_profile_genericobject();
+   PluginGenericobjectProfile::changeProfile();
    glpi_header($_SERVER['HTTP_REFERER']);
 }
-?>
