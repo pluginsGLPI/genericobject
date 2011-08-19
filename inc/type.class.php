@@ -1019,9 +1019,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Only look for published and active types
    
       foreach (self::getTypes() as $id => $objecttype) {
-         $type = new PluginGenericobjectType();
-         $type->fields = $objecttype;
-         self::registerOneType($type);
+         call_user_func(array($objecttype['itemtype'], 'registerType'));
       }
    }
    
@@ -1041,23 +1039,8 @@ class PluginGenericobjectType extends CommonDBTM {
       $fields    = $DB->list_fields($table);
 
       //If table doesn't exists, do not try to register !
-      if (class_exists($itemtype) && TableExists($table)) {
-         
-         $options = array("document_types"         => $objecttype->canUseDocuments(),
-                          "helpdesk_visible_types" => $objecttype->canUseTickets() 
-                                                       && isset($fields['helpdesk_visible']),
-                          "linkgroup_types"        => $objecttype->canUseTickets() 
-                                                       && isset ($fields["groups_id"]),
-                          "linkuser_types"         => $objecttype->canUseTickets() 
-                                                      && isset ($fields["users_id"]),
-                          "ticket_types"           => $objecttype->canUseTickets(),
-                          "infocom_types"          => $objecttype->canUseInfocoms(),
-                          "networkport_types"      => $objecttype->canUseNetworkPorts(),
-                          "reservation_types"      => $objecttype->canBeReserved(),
-                          "contract_types"         => $objecttype->canUseContract());
-         Plugin::registerClass($itemtype, $options);
-         //Include locales, 
-         self::includeLocales($objecttype->getName());
+      if (class_exists($objecttype->fields['itemype'])) {
+         call_user_func(array($objecttype->fields['itemype'], 'registerType'));
 
 /*
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/search.php?itemtype=' . $itemtype;

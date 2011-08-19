@@ -42,14 +42,48 @@ class PluginGenericobjectObject extends CommonDBTM {
    //Internal field counter
    private $cpt = 0;
    
+   static function registerType() {
+      global $DB, $LANG, $PLUGIN_HOOKS;
+      $class = get_called_class();
+      $item = new $class();
+      $fields = $DB->list_fields(getTableForItemType($class));
+      
+      $options = array("document_types"         => $item->type->canUseDocuments(),
+                       "helpdesk_visible_types" => $item->type->canUseTickets() 
+                                                    && isset($fields['helpdesk_visible']),
+                       "linkgroup_types"        => $item->type->canUseTickets() 
+                                                    && isset ($fields["groups_id"]),
+                       "linkuser_types"         => $item->type->canUseTickets() 
+                                                   && isset ($fields["users_id"]),
+                       "ticket_types"           => $item->type->canUseTickets(),
+                       "infocom_types"          => $item->type->canUseInfocoms(),
+                       "networkport_types"      => $item->type->canUseNetworkPorts(),
+                       "reservation_types"      => $item->type->canBeReserved(),
+                       "contract_types"         => $item->type->canUseContract());
+         Plugin::registerClass($class, $options);
+         $profile = new PluginGenericobjectProfile();
+         if ($profile->haveRight($class,"r")) {
+           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
+                                                      = call_user_func(array($class, 'getTypeName'));
+           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
+                                                      = getItemTypeSearchURL($class, false);
+           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
+                                                      = getItemTypeFormURL($class, false);
+           if ($item->type->canUseTemplate()) {
+              $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
+                                                         = "/front/setup.templates.php?itemtype=$class&amp;add=0";
+           }
+      }
+   }
+   
    static function getTypeName() {
       $class = get_called_class();
       $item = new $class();
       PluginGenericobjectType::includeLocales($item->type->fields['name']);
-      if(isset($LANG['genericobject'][__CLASS__][0])) {
-         return $LANG['genericobject'][__CLASS__][0];
+      if(isset($LANG['genericobject'][$class][0])) {
+         return $LANG['genericobject'][$class][0];
       } else {
-         return $this->type->fields['name'];
+         return $item->type->fields['name'];
       }
    }
    
