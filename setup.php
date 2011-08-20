@@ -55,7 +55,7 @@ function plugin_init_genericobject() {
    $GENERICOBJECT_BLACKLISTED_FIELDS = array ("itemtype", "table", "is_deleted", "id", 
                                               "entities_id", "is_recursive", "is_template", 
                                               "notepad", "template_name", "is_helpdesk_visible", 
-                                              "name", "comment");
+                                              "comment");
 
    $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS = array ("id", "name", "notes", "entities_id",
                                                         "recursive", "is_template");
@@ -64,17 +64,12 @@ function plugin_init_genericobject() {
    $plugin = new Plugin;
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
-      //Include all constant's locales files
-      foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/locales/*.php') as $file)
-         include_once ($file);
-
       //Include all fields constants files
       foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) {
          include_once ($file);
       }
       
       include_once (GLPI_ROOT . "/plugins/genericobject/inc/field.constant.php");
-
 
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
@@ -142,23 +137,20 @@ function plugin_genericobject_check_config($verbose = false) {
    return false;
 }
 
-function plugin_genericobject_haveTypeRight($type, $right) {
-   $profile = new PluginGenericobjectProfile();
-   switch ($type) {
+function plugin_genericobject_haveTypeRight($itemtype, $right) {
+   switch ($itemtype) {
       case 'PluginGenericobjectType' :
          return haveRight("config", $right);
       default :
-         return $profile->haveRight(PluginGenericobjectType::getNameByID($type), $right);
+         return haveRight($itemtype, $right);
    }
 
 }
-
+/*
 function plugin_genericobject_checkRight($module, $right) {
    global $CFG_GLPI;
 
-   $profile = new PluginGenericobjectProfile();
-
-   if (!$profile->haveRight($module, $right)) {
+   if (! haveRight($module, $right)) {
       // Gestion timeout session
       if (!isset ($_SESSION["glpiID"])) {
          glpi_header($CFG_GLPI["root_doc"] . "/index.php");
@@ -168,4 +160,4 @@ function plugin_genericobject_checkRight($module, $right) {
       displayRightError();
    }
    return true;
-}
+}*/

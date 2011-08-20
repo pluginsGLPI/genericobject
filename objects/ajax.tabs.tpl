@@ -39,5 +39,4 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-$dropdown = new %%OBJECT%%();
-include (GLPI_ROOT . "/ajax/dropdown.common.tabs.php");
+include ("object.tabs.php");

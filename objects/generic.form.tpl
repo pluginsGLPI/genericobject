@@ -36,8 +36,8 @@
  * This file is automatically managed by genericobject plugin. Do not modify it !
  */
 
-//define('GLPI_ROOT', '../../..');
-//include (GLPI_ROOT . "/inc/includes.php");
+define('GLPI_ROOT', '../../..');
+include (GLPI_ROOT . "/inc/includes.php");
 
-include ("object.form.php");
-?>
+$item = new %%CLASSNAME%%();
+include (GLPI_ROOT."/plugins/genericobject/front/object.form.php");

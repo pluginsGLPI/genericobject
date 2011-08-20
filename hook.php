@@ -99,7 +99,7 @@ function plugin_genericobject_AssignToTicket($types){
    global $LANG;
    
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
-      if (PluginGenericobjectProfile::haveRight($value["name"].'_open_ticket',"1")) {
+      if (haveRight($value["name"].'_open_ticket',"1")) {
          $types[$value['itemtype']] = call_user_func(array($value['itemtype'], 'getTypeName'));
       }
    }
@@ -244,6 +244,7 @@ function plugin_genericobject_giveItem($itemtype,$ID,$data,$num,$meta=0) {
  * @param name the internal object name
  * @return an array with all search options
  */
+ 
 function plugin_genericobject_objectSearchOptions($name, $search_options = array ()) {
    global $DB, $GENERICOBJECT_AVAILABLE_FIELDS, $LANG;
 
@@ -308,6 +309,7 @@ function plugin_genericobject_objectSearchOptions($name, $search_options = array
    }
    return $search_options;
 }
+
 //----------------------- INSTALL / UNINSTALL FUNCTION -------------------------------//
 
 function plugin_genericobject_install() {
@@ -349,52 +351,10 @@ function plugin_genericobject_uninstall() {
    global $DB;
    
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
-/*
-   //Delete search display preferences
-   $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='4850';";
-   $DB->query($query);
-*/
+
    //For each type
    foreach (PluginGenericobjectType::getTypes(true) as $tmp => $value) {
-      //Delete all tables and files related to the type (dropdowns)
-      PluginGenericobjectType::deleteSpecificDropdownFiles($value["itemtype"]);
-      PluginGenericobjectType::deleteSpecificDropdownTables($value["itemtype"]);
-
-      //Delete loans
-      PluginGenericobjectType::deleteLoans($value["itemtype"]);
-
-      //Delete if exists datainjection models
-      PluginGenericobjectType::removeDataInjectionModels($value["itemtype"]);
-
-      PluginGenericobjectType::deleteNetworking($value["itemtype"]);
-
-      //Delete search display preferences
-      $query = "DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='" . $value["itemtype"] . "';";
-      $DB->query($query);
-
-      //Delete link tables
-      $link_tables = array ("glpi_infocoms", "glpi_reservationitems", "glpi_documents_items",
-                            "glpi_contracts_items",  "glpi_bookmarks", "glpi_logs");
-      foreach ($link_tables as $link_table) {
-         $query = "DELETE FROM `" . $link_table . "` WHERE  `itemtype`='" . 
-                  $value["itemtype"] . "';";
-         $DB->query($query);
-      }
-
-      //Drop itemtype link table
-      PluginGenericobjectType::deleteLinkTable($value["itemtype"]);
-      
-      //Drop type table
-      $query = "DROP TABLE IF EXISTS `" .
-      PluginGenericobjectType::getTableNameByName($value["name"]) . "`";
-      $DB->query($query);
-      
-      if (file_exists(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"))
-         unlink(GENERICOBJECT_CLASS_PATH . "/".$value["itemtype"].".class.php"); 
-         
-      //Remove class from the filesystem
-      PluginGenericobjectType::deleteClassFile($value["itemtype"]);
-      
+      call_user_func(array($value['itemtype'], 'uninstall'));
    }
 
    foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile', 

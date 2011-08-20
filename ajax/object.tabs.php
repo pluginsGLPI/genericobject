@@ -30,8 +30,6 @@
     Purpose of file:
     ----------------------------------------------------------------------*/
 
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT . "/inc/includes.php");
 header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
@@ -85,10 +83,10 @@ if (empty ($_POST["id"])) {
          if ($item->canUseTickets()) {
             Ticket::showListForItem($itemtype, $_POST["id"]);
          }
-         if ($item->canUseNotes()) {
+         if ($item->canUseNotepad()) {
             showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
          }
-         if ($item->canUseLoans()) {
+         if ($item->canBeReserved()) {
             Reservation::showForItem($itemtype, $_POST["id"]);
          }
          if ($item->canUseHistory()) {
@@ -122,7 +120,7 @@ if (empty ($_POST["id"])) {
          //PluginGenericobjectObject::showDevice($_POST['target'], $itemtype, $_POST["id"]);
          break;
       case 10 :
-         showNotesForm($_POST['target'], 'PluginGenericobjectObject', $_POST["id"]);
+         showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
          break;
       case 11 :
          Reservation::showForItem($itemtype, $_POST["id"]);

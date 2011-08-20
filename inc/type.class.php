@@ -44,7 +44,8 @@ class PluginGenericobjectType extends CommonDBTM {
    const CLASS_DROPDOWN_TEMPLATE     = "../objects/generic.dropdown.class.tpl";
    const FRONTFORM_DROPDOWN_TEMPLATE = "../objects/front.form.tpl";
    const SEARCH_TEMPLATE             = "../objects/front.tpl";
-   const AJAX_DROPDOWN_TEMPLATE      = "../objects/ajax.tabs.tpl";
+   const AJAX_DROPDOWN_TEMPLATE      = "../objects/dropdown.tabs.tpl";
+   const AJAX_TEMPLATE               = "../objects/ajax.tabs.tpl";
 
    function __construct($itemtype = false) {
       if ($itemtype) {
@@ -299,6 +300,7 @@ class PluginGenericobjectType extends CommonDBTM {
      //Write the form on the filesystem
       self::addFormFile($this->input["name"],$this->input["itemtype"]);
       self::addSearchFile($this->input["name"],$this->input["itemtype"]);
+      self::addAjaxFile($this->input["name"],$this->input["itemtype"]);
       
       //Create rights for this new object
       PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], true);
@@ -355,6 +357,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
       //Remove form from the filesystem
       self::deleteSearchFile($this->fields["name"]);
+
+      self::deleteAjaxFile($this->fields["name"]);
 
       //Delete profile informations associated with this type
       PluginGenericobjectProfile::deleteTypeFromProfile($this->fields["itemtype"]);
@@ -644,6 +648,10 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteFile(self::getCompleteSearchFilename($name));
    }
 
+   public static function deleteAjaxFile($name) {
+      self::deleteFile(self::getCompleteAjaxTabFilename($name));
+   }
+
    public static function deleteDropdownAjaxFile($name, $field) {
       self::deleteFile(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php");
    }
@@ -692,6 +700,10 @@ class PluginGenericobjectType extends CommonDBTM {
 
    public static function addDropdownAjaxFile($name, $field) {
       self::addFileFromTemplate($name, self::AJAX_DROPDOWN_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
+   }
+
+   public static function addAjaxFile($name, $field) {
+      self::addFileFromTemplate($name, self::AJAX_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
    }
    
    public static function addDropdownFrontformFile($name, $field) {
@@ -1039,8 +1051,8 @@ class PluginGenericobjectType extends CommonDBTM {
       $fields    = $DB->list_fields($table);
 
       //If table doesn't exists, do not try to register !
-      if (class_exists($objecttype->fields['itemype'])) {
-         call_user_func(array($objecttype->fields['itemype'], 'registerType'));
+      if (class_exists($objecttype->fields['itemtype'])) {
+         call_user_func(array($objecttype->fields['itemtype'], 'registerType'));
 
 /*
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/search.php?itemtype=' . $itemtype;

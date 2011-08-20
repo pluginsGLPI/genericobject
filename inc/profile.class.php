@@ -90,7 +90,6 @@ class PluginGenericobjectProfile extends CommonDBTM {
          
          }
 
-
       } else {
          echo "<tr><td class='center'><strong>"; 
          echo $LANG["genericobject"]['profile'][3]."</strong></td></tr>";
@@ -157,15 +156,18 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
    }
    
-   
    /**
     * Check if rights for a profile still exists
-    * @param profileID the profile ID
+    * @param profiles_id the profile ID
+    * @param itemtype name of the type 
     * @return true if exists, no if not
     */
-   public static function profileExists($profiles_id) {
-      return (countElementsInTable(getTableForItemType(__CLASS__), 
-                                  "`profiles_id`='$profiles_id'")>0?true:false);
+   public static function profileExists($profiles_id, $itemtype = false) {
+      $condition = "`profiles_id`='$profiles_id'";
+      if($itemtype) {
+         $condition.= "AND `itemtype`='$itemtype'";
+      }
+      return (countElementsInTable(getTableForItemType(__CLASS__),$condition) >0?true:false);
    }
    
    /**
@@ -174,10 +176,9 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @return nothing
     */
    public static function createAccess($profiles_id, $first=false) {
-      $types          = PluginGenericobjectType::getTypes(true);
       $profile = new self();
-      foreach ($types as $tmp => $value) {
-         if (!self::profileForTypeExists($profiles_id, $value["itemtype"])) {
+      foreach ( PluginGenericobjectType::getTypes(true) as $tmp => $value) {
+         if (!self::profileExists($profiles_id, $value["itemtype"])) {
             $input["itemtype"]    = $value["itemtype"];
             $input["right"]       = ($first?'w':'');
             $input["open_ticket"] = ($first?1:0);
@@ -187,18 +188,6 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
    }
 
-   /**
-    * Check if rights for a profile and type still exists
-    * @param profileID the profile ID
-    * @param itemtype name of the type 
-    * @return true if exists, no if not
-    */
-   public static function profileForTypeExists($profiles_id, $itemtype) {
-      global $DB;
-      return (countElementsInTable(getTableForItemType(__CLASS__), 
-                                  "`profiles_id`='$profiles_id' " .
-                                  "AND `itemtype`='$itemtype'")>0?true:false);
-   }
 
    /**
     * Delete type from the rights
@@ -213,22 +202,17 @@ class PluginGenericobjectProfile extends CommonDBTM {
    public static function changeProfile() {
       $profile = new self();
       if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'])) {
-         $_SESSION["glpi_plugin_genericobject_profile"]=$profile->fields;
+         foreach ($profile->fields as $key => $value) {
+            if ($key != 'id') {
+               $_SESSION["glpiactiveprofile"][$key] = $value;
+            }
+         }
       } else {
-         unset($_SESSION["glpi_plugin_genericobject_profile"]);
-      }
-
-   }
-   
-   function haveRight($module, $right) {
-      $matches = array ("" => array ("", "r", "w"), "r" => array ("r", "w"), "w" => array ("w"),
-                        "1" => array ("1"), "0" => array ("0", "1"));
-   
-      if (isset ($_SESSION["glpi_plugin_genericobject_profile"][$module]) 
-            && in_array($_SESSION["glpi_plugin_genericobject_profile"][$module], $matches[$right])) {
-         return true;
-      } else {
-         return false;
+         foreach ($_SESSION["glpiactiveprofile"] as $key => $value) {
+            if (preg_match("/^PluginGenericobject/",$key)) {
+               unset($_SESSION["glpiactiveprofile"][$key]);
+            }
+         }
       }
    }
 

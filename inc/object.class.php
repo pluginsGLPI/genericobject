@@ -34,10 +34,7 @@
 // ----------------------------------------------------------------------
 class PluginGenericobjectObject extends CommonDBTM {
 
-   //Object type configuration
-   private $type_infos = array ();
-
-   protected $type;
+   protected $objecttype;
    
    //Internal field counter
    private $cpt = 0;
@@ -48,30 +45,34 @@ class PluginGenericobjectObject extends CommonDBTM {
       $item = new $class();
       $fields = $DB->list_fields(getTableForItemType($class));
       
-      $options = array("document_types"         => $item->type->canUseDocuments(),
-                       "helpdesk_visible_types" => $item->type->canUseTickets() 
+      $options = array("document_types"         => $item->objecttype->canUseDocuments(),
+                       "helpdesk_visible_types" => $item->objecttype->canUseTickets() 
                                                     && isset($fields['helpdesk_visible']),
-                       "linkgroup_types"        => $item->type->canUseTickets() 
+                       "linkgroup_types"        => $item->objecttype->canUseTickets() 
                                                     && isset ($fields["groups_id"]),
-                       "linkuser_types"         => $item->type->canUseTickets() 
+                       "linkuser_types"         => $item->objecttype->canUseTickets() 
                                                    && isset ($fields["users_id"]),
-                       "ticket_types"           => $item->type->canUseTickets(),
-                       "infocom_types"          => $item->type->canUseInfocoms(),
-                       "networkport_types"      => $item->type->canUseNetworkPorts(),
-                       "reservation_types"      => $item->type->canBeReserved(),
-                       "contract_types"         => $item->type->canUseContract());
+                       "ticket_types"           => $item->objecttype->canUseTickets(),
+                       "infocom_types"          => $item->objecttype->canUseInfocoms(),
+                       "networkport_types"      => $item->objecttype->canUseNetworkPorts(),
+                       "reservation_types"      => $item->objecttype->canBeReserved(),
+                       "contract_types"         => $item->objecttype->canUseContract());
          Plugin::registerClass($class, $options);
-         $profile = new PluginGenericobjectProfile();
-         if ($profile->haveRight($class,"r")) {
+         if (haveRight($class, "r")) {
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
                                                       = call_user_func(array($class, 'getTypeName'));
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
                                                       = getItemTypeSearchURL($class, false);
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = getItemTypeFormURL($class, false);
-           if ($item->type->canUseTemplate()) {
+           if ($item->objecttype->canUseTemplate()) {
               $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
                                                          = "/front/setup.templates.php?itemtype=$class&amp;add=0";
+           }
+
+           if (haveRight('config', 'w')) {
+              $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
+                                          = getItemTypeSearchURL('PluginGenericobjectType',false);
            }
       }
    }
@@ -79,31 +80,28 @@ class PluginGenericobjectObject extends CommonDBTM {
    static function getTypeName() {
       $class = get_called_class();
       $item = new $class();
-      PluginGenericobjectType::includeLocales($item->type->fields['name']);
+      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
       if(isset($LANG['genericobject'][$class][0])) {
          return $LANG['genericobject'][$class][0];
       } else {
-         return $item->type->fields['name'];
+         return $item->objecttype->fields['name'];
       }
    }
    
    public function __construct() {
-      if (get_class($this) != __CLASS__) {
-         $this->table = getTableForItemType(get_class($this));
-         if (get_class($this) && class_exists(get_class($this))) {
-            $this->type = new PluginGenericobjectType(get_class($this));
-         }
+      $this->table = getTableForItemType(get_class($this));
+      if (get_called_class() && class_exists(get_called_class())) {
+         $this->objecttype = new PluginGenericobjectType(get_called_class());
       }
+      $this->dohistory = $this->canUseHistory();
    }
    
    function canCreate() {
-      $profile = new PluginGenericobjectProfile();
-      return $profile->haveRight(get_class($this), 'w');
+      return haveRight(get_class($this), 'w');
    }
 
    function canView() {
-      $profile = new PluginGenericobjectProfile();
-      return $profile->haveRight(get_class($this), 'r');
+      return haveRight(get_class($this), 'r');
    }
 
    function defineTabs($options=array()) {
@@ -134,11 +132,11 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ong[7] = $LANG['setup'][620];
          }
 */
-         if ($this->canUseNotes() && haveRight("notes", "r")) {
+         if ($this->canUseNotepad() && haveRight("notes", "r")) {
             $ong[10] = $LANG['title'][37];
          }
 
-         if ($this->canUseLoans()) {
+         if ($this->canBeReserved()) {
             $ong[11] = $LANG['Menu'][17];
          }
 
@@ -150,58 +148,58 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseInfocoms() {
-      return ($this->type->canUseInfocoms() 
+      return ($this->objecttype->canUseInfocoms() 
                && (haveRight("contract", "r") || haveRight("infocom", "r")));
    }
 
    function canUseDocuments() {
-      return ($this->type->canUseDocuments() && haveRight("document", "r"));
+      return ($this->objecttype->canUseDocuments() && haveRight("document", "r"));
 
    }
 
    function canUseTickets() {
-      return ($this->type->canUseTickets() && haveRight("show_all_ticket", "1"));
+      return ($this->objecttype->canUseTickets() && haveRight("show_all_ticket", "1"));
    }
 
-   function canUseNotes() {
-      return ($this->type->canUseNotes() && haveRight("notes", "r"));
+   function canUseNotepad() {
+      return ($this->objecttype->canUseNotepad() && haveRight("notes", "r"));
    }
 
-   function canUseLoans() {
-      return ($this->type->canUseLoans() && haveRight("reservation_central", "r"));
+   function canBeReserved() {
+      return ($this->objecttype->canBeReserved() && haveRight("reservation_central", "r"));
    }
 
    function canUseHistory() {
-      return ($this->type->canUseHistory());
+      return ($this->objecttype->canUseHistory());
    }
 
    function canUsePluginDataInjection() {
-      return ($this->type->canUsePluginDataInjection());
+      return ($this->objecttype->canUsePluginDataInjection());
    }
 
    function canUsePluginPDF() {
-      return ($this->type->canUsePluginPDF());
+      return ($this->objecttype->canUsePluginPDF());
    }
 
    function canUsePluginOrder() {
-      return ($this->type->canUsePluginOrder());
+      return ($this->objecttype->canUsePluginOrder());
    }
 
    function canUseNetworkPorts() {
-      return ($this->type->canUseNetworkPorts());
+      return ($this->objecttype->canUseNetworkPorts());
    }
 
    function canUseDirectConnections() {
-      return ($this->type->canUseDirectConnections());
+      return ($this->objecttype->canUseDirectConnections());
    }
 
-   function title($name) {
-      displayTitle('', PluginGenericobjectObject::getLabel($name), 
-                   PluginGenericobjectObject::getLabel($name));
+   function title() {
+      $name = call_user_func(array(get_called_class(), 'getTypeName'));
+      displayTitle('', $name, $name);
    }
 
    function showForm($ID, $options=array(), $previsualisation = false) {
-      global $LANG;
+      global $LANG, $DB;
 
       if ($previsualisation) {
          $canedit = true;
@@ -222,41 +220,22 @@ class PluginGenericobjectObject extends CommonDBTM {
       
       $this->fields['id'] = $ID;
       $this->showFormHeader($options);
-      echo "<input type='hidden' name='itemtype' value='" .get_class($this). "'>";
-      if (!$previsualisation) {
-         echo "<div class='center' id='tabsbody'>";
-      }
-      else {
-         echo "<div class='center'>";
-      }
-      echo "<table class='tab_cadre_fixe' >";
-
-      foreach ($DB->list_fields(getTableForItemType(get_class($this))) as $field => $tmp) {
+      foreach ($DB->list_fields(getTableForItemType(get_called_class())) as $field => $description) {
          $value = $this->fields[$field];
-         $this->displayField($canedit, $field, $value);
+         $this->displayField($canedit, $field, $value, $description);
       }
       $this->closeColumn();
 
       if (!$previsualisation) {
          $this->showFormButtons($options);
-      }
-
-      echo "</table></div></form>";
-      if (!$previsualisation) {
          echo "<div id='tabcontent'></div>";
          echo "<script type='text/javascript'>loadDefaultTab();</script>";
+      } else {
+         echo "</table></div></form>";
       }
    }
 
-   function getAllTabs() {
-      global $LANG;
-      foreach (getAllDatasFromTable($this->table) as $ID => $value)
-         $tabs[$value["itemtype"]] = $LANG["genericobject"][$value["name"]][1];
-
-      return $tabs;
-   }
-
-   function displayField($canedit, $name, $value) {
+   function displayField($canedit, $name, $value, $description = array()) {
       global $GENERICOBJECT_AVAILABLE_FIELDS, $GENERICOBJECT_BLACKLISTED_FIELDS;
 
       if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$name]) 
@@ -266,84 +245,41 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo $GENERICOBJECT_AVAILABLE_FIELDS[$name]['name'];
          $this->endColumn();
          $this->startColumn();
-         switch ($GENERICOBJECT_AVAILABLE_FIELDS[$name]['input_type']) {
-            case 'multitext' :
-               if ($canedit) {
-                  echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value . 
-                     "</textarea>";
-               }
-               else {
-                  echo $value;
-               }
-               break;
-            case 'text' :
-               if ($canedit) {
-                  $table = PluginGenericobjectType::getTableByName($name);
-                  autocompletionTextField($this, $name);
-               } else {
-                  echo $value;
-               }
-               break;
-            case 'date' :
-               if ($canedit) {
-                  showDateFormItem($name, $value, false, true);
-               }
-               else {
-                  echo convDate($value);
-               }
-               break;
-            case 'integer' :
-               if ($canedit) {
-                  echo "<input type='text' name='".$name."' value=\"".formatNumber($value, true, 0)."\" size='6'>";
-               } else
-                  echo $value;
-               break;
-            case 'dropdown_global' :
-               Dropdown::showGlobalSwitch($_SERVER['PHP_SELF'],'',$this->fields['id'],
-                                          $this->fields['is_global'],2);
-               
-               break;
-            case 'dropdown' :
-               if (PluginGenericobjectType::isDropdownTypeSpecific($name)) {
-                  $type = strtolower(str_replace("PluginGenericobject", "", $this->type));
-                  $device_name = PluginGenericobjectType::getNameByID($type);
-                  $table = PluginGenericobjectType::getDropdownTableName($device_name, $name);
-               } else
-                  $table = $GENERICOBJECT_AVAILABLE_FIELDS[$name]['table'];
-
-               if ($canedit) {
-                  $entity_restrict = $this->fields["entities_id"];
-                  switch ($table) {
-                     default :
-                        if (isset($device_name)) {
-                           $object_name = "PluginGenericobject".ucfirst($device_name).ucfirst($name);
-                        }
-                        else $object_name = ucfirst($name);
-                  
-                        //dropdownValue($table, $name, $value, 1, $entity_restrict);
-                        Dropdown::show($object_name, array('value' => $value, 'name' => $name,
-                                                           'entity' => $entity_restrict));
-                        break;
-                     case 'glpi_users' :
-                        User::dropdown(array('name'   => $name, 'value'  => $value, 
-                                             'right'  => 'all', 'entity' => $entity_restrict));
-                        break;   
+         
+         switch ($description['Type']) {
+            case "int(11)":
+               $fk_table = getTableNameForForeignKeyField($name);
+               if ($fk_table != '') {
+                  $itemtype = getItemTypeForTable($fk_table); 
+                  $dropdown = new $itemtype();
+                  $parameters = array('name' => $name, 'value' => $value, 'comments' => true);
+                  if ($dropdown->isEntityAssign()) {
+                     $parameters["entity"] = $this->fields['entities_id'];
                   }
-                  
-               } else {
-                  echo getDropdownName($table, $value);
+                  if ($dropdown->maybeRecursive()) {
+                     $parameters['entity_sons'] = true;
+                  }
+                  Dropdown::show($itemtype, $parameters);
                }
                break;
-            case 'dropdown_yesno' :
-               if ($canedit) {
-                  //dropdownYesNo($name, $value);
-                  Alert::dropdownYesNo(array("name" => $name, 
-                                                "value" => $value));
-               }
-               else {
-                  echo getYesNo($value);
-               }
+            case "tinyint(1)":
+               Dropdown::showYesNo($name, $value);
                break;
+            default:
+            case "varchar(255)":
+                  autocompletionTextField($this, $name);
+               break;
+            case "longtext":
+            case "text":
+               echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value . 
+                     "</textarea>";
+               break;
+            case "date":
+                  showDateFormItem($name, $value, false, true);
+                  break;
+            case "datetime":
+                  showDateTimeFormItem($name, $value, false, true);
+                  break;
          }
          $this->endColumn();
       }
@@ -404,7 +340,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (isset ($this->input["_oldID"])) {
          // ADD Infocoms
          $ic = new Infocom();
-         if ($ic->getFromDBforDevice($this->type, $this->input["_oldID"])) {
+         if ($item->canUseInfocoms() 
+            && $ic->getFromDBforDevice($this->type, $this->input["_oldID"])) {
             $ic->fields["items_id"] = $this->fields['id'];
             unset ($ic->fields["id"]);
             if (isset ($ic->fields["immo_number"])) {
@@ -420,103 +357,57 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ic->addToDB();
          }
 
-         // ADD Contract
-         $query = "SELECT contracts_id 
-                     FROM glpi_contracts_items 
-                     WHERE items_id='" . $this->input["_oldID"] . "' 
-                        AND itemtype='" . $this->type . "';";
-         $result = $DB->query($query);
-         if ($DB->numrows($result) > 0) {
-            while ($data = $DB->fetch_array($result))
-               addDeviceContract($data["contracts_id"], $this->type, $this->input['newID']);
+         foreach (array('Document_Item' => 'documents_id', 
+                        'Contract_Item' => 'contracts_id') as $type => $fk) {
+            $item = new $type();
+            foreach ($item->find("items_id='" . $this->input["_oldID"] . "' 
+                                 AND itemtype='" . $this->type . "'") as $tmpid => $data) {
+               $tmp = array();
+               $tmp['items_id'] = $this->input["_oldID"];
+               $tmp['itemtype'] = $type;
+               $tmp[$fk]        = $data[$fk];
+               $item->add($tmp);
+            }
+         }
+         
+         if ($item->canUseNetworkPorts()) {
+            // ADD Ports
+            $query = "SELECT `id`
+                      FROM `glpi_networkports`
+                      WHERE `items_id` = '".$this->input["_oldID"]."'
+                            AND `itemtype` = '".get_called_class()."';";
+            $result=$DB->query($query);
+            if ($DB->numrows($result)>0) {
+               while ($data=$DB->fetch_array($result)) {
+                  $np  = new NetworkPort();
+                  $npv = new NetworkPort_Vlan();
+                  $np->getFromDB($data["id"]);
+                  unset($np->fields["id"]);
+                  unset($np->fields["ip"]);
+                  unset($np->fields["mac"]);
+                  unset($np->fields["netpoints_id"]);
+                  $np->fields["items_id"] = $this->fields['id'];
+                  $portid = $np->addToDB();
+                  foreach ($DB->request('glpi_networkports_vlans',
+                                        array('networkports_id' => $data["id"])) as $vlan) {
+                     $npv->assignVlan($portid, $vlan['vlans_id']);
+                  }
+               }
+            }
          }
 
-         // ADD Documents
-         $query = "SELECT documents_id 
-                     FROM glpi_documents_items 
-                     WHERE items_id='" . $this->input["_oldID"] . "' AND itemtype='" . 
-                        $this->type . "';";
-         $result = $DB->query($query);
-         if ($DB->numrows($result) > 0) {
-            while ($data = $DB->fetch_array($result))
-               addDeviceDocument($data["documents_id"], $this->type, $this->input['newID']);
-         }
       }
    }
 
    function cleanDBonPurge() {
-      global $DB, $CFG_GLPI;
+      $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
       
-      $ID = $this->fields['id'];
-
-      //$job = new Job();
-      $query = "SELECT * 
-               FROM `glpi_tickets` 
-               WHERE `items_id` = '".$this->fields['id']."'  AND `itemtype`='" . $this->type . "'";
-      $result = $DB->query($query);
-
-      if ($DB->numrows($result))
-         while ($data = $DB->fetch_array($result)) {
-            if ($CFG_GLPI["keep_tracking_on_delete"] == 1) {
-               $query = "UPDATE `glpi_tickets` SET `items_id` = '0', `itemtype`='0' " .
-                        "WHERE `id`='" . $data["id"] . "';";
-               $DB->query($query);
-            } /*else
-               $job->delete(array (
-                  "id" => $data["id"]
-               ));*/
-         }
-
-      $query = "SELECT id 
-               FROM `glpi_networkports` 
-               WHERE `items_id` = '".$this->fields['id']."' AND `itemtype` = '" . $this->type . "'";
-      $result = $DB->query($query);
-      while ($data = $DB->fetch_array($result)) {
-         $q = "DELETE FROM `glpi_networkports_networkports` " .
-              "WHERE `networkports_id_1` = '" . $data["id"] . "' " .
-                  "OR `networkports_id_2` = '" . $data["id"] . "'";
-         $DB->query($q);
+      $types = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item', 
+                     'Reservation_Item', 'Document_Item', 'Infocom', 'Contract_Item');
+      foreach ($types as $type) {
+         $item = new $type();
+         $item->deleteByCriteria($parameters);
       }
-
-
-      $query2 = "DELETE FROM `glpi_networkports` " .
-                "WHERE `items_id` = '$ID' AND `itemtype` = '" . $this->type . "'";
-      $DB->query($query2);
-
-      $query = "SELECT * FROM `glpi_computers_items` " .
-               "WHERE `itemtype`='" . $this->type . "' AND `items_id` ='$ID'";
-      if ($result = $DB->query($query)) {
-         if ($DB->numrows($result) > 0) {
-            while ($data = $DB->fetch_array($result)) {
-               // Disconnect without auto actions
-               Disconnect($data["id"], 1, false);
-            }
-         }
-      }
-
-      $query = "SELECT `id` FROM `glpi_reservationsitems` " .
-               "WHERE `itemtype`='" . $this->type . "' AND `items_id`='$ID'";
-      if ($result = $DB->query($query)) {
-         if ($DB->numrows($result) > 0) {
-            $rr = new ReservationItem();
-            $rr->delete(array (
-               "id" => $DB->result($result, 0, "id")
-            ));
-         }
-      }
-
-      $query = "DELETE FROM `glpi_infocoms` " .
-               "WHERE `items_id` = '$ID' AND `itemtype`='" . $this->type . "'";
-      $DB->query($query);
-
-      $query = "DELETE FROM `glpi_contracts_items` " .
-               "WHERE `items_id` = '$ID' AND `itemtype`='" . $this->type . "'";
-      $DB->query($query);
-
-      $query = "DELETE FROM `glpi_documents_items` " .
-               "WHERE (`items_id` = '$ID' AND `itemtype`='" . $this->type . "')";
-      $DB->query($query);
-
    }
    
    /**
@@ -525,9 +416,8 @@ class PluginGenericobjectObject extends CommonDBTM {
     */
    public static function showPrevisualisationForm($itemtype) {
       global $LANG;
-      
-      $profile = new PluginGenericobjectProfile();
-      if ($profile->haveRight($itemtype,'r')) {
+
+      if (haveRight($itemtype,'r')) {
          $name = PluginGenericobjectType::getNameByID($itemtype);
          echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
          $object = new PluginGenericobjectObject($itemtype);
@@ -876,16 +766,5 @@ class PluginGenericobjectObject extends CommonDBTM {
          return $name;
       }
    }
-   
-   static function uninstall() {
-      global $DB;
-      
-      $tables = array ("glpi_displaypreferences", "glpi_documents_items", "glpi_bookmarks",
-                       "glpi_logs");
-      foreach ($tables as $table) {
-         $query = "DELETE FROM `$table` WHERE `itemtype`='".__CLASS__."'";
-         $DB->query($query);
-      }
 
-   }
 }

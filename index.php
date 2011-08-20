@@ -41,10 +41,8 @@ commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins",
 echo "<table class='tab_cadre_fixe'>";
 echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
       
-$profile = new PluginGenericobjectProfile();
-
 foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
-   if ($profile->haveRight($value['itemtype'], 'r')) {
+   if (haveRight($value['itemtype'], 'r')) {
       echo "<tr class='tab_bg_1'><td align='center'>"; 
       echo "<a href='".getItemTypeSearchURL($value['itemtype'])."'>";
       echo call_user_func(array($value['itemtype'], 'getTypeName'));
