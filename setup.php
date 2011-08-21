@@ -94,12 +94,11 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
-   $types = PluginGenericobjectType::getTypes();
-   foreach ($types as $type => $params) {
-
-      Plugin::registerClass('PluginGenericobject'.ucfirst($params["name"]), 
-                         array('helpdesk_types' => true, 'linkgroup_types' => true,
-                               'linkuser_types' => true));
+     $types = PluginGenericobjectType::getTypes();
+      foreach ($types as $type => $params) {
+         Plugin::registerClass('PluginGenericobject'.ucfirst($params["name"]), 
+                            array('helpdesk_types' => true, 'linkgroup_types' => true,
+                                  'linkuser_types' => true));
       }
       
       PluginGenericobjectType::registerNewTypes();

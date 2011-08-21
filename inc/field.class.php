@@ -200,6 +200,9 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'date':
                $query.="DATE DEFAULT NULL";
                break;
+            case 'datetime':
+               $query.="DATETIME DEFAULT NULL";
+               break;
          }
          $DB->query($query);
       }

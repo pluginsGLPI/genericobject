@@ -36,6 +36,7 @@ global $GENERICOBJECT_AVAILABLE_FIELDS, $LANG;
 $GENERICOBJECT_AVAILABLE_FIELDS['id']['name']       = 'ID';
 $GENERICOBJECT_AVAILABLE_FIELDS['id']['field']      = 'id';
 $GENERICOBJECT_AVAILABLE_FIELDS['id']['input_type'] = 'text';
+$GENERICOBJECT_AVAILABLE_FIELDS['id']['massiveaction'] = false;
 
 $GENERICOBJECT_AVAILABLE_FIELDS['name']['name']       = $LANG['common'][16];
 $GENERICOBJECT_AVAILABLE_FIELDS['name']['field']      = 'name';
@@ -96,16 +97,17 @@ $GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['table']      = 'glpi_entities';
 $GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['field']      = 'completename';
 $GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['linkfield']  = 'entities_id';
 $GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['input_type'] = 'dropdown';
+$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['massiveaction'] = false;
 
 $GENERICOBJECT_AVAILABLE_FIELDS['template_name']['name']       = $LANG['entity'][0];
 $GENERICOBJECT_AVAILABLE_FIELDS['template_name']['field']      = 'template_name';
 $GENERICOBJECT_AVAILABLE_FIELDS['template_name']['linkfield']  = 'entities_id';
 $GENERICOBJECT_AVAILABLE_FIELDS['template_name']['input_type'] = 'text';
+$GENERICOBJECT_AVAILABLE_FIELDS['template_name']['massiveaction'] = false;
 
 $GENERICOBJECT_AVAILABLE_FIELDS['notepad']['name']       = $LANG['title'][37];
 $GENERICOBJECT_AVAILABLE_FIELDS['notepad']['field']      = 'notepad';
 $GENERICOBJECT_AVAILABLE_FIELDS['notepad']['input_type'] = 'multitext';
-
 
 $GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['name']       = $LANG['entity'][9];
 $GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['field']      = 'is_recursive';
@@ -118,13 +120,14 @@ $GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['field']      = 'is_deleted';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['linkfield']  = '';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['input_type'] = 'dropdown_yesno';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['datatype']   = 'bool';
-
+$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['massiveaction'] = false;
 
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['name']       = $LANG['common'][13];
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['field']      = 'is_template';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['linkfield']  = '';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['input_type'] = 'dropdown_yesno';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_template']['datatype']   ='bool';
+$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['massiveaction'] = false;
 
 
 $GENERICOBJECT_AVAILABLE_FIELDS['is_global']['name']       = $LANG['peripherals'][33];
@@ -132,7 +135,7 @@ $GENERICOBJECT_AVAILABLE_FIELDS['is_global']['field']      = 'is_global';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_global']['linkfield']  = '';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_global']['input_type'] = 'dropdown_global';
 $GENERICOBJECT_AVAILABLE_FIELDS['is_global']['datatype']   = 'bool';
-
+$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['massiveaction'] = false;
 
 $GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['name']       = $LANG['software'][46];
 $GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['field']      = 'is_helpdesk_visible';

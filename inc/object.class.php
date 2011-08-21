@@ -434,13 +434,64 @@ class PluginGenericobjectObject extends CommonDBTM {
       $options = array();
       $table = getTableForItemType(get_class($this));
       foreach ($DB->list_fields($table) as $field => $values) {
-         $options[$index]['field'] = $field;
-         if ($tmp = getTableNameForForeignKeyField($field) != '') {
+         
+         //Table definition
+         $tmp = getTableNameForForeignKeyField($field);
+         if ($tmp != '') {
+            $itemtype = getItemTypeForTable($tmp);
+            $item     = new $itemtype();
+            //Set table
             $options[$index]['table'] = $tmp;
+            
+            //Set field
+            if ($item instanceof CommonTreeDropdown) {
+               $options[$index]['field'] = 'completename';
+            } else {
+               $options[$index]['field'] = 'name';
+            }
          } else {
             $options[$index]['table'] = $table;
+            $options[$index]['field'] = $field;
          }
+
          $options[$index]['name']  = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+         
+         //Massive action or not
+         if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['massiveaction'])) {
+            $options[$index]['massiveaction'] 
+               = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['massiveaction'];
+         }
+         
+         //Field type
+         switch ($values['Type']) {
+            default:
+            case "varchar(255)":
+               if ($field == 'name') {
+                  $options[$index]['datatype']      = 'itemlink';
+                  $options[$index]['itemlink_type'] = get_called_class();
+                  $options[$index]['massiveaction'] = false;
+               }
+               break;
+            case "tinyint(1)":
+               $options[$index]['datatype'] = 'bool';
+               break;
+            case "text":
+            case "longtext":
+               $options[$index]['datatype'] = 'text';
+               break;
+            case "int(11)":
+               $options[$index]['datatype'] = 'text';
+               break;
+            case "float":
+                $options[$index]['datatype'] = 'decimal';
+               break;
+            case "date":
+               $options[$index]['datatype'] = 'date';
+               break;
+            case "datetime":
+               $options[$index]['datatype'] = 'datetime';
+               break;
+         }
          $index++;
       }
       return $options;

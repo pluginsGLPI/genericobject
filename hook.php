@@ -33,39 +33,10 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 
-function plugin_genericobject_getAddSearchOptions($itemtype) {
-   global $LANG;
-   $sopt = array ();
-   
-   $sopt[1]['table']     = 'glpi_plugin_genericobject_types';
-   $sopt[1]['field']     = 'name';
-   $sopt[1]['linkfield'] = '';
-   $sopt[1]['name']      = $LANG["common"][22];
-   $sopt[1]['datatype']  = 'itemlink';
- 
-   foreach (PluginGenericobjectType::getTypes() as $type => $params) {
-      $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
-   }
-   
-   return $sopt;
-
-}
-
-
-function plugin_genericobject_getSearchOption() {
-   global $LANG;
-   $sopt = array ();
-   foreach (PluginGenericobjectType::getTypes() as $type => $params) {
-      $sopt = plugin_genericobject_objectSearchOptions($params["name"],$sopt);
-   }
-   return $sopt;
-
-}
-
 function plugin_headings_actions_genericobject($item) {
 
    switch (get_class($item)) {
-      case PROFILE_TYPE :
+      case 'Profile' :
          return array (1 => "plugin_headings_genericobject");
          break;
    }
@@ -76,7 +47,7 @@ function plugin_get_headings_genericobject($item, $withtemplate) {
    global $LANG;
 
    switch (get_class($item)) {
-      case PROFILE_TYPE:
+      case 'Profile':
          $prof = new Profile();
             return array(1 => $LANG["genericobject"]["title"][1]);
             break;
@@ -85,9 +56,8 @@ function plugin_get_headings_genericobject($item, $withtemplate) {
 }
 
 function plugin_headings_genericobject($item, $withtemplate) {
-   global $CFG_GLPI,$LANG;
    switch (get_class($item)) {
-      case PROFILE_TYPE :
+      case 'Profile' :
          PluginGenericobjectProfile::createAccess($item->getID());
          $prof = new PluginGenericobjectProfile();
          $prof->showForm($item->getID());
@@ -95,9 +65,7 @@ function plugin_headings_genericobject($item, $withtemplate) {
    }   
 }
 
-function plugin_genericobject_AssignToTicket($types){
-   global $LANG;
-   
+function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
       if (haveRight($value["name"].'_open_ticket',"1")) {
          $types[$value['itemtype']] = call_user_func(array($value['itemtype'], 'getTypeName'));
@@ -120,7 +88,7 @@ function plugin_genericobject_getDropdown() {
 }
 
 // Define dropdown relations
-function plugin_genericobject_getDatabaseRelations(){
+function plugin_genericobject_getDatabaseRelations() {
    $dropdowns = array();
 
    $plugin = new Plugin();
@@ -136,178 +104,12 @@ function plugin_genericobject_getDatabaseRelations(){
    return $dropdowns;
 }
 
-/**
- * Integration with datainjection plugin
- */
-function plugin_genericobject_datainjection_variables()
-{
-   global $DATA_INJECTION_MAPPING,$DATA_INJECTION_INFOS, $GENERICOBJECT_AVAILABLE_FIELDS,
-          $SEARCH_OPTION;
-   
-   $types = PluginGenericobjectType::getTypes();
-   foreach ($types as $tmp => $value) {
-      $name = PluginGenericobjectType::getNameByID($value["itemtype"]);
-      $fields = PluginGenericobjectField::getFieldsByType($value["itemtype"]);
-      foreach ($fields as $field => $object) {
-         switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
-               case 'date':
-               case 'text':
-                  $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
-                     PluginGenericobjectType::getTableByName($name);
-                  $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
-                     PluginGenericobjectType::getTableByName($name);
-                  break;
-               case 'dropdown' :
-                  if (PluginGenericobjectType::isDropdownTypeSpecific($field)) {
-                     $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
-                        PluginGenericobjectType::getDropdownTableName($name,$field);
-                     $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
-                        PluginGenericobjectType::getDropdownTableName($name,$field);   
-                  } else {
-                      $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
-                         $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
-                      $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
-                         $GENERICOBJECT_AVAILABLE_FIELDS[$field]['table'];
-                   }   
-                     
-                  break;
-               case 'dropdown_yesno' :
-                  $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['table'] = 
-                     PluginGenericobjectType::getTableByName($name);
-                  $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['table'] = 
-                     PluginGenericobjectType::getTableByName($name);
-                  break;
-         }
-            
-         $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['name'] = 
-            $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
-         $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['field'] = 
-            $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
-         $DATA_INJECTION_MAPPING[$value["itemtype"]][$field]['type'] = 
-            (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?
-               $GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
-
-         $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['name'] = 
-            $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
-         $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['field'] = 
-            $GENERICOBJECT_AVAILABLE_FIELDS[$field]['field'];
-         $DATA_INJECTION_INFOS[$value["itemtype"]][$field]['input_type'] = 
-            (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type'])?
-               $GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']:'text');
-
-      }   
-   }
-}
-
-function plugin_uninstall_addUninstallTypes($uninstal_types)
-{
-   /*
-   $types = PluginGenericobjectType::getTypes();
-   
-   foreach ($types as $tmp => $type)
-      if ($type["use_plugin_uninstall"])
+function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
+   foreach (PluginGenericobjectType::getTypes() as $tmp => $type)
+      if ($type["use_plugin_uninstall"]) {
          $uninstal_types[] = $type["itemtype"];
-   */
-   return $uninstal_types;      
-}
-
-function plugin_genericobject_giveItem($itemtype,$ID,$data,$num,$meta=0) {
-   $searchopt=&Search::getOptions($itemtype);
-   
-   $NAME="ITEM_";
-   if ($meta) {
-      $NAME="META_";
-   }
-   $table=$searchopt[$ID]["table"];
-   $field=$searchopt[$ID]["field"];
-   $linkfield=$searchopt[$ID]["linkfield"];
-   
-   if ($table == "glpi_plugin_genericobject_types") {
-      return;
-   }
-   $out = "";
-   //echo $field;
-   switch ($field) {
-      case 'name':   
-         $out  = "<a id='ticket".$data[$NAME.$num]."' href=\"object.form.php?id=".$data['id'];
-         $out .= "\">".$data[$NAME.$num];
-         $out .= "</a>";
-         break;
-   }
-   
-   return $out;
-}
-
-
-/**
- * Add search options for an object type
- * @param name the internal object name
- * @return an array with all search options
- */
- 
-function plugin_genericobject_objectSearchOptions($name, $search_options = array ()) {
-   global $DB, $GENERICOBJECT_AVAILABLE_FIELDS, $LANG;
-
-   $table = PluginGenericobjectType::getTableByName($name);
-
-   if (TableExists($table)) {
-      $type = PluginGenericobjectType::getIdentifierByName($name);
-      $ID = PluginGenericobjectType::getIDByName($name);
-      $fields = $DB->list_fields($table);
-      $i = 5000;
-
-      $search_options[80]['table'] = 'glpi_entities';
-      $search_options[80]['field'] = 'completename';
-      $search_options[80]['linkfield'] = 'entities_id';
-      $search_options[80]['name'] = $LANG["entity"][0];     
-
-      $search_options[4030]['table'] = $table;
-      $search_options[4030]['field'] = 'id';
-      $search_options[4030]['linkfield'] = '';
-      $search_options[4030]['name'] = $LANG["common"][2];
-
-      if (!empty ($fields)) {
-         $search_options['common'] = PluginGenericobjectObject::getLabel($name);
-         foreach ($fields as $field_values) {
-            $field_name = $field_values['Field'];
-            if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name])) {
-               $search_options[$i]['linkfield'] = '';
-
-               switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['input_type']) {
-                  case 'date' :
-                  case 'text' :
-                  case 'multitext' :
-                  case 'integer' :
-                     $search_options[$i]['table'] = PluginGenericobjectType::getTableByName($name);
-                     break;
-                  case 'dropdown' :
-                     if (PluginGenericobjectType::isDropdownTypeSpecific($field_name))
-                        $search_options[$i]['table'] = PluginGenericobjectType::getDropdownTableName($name, $field_name);
-                     else
-                        $search_options[$i]['table'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['table'];
-
-                     $search_options[$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
-                     break;
-                  case 'dropdown_yesno' :
-                  case 'dropdown_global' :
-                     $search_options[$i]['table'] = PluginGenericobjectType::getTableByName($name);
-                     $search_options[$i]['linkfield'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['linkfield'];
-                     break;
-               }
-               
-               $search_options[$i]['field'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['field'];
-               $search_options[$i]['name'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['name'];
-               if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype']))
-                  $search_options[$i]['datatype'] = $GENERICOBJECT_AVAILABLE_FIELDS[$field_name]['datatype'];
-
-               $i++;
-            }
-
-         }
       }
-
-   }
-   return $search_options;
+   return $uninstal_types;
 }
 
 //----------------------- INSTALL / UNINSTALL FUNCTION -------------------------------//
@@ -335,9 +137,16 @@ function plugin_genericobject_install() {
       }
    }
 
-   if (!is_dir(GENERICOBJECT_CLASS_PATH))
+   if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
       @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true) 
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
+   }
+   /*
+   foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH)
+            as $path) {
+      chown($path, 'www-data');
+      chmod($path, 744);
+   }*/
 
    //Init plugin & types
    plugin_init_genericobject();
@@ -365,7 +174,7 @@ function plugin_genericobject_uninstall() {
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            call_user_func(array($itemtype,'uninstall'));
+            call_user_func(array($itemtype, 'uninstall'));
          }
       }
    }

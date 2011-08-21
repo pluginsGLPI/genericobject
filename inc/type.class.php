@@ -517,7 +517,7 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function addTable($itemtype) {
       global $DB;
-      $query = "CREATE TABLE `".getTableForItemType($itemtype)."` (
+      $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."` (
                   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
                   `comment` TEXT NULL  ,
