@@ -33,7 +33,7 @@
 class PluginGenericobjectField extends CommonDBTM {
 
    public static function showObjectFieldsForm($ID) {
-      global $LANG, $DB, $GENERICOBJECT_BLACKLISTED_FIELDS, $GENERICOBJECT_AVAILABLE_FIELDS, $CFG_GLPI, 
+      global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI, 
              $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS;
 
       $url          = getItemTypeFormURL(__CLASS__);
@@ -46,7 +46,7 @@ class PluginGenericobjectField extends CommonDBTM {
          $used_fields[$autofield] = $autofield;
       }
 
-      foreach ($GENERICOBJECT_BLACKLISTED_FIELDS as $autofield) {
+      foreach ($GO_BLACKLIST_FIELDS as $autofield) {
          if (!in_array($autofield,$used_fields)) {
             $used_fields[$autofield] = $autofield;
          }
@@ -119,10 +119,10 @@ class PluginGenericobjectField extends CommonDBTM {
    }
 
    static function dropdownFields($name,$used=array()) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS;
+      global $GO_FIELDS;
       
       $dropdown_types = array();
-      foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values) {
+      foreach ($GO_FIELDS as $field => $values) {
          if(!in_array($field,$used)) {
             $dropdown_types[$field] = $values['name']." (".$field.")";
          }
@@ -132,8 +132,8 @@ class PluginGenericobjectField extends CommonDBTM {
    }
 
    public static function displayFieldDefinition($target, $ID, $field, $index, $total) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS;
-      $readonly = in_array($field, $GENERICOBJECT_BLACKLISTED_FIELDS);
+      global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS;
+      $readonly = in_array($field, $GO_BLACKLIST_FIELDS);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
       $sel = "";
@@ -147,7 +147,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</td>";
       echo "<td>" . $field . "</td>";
-      echo "<td>" . $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'] . "</td>";
+      echo "<td>" . $GO_FIELDS[$field]['name'] . "</td>";
 
       echo "<td width='10'>";
       if (!$readonly && $index > 2) {
@@ -167,11 +167,11 @@ class PluginGenericobjectField extends CommonDBTM {
    }
 
    public static function addNewField($table, $field, $name='') {
-      global $DB, $GENERICOBJECT_AVAILABLE_FIELDS;
+      global $DB, $GO_FIELDS;
 
       if (!FieldExists($table, $field)) {
          $query = "ALTER TABLE `$table` ADD `$field` ";
-         switch ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['input_type']) {
+         switch ($GO_FIELDS[$field]['input_type']) {
             case 'dropdown_yesno' :
             case 'dropdown_global' :
             case 'bool' :

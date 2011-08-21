@@ -60,9 +60,9 @@ if (isset ($_POST["add"])) {
    $item->delete($_POST);
    $item->redirectToList();
 }
-
-commonHeader(call_user_func(array(get_class($item), 'getTypeName')), $_SERVER['PHP_SELF'], 
-             "plugins", "genericobject", get_class($item));
+$itemtype = get_class($item);
+commonHeader(call_user_func(array($itemtype, 'getTypeName')), $_SERVER['PHP_SELF'], 
+             "plugins", "genericobject", $itemtype);
 
 $item->title();
 $item->showForm($id);

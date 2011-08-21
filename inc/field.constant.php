@@ -31,167 +31,167 @@
 // Original Author of file: Walid Nouh
 // Purpose of file:
 // ----------------------------------------------------------------------
-global $GENERICOBJECT_AVAILABLE_FIELDS, $LANG;
+global $GO_FIELDS, $LANG;
 
-$GENERICOBJECT_AVAILABLE_FIELDS['id']['name']       = 'ID';
-$GENERICOBJECT_AVAILABLE_FIELDS['id']['field']      = 'id';
-$GENERICOBJECT_AVAILABLE_FIELDS['id']['input_type'] = 'text';
-$GENERICOBJECT_AVAILABLE_FIELDS['id']['massiveaction'] = false;
+$GO_FIELDS['id']['name']       = 'ID';
+$GO_FIELDS['id']['field']      = 'id';
+$GO_FIELDS['id']['input_type'] = 'text';
+$GO_FIELDS['id']['massiveaction'] = false;
 
-$GENERICOBJECT_AVAILABLE_FIELDS['name']['name']       = $LANG['common'][16];
-$GENERICOBJECT_AVAILABLE_FIELDS['name']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['name']['input_type'] = 'text';
-$GENERICOBJECT_AVAILABLE_FIELDS['name']['datatype']   = 'itemlink';
+$GO_FIELDS['name']['name']       = $LANG['common'][16];
+$GO_FIELDS['name']['field']      = 'name';
+$GO_FIELDS['name']['input_type'] = 'text';
+$GO_FIELDS['name']['datatype']   = 'itemlink';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['serial']['name']       = $LANG['common'][19];
-$GENERICOBJECT_AVAILABLE_FIELDS['serial']['field']      = 'serial';
-$GENERICOBJECT_AVAILABLE_FIELDS['serial']['input_type'] = 'text';
+$GO_FIELDS['serial']['name']       = $LANG['common'][19];
+$GO_FIELDS['serial']['field']      = 'serial';
+$GO_FIELDS['serial']['input_type'] = 'text';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['otherserial']['name']       = $LANG['common'][20];
-$GENERICOBJECT_AVAILABLE_FIELDS['otherserial']['field']      = 'otherserial';
-$GENERICOBJECT_AVAILABLE_FIELDS['otherserial']['input_type'] = 'text';
+$GO_FIELDS['otherserial']['name']       = $LANG['common'][20];
+$GO_FIELDS['otherserial']['field']      = 'otherserial';
+$GO_FIELDS['otherserial']['input_type'] = 'text';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['comment']['name']       = $LANG['common'][25];
-$GENERICOBJECT_AVAILABLE_FIELDS['comment']['field']      = 'comment';
-$GENERICOBJECT_AVAILABLE_FIELDS['comment']['input_type'] = 'multitext';
+$GO_FIELDS['comment']['name']       = $LANG['common'][25];
+$GO_FIELDS['comment']['field']      = 'comment';
+$GO_FIELDS['comment']['input_type'] = 'multitext';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['other']['name']         = $LANG['common'][62];
-$GENERICOBJECT_AVAILABLE_FIELDS['other']['field']        = 'other';
-$GENERICOBJECT_AVAILABLE_FIELDS['other']['input_type']   = 'text';
+$GO_FIELDS['other']['name']         = $LANG['common'][62];
+$GO_FIELDS['other']['field']        = 'other';
+$GO_FIELDS['other']['input_type']   = 'text';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['name']       = $LANG['genericobject']['fields'][30];
-$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['field']      = 'creationdate';
-$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['input_type'] = 'date';
-$GENERICOBJECT_AVAILABLE_FIELDS['creationdate']['datatype']   = 'date';
+$GO_FIELDS['creationdate']['name']       = $LANG['genericobject']['fields'][30];
+$GO_FIELDS['creationdate']['field']      = 'creationdate';
+$GO_FIELDS['creationdate']['input_type'] = 'date';
+$GO_FIELDS['creationdate']['datatype']   = 'date';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['name']       = $LANG['genericobject']['fields'][31];
-$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['field']      = 'expirationdate';
-$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['input_type'] = 'date';
-$GENERICOBJECT_AVAILABLE_FIELDS['expirationdate']['datatype']   = 'date';
+$GO_FIELDS['expirationdate']['name']       = $LANG['genericobject']['fields'][31];
+$GO_FIELDS['expirationdate']['field']      = 'expirationdate';
+$GO_FIELDS['expirationdate']['input_type'] = 'date';
+$GO_FIELDS['expirationdate']['datatype']   = 'date';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['url']['name']       = $LANG['genericobject']['fields'][10];
-$GENERICOBJECT_AVAILABLE_FIELDS['url']['field']      = 'url';
-$GENERICOBJECT_AVAILABLE_FIELDS['url']['input_type'] = 'text';
-$GENERICOBJECT_AVAILABLE_FIELDS['url']['datatype']   = 'weblink';
+$GO_FIELDS['url']['name']       = $LANG['genericobject']['fields'][10];
+$GO_FIELDS['url']['field']      = 'url';
+$GO_FIELDS['url']['input_type'] = 'text';
+$GO_FIELDS['url']['datatype']   = 'weblink';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['types_id']['name']          = $LANG['common'][17];
-$GENERICOBJECT_AVAILABLE_FIELDS['types_id']['field']         = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['types_id']['linkfield']     = 'type';
-$GENERICOBJECT_AVAILABLE_FIELDS['types_id']['input_type']    = 'dropdown';
-$GENERICOBJECT_AVAILABLE_FIELDS['types_id']['dropdown_type'] = 'type_specific';
+$GO_FIELDS['types_id']['name']          = $LANG['common'][17];
+$GO_FIELDS['types_id']['field']         = 'name';
+$GO_FIELDS['types_id']['linkfield']     = 'type';
+$GO_FIELDS['types_id']['input_type']    = 'dropdown';
+$GO_FIELDS['types_id']['dropdown_type'] = 'type_specific';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['models_id']['name']          = $LANG['common'][22];
-$GENERICOBJECT_AVAILABLE_FIELDS['models_id']['field']         = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['models_id']['linkfield']     = 'model';
-$GENERICOBJECT_AVAILABLE_FIELDS['models_id']['input_type']    = 'dropdown';
-$GENERICOBJECT_AVAILABLE_FIELDS['models_id']['dropdown_type'] = 'type_specific';
+$GO_FIELDS['models_id']['name']          = $LANG['common'][22];
+$GO_FIELDS['models_id']['field']         = 'name';
+$GO_FIELDS['models_id']['linkfield']     = 'model';
+$GO_FIELDS['models_id']['input_type']    = 'dropdown';
+$GO_FIELDS['models_id']['dropdown_type'] = 'type_specific';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['category']['name']          = $LANG['common'][36];
-$GENERICOBJECT_AVAILABLE_FIELDS['category']['field']         = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['category']['linkfield']     = 'category';
-$GENERICOBJECT_AVAILABLE_FIELDS['category']['input_type']    = 'dropdown';
-$GENERICOBJECT_AVAILABLE_FIELDS['category']['dropdown_type'] = 'type_specific';
+$GO_FIELDS['category']['name']          = $LANG['common'][36];
+$GO_FIELDS['category']['field']         = 'name';
+$GO_FIELDS['category']['linkfield']     = 'category';
+$GO_FIELDS['category']['input_type']    = 'dropdown';
+$GO_FIELDS['category']['dropdown_type'] = 'type_specific';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['name']       = $LANG['entity'][0];
-$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['table']      = 'glpi_entities';
-$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['field']      = 'completename';
-$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['linkfield']  = 'entities_id';
-$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['input_type'] = 'dropdown';
-$GENERICOBJECT_AVAILABLE_FIELDS['entities_id']['massiveaction'] = false;
+$GO_FIELDS['entities_id']['name']       = $LANG['entity'][0];
+$GO_FIELDS['entities_id']['table']      = 'glpi_entities';
+$GO_FIELDS['entities_id']['field']      = 'completename';
+$GO_FIELDS['entities_id']['linkfield']  = 'entities_id';
+$GO_FIELDS['entities_id']['input_type'] = 'dropdown';
+$GO_FIELDS['entities_id']['massiveaction'] = false;
 
-$GENERICOBJECT_AVAILABLE_FIELDS['template_name']['name']       = $LANG['entity'][0];
-$GENERICOBJECT_AVAILABLE_FIELDS['template_name']['field']      = 'template_name';
-$GENERICOBJECT_AVAILABLE_FIELDS['template_name']['linkfield']  = 'entities_id';
-$GENERICOBJECT_AVAILABLE_FIELDS['template_name']['input_type'] = 'text';
-$GENERICOBJECT_AVAILABLE_FIELDS['template_name']['massiveaction'] = false;
+$GO_FIELDS['template_name']['name']       = $LANG['entity'][0];
+$GO_FIELDS['template_name']['field']      = 'template_name';
+$GO_FIELDS['template_name']['linkfield']  = 'entities_id';
+$GO_FIELDS['template_name']['input_type'] = 'text';
+$GO_FIELDS['template_name']['massiveaction'] = false;
 
-$GENERICOBJECT_AVAILABLE_FIELDS['notepad']['name']       = $LANG['title'][37];
-$GENERICOBJECT_AVAILABLE_FIELDS['notepad']['field']      = 'notepad';
-$GENERICOBJECT_AVAILABLE_FIELDS['notepad']['input_type'] = 'multitext';
+$GO_FIELDS['notepad']['name']       = $LANG['title'][37];
+$GO_FIELDS['notepad']['field']      = 'notepad';
+$GO_FIELDS['notepad']['input_type'] = 'multitext';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['name']       = $LANG['entity'][9];
-$GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['field']      = 'is_recursive';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['linkfield']  = '';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['input_type'] = 'dropdown_yesno';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_recursive']['datatype']   = 'bool';
+$GO_FIELDS['is_recursive']['name']       = $LANG['entity'][9];
+$GO_FIELDS['is_recursive']['field']      = 'is_recursive';
+$GO_FIELDS['is_recursive']['linkfield']  = '';
+$GO_FIELDS['is_recursive']['input_type'] = 'dropdown_yesno';
+$GO_FIELDS['is_recursive']['datatype']   = 'bool';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['name']       = $LANG['ocsconfig'][49];
-$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['field']      = 'is_deleted';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['linkfield']  = '';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['input_type'] = 'dropdown_yesno';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['datatype']   = 'bool';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_deleted']['massiveaction'] = false;
+$GO_FIELDS['is_deleted']['name']       = $LANG['ocsconfig'][49];
+$GO_FIELDS['is_deleted']['field']      = 'is_deleted';
+$GO_FIELDS['is_deleted']['linkfield']  = '';
+$GO_FIELDS['is_deleted']['input_type'] = 'dropdown_yesno';
+$GO_FIELDS['is_deleted']['datatype']   = 'bool';
+$GO_FIELDS['is_deleted']['massiveaction'] = false;
 
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['name']       = $LANG['common'][13];
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['field']      = 'is_template';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['linkfield']  = '';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['input_type'] = 'dropdown_yesno';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['datatype']   ='bool';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_template']['massiveaction'] = false;
+$GO_FIELDS['is_template']['name']       = $LANG['common'][13];
+$GO_FIELDS['is_template']['field']      = 'is_template';
+$GO_FIELDS['is_template']['linkfield']  = '';
+$GO_FIELDS['is_template']['input_type'] = 'dropdown_yesno';
+$GO_FIELDS['is_template']['datatype']   ='bool';
+$GO_FIELDS['is_template']['massiveaction'] = false;
 
 
-$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['name']       = $LANG['peripherals'][33];
-$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['field']      = 'is_global';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['linkfield']  = '';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['input_type'] = 'dropdown_global';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['datatype']   = 'bool';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_global']['massiveaction'] = false;
+$GO_FIELDS['is_global']['name']       = $LANG['peripherals'][33];
+$GO_FIELDS['is_global']['field']      = 'is_global';
+$GO_FIELDS['is_global']['linkfield']  = '';
+$GO_FIELDS['is_global']['input_type'] = 'dropdown_global';
+$GO_FIELDS['is_global']['datatype']   = 'bool';
+$GO_FIELDS['is_global']['massiveaction'] = false;
 
-$GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['name']       = $LANG['software'][46];
-$GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['field']      = 'is_helpdesk_visible';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['linkfield']  = '';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['input_type'] = 'dropdown_yesno';
-$GENERICOBJECT_AVAILABLE_FIELDS['is_helpdesk_visible']['datatype']   = 'bool';
+$GO_FIELDS['is_helpdesk_visible']['name']       = $LANG['software'][46];
+$GO_FIELDS['is_helpdesk_visible']['field']      = 'is_helpdesk_visible';
+$GO_FIELDS['is_helpdesk_visible']['linkfield']  = '';
+$GO_FIELDS['is_helpdesk_visible']['input_type'] = 'dropdown_yesno';
+$GO_FIELDS['is_helpdesk_visible']['datatype']   = 'bool';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['locations_id']['name']       = $LANG['common'][15];
-$GENERICOBJECT_AVAILABLE_FIELDS['locations_id']['table']      = 'glpi_locations';
-$GENERICOBJECT_AVAILABLE_FIELDS['locations_id']['field']      = 'completename';
-$GENERICOBJECT_AVAILABLE_FIELDS['locations_id']['linkfield']  = 'location';
-$GENERICOBJECT_AVAILABLE_FIELDS['locations_id']['input_type'] = 'dropdown';
-$GENERICOBJECT_AVAILABLE_FIELDS['locations_id']['entity']     = 'entity_restrict';
+$GO_FIELDS['locations_id']['name']       = $LANG['common'][15];
+$GO_FIELDS['locations_id']['table']      = 'glpi_locations';
+$GO_FIELDS['locations_id']['field']      = 'completename';
+$GO_FIELDS['locations_id']['linkfield']  = 'location';
+$GO_FIELDS['locations_id']['input_type'] = 'dropdown';
+$GO_FIELDS['locations_id']['entity']     = 'entity_restrict';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['states_id']['name']       = $LANG['joblist'][0];
-$GENERICOBJECT_AVAILABLE_FIELDS['states_id']['table']      = 'glpi_states';
-$GENERICOBJECT_AVAILABLE_FIELDS['states_id']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['states_id']['linkfield']  = 'state';
-$GENERICOBJECT_AVAILABLE_FIELDS['states_id']['input_type'] = 'dropdown';
+$GO_FIELDS['states_id']['name']       = $LANG['joblist'][0];
+$GO_FIELDS['states_id']['table']      = 'glpi_states';
+$GO_FIELDS['states_id']['field']      = 'name';
+$GO_FIELDS['states_id']['linkfield']  = 'state';
+$GO_FIELDS['states_id']['input_type'] = 'dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['name']       = $LANG['common'][34];
-$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['table']      = 'glpi_users';
-$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['linkfield']  = 'users_id';
-$GENERICOBJECT_AVAILABLE_FIELDS['users_id']['input_type'] = 'dropdown';
+$GO_FIELDS['users_id']['name']       = $LANG['common'][34];
+$GO_FIELDS['users_id']['table']      = 'glpi_users';
+$GO_FIELDS['users_id']['field']      = 'name';
+$GO_FIELDS['users_id']['linkfield']  = 'users_id';
+$GO_FIELDS['users_id']['input_type'] = 'dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['groups_id']['name']       = $LANG['common'][35];
-$GENERICOBJECT_AVAILABLE_FIELDS['groups_id']['table']      = 'glpi_groups';
-$GENERICOBJECT_AVAILABLE_FIELDS['groups_id']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['groups_id']['linkfield']  = 'groups_id';
-$GENERICOBJECT_AVAILABLE_FIELDS['groups_id']['input_type'] = 'dropdown';
+$GO_FIELDS['groups_id']['name']       = $LANG['common'][35];
+$GO_FIELDS['groups_id']['table']      = 'glpi_groups';
+$GO_FIELDS['groups_id']['field']      = 'name';
+$GO_FIELDS['groups_id']['linkfield']  = 'groups_id';
+$GO_FIELDS['groups_id']['input_type'] = 'dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['manufacturers_id']['name']       = $LANG['common'][5];
-$GENERICOBJECT_AVAILABLE_FIELDS['manufacturers_id']['table']      = 'glpi_manufacturers';
-$GENERICOBJECT_AVAILABLE_FIELDS['manufacturers_id']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['manufacturers_id']['linkfield']  = 'manufacturers_id';
-$GENERICOBJECT_AVAILABLE_FIELDS['manufacturers_id']['input_type'] = 'dropdown';
+$GO_FIELDS['manufacturers_id']['name']       = $LANG['common'][5];
+$GO_FIELDS['manufacturers_id']['table']      = 'glpi_manufacturers';
+$GO_FIELDS['manufacturers_id']['field']      = 'name';
+$GO_FIELDS['manufacturers_id']['linkfield']  = 'manufacturers_id';
+$GO_FIELDS['manufacturers_id']['input_type'] = 'dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['name']       = $LANG['common'][10];
-$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['table']      = 'glpi_users';
-$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['linkfield']  = 'tech_num';
-$GENERICOBJECT_AVAILABLE_FIELDS['tech_num']['input_type'] = 'dropdown';
+$GO_FIELDS['tech_num']['name']       = $LANG['common'][10];
+$GO_FIELDS['tech_num']['table']      = 'glpi_users';
+$GO_FIELDS['tech_num']['field']      = 'name';
+$GO_FIELDS['tech_num']['linkfield']  = 'tech_num';
+$GO_FIELDS['tech_num']['input_type'] = 'dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['domains_id']['name']       = $LANG['setup'][89];
-$GENERICOBJECT_AVAILABLE_FIELDS['domains_id']['table']      = 'glpi_domains';
-$GENERICOBJECT_AVAILABLE_FIELDS['domains_id']['field']      = 'name';
-$GENERICOBJECT_AVAILABLE_FIELDS['domains_id']['linkfield']  = 'domain';
-$GENERICOBJECT_AVAILABLE_FIELDS['domains_id']['input_type'] = 'dropdown';
+$GO_FIELDS['domains_id']['name']       = $LANG['setup'][89];
+$GO_FIELDS['domains_id']['table']      = 'glpi_domains';
+$GO_FIELDS['domains_id']['field']      = 'name';
+$GO_FIELDS['domains_id']['linkfield']  = 'domain';
+$GO_FIELDS['domains_id']['input_type'] = 'dropdown';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['contacts_id']['name']       = $LANG['common'][18];
-$GENERICOBJECT_AVAILABLE_FIELDS['contacts_id']['field']      = 'contact';
-$GENERICOBJECT_AVAILABLE_FIELDS['contacts_id']['linkfield']  = 'contact';
-$GENERICOBJECT_AVAILABLE_FIELDS['contacts_id']['input_type'] = 'text';
+$GO_FIELDS['contacts_id']['name']       = $LANG['common'][18];
+$GO_FIELDS['contacts_id']['field']      = 'contact';
+$GO_FIELDS['contacts_id']['linkfield']  = 'contact';
+$GO_FIELDS['contacts_id']['input_type'] = 'text';
 
-$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['name']       = $LANG['common'][21];
-$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['field']      = 'contact_num';
-$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['linkfield']  = 'contact_num';
-$GENERICOBJECT_AVAILABLE_FIELDS['contact_num']['input_type'] = 'text';
+$GO_FIELDS['contact_num']['name']       = $LANG['common'][21];
+$GO_FIELDS['contact_num']['field']      = 'contact_num';
+$GO_FIELDS['contact_num']['linkfield']  = 'contact_num';
+$GO_FIELDS['contact_num']['input_type'] = 'text';

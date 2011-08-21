@@ -566,7 +566,7 @@ class PluginGenericobjectType extends CommonDBTM {
    
    
    public static function getDropdownSpecific(& $dropdowns, $type, $check_entity = false) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS;
+      global $GO_FIELDS;
       
       $specific_types = self::getDropdownSpecificFields();
       foreach ($specific_types as $ID => $field) {
@@ -576,16 +576,16 @@ class PluginGenericobjectType extends CommonDBTM {
                   && self::isDropdownEntityRestrict($field)))
                $dropdowns["PluginGenericobject".ucfirst($type["name"]).$field] = 
                   PluginGenericobjectObject::getLabel($type["name"]) . ' : ' . 
-                                                      $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+                                                      $GO_FIELDS[$field]['name'];
          }
       }
    }
    
    public static function getDropdownSpecificFields() {
-      global $GENERICOBJECT_AVAILABLE_FIELDS;
+      global $GO_FIELDS;
       $specific_fields = array ();
 
-      foreach ($GENERICOBJECT_AVAILABLE_FIELDS as $field => $values) {
+      foreach ($GO_FIELDS as $field => $values) {
          if (isset ($values["dropdown_type"]) && $values["dropdown_type"] == 'type_specific') {
             $specific_fields[$field] = $field;
          }
@@ -595,9 +595,9 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    public static function isDropdownTypeSpecific($field) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS;
-      return (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type']) 
-                 && $GENERICOBJECT_AVAILABLE_FIELDS[$field]['dropdown_type'] == 'type_specific');
+      global $GO_FIELDS;
+      return (isset ($GO_FIELDS[$field]['dropdown_type']) 
+                 && $GO_FIELDS[$field]['dropdown_type'] == 'type_specific');
    }
    
    
@@ -831,9 +831,9 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    public static function isDropdownEntityRestrict($field) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS;
-      return (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$field]['entity']) 
-                  && $GENERICOBJECT_AVAILABLE_FIELDS[$field]['entity'] == 'entity_restrict');
+      global $GO_FIELDS;
+      return (isset ($GO_FIELDS[$field]['entity']) 
+                  && $GO_FIELDS[$field]['entity'] == 'entity_restrict');
    }
 
    public static function enableTemplateManagement($name) {
@@ -869,7 +869,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    public static function getDatabaseRelationsSpecificDropdown(& $dropdowns, $type) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS;
+      global $GO_FIELDS;
       $specific_types = self::getDropdownSpecificFields();
       $table = self::getTableNameByName($type["name"]);
 
@@ -877,7 +877,7 @@ class PluginGenericobjectType extends CommonDBTM {
          if (TableExists($table) && FieldExists($table, $field)) {
             $dropdowns[$table] = array (
                self::getDropdownTableName($type["name"], $field) => 
-                  $GENERICOBJECT_AVAILABLE_FIELDS[$field]['linkfield']);
+                  $GO_FIELDS[$field]['linkfield']);
          }
       }
    }

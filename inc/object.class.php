@@ -41,13 +41,13 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    static function registerType() {
       global $DB, $LANG, $PLUGIN_HOOKS;
-      $class = get_called_class();
-      $item = new $class();
+      $class  = get_called_class();
+      $item   = new $class();
       $fields = $DB->list_fields(getTableForItemType($class));
       
       $options = array("document_types"         => $item->objecttype->canUseDocuments(),
                        "helpdesk_visible_types" => $item->objecttype->canUseTickets() 
-                                                    && isset($fields['helpdesk_visible']),
+                                                    && isset($fields['is_helpdesk_visible']),
                        "linkgroup_types"        => $item->objecttype->canUseTickets() 
                                                     && isset ($fields["groups_id"]),
                        "linkuser_types"         => $item->objecttype->canUseTickets() 
@@ -61,6 +61,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          if (haveRight($class, "r")) {
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
                                                       = call_user_func(array($class, 'getTypeName'));
+           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
+                                                      = getItemTypeSearchURL($class, false);
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
                                                       = getItemTypeSearchURL($class, false);
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
@@ -79,7 +81,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    static function getTypeName() {
       $class = get_called_class();
-      $item = new $class();
+      $item  = new $class();
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
       if(isset($LANG['genericobject'][$class][0])) {
          return $LANG['genericobject'][$class][0];
@@ -89,7 +91,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    public function __construct() {
-      $this->table = getTableForItemType(get_class($this));
+      $this->table = getTableForItemType(get_called_class());
       if (get_called_class() && class_exists(get_called_class())) {
          $this->objecttype = new PluginGenericobjectType(get_called_class());
       }
@@ -97,11 +99,11 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function canCreate() {
-      return haveRight(get_class($this), 'w');
+      return haveRight(get_called_class(), 'w');
    }
 
    function canView() {
-      return haveRight(get_class($this), 'r');
+      return haveRight(get_called_class(), 'r');
    }
 
    function defineTabs($options=array()) {
@@ -236,13 +238,13 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function displayField($canedit, $name, $value, $description = array()) {
-      global $GENERICOBJECT_AVAILABLE_FIELDS, $GENERICOBJECT_BLACKLISTED_FIELDS;
+      global $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
-      if (isset ($GENERICOBJECT_AVAILABLE_FIELDS[$name]) 
-         && !in_array($name, $GENERICOBJECT_BLACKLISTED_FIELDS)) {
+      if (isset ($GO_FIELDS[$name]) 
+         && !in_array($name, $GO_BLACKLIST_FIELDS)) {
 
          $this->startColumn();
-         echo $GENERICOBJECT_AVAILABLE_FIELDS[$name]['name'];
+         echo $GO_FIELDS[$name]['name'];
          $this->endColumn();
          $this->startColumn();
          
@@ -265,7 +267,6 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "tinyint(1)":
                Dropdown::showYesNo($name, $value);
                break;
-            default:
             case "varchar(255)":
                   autocompletionTextField($this, $name);
                break;
@@ -279,6 +280,10 @@ class PluginGenericobjectObject extends CommonDBTM {
                   break;
             case "datetime":
                   showDateTimeFormItem($name, $value, false, true);
+                  break;
+            default:
+            case "float":
+                  echo "<input type='text' name='$name' value='$value'>";
                   break;
          }
          $this->endColumn();
@@ -428,13 +433,15 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function getSearchOptions() {
-      global $DB, $GENERICOBJECT_AVAILABLE_FIELDS;
+      global $DB, $GO_FIELDS;
       
       $index = 0;
       $options = array();
-      $table = getTableForItemType(get_class($this));
+      $table = getTableForItemType(get_called_class());
       foreach ($DB->list_fields($table) as $field => $values) {
-         
+         if ($field == 'is_deleted') {
+            continue;
+         }
          //Table definition
          $tmp = getTableNameForForeignKeyField($field);
          if ($tmp != '') {
@@ -454,12 +461,12 @@ class PluginGenericobjectObject extends CommonDBTM {
             $options[$index]['field'] = $field;
          }
 
-         $options[$index]['name']  = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['name'];
+         $options[$index]['name']  = $GO_FIELDS[$field]['name'];
          
          //Massive action or not
-         if (isset($GENERICOBJECT_AVAILABLE_FIELDS[$field]['massiveaction'])) {
+         if (isset($GO_FIELDS[$field]['massiveaction'])) {
             $options[$index]['massiveaction'] 
-               = $GENERICOBJECT_AVAILABLE_FIELDS[$field]['massiveaction'];
+               = $GO_FIELDS[$field]['massiveaction'];
          }
          
          //Field type
@@ -496,166 +503,6 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       return $options;
    }
-   /*
-   public static function showDevice($target,$itemtype,$item_id) {
-      global $DB,$CFG_GLPI, $LANG,$INFOFORM_PAGES,$LINK_ID_TABLE;
-      
-      $name = PluginGenericobjectType::getNameByID($itemtype);
-      
-      if (!haveRight($name,"r")) return false;
-      //if (!haveTypeRight($name,"r")) return false;
-      
-      $rand=mt_rand();
-      
-      $commonitem = new PluginGenericobjectObject($itemtype);
-      
-      
-      if ($commonitem->getFromDB($item_id)){
-         $obj = $commonitem;
-         
-         $canedit=$obj->can($item_id,'w'); 
-
-         $query = "SELECT DISTINCT itemtype 
-               FROM `".PluginGenericobjectType::getLinkDeviceTableName($name)."` 
-               WHERE source_id = '$item_id' 
-               ORDER BY itemtype";
-         
-         $result = $DB->query($query);
-         $number = $DB->numrows($result);
-
-         $i = 0;
-         if (isMultiEntitiesMode()) {
-            $colsup=1;
-         }else {
-            $colsup=0;
-         }
-         echo "<form method='post' name='link_type_form$rand' " .
-              " id='link_type_form$rand'  action=\"$target\">";
-      
-         echo "<div align='center'><table class='tab_cadrehov'>";
-         echo "<tr><th colspan='".($canedit?(5+$colsup):(4+$colsup))."'>".
-               $LANG['genericobject']['links'][2].":</th></tr><tr>";
-         if ($canedit) {
-            echo "<th>&nbsp;</th>";
-         }
-         echo "<th>".$LANG['common'][17]."</th>";
-         echo "<th>".$LANG['common'][16]."</th>";
-         if (isMultiEntitiesMode())
-            echo "<th>".$LANG['entity'][0]."</th>";
-         echo "<th>".$LANG['common'][19]."</th>";
-         echo "<th>".$LANG['common'][20]."</th>";
-         echo "</tr>";
-      
-         $ci=new CommonItem();
-         while ($i < $number) {
-            $type=$DB->result($result, $i, "itemtype");
-            //if (haveTypeRight($type,"r")){
-            if (haveRight($type,"r")){
-               $column="name";
-               if ($type==TRACKING_TYPE) $column="ID";
-               if ($type==KNOWBASE_TYPE) $column="question";
-
-               $query = "SELECT ".$LINK_ID_TABLE[$type].".*, ".
-                           PluginGenericobjectType::getLinkDeviceTableName($name).".id AS IDD "
-                       ." FROM `".PluginGenericobjectType::getLinkDeviceTableName($name)."`, `".
-                           $LINK_ID_TABLE[$type]."`, `".$obj->table."`"
-                       ." WHERE ".$LINK_ID_TABLE[$type].".id = ".
-                     PluginGenericobjectType::getLinkDeviceTableName($name).".items_id 
-                  AND ".PluginGenericobjectType::getLinkDeviceTableName($name).".itemtype='$type' 
-                  AND ".PluginGenericobjectType::getLinkDeviceTableName($name).".source_id = '$item_id' ";
-                  $query.=getEntitiesRestrictRequest(" AND ",$LINK_ID_TABLE[$type],'','',
-                           isset($CFG_GLPI["recursive_type"][$type])); 
-
-                  if (in_array($LINK_ID_TABLE[$type],$CFG_GLPI["template_tables"])){
-                     $query.=" AND ".$LINK_ID_TABLE[$type].".is_template='0'";
-               }
-               $query.=" ORDER BY ".$obj->table.".entities_id, ".$LINK_ID_TABLE[$type].".$column";
-
-               if ($result_linked=$DB->query($query))
-                  if ($DB->numrows($result_linked)){
-                     $ci->setType($type);
-                     initNavigateListItems($type,PluginGenericobjectObject::getLabel($name)." = ".
-                        $obj->fields['name']);
-                     while ($data=$DB->fetch_assoc($result_linked)){
-                        addToNavigateListItems($type,$data["id"]);
-                        $ID="";
-                        if ($type==TRACKING_TYPE) $data["name"]=$LANG['job'][38]." ".$data["id"];
-                        if ($type==KNOWBASE_TYPE) $data["name"]=$data["question"];
-                        
-                        if($_SESSION["glpiview_ID"]||empty($data["name"])) $ID= " (".$data["id"].")";
-                        $item_name= "<a href=\"".$CFG_GLPI["root_doc"]."/".$INFOFORM_PAGES[$type].
-                           "?id=".$data["id"]."&itemtype=$type\">".$data["name"]."$ID</a>";
-      
-                        echo "<tr class='tab_bg_1'>";
-
-                        if ($canedit){
-                           echo "<td width='10'>";
-                           $sel="";
-                           if (isset($_GET["select"])&&$_GET["select"]=="all") $sel="checked";
-                           echo "<input type='checkbox' name='item[".$data["IDD"]."]' value='1' $sel>";
-                           echo "</td>";
-                        }
-                        echo "<td class='center'>".$ci->getType()."</td>";
-                        
-                        echo "<td class='center' ".(isset($data['is_deleted'])
-                                                      && $data['is_deleted']?"class='tab_bg_2_2'":"").">".
-                                                      $item_name."</td>";
-
-                        if (isMultiEntitiesMode())
-                           echo "<td class='center'>".getDropdownName("glpi_entities",
-                                                                      $data['entities_id'])."</td>";
-                        
-                        echo "<td class='center'>".(isset($data["serial"])? "".$data["serial"]."" :"-").
-                           "</td>";
-                        echo "<td class='center'>".(isset($data["otherserial"])? "".
-                                                      $data["otherserial"]."" :"-")."</td>";
-                        
-                        echo "</tr>";
-                     }
-                  }
-            }
-            $i++;
-         }
-      
-         if ($canedit)  {
-            echo "<tr class='tab_bg_1'><td colspan='".(3+$colsup)."' class='center'>";
-      
-            echo "<input type='hidden' name='source_id' value='$itemtype'>";
-            dropdownAllItems("items_id",0,0,($obj->fields['recursive']?-1:$obj->fields['entities_id']),
-                             PluginGenericobjectLink::getLinksByType($itemtype));     
-            echo "</td>";
-            echo "<td colspan='2' class='center' class='tab_bg_2'>";
-            echo "<input type='submit' name='add_type_link' value=\"".$LANG['buttons'][8]."\" class='submit'>";
-            echo "</td></tr>";
-            echo "</table></div>" ;
-            
-            echo "<div class='center'>";
-            echo "<table width='80%' class='tab_glpi'>";
-            echo "<tr><td><img src=\"".$CFG_GLPI["root_doc"]."/pics/arrow-left.png\" alt=''></td>"; 
-            echo "<td class='center'>"; 
-            echo "<a onclick= \"if ( markCheckboxes('link_type_form$rand') ) return false;\" href='".
-               $_SERVER['PHP_SELF']."?id=$item_id&amp;select=all'>".$LANG['buttons'][18]."</a></td>";
-            
-            echo "<td>/</td><td class='center'>"; 
-            echo "<a onclick= \"if ( unMarkCheckboxes('link_type_form$rand') ) return false;\" href='".
-               $_SERVER['PHP_SELF']."?id=$item_id&amp;select=none'>".$LANG['buttons'][19]."</a>";
-            echo "</td>";
-            echo "<td align='left' width='80%'>";
-            echo "<input type='submit' name='delete_type_link' value=\"".$LANG['buttons'][6].
-                    "\" class='submit'>";
-            echo "</td>";
-            echo "</table>";
-         
-            echo "</div>";
-
-         }else{
-      
-            echo "</table></div>";
-         }
-         echo "</form>";
-      }
-   }
-   */
    
    /**
     * Reorder all fields for a type
@@ -677,137 +524,6 @@ class PluginGenericobjectObject extends CommonDBTM {
          $i++; 
       }*/
    }
-   
-   
-   /**
-    * Change object field's order
-    * @param field the field to move up/down
-    * @param itemtype object item type
-    * @param action up/down
-    */
-    /*
-   public static function changeFieldOrder($field,$itemtype,$action){
-         global $DB;
-
-         $table = getTableForItemType('PluginGenericobjectField');
-         $sql ="SELECT `id`, `rank` " .
-               "FROM `$table` " .
-               "WHERE `itemtype`='$itemtype' AND `name`='$field'";
-
-         if ($result = $DB->query($sql)){
-            if ($DB->numrows($result)==1){
-               
-               $current_rank=$DB->result($result,0,"rank");
-               $id = $DB->result($result,0,"id");
-               // Search rules to switch
-               $sql2="";
-               switch ($action){
-                  case "up":
-                     $sql2 ="SELECT id, rank FROM `$table` " .
-                            "WHERE itemtype='$itemtype' " .
-                            "   AND rank < '$current_rank' ORDER BY `rank` DESC LIMIT 1";
-                  break;
-                  case "down":
-                     $sql2 ="SELECT id, rank FROM `$table` " .
-                            "WHERE itemtype='$itemtype' " .
-                            "   AND rank > '$current_rank' ORDER BY `rank` ASC LIMIT 1";
-                  break;
-                  default :
-                     return false;
-                  break;
-               }
-               
-               $field = new PluginGenericobjectField();
-               if ($result2 = $DB->query($sql2)){
-                  if ($DB->numrows($result2)==1){
-                     list($others_id,$new_rank)=$DB->fetch_array($result2);
-                     $tmp = array();
-                     $tmp['id'] = $id;
-                     $tmp['rank'] = $new_rank;
-                     $field->update($tmp);
-                     
-                     $tmp['id'] = $others_id;
-                     $tmp['rank'] = $current_rank;
-                     $field->update($tmp);
-                     return true;
-                  }
-               }
-            }
-            return false;
-         }
-      }
-
-
-   public static function showTemplateByDeviceType($target, $itemtype, $entity, 
-                                                                        $add=0) {
-      global $LANG,$DB;
-      $name = PluginGenericobjectType::getNameByID($itemtype);
-      $commonitem = new PluginGenericobjectObject($itemtype);
-      //$commonitem->setType($itemtype,true);
-      $title = PluginGenericobjectObject::getLabel($name);
-      $query = "SELECT * FROM `".$commonitem->getTable()."` " .
-               "WHERE `is_template` = '1' AND `entities_id`='" . 
-                  $_SESSION["glpiactive_entity"] . "' ORDER BY `template_name`";
-      if ($result = $DB->query($query)) {
-
-         echo "<div class='center'><table class='tab_cadre' width='50%'>";
-         if ($add) {
-            echo "<tr><th>" . $LANG['common'][7] . " - $title:</th></tr>";
-         } else {
-            echo "<tr><th colspan='2'>" . $LANG['common'][14] . " - $title:</th></tr>";
-         }
-
-         if ($add) {
-
-            echo "<tr>";
-            echo "<td align='center' class='tab_bg_1'>";
-            echo "<a href=\"$target?itemtype=$itemtype&id=-1&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;" . 
-               $LANG['common'][31] . "&nbsp;&nbsp;&nbsp;</a></td>";
-            echo "</tr>";
-         }
-      
-         while ($data = $DB->fetch_array($result)) {
-
-            $templname = $data["template_name"];
-            if ($_SESSION["glpiview_ID"]||empty($data["template_name"])){
-                        $templname.= "(".$data["id"].")";
-            }
-            echo "<tr>";
-            echo "<td align='center' class='tab_bg_1'>";
-            
-            if (haveTypeRight($itemtype, "w") && !$add) {
-               echo "<a href=\"$target?itemtype=$itemtype&id=" . $data["id"] . 
-                  "&amp;withtemplate=1\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
-
-               echo "<td align='center' class='tab_bg_2'>";
-               echo "<strong><a href=\"$target?itemtype=$itemtype&id=" . $data["id"] . 
-                  "&amp;purge=purge&amp;withtemplate=1\">" . $LANG['buttons'][6] . "</a></strong>";
-               echo "</td>";
-            } else {
-               echo "<a href=\"$target?itemtype=$itemtype&id=" . $data["id"] . 
-                  "&amp;withtemplate=2\">&nbsp;&nbsp;&nbsp;$templname&nbsp;&nbsp;&nbsp;</a></td>";
-            }
-
-            echo "</tr>";
-
-         }
-
-         //if (haveTypeRight($itemtype, "w") &&!$add) {
-         if (haveRight($itemtype, "w") &&!$add) {
-            echo "<tr>";
-            echo "<td colspan='2' align='center' class='tab_bg_2'>";
-            echo "<strong><a href=\"$target?itemtype=$itemtype&withtemplate=1\">" . 
-               $LANG['common'][9] . "</a></strong>";
-            echo "</td>";
-            echo "</tr>";
-         }
-
-         echo "</table></div>";
-      }
-      
-   }
-
-*/
    
    static function getLabel($name) {
       global $LANG;

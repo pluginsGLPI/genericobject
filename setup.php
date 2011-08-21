@@ -48,11 +48,11 @@ if (!defined("GENERICOBJECT_CLASS_PATH")) {
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
-   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GENERICOBJECT_BLACKLISTED_FIELDS, 
+   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, 
           $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, 
-          $GENERICOBJECT_AVAILABLE_FIELDS, $GENERICOBJECT_PDF_TYPES;
+          $GO_FIELDS, $GENERICOBJECT_PDF_TYPES;
           
-   $GENERICOBJECT_BLACKLISTED_FIELDS = array ("itemtype", "table", "is_deleted", "id", 
+   $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", 
                                               "entities_id", "is_recursive", "is_template", 
                                               "notepad", "template_name", "is_helpdesk_visible", 
                                               "comment");
@@ -94,13 +94,6 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
-     $types = PluginGenericobjectType::getTypes();
-      foreach ($types as $type => $params) {
-         Plugin::registerClass('PluginGenericobject'.ucfirst($params["name"]), 
-                            array('helpdesk_types' => true, 'linkgroup_types' => true,
-                                  'linkuser_types' => true));
-      }
-      
       PluginGenericobjectType::registerNewTypes();
    }
 }
