@@ -1041,35 +1041,9 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    static function registerOneType(PluginGenericobjectType $objecttype) {
-      global $LANG, $DB, $PLUGIN_HOOKS, $CFG_GLPI, 
-            $IMPORT_PRIMARY_TYPES, $IMPORT_TYPES, $ORDER_AVAILABLE_TYPES,
-            $ORDER_TYPE_TABLES,$ORDER_MODEL_TABLES, $ORDER_TEMPLATE_TABLES,
-            $UNINSTALL_TYPES,$GENERICOBJECT_PDF_TYPES,$GENINVENTORYNUMBER_INVENTORY_TYPES;
-
-      $itemtype  = get_class($objecttype);
-      $table     = getTableForItemType($itemtype);
-      $fields    = $DB->list_fields($table);
-
       //If table doesn't exists, do not try to register !
       if (class_exists($objecttype->fields['itemtype'])) {
          call_user_func(array($objecttype->fields['itemtype'], 'registerType'));
-
-/*
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['search'][$name] = 'front/search.php?itemtype=' . $itemtype;
-           if ($type['use_plugin_uninstall'] && $plugin->isActivated('uninstall')) {
-              Plugin::load("uninstall");
-              $UNINSTALL_TYPES[] = $typeID;
-           }
-*/
-/*
-         // Later, when per entity and tree dropdowns will be managed !
-         foreach (self::getSpecificDropdownsTablesByType($i) as $table => $name) {
-            array_push($CFG_GLPI["specif_entities_tables"], $table);
-            //array_push($CFG_GLPI["dropdowntree_tables"], $table);
-            
-            //$PLUGIN_HOOKS['submenu_entry']['genericobject']['add'][$name.$field] = "front/$name.$field.php";
-         }
-*/ 
       }
    }
    

@@ -477,6 +477,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $options[$index]['datatype']      = 'itemlink';
                   $options[$index]['itemlink_type'] = get_called_class();
                   $options[$index]['massiveaction'] = false;
+               } else {
+                  $options[$index]['datatype'] = 'string';
                }
                break;
             case "tinyint(1)":

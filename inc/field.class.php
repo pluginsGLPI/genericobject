@@ -39,6 +39,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $url          = getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
       $object_type->getFromDB($ID);
+      $itemtype     = $object_type->fields['itemtype'];
       $fields_in_db = $DB->list_fields(getTableForItemType($object_type->fields["itemtype"]));
       $used_fields  = array();
       
@@ -73,7 +74,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $total = count($fields_in_db);
 
       foreach ($fields_in_db as $field => $value) {
-         self::displayFieldDefinition($url, $ID, $field, $index, $total);
+         self::displayFieldDefinition($url, $itemtype, $field, $index, $total);
          $index++;
          $used_fields[$field] = $field; 
       }
@@ -86,23 +87,16 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . 
                $url . "?id=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
       echo "</td><td colspan='5' align='left' width='75%'>";
-
-      echo "<select name=\"massiveaction\" id='massiveaction'>";
-      echo "<option value=\"-1\" selected>-----</option>";
-      echo "<option value=\"delete\">" . $LANG['buttons'][6] . "</option>";
-      //echo "<option value=\"move_field\">" . $LANG['buttons'][20] . "</option>";
-      echo "</select>";
-
+      $rand = Dropdown::showFromArray('massiveaction', array('' => DROPDOWN_EMPTY_VALUE, 
+                                                             'delete' => $LANG['buttons'][6]));
       $params = array ('action' => '__VALUE__', 'itemtype' => $object_type->fields["itemtype"]);
 
       $ajax_page = $CFG_GLPI["root_doc"].
                "/plugins/genericobject/ajax/plugin_genericobject_dropdownObjectTypeFields.php";
-      ajaxUpdateItemOnSelectEvent("massiveaction", "show_massiveaction", $ajax_page, $params);
-
+      ajaxUpdateItemOnSelectEvent("dropdown_massiveaction$rand", "show_massiveaction", $ajax_page, 
+                                  $params);
       echo "<span id='show_massiveaction'>&nbsp;</span>\n";
-
       echo "</td></tr>";
-
       echo "</table>";
       echo "<br>";
 
@@ -118,7 +112,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</table></div></form>";
    }
 
-   static function dropdownFields($name,$used=array()) {
+   static function dropdownFields($name,$used = array()) {
       global $GO_FIELDS;
       
       $dropdown_types = array();
@@ -131,7 +125,7 @@ class PluginGenericobjectField extends CommonDBTM {
       Dropdown::showFromArray($name,$dropdown_types);
    }
 
-   public static function displayFieldDefinition($target, $ID, $field, $index, $total) {
+   public static function displayFieldDefinition($target, $itemtype, $field, $index, $total) {
       global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS;
       $readonly = in_array($field, $GO_BLACKLIST_FIELDS);
 
@@ -151,14 +145,14 @@ class PluginGenericobjectField extends CommonDBTM {
 
       echo "<td width='10'>";
       if (!$readonly && $index > 2) {
-         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;id=" . $ID . "\">"; 
+         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;itemtype=$itemtype\">"; 
          echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_up.png\" alt=''></a>";
       }
       echo "</td>";
 
       echo "<td width='10'>";
       if (!$readonly && $index > 1 && $index < $total) {
-         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;id=" . $ID . "\">"; 
+         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;itemtype=$itemtype\">"; 
          echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
       }
       echo "</td>";
@@ -166,7 +160,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</tr>";
    }
 
-   public static function addNewField($table, $field, $name='') {
+   public static function addNewField($table, $field) {
       global $DB, $GO_FIELDS;
 
       if (!FieldExists($table, $field)) {
@@ -185,14 +179,6 @@ class PluginGenericobjectField extends CommonDBTM {
                break;
             case 'dropdown' :
                $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
-               /*
-               if (PluginGenericobjectType::isDropdownTypeSpecific($field)) {
-                  PluginGenericobjectType::addDropdownTable($name, $field);
-                  PluginGenericobjectType::addDropdownClassFile($name, $field);
-                  PluginGenericobjectType::addDropdownFrontFile($name, $field);
-                  PluginGenericobjectType::addDropdownFrontformFile($name, $field);
-                  PluginGenericobjectType::addDropdownAjaxFile($name, $field);
-               }*/
                break;
             case 'integer' :
                $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
@@ -215,15 +201,24 @@ class PluginGenericobjectField extends CommonDBTM {
       }
     }
    
-   static function changeFieldOrder($itemtype, $field, $action = 'up') {
+   static function changeFieldOrder($params = array()) {
       global $DB;
-      $parent = array();
-      foreach ($DB->list_fields(getTableForItemType($itemtype)) as $field) {
-         if ($field['name'] == $field) {
-            
-         }
-         $parent = $field;
+      $itemtype = $params['itemtype'];
+      $field    = $params['field'];
+      $table    = getTableForItemType($itemtype);
+      $parent = false;
+      $fields = $DB->list_fields(getTableForItemType($params['itemtype']));
+      $current_field = $fields[$field];
+      if ($params['action'] == 'down') {
+         $parent = prev($fields);
+         $query  = "ALTER TABLE `$table` MODIFY `$field` ".$current_field['Type'];
+         $query .= " AFTER `".$parent['Field']."`";
+      } else {
+         $parent = next($fields);
+         $query  = "ALTER TABLE `$table` MODIFY `$field` ".$current_field['Type'];
+         $query .= "  AFTER `".$parent['Field']."`";
       }
+      $DB->query($query) or die ($DB->error());
    }
    /**
     * Get all fields for an object type
