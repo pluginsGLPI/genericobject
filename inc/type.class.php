@@ -1060,17 +1060,16 @@ class PluginGenericobjectType extends CommonDBTM {
              && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
          include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
    
-      } else
+      } else {
          if (file_exists($prefix . ".en_GB.php")) {
             include_once ($prefix . ".en_GB.php");
-   
          } else
-            if (file_exists($prefix . ".fr_FR.php")) {
-               include_once ($prefix . ".fr_FR.php");
-   
-            } else {
-               return false;
-            }
+           if (file_exists($prefix . ".fr_FR.php")) {
+              include_once ($prefix . ".fr_FR.php");
+           } else {
+            return false;
+         }
+      }
       return true;
    }
 

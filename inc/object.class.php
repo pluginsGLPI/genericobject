@@ -196,8 +196,6 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function title() {
-      $name = call_user_func(array(get_called_class(), 'getTypeName'));
-      displayTitle('', $name, $name);
    }
 
    function showForm($ID, $options=array(), $previsualisation = false) {
@@ -247,7 +245,6 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo $GO_FIELDS[$name]['name'];
          $this->endColumn();
          $this->startColumn();
-         
          switch ($description['Type']) {
             case "int(11)":
                $fk_table = getTableNameForForeignKeyField($name);
@@ -408,7 +405,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
       
       $types = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item', 
-                     'Reservation_Item', 'Document_Item', 'Infocom', 'Contract_Item');
+                     'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();
          $item->deleteByCriteria($parameters);

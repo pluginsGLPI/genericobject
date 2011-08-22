@@ -121,7 +121,6 @@ class PluginGenericobjectField extends CommonDBTM {
             $dropdown_types[$field] = $values['name']." (".$field.")";
          }
       }
-      //return dropdownArrayValues($name,$dropdown_types);
       Dropdown::showFromArray($name,$dropdown_types);
    }
 
@@ -160,6 +159,12 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</tr>";
    }
 
+   /**
+    * Add a new field in DB
+    * @param table the table
+    * @param field the field to delete
+    * @return nothing
+    */
    public static function addNewField($table, $field) {
       global $DB, $GO_FIELDS;
 
@@ -194,48 +199,54 @@ class PluginGenericobjectField extends CommonDBTM {
       }
    }
 
-    static function deleteField($table, $field) {
-      global $DB;
-      if (FieldExists($table, $field)) {
-         $DB->query("ALTER TABLE `$table` DROP `$field`;");
-      }
-    }
+   /**
+    * Delete a field in DB
+    * @param table the table
+    * @param field the field to delete
+    * @return nothing
+    */
+   static function deleteField($table, $field) {
+     global $DB;
+     //If field exists, drop it !
+     if (FieldExists($table, $field)) {
+        $DB->query("ALTER TABLE `$table` DROP `$field`");
+     }
+   }
    
+   /**
+    * Change field order in DB
+    * @params an array which contains the itemtype, the field to move and the action (up/down)
+    * @return nothing
+    */
    static function changeFieldOrder($params = array()) {
       global $DB;
       $itemtype = $params['itemtype'];
       $field    = $params['field'];
       $table    = getTableForItemType($itemtype);
-      $parent = false;
-      $fields = $DB->list_fields(getTableForItemType($params['itemtype']));
-      $current_field = $fields[$field];
-      if ($params['action'] == 'down') {
-         $parent = prev($fields);
-         $query  = "ALTER TABLE `$table` MODIFY `$field` ".$current_field['Type'];
-         $query .= " AFTER `".$parent['Field']."`";
-      } else {
-         $parent = next($fields);
-         $query  = "ALTER TABLE `$table` MODIFY `$field` ".$current_field['Type'];
-         $query .= "  AFTER `".$parent['Field']."`";
-      }
-      $DB->query($query) or die ($DB->error());
-   }
-   /**
-    * Get all fields for an object type
-    * @itemtype the object type
-    * @return an array with all the fields for this type
-    */
-   public static function getFieldsByType($itemtype) {
-      global $DB;
+      $fields   = $DB->list_fields(getTableForItemType($params['itemtype']));
       
-      $query    = "SELECT * FROM `".getTableForItemType(__CLASS__)."` " .
-                  "WHERE `itemtype`='$itemtype' ORDER BY `rank` ASC";
-      foreach ($DB->request($query) as $data) {
-         $tmp                    = new self();
-         $tmp->fields            = $data;
-         $fields[$data["name"]] = $tmp;
+      //If action is down, reverse array first
+      if ($params['action'] == 'down') {
+         $fields = array_reverse($fields);
       }
-      return $fields;
+
+      //Get array keys
+      $keys  = array_keys($fields);
+      //Index represents current position of $field
+      $index = 0;
+      foreach ($keys as $id => $key) {
+         if ($key == $field) {
+            $index = $id;
+         }
+      }
+      //Get 2 positions before and move field
+      $previous = $index -2;
+      if (isset($keys[$previous])) {
+         $parent = $fields[$keys[$previous]];
+         $query  = "ALTER TABLE `$table` MODIFY `$field` ".$fields[$field]['Type'];
+         $query .= " AFTER `".$fields[$keys[$previous]]['Field']."`";
+         $DB->query($query) or die ($DB->error());
+      }
    }
    
    public static function checkNecessaryFieldsDelete($itemtype,$field) {
@@ -257,29 +268,9 @@ class PluginGenericobjectField extends CommonDBTM {
    }
    
    static function install(Migration $migration) {
-      global $DB;
-/*      
-      if (!TableExists(getTableForItemType(__CLASS__))) {
-         $query = "CREATE TABLE `".getTableForItemType(__CLASS__)."` (
-                     `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-                     `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
-                     `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '' ,
-                     `rank` INT( 11 ) NOT NULL DEFAULT '0' ,
-                     `mandatory` tinyint(1) NOT NULL default '0',
-                     `entity_restrict` tinyint(1) NOT NULL default '0',
-                     `unique` tinyint(1) NOT NULL default '0'
-                     ) ENGINE = MYISAM  COMMENT = 'Field type description' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die ($DB->error());
-      }
-      */
    }
    
    static function uninstall() {
-/*
-      global $DB;
-      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
-      $DB->query($query) or die ($DB->error());
-*/
    }
 
 }

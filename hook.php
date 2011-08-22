@@ -62,12 +62,12 @@ function plugin_headings_genericobject($item, $withtemplate) {
          $prof = new PluginGenericobjectProfile();
          $prof->showForm($item->getID());
          break;
-   }   
+   }
 }
 
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
-      if (haveRight($value["name"].'_open_ticket',"1")) {
+      if ($value['use_tickets'] && haveRight($value["itemtype"].'_open_ticket',"1")) {
          $types[$value['itemtype']] = call_user_func(array($value['itemtype'], 'getTypeName'));
       }
    }
