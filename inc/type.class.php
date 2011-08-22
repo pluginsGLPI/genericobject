@@ -46,6 +46,7 @@ class PluginGenericobjectType extends CommonDBTM {
    const SEARCH_TEMPLATE             = "../objects/front.tpl";
    const AJAX_DROPDOWN_TEMPLATE      = "../objects/dropdown.tabs.tpl";
    const AJAX_TEMPLATE               = "../objects/ajax.tabs.tpl";
+   const LOCALE_TEMPLATE             = "../objects/locale.tpl";
 
    function __construct($itemtype = false) {
       if ($itemtype) {
@@ -126,7 +127,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td>" . $LANG['genericobject']['config'][9] . "</td>";
       echo "<td>";
       if ($ID) {
-         echo PluginGenericobjectObject::getLabel($this->fields["name"]);
+         echo call_user_func(array($this->fields["itemtype"], "getTypeName"));
       }
       echo "</td>";
       echo "</tr>";
@@ -305,6 +306,9 @@ class PluginGenericobjectType extends CommonDBTM {
       //Create rights for this new object
       PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], true);
 
+      //Write object class on the filesystem
+      self::addLocales($this->input["name"], $this->input["itemtype"]);
+
       //Reload profiles
       PluginGenericobjectProfile::changeProfile();
       return true;
@@ -367,6 +371,12 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteTable($this->fields["itemtype"]);
 
       self::removeDataInjectionModels($this->fields["itemtype"]);
+
+      $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$this->input['name'];
+      if (is_dir($locale_dir)) {
+         @rmdir($locale_dir);
+      }
+
       return true;
    }
 
@@ -683,10 +693,36 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
    
+   
+   public static function addLocales($name, $itemtype) {
+      global $CFG_GLPI;
+      $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$name;
+      if (!is_dir($locale_dir)) {
+         @ mkdir($locale_dir, 0777, true);
+      }
+      logDebug($CFG_GLPI['language'], $_SESSION['glpilanguage']);
+      $locale_file = $name.".".$_SESSION['glpilanguage'];
+      self::addFileFromTemplate($name, self::LOCALE_TEMPLATE, $locale_dir, $locale_file);
+      if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
+         $locale_file = $name.".".$CFG_GLPI['language'];
+         self::addFileFromTemplate($name, self::LOCALE_TEMPLATE, $locale_dir, $locale_file);
+      }
+   }
+
+   public static function deleteLocales($name, $itemtype) {
+      global $CFG_GLPI;
+      $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$name;
+      foreach (glob("*.php") as $file) {
+         @unlink($file);
+      }
+      @rmdir($locale_dir);
+   }
+
+
    public static function addFileFromTemplate($name, $template, $directory, $filename) {
       $DBf_handle = fopen($template, "rt");
       $template_file = fread($DBf_handle, filesize($template));
-      fclose($DBf_handle);
+      $template_file = str_replace("%%NAME%%", $name, $template_file);
       $template_file = str_replace("%%CLASSNAME%%", self::getClassByName($name), $template_file);
       $DBf_handle = fopen($directory . "/".$filename.".php", "w");
       fwrite($DBf_handle, $template_file);
@@ -1017,7 +1053,13 @@ class PluginGenericobjectType extends CommonDBTM {
    static function getTypes($all = false) {
       $table = getTableForItemType(__CLASS__);
       if (TableExists($table)) {
-         return getAllDatasFromTable($table, ($all?" status=" . self::ACTIVE:""));
+         $mytypes = array();
+         foreach (getAllDatasFromTable($table, ($all?" status=" . self::ACTIVE:""))as $data) {
+            if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name']."class.php")) {
+               $mytypes[] = $data;
+            }
+         }
+         return $mytypes;
       } else {
          return array ();
       }
@@ -1055,7 +1097,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function includeLocales($name) {
       global $CFG_GLPI, $LANG;
    
-      $prefix = GENERICOBJECT_DIR . "/objects/" . $name . "/" . $name;
+      $prefix = GENERICOBJECT_LOCALES_PATH . "/" . $name . "/" . $name;
       if (isset ($_SESSION["glpilanguage"]) 
              && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
          include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);

@@ -80,6 +80,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    static function getTypeName() {
+      global $LANG;
       $class = get_called_class();
       $item  = new $class();
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
@@ -92,7 +93,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    public function __construct() {
       $this->table = getTableForItemType(get_called_class());
-      if (get_called_class() && class_exists(get_called_class())) {
+      if (class_exists(get_called_class())) {
          $this->objecttype = new PluginGenericobjectType(get_called_class());
       }
       $this->dohistory = $this->canUseHistory();

@@ -186,12 +186,12 @@ function plugin_genericobject_uninstall() {
 function check_directories() {
    global $LANG;
    
-   if (!is_writable(GENERICOBJECT_DIR.'/inc/') 
-         || !is_writable(GENERICOBJECT_DIR.'/front/') 
-            || !is_writable(GENERICOBJECT_DIR.'/ajax/')) {
-      addMessageAfterRedirect($LANG['genericobject']['install'][0]);
-      return false;
-   } else {
-      return true;
+   foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH, 
+                  GENERICOBJECT_LOCALES_PATH) as $path) {
+      if (!is_dir($path) || !is_writable($path)) {
+         addMessageAfterRedirect($LANG['genericobject']['install'][0]);
+         return false;
+      }
    }
+   return true;
 }

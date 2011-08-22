@@ -46,6 +46,9 @@ if (!defined("GENERICOBJECT_CLASS_PATH")) {
    define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DIR . "/inc");
 }
 
+if (!defined("GENERICOBJECT_LOCALES_PATH")) {
+   define("GENERICOBJECT_LOCALES_PATH", GENERICOBJECT_DIR . "/locales");
+}
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, 
@@ -138,18 +141,3 @@ function plugin_genericobject_haveTypeRight($itemtype, $right) {
    }
 
 }
-/*
-function plugin_genericobject_checkRight($module, $right) {
-   global $CFG_GLPI;
-
-   if (! haveRight($module, $right)) {
-      // Gestion timeout session
-      if (!isset ($_SESSION["glpiID"])) {
-         glpi_header($CFG_GLPI["root_doc"] . "/index.php");
-         exit ();
-      }
-
-      displayRightError();
-   }
-   return true;
-}*/
