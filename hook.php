@@ -90,7 +90,7 @@ function plugin_genericobject_getDropdown() {
 // Define dropdown relations
 function plugin_genericobject_getDatabaseRelations() {
    $dropdowns = array();
-
+/*
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
       foreach (PluginGenericobjectType::getTypes(true) as $tmp => $values) {
@@ -100,7 +100,7 @@ function plugin_genericobject_getDatabaseRelations() {
          }
       }
    }
-
+*/
    return $dropdowns;
 }
 

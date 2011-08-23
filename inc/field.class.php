@@ -32,34 +32,29 @@
 // ----------------------------------------------------------------------
 class PluginGenericobjectField extends CommonDBTM {
 
-   public static function showObjectFieldsForm($ID) {
-      global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI, 
-             $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS;
+   public static function showObjectFieldsForm($id) {
+      global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
       $url          = getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
-      $object_type->getFromDB($ID);
+      $object_type->getFromDB($id);
       $itemtype     = $object_type->fields['itemtype'];
-      $fields_in_db = $DB->list_fields(getTableForItemType($object_type->fields["itemtype"]));
+      $fields_in_db = $DB->list_fields(getTableForItemType($itemtype));
       $used_fields  = array();
-      
-      foreach ($GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS as $autofield) {
-         $used_fields[$autofield] = $autofield;
-      }
 
       foreach ($GO_BLACKLIST_FIELDS as $autofield) {
-         if (!in_array($autofield,$used_fields)) {
+         if (!in_array($autofield, $used_fields)) {
             $used_fields[$autofield] = $autofield;
          }
       }
 
-      echo "<form name='form_fields' method='post' action=\"$url\">";
       echo "<div class='center'>";
+      echo "<form name='fields_definition' method='post' action='$url'>";
       echo "<table class='tab_cadre_fixe' >";
-      echo "<input type='hidden' name='id' value='$ID'>";
+      echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
-      echo $LANG['genericobject']['fields'][1] . " : " . 
-         PluginGenericobjectObject::getLabel($object_type->fields["name"]);
+      echo $LANG['genericobject']['fields'][1] . " : ";
+      call_user_func(array($itemtype, 'getTypeName'));
       echo "</th></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -75,30 +70,15 @@ class PluginGenericobjectField extends CommonDBTM {
 
       foreach ($fields_in_db as $field => $value) {
          self::displayFieldDefinition($url, $itemtype, $field, $index, $total);
-         $index++;
+         //All backlisted fields cannot be moved, and are listed first
+         if (!in_array($field, $GO_BLACKLIST_FIELDS)) {
+            $index++;
+         }
          $used_fields[$field] = $field; 
       }
-      
-      echo "<tr><td><img src=\"" . $CFG_GLPI["root_doc"] . "/pics/arrow-left.png\" alt=''>"; 
-      echo "</td><td class='center'>"; 
-      
-      echo "<a onclick= \"if ( markCheckboxes('form_fields') ) return false;\" href='" . $url . 
-              "?id=$ID&amp;select=all'>" . $LANG['buttons'][18] . "</a>";
-      echo "&nbsp;/&nbsp;<a onclick= \"if ( unMarkCheckboxes('form_fields') ) return false;\" href='" . 
-               $url . "?id=$ID&amp;select=none'>" . $LANG['buttons'][19] . "</a>";
-      echo "</td><td colspan='5' align='left' width='75%'>";
-      $rand = Dropdown::showFromArray('massiveaction', array('' => DROPDOWN_EMPTY_VALUE, 
-                                                             'delete' => $LANG['buttons'][6]));
-      $params = array ('action' => '__VALUE__', 'itemtype' => $object_type->fields["itemtype"]);
-
-      $ajax_page = $CFG_GLPI["root_doc"].
-               "/plugins/genericobject/ajax/plugin_genericobject_dropdownObjectTypeFields.php";
-      ajaxUpdateItemOnSelectEvent("dropdown_massiveaction$rand", "show_massiveaction", $ajax_page, 
-                                  $params);
-      echo "<span id='show_massiveaction'>&nbsp;</span>\n";
-      echo "</td></tr>";
       echo "</table>";
-      echo "<br>";
+      openArrowMassive('fields_definition', true);
+      closeArrowMassive('delete', $LANG['buttons'][6]);
 
       echo "<table class='tab_cadre'>";
       echo "<tr class='tab_bg_1'>";
@@ -129,10 +109,10 @@ class PluginGenericobjectField extends CommonDBTM {
       $readonly = in_array($field, $GO_BLACKLIST_FIELDS);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
-      $sel = "";
-      if (isset ($_POST["selected"])) {
+      if (isset ($_GET["select"]) && $_GET["select"] == "all") {
          $sel = "checked";
       }
+      $sel ="";
 
       echo "<td width='10'>";
       if (!$readonly) {

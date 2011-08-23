@@ -45,26 +45,21 @@ if (!defined("GENERICOBJECT_AJAX_PATH")) {
 if (!defined("GENERICOBJECT_CLASS_PATH")) {
    define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DIR . "/inc");
 }
-
 if (!defined("GENERICOBJECT_LOCALES_PATH")) {
    define("GENERICOBJECT_LOCALES_PATH", GENERICOBJECT_DIR . "/locales");
 }
+
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
-   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, 
-          $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS, 
-          $GO_FIELDS, $GENERICOBJECT_PDF_TYPES;
+   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS, 
+          $GENERICOBJECT_PDF_TYPES;
           
-   $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", 
-                                              "entities_id", "is_recursive", "is_template", 
-                                              "notepad", "template_name", "is_helpdesk_visible", 
-                                              "comment");
-
-   $GENERICOBJECT_AUTOMATICALLY_MANAGED_FIELDS = array ("id", "name", "notes", "entities_id",
-                                                        "recursive", "is_template");
+   $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id", 
+                                 "is_recursive", "is_template", "notepad", "template_name", 
+                                 "is_helpdesk_visible", "comment", "name");
 
    $GENERICOBJECT_PDF_TYPES = array ();
-   $plugin = new Plugin;
+   $plugin = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
       //Include all fields constants files

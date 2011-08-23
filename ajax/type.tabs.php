@@ -50,45 +50,30 @@ foreach (array ('sort', 'order') as $field) {
    }
    
 }
-/*
-if(!isset($_POST["withtemplate"])) {
-   $_POST["withtemplate"] = "";
-} elseif(!isset($_GET["withtemplate"])) {
-   $_GET["withtemplate"] = "";
-}
-*/
 
 switch($_POST['glpi_tab']){
-      case -1:
-         $type->showBehaviourForm($_POST["id"]);
-         PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
-         PluginGenericobjectLink::showDeviceTypeLinks($_POST['target'],
-                                                                           $_POST["id"]);
-         $type->getFromDB($_POST["id"]);
-         PluginGenericobjectObject::showPrevisualisationForm($type->fields["itemtype"]);
-         Log::showForItem($type);
-        break;
+   case -1:
+      $type->showBehaviourForm($_POST["id"]);
+      PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
+      $type->getFromDB($_POST["id"]);
+      PluginGenericobjectObject::showPrevisualisationForm($type);
+      Log::showForItem($type);
+     break;
         
-      case 1 :
-         $type->showBehaviourForm($_POST["id"]);
-         break;
+   case 1 :
+     $type->showBehaviourForm($_POST["id"]);
+     break;
 
-      case 3 :
-         PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
-         break;
+   case 3 :
+     PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
+     break;
 
-      case 4 :
-         PluginGenericobjectLink::showDeviceTypeLinks($_POST['target'],
-                                                                           $_POST["id"]);
-         break; 
-
-      case 5 :
-         $type->getFromDB($_POST["id"]);
-         PluginGenericobjectObject::showPrevisualisationForm($type->fields["itemtype"]);
+  case 5 :
+     $type->getFromDB($_POST["id"]);
+     PluginGenericobjectObject::showPrevisualisationForm($type);
+   break;
+   
+   case 12 :
+      Log::showForItem($type);
       break;
-      
-      case 12 :
-         Log::showForItem($type);
-         break;
-      }
-?>
+}

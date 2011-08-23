@@ -56,7 +56,6 @@ $GO_FIELDS['comment']['field']      = 'comment';
 $GO_FIELDS['comment']['input_type'] = 'multitext';
 
 $GO_FIELDS['other']['name']         = $LANG['common'][62];
-$GO_FIELDS['other']['field']        = 'other';
 $GO_FIELDS['other']['input_type']   = 'text';
 
 $GO_FIELDS['creationdate']['name']       = $LANG['genericobject']['fields'][30];
@@ -79,12 +78,14 @@ $GO_FIELDS['types_id']['field']         = 'name';
 $GO_FIELDS['types_id']['linkfield']     = 'type';
 $GO_FIELDS['types_id']['input_type']    = 'dropdown';
 $GO_FIELDS['types_id']['dropdown_type'] = 'type_specific';
+$GO_FIELDS['types_id']['readonly']      = true;
 
 $GO_FIELDS['models_id']['name']          = $LANG['common'][22];
 $GO_FIELDS['models_id']['field']         = 'name';
 $GO_FIELDS['models_id']['linkfield']     = 'model';
 $GO_FIELDS['models_id']['input_type']    = 'dropdown';
 $GO_FIELDS['models_id']['dropdown_type'] = 'type_specific';
+$GO_FIELDS['models_id']['readonly']      = true;
 
 $GO_FIELDS['category']['name']          = $LANG['common'][36];
 $GO_FIELDS['category']['field']         = 'name';

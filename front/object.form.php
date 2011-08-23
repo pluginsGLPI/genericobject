@@ -33,30 +33,30 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 
-if (!isset($_GET['id'])) {
-   $id = 0;
+if (!isset($_REQUEST['id'])) {
+   $id = -1;
 } else {
-   $id = $_GET['id'];
+   $id = $_REQUEST['id'];
 }
 
 if (isset ($_POST["add"])) {
-   $item->check($_POST['id'],'w');
+   $item->check($id,'w');
    $item->add($_POST);
    glpi_header($_SERVER["HTTP_REFERER"]);
 } elseif (isset ($_POST["update"])) {
-   $item->check($_POST['id'],'w');
+   $item->check($id,'w');
    $item->update($_POST);
    glpi_header($_SERVER["HTTP_REFERER"]);
 } elseif (isset ($_POST["restore"])) {
-   $item->check($_POST['id'],'w');
+   $item->check($id,'w');
    $item->restore($_POST);
    glpi_header($_SERVER["HTTP_REFERER"]);
 } elseif (isset($_REQUEST["purge"])) {
-   $input["id"]=$_REQUEST["id"];
-   $item->check($_POST['id'],'w');
+   $item->check($id,'w');
    $item->delete($_POST,1);
    $item->redirectToList();
 } elseif (isset($_SERVER["delete"])) {
+   $item->check($id,'w');
    $item->delete($_POST);
    $item->redirectToList();
 }

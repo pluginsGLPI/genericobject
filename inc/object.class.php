@@ -199,31 +199,30 @@ class PluginGenericobjectObject extends CommonDBTM {
    function title() {
    }
 
-   function showForm($ID, $options=array(), $previsualisation = false) {
+   function showForm($id, $options=array(), $previsualisation = false) {
       global $LANG, $DB;
 
       if ($previsualisation) {
          $canedit = true;
          $this->getEmpty();
       } else {
-         if ($ID > 0) {
-            $this->check($ID, 'r');
+         if ($id > 0) {
+            $this->check($id, 'r');
          } else {
             // Create item 
             $this->check(-1, 'w');
-            $use_cache = false;
             $this->getEmpty();
          }
 
          $this->showTabs($options);
-         $canedit = $this->can($ID, 'w');
+         $canedit = $this->can($id, 'w');
       }
       
-      $this->fields['id'] = $ID;
+      $this->fields['id'] = $id;
       $this->showFormHeader($options);
-      foreach ($DB->list_fields(getTableForItemType(get_called_class())) as $field => $description) {
-         $value = $this->fields[$field];
-         $this->displayField($canedit, $field, $value, $description);
+      foreach ($DB->list_fields(getTableForItemType($this->objecttype->fields['itemtype'])) 
+               as $field => $description) {
+         $this->displayField($canedit, $field, $this->fields[$field], $description);
       }
       $this->closeColumn();
 
@@ -239,8 +238,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    function displayField($canedit, $name, $value, $description = array()) {
       global $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
+      $donotdisplay_fields = array('id', 'is_recursive', 'is_template', 'template_name', 
+                                   'is_deleted', 'entities_id', 'notepad');
       if (isset ($GO_FIELDS[$name]) 
-         && !in_array($name, $GO_BLACKLIST_FIELDS)) {
+         && !in_array($name, $donotdisplay_fields)) {
 
          $this->startColumn();
          echo $GO_FIELDS[$name]['name'];
@@ -417,14 +418,14 @@ class PluginGenericobjectObject extends CommonDBTM {
     * Display object preview form
     * @param type the object type
     */
-   public static function showPrevisualisationForm($itemtype) {
+   public static function showPrevisualisationForm(PluginGenericobjectType $type) {
       global $LANG;
-
-      if (haveRight($itemtype,'r')) {
-         $name = PluginGenericobjectType::getNameByID($itemtype);
+      $itemtype = $type->fields['itemtype'];
+      $item     = new $itemtype();
+      
+      if (haveRight($itemtype, 'r')) {
          echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
-         $object = new PluginGenericobjectObject($itemtype);
-         $object->showForm('', null, true);
+         $item->showForm(-1, array(), true);
       } else {
          echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";
       }

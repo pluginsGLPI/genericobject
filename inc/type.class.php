@@ -48,6 +48,8 @@ class PluginGenericobjectType extends CommonDBTM {
    const AJAX_TEMPLATE               = "../objects/ajax.tabs.tpl";
    const LOCALE_TEMPLATE             = "../objects/locale.tpl";
 
+   var $dohistory = true;
+   
    function __construct($itemtype = false) {
       if ($itemtype) {
          $this->getFromDBByType($itemtype);
@@ -80,7 +82,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $ong[1]     = $LANG['title'][26];
       if (isset($this->fields['id']) && $this->fields['id'] > 0) {
          $ong[3]  = $LANG['rulesengine'][12];
-         //$ong[4] = $LANG['genericobject']['config'][4];
          $ong[5]  = $LANG['genericobject']['config'][7];
          $ong[12] = $LANG['title'][38];
       }
@@ -516,6 +517,12 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[15]['field']      = 'use_loans';
       $sopt[15]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][17];
       $sopt[15]['datatype']   = 'bool';
+
+      $sopt[16]['table']      = $this->getTable();
+      $sopt[16]['field']      = 'use_loans';
+      $sopt[16]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][25];
+      $sopt[16]['datatype']   = 'bool';
+
       return $sopt;
    }
    
@@ -532,6 +539,7 @@ class PluginGenericobjectType extends CommonDBTM {
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
                   `comment` TEXT NULL  ,
                   `notepad` TEXT NULL  ,
+                  `date_mod` DATETIME NULL  ,
                   PRIMARY KEY ( `id` ) 
                   ) ENGINE = MYISAM COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
@@ -541,30 +549,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $DB->query($query);
 
    }
-   
-
-   public static function addLinkTable($itemtype) {
-      global $DB;
-      $name = $itemtype;
-      //$name = self::getNameByID($itemtype);
-      $query = "CREATE TABLE IF NOT EXISTS `".self::getLinkDeviceTableName($name)."` (
-                 `id` int(11) NOT NULL auto_increment,
-                 `source_id` int(11) NOT NULL default '0',
-                 `items_id` int(11) NOT NULL default '0',
-                 `itemtype` VARCHAR( 255 ) NOT NULL,
-                 PRIMARY KEY  (`id`),
-                 UNIQUE KEY `source_id` (`source_id`,`items_id`,`itemtype`),
-                 KEY `source_id_2` (`source_id`),
-                 KEY `items_id` (`items_id`,`itemtype`)
-               ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-      $DB->query($query);
-   }
-   
-   
-   public static function getLinkDeviceTableName($name) {
-      return "glpi_plugin_genericobject_".getPlural($name)."_device";
-   }
-   
    
    public static function getSpecificDropdownsTablesByType($type) {
       $dropdowns   = array ();
@@ -618,9 +602,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
 
-
    //Form pages
-   
    static function getCompleteClassFilename($name) {
       return GENERICOBJECT_CLASS_PATH . "/".$name.".class.php";
    }
@@ -700,7 +682,6 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!is_dir($locale_dir)) {
          @ mkdir($locale_dir, 0777, true);
       }
-      logDebug($CFG_GLPI['language'], $_SESSION['glpilanguage']);
       $locale_file = $name.".".$_SESSION['glpilanguage'];
       self::addFileFromTemplate($name, self::LOCALE_TEMPLATE, $locale_dir, $locale_file);
       if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
@@ -783,8 +764,6 @@ class PluginGenericobjectType extends CommonDBTM {
       self::addFileFromTemplate($name, self::SEARCH_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
    }
 
-
-
    public static function deleteDropdownTable($name, $field) {
       global $DB;
       if (TableExists(self::getDropdownTableName($name, $field)))
@@ -797,8 +776,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $query = "DROP TABLE IF EXISTS `".self::getLinkDeviceTableName($name)."`";
       $DB->query($query);
    }
-   
-   
    
    public static function addDropdownTable($name, $field) {
       global $DB;
@@ -831,24 +808,6 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
    
-
-    /**
-    * Get next available device typ
-    * @return the next available device type 
-    */
-   public static function getNextDeviceType() {
-      global $DB;
-      $query = "SELECT MAX(itemtype) as cpt FROM `glpi_plugin_genericobject_types`";
-      $result = $DB->query($query);
-      if (!$DB->result($result, 0, "cpt")) {
-         $cpt = 4090;
-      } else {
-         $cpt = $DB->result($result, 0, "cpt") + 1;
-      }
-      return $cpt;
-   }
-
-
    /**
     * Delete object type table + entries in glpi_display
     * @name object type's name
@@ -872,38 +831,6 @@ class PluginGenericobjectType extends CommonDBTM {
                   && $GO_FIELDS[$field]['entity'] == 'entity_restrict');
    }
 
-   public static function enableTemplateManagement($name) {
-      global $DB;
-      $table = self::getTableNameByName($name);
-      if (!FieldExists($table, "is_template")) {
-         $query = "ALTER TABLE `$table` ADD `is_template` INT ( 1 ) NOT NULL DEFAULT 0";
-         $DB->query($query);
-      }
-
-      if (!FieldExists($table, "template_name")) {
-         $query = "ALTER TABLE `$table` " .
-                  "ADD `template_name` VARCHAR ( 255 )  collate utf8_unicode_ci NOT NULL DEFAULT ''";
-         $DB->query($query);
-      }
-   }
-
-   public static function disableTemplateManagement($name) {
-      global $DB;
-
-      $table = self::getTableNameByName($name);
-
-      if (FieldExists($table, "is_template")) {
-         $table = self::getTableNameByName($name);
-         $query = "ALTER TABLE `$table` DROP `is_template`";
-         $DB->query($query);
-      }
-
-      if (FieldExists($table, "template_name")) {
-         $query = "ALTER TABLE `$table` DROP `template_name`";
-         $DB->query($query);
-      }
-   }
-
    public static function getDatabaseRelationsSpecificDropdown(& $dropdowns, $type) {
       global $GO_FIELDS;
       $specific_types = self::getDropdownSpecificFields();
@@ -922,23 +849,6 @@ class PluginGenericobjectType extends CommonDBTM {
       global $DB;
       foreach(self::getDropdownSpecificFields() as $dropdown_itemtype => $tmp) {
          $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType($dropdown_itemtype)."`");
-      }
-   }
-
-   /**
-    * Get an internal ID by the object name
-    * @param name the object's name
-    * @return the object's ID
-    */
-   static function getIDByName($name) {
-      global $DB;
-      $query = "SELECT `itemtype` FROM `".getTableForItemType(__CLASS__)."` " .
-               "WHERE `name`='$name'";
-      $result = $DB->query($query);
-      if ($DB->numrows($result)) {
-         return $DB->result($result, 0, "itemtype");
-      } else {
-         return 0;
       }
    }
    
@@ -1019,25 +929,6 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
 
-   
-   /**
-    * Get the object table name, by giving the identifier
-    * @param name the object's internal identifier
-    * @return the classname associated with the object
-    */
-   static function getTableByName($name) {
-      return 'glpi_plugin_genericobject_' . getPlural($name);
-   }
-   
-   /**
-    * Get the object ID, by giving the name
-    * @param name the object's internal identifier
-    * @return the ID associated with the object
-    */
-   static function getIdentifierByName($name) {
-      return 'PLUGIN_GENERICOBJECT_' . strtoupper($name) . '_TYPE';
-   }
-   
    /**
     * Get the object class, by giving the name
     * @param name the object's internal identifier
@@ -1054,8 +945,9 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if (TableExists($table)) {
          $mytypes = array();
-         foreach (getAllDatasFromTable($table, ($all?" status=" . self::ACTIVE:""))as $data) {
-            if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name']."class.php")) {
+         foreach (getAllDatasFromTable($table, (!$all?" status=" . self::ACTIVE:"")) as $data) {
+            //If class is not present on the filesystem, do not list itemtype
+            if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
                $mytypes[] = $data;
             }
          }
@@ -1220,7 +1112,6 @@ class PluginGenericobjectType extends CommonDBTM {
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
                            `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
-                           `state` INT( 2 ) NOT NULL DEFAULT 0 ,
                            `status` INT ( 1 )NOT NULL DEFAULT 0 ,
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
                            `use_deleted` tinyint(1) NOT NULL default '0',
