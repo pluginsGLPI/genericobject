@@ -43,6 +43,7 @@ class PluginGenericobjectType extends CommonDBTM {
    const FORM_TEMPLATE               = "../objects/generic.form.tpl";
    const CLASS_DROPDOWN_TEMPLATE     = "../objects/generic.dropdown.class.tpl";
    const FRONTFORM_DROPDOWN_TEMPLATE = "../objects/front.form.tpl";
+   const FRONT_DROPDOWN_TEMPLATE     = "../objects/front.tpl";
    const SEARCH_TEMPLATE             = "../objects/front.tpl";
    const AJAX_DROPDOWN_TEMPLATE      = "../objects/dropdown.tabs.tpl";
    const AJAX_TEMPLATE               = "../objects/ajax.tabs.tpl";
@@ -285,8 +286,8 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
 
+
    function prepareInputForAdd($input) {
-      $input['name']     = str_replace(array(' ', '_', '-'), '', strtolower($input["name"]));
       $input['itemtype'] = self::getClassByName($input['name']);
       return $input;
    }
@@ -561,7 +562,7 @@ class PluginGenericobjectType extends CommonDBTM {
    
    public static function getDropdownSpecific(& $dropdowns, $type, $check_entity = false) {
       global $GO_FIELDS;
-      
+ /*     
       $specific_types = self::getDropdownSpecificFields();
       foreach ($specific_types as $ID => $field) {
          if (FieldExists(getTableForItemType(__CLASS__), $field)) {
@@ -572,7 +573,7 @@ class PluginGenericobjectType extends CommonDBTM {
                   PluginGenericobjectObject::getLabel($type["name"]) . ' : ' . 
                                                       $GO_FIELDS[$field]['name'];
          }
-      }
+      }*/
    }
    
    public static function getDropdownSpecificFields() {
@@ -728,7 +729,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    public static function addDropdownClassFile($name, $field) {
-      self::addFileFromTemplate($name, self::DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
+      self::addFileFromTemplate($name, self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
    } 
 
    /**
@@ -777,33 +778,16 @@ class PluginGenericobjectType extends CommonDBTM {
       $DB->query($query);
    }
    
-   public static function addDropdownTable($name, $field) {
+   public static function addDropdownTable($table) {
       global $DB;
-      if (!TableExists(self::getDropdownTableName($name, $field))) {
-         if (!self::isDropdownEntityRestrict($field)) {
-            $query = "CREATE TABLE `" . self::getDropdownTableName($name, $field) . "` (
-                          `id` int(11) NOT NULL auto_increment,
-                          `name` varchar(255) collate utf8_unicode_ci default NULL,
-                          `comment` text collate utf8_unicode_ci,
-                          PRIMARY KEY  (`id`),
-                          KEY `name` (`name`)
-                        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         } else {
-            $query = "CREATE TABLE IF NOT EXISTS `" . 
-                        self::getDropdownTableName($name, $field) . "` (
+      if (!TableExists($table)) {
+         $query = "CREATE TABLE IF NOT EXISTS `$table` (
                        `id` int(11) NOT NULL auto_increment,
-                       `entities_id` int(11) NOT NULL default '0',
                        `name` varchar(255) collate utf8_unicode_ci default NULL,
-                       `parentID` int(11) NOT NULL default '0',
-                       `completename` text collate utf8_unicode_ci,
                        `comment` text collate utf8_unicode_ci,
-                       `level` int(11) NOT NULL default '0',
                        PRIMARY KEY  (`id`),
-                       UNIQUE KEY `name` (`name`,`parentID`,`entities_id`),
-                       KEY `parentID` (`parentID`),
-                       KEY `entities_id` (`entities_id`)
-                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         }
+                       KEY `name` (`name`)
+                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query);
       }
    }
@@ -935,9 +919,13 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return the class associated with the object
     */
    static function getClassByName($name) {
+      $name = str_replace(array(' ', '_', '-'), '', strtolower($name));
       return 'PluginGenericobject' . ucfirst($name);
    }
    
+   static function getNameByTable($table) {
+      return (str_replace('glpi_plugin_genericobject_','', $table));
+   }
    /**
     * Get all types of active&published objects
     */

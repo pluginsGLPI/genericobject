@@ -37,4 +37,3 @@
  */
 class %%CLASSNAME%% extends PluginGenericobjectObject {
 }
-?>

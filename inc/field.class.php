@@ -176,6 +176,19 @@ class PluginGenericobjectField extends CommonDBTM {
                break;
          }
          $DB->query($query);
+         
+         $table = getTableNameForForeignKeyField($field);
+         if ($table != '' && !TableExists($table)) {
+            //Cannot use standard methods because class doesn't exists yet !
+            $name = PluginGenericobjectType::getNameByTable($table);
+            $name = getSingular($name);
+            $itemtype = 'PluginGenericobject'.ucfirst($name);
+            PluginGenericobjectType::addDropdownClassFile($name, $itemtype);
+            PluginGenericobjectType::addDropdownTable($table);
+            PluginGenericobjectType::addDropdownFrontFile($name);
+            PluginGenericobjectType::addDropdownAjaxFile($name, $field);
+            PluginGenericobjectType::addDropdownFrontformFile($name, $field);
+         }
       }
    }
 

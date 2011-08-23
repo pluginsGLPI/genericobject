@@ -38,4 +38,3 @@
 class %%CLASSNAME%% extends CommonDropdown {
 
 }
-?>

@@ -118,7 +118,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($this->canUseDirectConnections() || $this->canUseNetworkPorts())
             $ong[3] = $LANG['title'][27];
 
-         if ($this->canUseInfocoms()) {
+         if ($this->canUseInfocoms() || $this->canUseContracts()) {
             $ong[4] = $LANG['Menu'][26];
          }
 
@@ -151,13 +151,15 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseInfocoms() {
-      return ($this->objecttype->canUseInfocoms() 
-               && (haveRight("contract", "r") || haveRight("infocom", "r")));
+      return ($this->objecttype->canUseInfocoms() || haveRight("infocom", "r"));
+   }
+
+   function canUseContracts() {
+      return ($this->objecttype->canUseContracts() || haveRight("contract", "r"));
    }
 
    function canUseDocuments() {
       return ($this->objecttype->canUseDocuments() && haveRight("document", "r"));
-
    }
 
    function canUseTickets() {
@@ -504,35 +506,4 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       return $options;
    }
-   
-   /**
-    * Reorder all fields for a type
-    * @param itemtype the object type
-    */
-   public static function reorderFields($itemtype) {
-      global $DB;
-      logDebug($DB->list_fields(getTableForItemType($itemtype)));
-      /*
-      $query = "SELECT id FROM `glpi_plugin_genericobject_type_fields` " .
-               "WHERE itemtype='$itemtype' ORDER BY rank ASC";
-      $result = $DB->query($query);
-      $i = 0;
-      while ($datas = $DB->fetch_array($result))
-      {
-         $query = "UPDATE `glpi_plugin_genericobject_type_fields` SET rank=$i " .
-                  "WHERE itemtype='$itemtype' AND id=".$datas["id"];
-         $DB->query($query);
-         $i++; 
-      }*/
-   }
-   
-   static function getLabel($name) {
-      global $LANG;
-      if (isset ($LANG['genericobject'][$name][1])) {
-         return $LANG['genericobject'][$name][1];
-      } else {
-         return $name;
-      }
-   }
-
 }

@@ -63,9 +63,7 @@ if (empty ($_POST["id"])) {
    
    $item = new $itemtype();
    $item->getFromDB($_POST["id"]);
-   
-   //echo $item->getType();
-         
+
    switch ($_POST['glpi_tab']) {
       case -1 :
          
@@ -73,7 +71,7 @@ if (empty ($_POST["id"])) {
             NetworkPort::showForItem($itemtype, $_POST["id"]);
          }
 
-         if ($item->canUseInfocoms()) {
+         if ($item->canUseInfocoms() || $item->canUseContract()) {
             Infocom::showForItem($item);
             Contract::showAssociated($item);
          }
@@ -107,26 +105,38 @@ if (empty ($_POST["id"])) {
          }
          break;
       case 4 :
-         Infocom::showForItem($item);
-         Contract::showAssociated($item);
+         if ($item->canUseInfocoms() || $item->canUseContract()) {
+            Infocom::showForItem($item);
+            Contract::showAssociated($item);
+         }
          break;
       case 5 :
-         Document::showAssociated($item);
+         if ($item->canUseDocuments()) {
+            Document::showAssociated($item);
+         }
          break;
       case 6 :
-         Ticket::showListForItem($itemtype, $_POST["id"]);
+         if ($item->canUseTickets()) {
+            Ticket::showListForItem($itemtype, $_POST["id"]);
+         }
          break;
       case 7 :
          //PluginGenericobjectObject::showDevice($_POST['target'], $itemtype, $_POST["id"]);
          break;
       case 10 :
-         showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
+         if ($item->canUseNotepad()) {
+            showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
+         }
          break;
       case 11 :
-         Reservation::showForItem($itemtype, $_POST["id"]);
+         if ($item->canBeReserved()) {
+            Reservation::showForItem($itemtype, $_POST["id"]);
+         }
          break;
       case 12 :
-         Log::showForItem($item);
+         if ($item->canUseHistory()) {
+            Log::showForItem($item);
+         }
          break;
       default :
          if (!Plugin::displayAction($item, $_POST['glpi_tab'])) {
