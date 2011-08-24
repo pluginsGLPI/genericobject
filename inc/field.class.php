@@ -180,9 +180,11 @@ class PluginGenericobjectField extends CommonDBTM {
          $table = getTableNameForForeignKeyField($field);
          if ($table != '' && !TableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
-            $name = PluginGenericobjectType::getNameByTable($table);
+            $name = str_replace("glpi_plugin_genericobject_","", $table);
             $name = getSingular($name);
+            //Build itemtype
             $itemtype = 'PluginGenericobject'.ucfirst($name);
+            //Add files on the disk
             PluginGenericobjectType::addDropdownClassFile($name, $itemtype);
             PluginGenericobjectType::addDropdownTable($table);
             PluginGenericobjectType::addDropdownFrontFile($name);
@@ -203,6 +205,15 @@ class PluginGenericobjectField extends CommonDBTM {
      //If field exists, drop it !
      if (FieldExists($table, $field)) {
         $DB->query("ALTER TABLE `$table` DROP `$field`");
+     }
+
+     $table = getTableNameForForeignKeyField($field);
+     //If dropdown is managed by the plugin
+     if ($table != '' && preg_match('/plugin_genericobject/', $table)) {
+        //Delete dropdown table
+        $query = "DROP TABLE `$table`";
+        $DB->query($query);
+        //
      }
    }
    

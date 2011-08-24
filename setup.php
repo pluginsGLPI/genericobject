@@ -92,7 +92,9 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
 
-      PluginGenericobjectType::registerNewTypes();
+      foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
+         call_user_func(array($objecttype['itemtype'], 'registerType'));
+      }
    }
 }
 

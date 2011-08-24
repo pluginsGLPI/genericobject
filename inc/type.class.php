@@ -817,16 +817,6 @@ class PluginGenericobjectType extends CommonDBTM {
 
    public static function getDatabaseRelationsSpecificDropdown(& $dropdowns, $type) {
       global $GO_FIELDS;
-      $specific_types = self::getDropdownSpecificFields();
-      $table = self::getTableNameByName($type["name"]);
-
-      foreach ($specific_types as $ID => $field) {
-         if (TableExists($table) && FieldExists($table, $field)) {
-            $dropdowns[$table] = array (
-               self::getDropdownTableName($type["name"], $field) => 
-                  $GO_FIELDS[$field]['linkfield']);
-         }
-      }
    }
 
    public static function deleteSpecificDropdownTables($itemtype) {
@@ -922,10 +912,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $name = str_replace(array(' ', '_', '-'), '', strtolower($name));
       return 'PluginGenericobject' . ucfirst($name);
    }
-   
-   static function getNameByTable($table) {
-      return (str_replace('glpi_plugin_genericobject_','', $table));
-   }
+
    /**
     * Get all types of active&published objects
     */
@@ -942,18 +929,6 @@ class PluginGenericobjectType extends CommonDBTM {
          return $mytypes;
       } else {
          return array ();
-      }
-   }
-   
-   /**
-    * Register all object's types and values
-    * @return nothing
-    */
-   static function registerNewTypes() {
-      //Only look for published and active types
-   
-      foreach (self::getTypes() as $id => $objecttype) {
-         call_user_func(array($objecttype['itemtype'], 'registerType'));
       }
    }
    
@@ -993,24 +968,6 @@ class PluginGenericobjectType extends CommonDBTM {
          }
       }
       return true;
-   }
-
-   /**
-    * Get table name by ID
-    * @param ID the object's ID
-    * @return the table
-    */
-   static function getTableNameByID($ID) {
-      return self::getTableNameByName(self::getNameByID($ID));
-   }
-   
-   /**
-    * Get table name by name
-    * @param ID the object's ID
-    * @return the table
-    */
-   static function getTableNameByName($name) {
-      return 'glpi_plugin_genericobject_' . getPlural($name);
    }
 
    //------------------------------- GETTERS -------------------------//
