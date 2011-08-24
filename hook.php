@@ -195,3 +195,11 @@ function check_directories() {
    }
    return true;
 }
+
+function plugin_datainjection_populate_genericobject() {
+   global $INJECTABLE_TYPES;
+   $type = new PluginGenericobjectType();
+   foreach($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
+      $INJECTABLE_TYPES[$data ['itemtype']] = 'genericobject';
+   }
+}

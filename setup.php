@@ -56,7 +56,7 @@ function plugin_init_genericobject() {
           
    $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id", 
                                  "is_recursive", "is_template", "notepad", "template_name", 
-                                 "is_helpdesk_visible", "comment", "name");
+                                 "is_helpdesk_visible", "comment", "name", "date_mod");
 
    $GENERICOBJECT_PDF_TYPES = array ();
    $plugin = new Plugin();
@@ -91,6 +91,7 @@ function plugin_init_genericobject() {
       // Onglets management
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
+      $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
 
       foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
          call_user_func(array($objecttype['itemtype'], 'registerType'));

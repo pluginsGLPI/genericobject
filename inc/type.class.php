@@ -48,6 +48,7 @@ class PluginGenericobjectType extends CommonDBTM {
    const AJAX_DROPDOWN_TEMPLATE      = "../objects/dropdown.tabs.tpl";
    const AJAX_TEMPLATE               = "../objects/ajax.tabs.tpl";
    const LOCALE_TEMPLATE             = "../objects/locale.tpl";
+   const OBJECTINJECTION_TEMPLATE    = "../objects/objectinjection.class.tpl";
 
    var $dohistory = true;
    
@@ -141,7 +142,7 @@ class PluginGenericobjectType extends CommonDBTM {
          echo $LANG['choice'][0];
       }
       else {
-         Dropdown::showYesNo("status", $this->fields["status"]);
+         Dropdown::showYesNo("is_active", $this->fields["is_active"]);
       }
       echo "</td>";
       echo "</tr>";
@@ -183,10 +184,10 @@ class PluginGenericobjectType extends CommonDBTM {
                     "use_contracts"            => $LANG['Menu'][25],
                     "use_documents"            => $LANG['Menu'][27],
                     "use_loans"                => $LANG['Menu'][17],
-                    "use_loans"                => $LANG['Menu'][17],
+                    "use_unicity"              => $LANG['setup'][811],
                     "use_network_ports"        => $LANG['genericobject']['config'][14],
                     "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
-                    "use_plugin_pdf"         => $LANG['genericobject']['config'][11],
+                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
                     "use_plugin_order"         => $LANG['genericobject']['config'][12],
                     "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]
                      //"use_plugin_geninventorynumber"=>$LANG['genericobject']['config'][15]
@@ -319,7 +320,7 @@ class PluginGenericobjectType extends CommonDBTM {
    function prepareInputForUpdate($input) {
       $type = new self();
       $this->getFromDB($input["id"]);
-      if (isset ($input["status"]) && $input["status"]) {
+      if (isset ($input["is_active"]) && $input["is_active"]) {
          $type->fields = $this->fields;
          self::registerOneType($type);
       }
@@ -354,6 +355,8 @@ class PluginGenericobjectType extends CommonDBTM {
       //Delete loans associated with this type
       self::deleteLoans($this->fields["itemtype"]);
 
+      //Delete loans associated with this type
+      self::deleteUnicity($this->fields["itemtype"]);
 
       //Remove class from the filesystem
       self::deleteClassFile($this->fields["name"]);
@@ -436,6 +439,9 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectField::addNewField($table, 'locations_id');
       }
 
+      if ($this->canUsePluginDataInjection() && !class_exists($this->fields['itemtype'].'Injection')) {
+         self::addDatainjectionFile($name);
+      }
 /*
      if ($this->canUsePluginGeninventoryNumber() 
             && !$commonitem->getField('otherserial')) {
@@ -465,7 +471,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[1]['datatype']    = 'itemlink';
 
       $sopt[5]['table']       = $this->getTable();
-      $sopt[5]['field']       = 'status';
+      $sopt[5]['field']       = 'is_active';
       $sopt[5]['name']        = $LANG['common'][60];
       $sopt[5]['datatype']    = 'bool';
    
@@ -523,6 +529,11 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[16]['field']      = 'use_loans';
       $sopt[16]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][25];
       $sopt[16]['datatype']   = 'bool';
+
+      $sopt[17]['table']       = $this->getTable();
+      $sopt[17]['field']       = 'use_unicity';
+      $sopt[17]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['setup'][811];
+      $sopt[17]['datatype']    = 'bool';
 
       return $sopt;
    }
@@ -711,6 +722,18 @@ class PluginGenericobjectType extends CommonDBTM {
       fclose($DBf_handle);
       
    }
+
+   public static function addDatainjectionFile($name) {
+      $DBf_handle = fopen(self::OBJECTINJECTION_TEMPLATE, "rt");
+      $template_file = fread($DBf_handle, filesize(self::OBJECTINJECTION_TEMPLATE));
+      $template_file = str_replace("%%NAME%%", $name, $template_file);
+      $injectionClass = self::getClassByName($name)."Injection";
+      $template_file = str_replace("%%CLASSNAME%%", $injectionClass, $template_file);
+      $DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/".$injectionClass."injection.class.php", "w");
+      fwrite($DBf_handle, $template_file);
+      fclose($DBf_handle);
+      
+   }
    
    public static function addDropdownFrontFile($name) {
       self::addFileFromTemplate($name, self::FRONT_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
@@ -807,24 +830,6 @@ class PluginGenericobjectType extends CommonDBTM {
       return getPlural("glpi_plugin_genericobject_" . $name . $field);
    }
 
-
-
-   public static function isDropdownEntityRestrict($field) {
-      global $GO_FIELDS;
-      return (isset ($GO_FIELDS[$field]['entity']) 
-                  && $GO_FIELDS[$field]['entity'] == 'entity_restrict');
-   }
-
-   public static function getDatabaseRelationsSpecificDropdown(& $dropdowns, $type) {
-      global $GO_FIELDS;
-   }
-
-   public static function deleteSpecificDropdownTables($itemtype) {
-      global $DB;
-      foreach(self::getDropdownSpecificFields() as $dropdown_itemtype => $tmp) {
-         $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType($dropdown_itemtype)."`");
-      }
-   }
    
    /**
     * Get object name by ID
@@ -876,6 +881,14 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
 
+   /**
+    * Delete all loans associated with a itemtype
+    */
+   public static function deleteUnicity($itemtype) {
+      $unicity = new FieldUnicity();
+      $unicity->deleteByCriteria(array('itemtype' => $itemtype));
+   }
+
    static function deleteNetworking($itemtype) {
        global $DB;
        $query = "SELECT `id` 
@@ -920,7 +933,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if (TableExists($table)) {
          $mytypes = array();
-         foreach (getAllDatasFromTable($table, (!$all?" status=" . self::ACTIVE:"")) as $data) {
+         foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
                $mytypes[] = $data;
@@ -979,6 +992,10 @@ class PluginGenericobjectType extends CommonDBTM {
    function canUseTemplate() {
       return $this->fields['use_template'];
    }
+
+   function canUseUnicity() {
+      return $this->fields['use_unicity'];
+   }
    
    function canBeDeleted() {
       return $this->fields['use_deleted'];
@@ -1012,7 +1029,7 @@ class PluginGenericobjectType extends CommonDBTM {
       return $this->fields['use_infocoms'];
    }
 
-   function canUseContract() {
+   function canUseContracts() {
       return $this->fields['use_contracts'];
    }
    
@@ -1057,8 +1074,9 @@ class PluginGenericobjectType extends CommonDBTM {
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
                            `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
-                           `status` INT ( 1 )NOT NULL DEFAULT 0 ,
+                           `is_active` tinyint(1) NOT NULL default '0',
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
+                           `use_unicity` tinyint(1) NOT NULL default '0',
                            `use_deleted` tinyint(1) NOT NULL default '0',
                            `use_notes` tinyint(1) NOT NULL default '0',
                            `use_history` tinyint(1) NOT NULL default '0',

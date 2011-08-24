@@ -68,6 +68,11 @@ $GO_FIELDS['expirationdate']['field']      = 'expirationdate';
 $GO_FIELDS['expirationdate']['input_type'] = 'date';
 $GO_FIELDS['expirationdate']['datatype']   = 'date';
 
+$GO_FIELDS['date_mod']['name']       = $LANG['login'][24];
+$GO_FIELDS['date_mod']['field']      = 'date_mod';
+$GO_FIELDS['date_mod']['input_type'] = 'datetime';
+$GO_FIELDS['date_mod']['datatype']   = 'datetime';
+
 $GO_FIELDS['url']['name']       = $LANG['genericobject']['fields'][10];
 $GO_FIELDS['url']['field']      = 'url';
 $GO_FIELDS['url']['input_type'] = 'text';

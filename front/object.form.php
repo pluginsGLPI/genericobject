@@ -39,6 +39,10 @@ if (!isset($_REQUEST['id'])) {
    $id = $_REQUEST['id'];
 }
 
+if (!isset($_GET["withtemplate"])) {
+   $_GET["withtemplate"] = "";
+}
+
 if (isset ($_POST["add"])) {
    $item->check($id,'w');
    $item->add($_POST);
@@ -65,6 +69,6 @@ commonHeader(call_user_func(array($itemtype, 'getTypeName')), $_SERVER['PHP_SELF
              "plugins", "genericobject", $itemtype);
 
 $item->title();
-$item->showForm($id);
+$item->showForm($id, array('withtemplate' => $_GET["withtemplate"]));
 
 commonFooter();

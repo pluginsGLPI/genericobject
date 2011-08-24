@@ -39,26 +39,41 @@ class PluginGenericobjectObject extends CommonDBTM {
    //Internal field counter
    private $cpt = 0;
    
+   static function install() {
+   }
+   
+   static function uninstall() {
+   }
+   
    static function registerType() {
       global $DB, $LANG, $PLUGIN_HOOKS;
       $class  = get_called_class();
       $item   = new $class();
       $fields = $DB->list_fields(getTableForItemType($class));
       
-      $options = array("document_types"         => $item->objecttype->canUseDocuments(),
-                       "helpdesk_visible_types" => $item->objecttype->canUseTickets() 
+      $options = array("document_types"         => $item->canUseDocuments(),
+                       "helpdesk_visible_types" => $item->canUseTickets() 
                                                     && isset($fields['is_helpdesk_visible']),
-                       "linkgroup_types"        => $item->objecttype->canUseTickets() 
+                       "linkgroup_types"        => $item->canUseTickets() 
                                                     && isset ($fields["groups_id"]),
-                       "linkuser_types"         => $item->objecttype->canUseTickets() 
+                       "linkuser_types"         => $item->canUseTickets() 
                                                    && isset ($fields["users_id"]),
-                       "ticket_types"           => $item->objecttype->canUseTickets(),
-                       "infocom_types"          => $item->objecttype->canUseInfocoms(),
-                       "networkport_types"      => $item->objecttype->canUseNetworkPorts(),
-                       "reservation_types"      => $item->objecttype->canBeReserved(),
-                       "contract_types"         => $item->objecttype->canUseContract());
+                       "ticket_types"           => $item->canUseTickets(),
+                       "infocom_types"          => $item->canUseInfocoms(),
+                       "networkport_types"      => $item->canUseNetworkPorts(),
+                       "reservation_types"      => $item->canBeReserved(),
+                       "contract_types"         => $item->canUseContracts(),
+                       "unicity_types"          => $item->canUseUnicity());
          Plugin::registerClass($class, $options);
          if (haveRight($class, "r")) {
+            //Change url for adding a new object, depending on template management activation
+            if ($item->objecttype->canUseTemplate()) {
+               //Template management is active
+               $add_url = "/front/setup.templates.php?itemtype=$class&amp;add=1";
+            } else {
+               //Template management is not active
+               $add_url = getItemTypeFormURL($class, false);
+            }
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
                                                       = call_user_func(array($class, 'getTypeName'));
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
@@ -66,15 +81,20 @@ class PluginGenericobjectObject extends CommonDBTM {
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
                                                       = getItemTypeSearchURL($class, false);
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
-                                                      = getItemTypeFormURL($class, false);
+                                                      = $add_url;
            if ($item->objecttype->canUseTemplate()) {
               $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
                                                          = "/front/setup.templates.php?itemtype=$class&amp;add=0";
            }
 
+           //Add configuration icon, if user has right
            if (haveRight('config', 'w')) {
               $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
                                           = getItemTypeSearchURL('PluginGenericobjectType',false);
+           }
+           
+           if ($item->canUseTickets()) {
+              $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
            }
       }
    }
@@ -90,6 +110,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          return $item->objecttype->fields['name'];
       }
    }
+   
    
    public function __construct() {
       $this->table = getTableForItemType(get_called_class());
@@ -158,6 +179,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       return ($this->objecttype->canUseContracts() || haveRight("contract", "r"));
    }
 
+   function canUseUnicity() {
+      return ($this->objecttype->canUseUnicity() || haveRight("config", "r"));
+   }
+
    function canUseDocuments() {
       return ($this->objecttype->canUseDocuments() && haveRight("document", "r"));
    }
@@ -219,15 +244,40 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->showTabs($options);
          $canedit = $this->can($id, 'w');
       }
-      
+
+      if (isset($options['withtemplate']) && $options['withtemplate'] == 2) {
+         $template   = "newcomp";
+         $datestring = $LANG['computers'][14]." : ";
+         $date       = convDateTime($_SESSION["glpi_currenttime"]);
+      } else if (isset($options['withtemplate']) && $options['withtemplate'] == 1) {
+         $template   = "newtemplate";
+         $datestring = $LANG['computers'][14]." : ";
+         $date       = convDateTime($_SESSION["glpi_currenttime"]);
+      } else {
+         $datestring = $LANG['common'][26].": ";
+         $date       = convDateTime($this->fields["date_mod"]);
+         $template   = false;
+      }
+
       $this->fields['id'] = $id;
       $this->showFormHeader($options);
+
       foreach ($DB->list_fields(getTableForItemType($this->objecttype->fields['itemtype'])) 
                as $field => $description) {
          $this->displayField($canedit, $field, $this->fields[$field], $description);
       }
       $this->closeColumn();
-
+      
+      if (!$this->isNewID($id)) {
+         echo "<tr class='tab_bg_1'>";
+         echo "<td colspan='2' class='center'>".$datestring.$date;
+         if (!$template && !empty($this->fields['template_name'])) {
+            echo "<span class='small_space'>(".$LANG['common'][13]."&nbsp;: ".
+                  $this->fields['template_name'].")</span>";
+         }
+         echo "</td></tr>";
+      }
+      
       if (!$previsualisation) {
          $this->showFormButtons($options);
          echo "<div id='tabcontent'></div>";
@@ -237,13 +287,18 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   static function getFieldsToHide() {
+      return array('id', 'is_recursive', 'is_template', 'template_name', 'is_deleted', 
+                   'entities_id', 'notepad', 'date_mod');
+   }
+   
    function displayField($canedit, $name, $value, $description = array()) {
       global $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
       $donotdisplay_fields = array('id', 'is_recursive', 'is_template', 'template_name', 
                                    'is_deleted', 'entities_id', 'notepad');
       if (isset ($GO_FIELDS[$name]) 
-         && !in_array($name, $donotdisplay_fields)) {
+         && !in_array($name, self::getFieldsToHide())) {
 
          $this->startColumn();
          echo $GO_FIELDS[$name]['name'];
@@ -505,5 +560,14 @@ class PluginGenericobjectObject extends CommonDBTM {
          $index++;
       }
       return $options;
+   }
+
+   //Datainjection specific methods
+   static function isPrimaryType() {
+      return true;
+   }
+   
+   function connectedTo() {
+      return array();
    }
 }
