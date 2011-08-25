@@ -348,9 +348,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $this->getFromDB($this->fields["id"]);
       //Delete relation table
       //self::deleteLinkTable($this->fields["itemtype"]);
-
-      //Delete all tables and files related to the type (dropdowns)
-      self::deleteSpecificDropdownTables($this->fields["itemtype"]);
       
       //Delete loans associated with this type
       self::deleteLoans($this->fields["itemtype"]);
@@ -375,6 +372,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Table type table in DB
       self::deleteTable($this->fields["itemtype"]);
 
+      self::deleteInjectionFile($this->fields['name']);
       self::removeDataInjectionModels($this->fields["itemtype"]);
 
       $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$this->input['name'];
@@ -439,9 +437,16 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectField::addNewField($table, 'locations_id');
       }
 
-      if ($this->canUsePluginDataInjection() && !class_exists($this->fields['itemtype'].'Injection')) {
-         self::addDatainjectionFile($name);
+      if ($this->canUsePluginDataInjection() && 
+         !file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
+         self::addDatainjectionFile($this->fields['name']);
       }
+      if (!$this->canUsePluginDataInjection() && 
+         file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
+         self::deleteInjectionFile($this->fields['name']);
+      }
+
+      
 /*
      if ($this->canUsePluginGeninventoryNumber() 
             && !$commonitem->getField('otherserial')) {
@@ -562,51 +567,6 @@ class PluginGenericobjectType extends CommonDBTM {
 
    }
    
-   public static function getSpecificDropdownsTablesByType($type) {
-      $dropdowns   = array ();
-      $object_type = new PluginGenericobjectType;
-      $object_type->getFromDBByType($type);
-      self::getDropdownSpecific($dropdowns, $object_type->fields, true);
-      return $dropdowns;
-   }
-   
-   
-   public static function getDropdownSpecific(& $dropdowns, $type, $check_entity = false) {
-      global $GO_FIELDS;
- /*     
-      $specific_types = self::getDropdownSpecificFields();
-      foreach ($specific_types as $ID => $field) {
-         if (FieldExists(getTableForItemType(__CLASS__), $field)) {
-            if (!$check_entity 
-               || ($check_entity 
-                  && self::isDropdownEntityRestrict($field)))
-               $dropdowns["PluginGenericobject".ucfirst($type["name"]).$field] = 
-                  PluginGenericobjectObject::getLabel($type["name"]) . ' : ' . 
-                                                      $GO_FIELDS[$field]['name'];
-         }
-      }*/
-   }
-   
-   public static function getDropdownSpecificFields() {
-      global $GO_FIELDS;
-      $specific_fields = array ();
-
-      foreach ($GO_FIELDS as $field => $values) {
-         if (isset ($values["dropdown_type"]) && $values["dropdown_type"] == 'type_specific') {
-            $specific_fields[$field] = $field;
-         }
-      }
-
-      return $specific_fields;
-   }
-   
-   public static function isDropdownTypeSpecific($field) {
-      global $GO_FIELDS;
-      return (isset ($GO_FIELDS[$field]['dropdown_type']) 
-                 && $GO_FIELDS[$field]['dropdown_type'] == 'type_specific');
-   }
-   
-   
    //-------------------------------- FILE CREATION / DELETION ----------------------------//
    public static function deleteFile($filename) {
       if (file_exists($filename)) {
@@ -629,6 +589,10 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function getCompleteAjaxTabFilename($name) {
       return GENERICOBJECT_AJAX_PATH . "/".$name.".tabs.php";
+   }
+
+   static function getCompleteInjectionFilename($name) {
+      return GENERICOBJECT_AJAX_PATH . "/".$name."injection.class.php";
    }
    
    /**
@@ -660,11 +624,9 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteFile(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php");
    }
 
-   //Classes
-   public static function deleteDropdownClassFile($name, $field) {
-      self::deleteFile(GENERICOBJECT_CLASS_PATH . "/".$name.$field.".class.php");
+   public static function deleteInjectionFile($name) {
+      self::deleteFile(self::getCompleteInjectionFilename($name));
    }
-
    /**
     * Delete an used class file
     * @param name the name of the object type
@@ -673,20 +635,6 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function deleteClassFile($name) {
       self::deleteFile(self::getCompleteClassFilename($name));
    }
-
-   public static function deleteSpecificDropdownFiles($itemtype) {
-      global $DB;
-      $name = self::getNameByID($itemtype);
-      $types = self::getDropdownSpecificFields();
-
-      foreach($types as $type => $tmp) {
-         self::deleteDropdownAjaxFile($name, $type);
-         self::deleteDropdownFrontFile($name, $type);
-         self::deleteDropdownFrontformFile($name, $type);
-         self::deleteDropdownClassFile($name, $type);
-      }
-   }
-   
    
    public static function addLocales($name, $itemtype) {
       global $CFG_GLPI;
@@ -695,10 +643,12 @@ class PluginGenericobjectType extends CommonDBTM {
          @ mkdir($locale_dir, 0777, true);
       }
       $locale_file = $name.".".$_SESSION['glpilanguage'];
-      self::addFileFromTemplate($name, self::LOCALE_TEMPLATE, $locale_dir, $locale_file);
+      self::addFileFromTemplate(array('CLASSNAME' => $name), self::LOCALE_TEMPLATE, $locale_dir, 
+                                $locale_file);
       if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
          $locale_file = $name.".".$CFG_GLPI['language'];
-         self::addFileFromTemplate($name, self::LOCALE_TEMPLATE, $locale_dir, $locale_file);
+         self::addFileFromTemplate(array('CLASSNAME' => $name), self::LOCALE_TEMPLATE, $locale_dir, 
+                                   $locale_file);
       }
    }
 
@@ -712,47 +662,51 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
 
-   public static function addFileFromTemplate($name, $template, $directory, $filename) {
-      $DBf_handle = fopen($template, "rt");
-      $template_file = fread($DBf_handle, filesize($template));
-      $template_file = str_replace("%%NAME%%", $name, $template_file);
-      $template_file = str_replace("%%CLASSNAME%%", self::getClassByName($name), $template_file);
-      $DBf_handle = fopen($directory . "/".$filename.".php", "w");
-      fwrite($DBf_handle, $template_file);
-      fclose($DBf_handle);
-      
+   public static function addFileFromTemplate($mappings = array(), $template, $directory, $filename) {
+      if (!empty($mappings)) {
+         $DBf_handle = fopen($template, "rt");
+         $template_file = fread($DBf_handle, filesize($template));
+         foreach ($mappings as $name => $value) {
+            $template_file = str_replace("%%$name%%", $value, $template_file);
+         }
+         $DBf_handle = fopen($directory . "/".$filename.".php", "w");
+         fwrite($DBf_handle, $template_file);
+         fclose($DBf_handle);
+         
+      }
    }
 
    public static function addDatainjectionFile($name) {
-      $DBf_handle = fopen(self::OBJECTINJECTION_TEMPLATE, "rt");
-      $template_file = fread($DBf_handle, filesize(self::OBJECTINJECTION_TEMPLATE));
-      $template_file = str_replace("%%NAME%%", $name, $template_file);
-      $injectionClass = self::getClassByName($name)."Injection";
-      $template_file = str_replace("%%CLASSNAME%%", $injectionClass, $template_file);
-      $DBf_handle = fopen(GENERICOBJECT_CLASS_PATH . "/".$injectionClass."injection.class.php", "w");
-      fwrite($DBf_handle, $template_file);
-      fclose($DBf_handle);
-      
+      self::addFileFromTemplate(array('CLASSNAME' => $name, 
+                                      'INJECTIONCLASS' => self::getClassByName($name)."Injection"), 
+                                self::OBJECTINJECTION_TEMPLATE, GENERICOBJECT_CLASS_PATH, 
+                                $name."injection.class");
    }
    
    public static function addDropdownFrontFile($name) {
-      self::addFileFromTemplate($name, self::FRONT_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::FRONT_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
    }
 
    public static function addDropdownAjaxFile($name, $field) {
-      self::addFileFromTemplate($name, self::AJAX_DROPDOWN_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::AJAX_DROPDOWN_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
    }
 
    public static function addAjaxFile($name, $field) {
-      self::addFileFromTemplate($name, self::AJAX_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::AJAX_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
    }
    
    public static function addDropdownFrontformFile($name, $field) {
-      self::addFileFromTemplate($name, self::FRONTFORM_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name.".form");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::FRONTFORM_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, 
+                                $name.".form");
    }
 
    public static function addDropdownClassFile($name, $field) {
-      self::addFileFromTemplate($name, self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
    } 
 
    /**
@@ -763,7 +717,8 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addClassFile($name, $classname) {
-      self::addFileFromTemplate($name, self::CLASS_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), self::CLASS_TEMPLATE, 
+                                GENERICOBJECT_CLASS_PATH, $name.".class");
    }
    
    /**
@@ -774,7 +729,8 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addFormFile($name, $classname) {
-      self::addFileFromTemplate($name, self::FORM_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name.".form");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::FORM_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name.".form");
    }
 
    /**
@@ -785,20 +741,15 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addSearchFile($name, $classname) {
-      self::addFileFromTemplate($name, self::SEARCH_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::SEARCH_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
    }
 
+   //-------------------- ADD / DELETE TABLES ----------------------------------//
    public static function deleteDropdownTable($name, $field) {
       global $DB;
       if (TableExists(self::getDropdownTableName($name, $field)))
          $DB->query("DROP TABLE IF EXISTS`" . self::getDropdownTableName($name, $field) . "`");
-   }
-   
-   public static function deleteLinkTable($itemtype) {
-      global $DB;
-      $name = self::getNameByID($itemtype);
-      $query = "DROP TABLE IF EXISTS `".self::getLinkDeviceTableName($name)."`";
-      $DB->query($query);
    }
    
    public static function addDropdownTable($table) {
@@ -820,10 +771,11 @@ class PluginGenericobjectType extends CommonDBTM {
     * @name object type's name
     * @return nothing
     */
-   public static function deleteTable($itemype) {
+   public static function deleteTable($itemtype) {
       global $DB;
-      $DB->query("DELETE FROM `glpi_displaypreferences` WHERE `itemtype`='$itemype'");
-      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType($itemype)."`");
+      $preferences = new DisplayPreference();
+      $preferences->deleteByCriteria(array("itemtype" => $itemtype));
+      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType($itemtype)."`");
    }
 
    public static function getDropdownTableName($name, $field) {
@@ -849,35 +801,24 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    public static function removeDataInjectionModels($itemtype) {
-      global $DB;
-         $plugin = new Plugin;
-            //Delete if exists datainjection models
-         if ($plugin->isInstalled("datainjection")) {
-            $query = "DELETE FROM `glpi_plugin_datainjection_models`,
-                                  `glpi_plugin_datainjection_mappings`,
-                                  `glpi_plugin_datainjection_infos`
-                      USING `glpi_plugin_datainjection_models`, `glpi_plugin_datainjection_mappings`,
-                            `glpi_plugin_datainjection_infos` 
-                      WHERE glpi_plugin_datainjection_models.itemtype='".$itemtype."' 
-                         AND glpi_plugin_datainjection_mappings.models_id=glpi_plugin_datainjection_models.id 
-                            AND glpi_plugin_datainjection_infos.models_id=glpi_plugin_datainjection_models.id";
-            
-            $DB->query ($query);
+      $plugin = new Plugin();
+      //Delete if exists datainjection models
+      if ($plugin->isInstalled("datainjection")) {
+         $model = new PluginDatainjectionModel();
+         foreach ($model->find("`itemtype`='$itemtype'") as $data) {
+            $model->delete($data);
          }
-      
+      }
    }
 
    /**
     * Delete all loans associated with a itemtype
     */
    public static function deleteLoans($itemtype) {
-      global $DB;
-      
-      $query = "DELETE FROM  `glpi_reservationitems`, `glpi_reservations` " .
-               "USING `glpi_reservationitems`, `glpi_reservations` " .
-                  "WHERE `glpi_reservationitems`.`itemtype`='$itemtype' " .
-                     "AND `glpi_reservationitems`.`id`=`glpi_reservations`.`reservationitems_id`";
-      $DB->query($query); 
+      $reservation_item = new ReservationItem();
+      foreach ($reservation_item->find("`itemtype`='$itemtype'") as $data) {
+         $reservation_item->delete($data);
+      }
    }
 
 

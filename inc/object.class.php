@@ -30,7 +30,7 @@
 */
 
 // Original Author of file: Walid Nouh
-// Purpose of file:
+// Purpose of file: Manage a standard object
 // ----------------------------------------------------------------------
 class PluginGenericobjectObject extends CommonDBTM {
 
@@ -74,6 +74,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                //Template management is not active
                $add_url = getItemTypeFormURL($class, false);
             }
+           //Menu management
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
                                                       = call_user_func(array($class, 'getTypeName'));
            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
@@ -93,16 +94,19 @@ class PluginGenericobjectObject extends CommonDBTM {
                                           = getItemTypeSearchURL('PluginGenericobjectType',false);
            }
            
+           //Item can be linked to tickets
            if ($item->canUseTickets()) {
               $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
            }
       }
    }
    
+   //Get itemtype name
    static function getTypeName() {
       global $LANG;
       $class = get_called_class();
       $item  = new $class();
+      //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
       if(isset($LANG['genericobject'][$class][0])) {
          return $LANG['genericobject'][$class][0];
@@ -150,12 +154,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($this->canUseTickets()) {
             $ong[6] = $LANG['title'][28];
          }
-/*
-         $linked_types = PluginGenericobjectLink::getLinksByType($this->type);
-         if (!empty ($linked_types)) {
-            $ong[7] = $LANG['setup'][620];
-         }
-*/
+
          if ($this->canUseNotepad() && haveRight("notes", "r")) {
             $ong[10] = $LANG['title'][37];
          }
@@ -171,6 +170,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $ong;
    }
 
+   //------------------------ CAN methods -------------------------------------//
    function canUseInfocoms() {
       return ($this->objecttype->canUseInfocoms() || haveRight("infocom", "r"));
    }
@@ -386,6 +386,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function prepareInputForAdd($input) {
 
+      //Template management
       if (isset ($input["id"]) && $input["id"] > 0) {
          $input["_oldID"] = $input["id"];
       }
@@ -524,6 +525,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             $options[$index]['massiveaction'] 
                = $GO_FIELDS[$field]['massiveaction'];
          }
+
+         if ($item->canUsePluginDataInjection()) {
+            $options[$index]['injectable'] = true;
+         }
          
          //Field type
          switch ($values['Type']) {
@@ -536,25 +541,58 @@ class PluginGenericobjectObject extends CommonDBTM {
                } else {
                   $options[$index]['datatype'] = 'string';
                }
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['checktype']   = 'text';
+                  $options[$index]['displaytype'] = 'text';
+               }
                break;
             case "tinyint(1)":
                $options[$index]['datatype'] = 'bool';
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['displaytype'] = 'bool';
+               }
                break;
             case "text":
             case "longtext":
                $options[$index]['datatype'] = 'text';
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['displaytype'] = 'multiline_text';
+               }
                break;
             case "int(11)":
                $options[$index]['datatype'] = 'text';
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['displaytype'] = 'dropdown_integer';
+                  $options[$index]['checktype']   = 'integer';
+               }
                break;
             case "float":
                 $options[$index]['datatype'] = 'decimal';
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['display']   = 'multiline_text';
+                  $options[$index]['checktype'] = 'integer';
+               }
                break;
             case "date":
                $options[$index]['datatype'] = 'date';
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['displaytype'] = 'date';
+                  $options[$index]['checktype']   = 'date';
+               }
                break;
             case "datetime":
                $options[$index]['datatype'] = 'datetime';
+               if ($item->canUsePluginDataInjection()) {
+                  //Datainjection specific
+                  $options[$index]['displaytype'] = 'date';
+                  $options[$index]['checktype']   = 'date';
+               }
                break;
          }
          $index++;
