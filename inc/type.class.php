@@ -330,57 +330,55 @@ class PluginGenericobjectType extends CommonDBTM {
 
    function post_updateItem($history = 1) {
       $this->checkNecessaryFieldsUpdate();
-      /*
-      if (in_array('use_plugin_geninventorynumber',$this->updates)) {
-         if ($input['use_plugin_geninventorynumber']) {
-            plugin_geninventorynumber_registerType($this->fields["itemtype"],'otherserial');
-            array_push($GENINVENTORYNUMBER_INVENTORY_TYPES,$this->fields["itemtype"]);
-         }
-         else {
-            plugin_geninventorynumber_unRegisterType($this->fields["itemtype"],'otherserial');
-            unset($GENINVENTORYNUMBER_INVENTORY_TYPES[$this->fields["itemtype"]]);
-         }
-      }*/
    }
 
    function pre_deleteItem() {
-      
-      $this->getFromDB($this->fields["id"]);
-      //Delete relation table
-      //self::deleteLinkTable($this->fields["itemtype"]);
-      
-      //Delete loans associated with this type
-      self::deleteLoans($this->fields["itemtype"]);
+      if ($this->getFromDB($this->fields["id"])) {
+         $name     = $this->fields['name'];
+         $itemtype = $this->fields['itemtype'];
+         
+         //Drop all dropdowns associated with itemtype
+         self::deleteDropdownsForItemtype($itemtype);
+         
+         //Delete loans associated with this type
+         self::deleteLoans($itemtype);
+   
+         //Delete loans associated with this type
+         self::deleteUnicity($itemtype);
+   
+         //Remove class from the filesystem
+         self::deleteClassFile($name);
+   
+         //Remove form from the filesystem
+         self::deleteFormFile($name);
+   
+         //Remove form from the filesystem
+         self::deleteSearchFile($name);
+   
+         //Remove ajax file
+         self::deleteAjaxFile($name);
 
-      //Delete loans associated with this type
-      self::deleteUnicity($this->fields["itemtype"]);
-
-      //Remove class from the filesystem
-      self::deleteClassFile($this->fields["name"]);
-
-      //Remove form from the filesystem
-      self::deleteFormFile($this->fields["name"]);
-
-      //Remove form from the filesystem
-      self::deleteSearchFile($this->fields["name"]);
-
-      self::deleteAjaxFile($this->fields["name"]);
-
-      //Delete profile informations associated with this type
-      PluginGenericobjectProfile::deleteTypeFromProfile($this->fields["itemtype"]);
-
-      //Table type table in DB
-      self::deleteTable($this->fields["itemtype"]);
-
-      self::deleteInjectionFile($this->fields['name']);
-      self::removeDataInjectionModels($this->fields["itemtype"]);
-
-      $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$this->input['name'];
-      if (is_dir($locale_dir)) {
-         @rmdir($locale_dir);
+         //Remove datainjection specific file
+         self::deleteInjectionFile($name);
+   
+         //Delete profile informations associated with this type
+         PluginGenericobjectProfile::deleteTypeFromProfile($itemtype);
+         
+         
+         //Remove existing datainjection models
+         self::removeDataInjectionModels($itemtype);
+   
+         //Drop itemtype table
+         self::deleteTable($itemtype);
+         
+         //Delete specific locale directory
+         self::deleteLocales($name, $itemtype);
+         
+         return true;
+      } else {
+         return false;
       }
 
-      return true;
    }
 
    function checkNecessaryFieldsUpdate() {
@@ -445,25 +443,6 @@ class PluginGenericobjectType extends CommonDBTM {
          file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::deleteInjectionFile($this->fields['name']);
       }
-
-      
-/*
-     if ($this->canUsePluginGeninventoryNumber() 
-            && !$commonitem->getField('otherserial')) {
-         PluginGenericobjectField::addNewField($this->fields["itemtype"], 'otherserial');
-         
-      }
-*/
-
-/*
-     if ($this->fields['use_direct_connections']) { 
-        foreach (array ('users_id', 'groups_id', 'states_id', 'locations_id') as $field) {
-           if (!$commonitem->getField($field)) {
-              PluginGenericobjectField::addNewField($this->fields["itemtype"], $field);
-           }
-        }
-     }
-*/
    }
    
    function getSearchOptions() {
@@ -543,7 +522,6 @@ class PluginGenericobjectType extends CommonDBTM {
       return $sopt;
    }
    
-   
    /**
     * Add object type table + entries in glpi_display
     * @name object type's name
@@ -592,7 +570,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    static function getCompleteInjectionFilename($name) {
-      return GENERICOBJECT_AJAX_PATH . "/".$name."injection.class.php";
+      return GENERICOBJECT_CLASS_PATH . "/".$name."injection.class.php";
    }
    
    /**
@@ -604,14 +582,6 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteFile(self::getCompleteFormFilename($name));
    }
 
-   public static function deleteDropdownFrontformFile($name, $field) {
-      self::deleteFile(self::getCompleteFormFilename($name));
-   }
-
-   public static function deleteDropdownFrontFile($name, $field) {
-      self::deleteFile(self::getCompleteSearchFilename($name));
-   }
-
    public static function deleteSearchFile($name) {
       self::deleteFile(self::getCompleteSearchFilename($name));
    }
@@ -620,13 +590,6 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteFile(self::getCompleteAjaxTabFilename($name));
    }
 
-   public static function deleteDropdownAjaxFile($name, $field) {
-      self::deleteFile(GENERICOBJECT_AJAX_PATH . "/".$name.$field.".tabs.php");
-   }
-
-   public static function deleteInjectionFile($name) {
-      self::deleteFile(self::getCompleteInjectionFilename($name));
-   }
    /**
     * Delete an used class file
     * @param name the name of the object type
@@ -635,6 +598,11 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function deleteClassFile($name) {
       self::deleteFile(self::getCompleteClassFilename($name));
    }
+
+   public static function deleteInjectionFile($name) {
+      self::deleteFile(self::getCompleteInjectionFilename($name));
+   }
+   
    
    public static function addLocales($name, $itemtype) {
       global $CFG_GLPI;
@@ -643,7 +611,8 @@ class PluginGenericobjectType extends CommonDBTM {
          @ mkdir($locale_dir, 0777, true);
       }
       $locale_file = $name.".".$_SESSION['glpilanguage'];
-      self::addFileFromTemplate(array('CLASSNAME' => $name), self::LOCALE_TEMPLATE, $locale_dir, 
+      self::addFileFromTemplate(array('NAME'      => $name, 
+                                      'CLASSNAME' => self::getClassByName($name)), self::LOCALE_TEMPLATE, $locale_dir, 
                                 $locale_file);
       if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
          $locale_file = $name.".".$CFG_GLPI['language'];
@@ -654,30 +623,32 @@ class PluginGenericobjectType extends CommonDBTM {
 
    public static function deleteLocales($name, $itemtype) {
       global $CFG_GLPI;
-      $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$name;
-      foreach (glob("*.php") as $file) {
+      foreach (glob(GLPI_ROOT . '/plugins/genericobject/locales/'.$name.'/*.php') as $file) {
          @unlink($file);
       }
-      @rmdir($locale_dir);
+      @rmdir(GLPI_ROOT . '/plugins/genericobject/locales/'.$name);
    }
-
 
    public static function addFileFromTemplate($mappings = array(), $template, $directory, $filename) {
       if (!empty($mappings)) {
-         $DBf_handle = fopen($template, "rt");
-         $template_file = fread($DBf_handle, filesize($template));
-         foreach ($mappings as $name => $value) {
-            $template_file = str_replace("%%$name%%", $value, $template_file);
+         $file_read = @fopen($template, "rt");
+         if ($file_read) {
+            $template_file = fread($file_read, filesize($template));
+            foreach ($mappings as $name => $value) {
+               $template_file = str_replace("%%$name%%", $value, $template_file);
+            }
+            fclose($file_read);
+            $file_write = @fopen($directory . "/".$filename.".php", "w");
+            if ($file_write) {
+               fwrite($file_write, $template_file);
+               fclose($file_write);
+            }
          }
-         $DBf_handle = fopen($directory . "/".$filename.".php", "w");
-         fwrite($DBf_handle, $template_file);
-         fclose($DBf_handle);
-         
       }
    }
 
    public static function addDatainjectionFile($name) {
-      self::addFileFromTemplate(array('CLASSNAME' => $name, 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name), 
                                       'INJECTIONCLASS' => self::getClassByName($name)."Injection"), 
                                 self::OBJECTINJECTION_TEMPLATE, GENERICOBJECT_CLASS_PATH, 
                                 $name."injection.class");
@@ -706,7 +677,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
    public static function addDropdownClassFile($name, $field) {
       self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
-                                self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
+                                self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, 
+                                $name.".class");
    } 
 
    /**
@@ -717,8 +689,8 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addClassFile($name, $classname) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), self::CLASS_TEMPLATE, 
-                                GENERICOBJECT_CLASS_PATH, $name.".class");
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+                                self::CLASS_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
    }
    
    /**
@@ -746,12 +718,6 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    //-------------------- ADD / DELETE TABLES ----------------------------------//
-   public static function deleteDropdownTable($name, $field) {
-      global $DB;
-      if (TableExists(self::getDropdownTableName($name, $field)))
-         $DB->query("DROP TABLE IF EXISTS`" . self::getDropdownTableName($name, $field) . "`");
-   }
-   
    public static function addDropdownTable($table) {
       global $DB;
       if (!TableExists($table)) {
@@ -777,11 +743,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $preferences->deleteByCriteria(array("itemtype" => $itemtype));
       $DB->query("DROP TABLE IF EXISTS `".getTableForItemType($itemtype)."`");
    }
-
-   public static function getDropdownTableName($name, $field) {
-      return getPlural("glpi_plugin_genericobject_" . $name . $field);
-   }
-
    
    /**
     * Get object name by ID
@@ -924,6 +885,39 @@ class PluginGenericobjectType extends CommonDBTM {
       return true;
    }
 
+   static function getDropdownForItemtype($itemtype) {
+      global $DB;
+      $associated_tables = array();
+      if (class_exists($itemtype)) {
+         $source_table = getTableForItemType($itemtype);
+         foreach ($DB->list_fields($source_table) as $field => $value) {
+            $table = getTableNameForForeignKeyField($field);
+            //If it's a drodpdown
+            if ($table && preg_match("/".getSingular($source_table)."/",$table)) {
+               $associated_tables[] = $table;
+            }
+         }
+      }
+      return $associated_tables;
+   }
+
+   static function deleteDropdownsForItemtype($itemtype) {
+      global $DB;
+      //Foreach dropdown : drop table & remove files !
+      foreach (self::getDropdownForItemtype($itemtype) as $table) {
+         $results = array();
+         if (preg_match("/glpi_plugin_genericobject_(.*)/i", getSingular($table), $results) 
+            && isset($results[1])) {
+            $name = $results[1];
+            $DB->query("DROP TABLE IF EXISTS`$table`");
+            self::deleteFormFile($name);
+            self::deleteSearchFile($name);
+            self::deleteAjaxFile($name);
+            self::deleteClassFile($name);
+            self::deleteInjectionFile($name);
+         }
+      }
+   }
    //------------------------------- GETTERS -------------------------//
 
    function canBeLinked() {

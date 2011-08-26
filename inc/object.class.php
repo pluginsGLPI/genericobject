@@ -105,6 +105,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    static function getTypeName() {
       global $LANG;
       $class = get_called_class();
+      //Datainjection : Don't understand why I need this trick : need to be investigated !
+      if(preg_match("/Injection$/i",$class)) {
+         $class = str_replace("Injection", "", $class);
+      }
       $item  = new $class();
       //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
@@ -501,9 +505,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          //Table definition
          $tmp = getTableNameForForeignKeyField($field);
+         $itemtype = getItemTypeForTable($tmp);
+         $item     = new $itemtype();
+
          if ($tmp != '') {
-            $itemtype = getItemTypeForTable($tmp);
-            $item     = new $itemtype();
             //Set table
             $options[$index]['table'] = $tmp;
             
@@ -601,11 +606,31 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    //Datainjection specific methods
-   static function isPrimaryType() {
+   function isPrimaryType() {
       return true;
    }
    
    function connectedTo() {
       return array();
    }
+   
+   /**
+    * Standard method to add an object into glpi
+    *
+    * @param values fields to add into glpi
+    * @param options options used during creation
+    * @return an array of IDs of newly created objects : for example array(Computer=>1, Networkport=>10)
+    *
+   **/
+   function addOrUpdateObject($values=array(), $options=array()) {
+
+      $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
+      $lib->processAddOrUpdate();
+      return $lib->getInjectionResults();
+   }
+
+   function getOptions($primary_type = '') {
+      return Search::getOptions($primary_type);
+   }
+   
 }

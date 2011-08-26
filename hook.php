@@ -77,12 +77,6 @@ function plugin_genericobject_AssignToTicket($types) {
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown() {
    $dropdowns = array();
-   
-   $plugin = new Plugin();
-   if ($plugin->isActivated("genericobject")) {
-      foreach (PluginGenericobjectType::getTypes() as $tmp => $values)
-         PluginGenericobjectType::getDropdownSpecific($dropdowns,$values);
-   }
 
    return $dropdowns;
 }
@@ -141,12 +135,6 @@ function plugin_genericobject_install() {
       @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true) 
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
    }
-   /*
-   foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH)
-            as $path) {
-      chown($path, 'www-data');
-      chmod($path, 744);
-   }*/
 
    //Init plugin & types
    plugin_init_genericobject();
@@ -200,6 +188,8 @@ function plugin_datainjection_populate_genericobject() {
    global $INJECTABLE_TYPES;
    $type = new PluginGenericobjectType();
    foreach($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
-      $INJECTABLE_TYPES[$data ['itemtype']] = 'genericobject';
+      if (class_exists($data ['itemtype']."Injection")) {
+         $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = 'genericobject';
+      }
    }
 }
