@@ -52,6 +52,14 @@ class PluginGenericobjectType extends CommonDBTM {
 
    var $dohistory = true;
    
+   static function &getInstance($itemtype, $refresh = false) {
+      static $singleton = array();
+      if (!isset($singleton[$itemtype]) ||$refresh) {
+         $singleton[$itemtype] = new self($itemtype);
+      }
+      return $singleton[$itemtype];
+   }
+   
    function __construct($itemtype = false) {
       if ($itemtype) {
          $this->getFromDBByType($itemtype);
@@ -117,8 +125,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td>";
       if (!$ID) {
          autocompletionTextField($this, 'name', array('value' => $this->fields["name"]));
-      }
-      else {
+      } else {
          echo "<input type='hidden' name='name' value='" . $this->fields["name"] . "'>";
          echo $this->fields["name"];
       }
@@ -175,7 +182,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $use = array ("use_entity"               => $LANG['Menu'][37],
                     "use_recursivity"          => $LANG['entity'][9],
-                    "use_tickets"              => $LANG['Menu'][31],
+                    "use_tickets"              => $LANG['title'][24],
                     "use_deleted"              => $LANG['ocsconfig'][49],
                     "use_notes"                => $LANG['title'][37],
                     "use_history"              => $LANG['title'][38],
@@ -187,17 +194,10 @@ class PluginGenericobjectType extends CommonDBTM {
                     "use_unicity"              => $LANG['setup'][811],
                     "use_network_ports"        => $LANG['genericobject']['config'][14],
                     "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
-                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
-                    "use_plugin_order"         => $LANG['genericobject']['config'][12],
-                    "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]
-                     //"use_plugin_geninventorynumber"=>$LANG['genericobject']['config'][15]
-                     );
-/*
-      if (GLPI_VERSION >= '0.72.3') {
-         $use["use_direct_connections"] = $LANG['connect'][0];
+//                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
+//                    "use_plugin_order"         => $LANG['genericobject']['config'][12],
+                    "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]);
 
-      }
-*/
       $plugin = new Plugin();
       $odd=0;
       foreach ($use as $right => $label) {
@@ -241,19 +241,7 @@ class PluginGenericobjectType extends CommonDBTM {
                else
                   echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
                break;
-               /*
-            case 'use_plugin_geninventorynumber' :
-               if ($plugin->isInstalled("geninventorynumber") 
-                      && $plugin->isActivated("geninventorynumber")) {
-                  $infos = plugin_version_geninventorynumber();
-                  if ($infos['version'] >= '1.3.0') {
-                     Alert::dropdownYesNo(array('name'=>$right,
-                                    'value'=> $this->fields[$right]));
-                  }
-               }
-               else
-                  echo "<input type='hidden' name='use_plugin_geninventorynumber' value='0'>\n";
-               break;*/
+
             case 'use_plugin_uninstall' :
                if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
                   //usePlugin("uninstall");
@@ -289,6 +277,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function prepareInputForAdd($input) {
+      $input['name'] = strtolower($input['name']);
       $input['itemtype'] = self::getClassByName($input['name']);
       return $input;
    }
@@ -622,7 +611,6 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    public static function deleteLocales($name, $itemtype) {
-      global $CFG_GLPI;
       foreach (glob(GLPI_ROOT . '/plugins/genericobject/locales/'.$name.'/*.php') as $file) {
          @unlink($file);
       }
@@ -793,29 +781,10 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function deleteNetworking($itemtype) {
        global $DB;
-       $query = "SELECT `id` 
-                 FROM `glpi_networkports` 
-                 WHERE `itemtype` = '" . $itemtype . "'";
-      $result = $DB->query($query);
-      while ($data = $DB->fetch_array($result)) {
-         $q = "DELETE FROM `glpi_networkports_networkports` " .
-              "WHERE `networkports_id_1` = '" . $data["id"] . "' " .
-              "OR `networkports_id_2` = '" . $data["id"] . "'";
-         $result2 = $DB->query($q);
-      }
-
-      $query2 = "DELETE FROM `glpi_networkports` WHERE `itemtype` = '" . $itemtype . "'";
-      $result2 = $DB->query($query2);
-
-      $query = "SELECT `id` FROM `glpi_computers_items` WHERE `itemtype`='" . $itemtype."'";
-      if ($result = $DB->query($query)) {
-         if ($DB->numrows($result) > 0) {
-            while ($data = $DB->fetch_array($result)) {
-               // Disconnect without auto actions
-               Disconnect($data["id"], 1, false);
-            }
-         }
-      }
+       $networkport = new NetworkPort();
+       foreach ($networkport->find("`itemtype`='$itemtype'") as $port) {
+         $networkport->delete($port);
+       }
    }
 
    /**
@@ -914,7 +883,6 @@ class PluginGenericobjectType extends CommonDBTM {
             self::deleteSearchFile($name);
             self::deleteAjaxFile($name);
             self::deleteClassFile($name);
-            self::deleteInjectionFile($name);
          }
       }
    }
@@ -1000,6 +968,10 @@ class PluginGenericobjectType extends CommonDBTM {
       return $this->fields['use_plugin_geninventorynumber'];
    }
 
+   function isTransferable() {
+      return $this->canBeEntityAssigned();
+      
+   }
    //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//
    static function install(Migration $migration) {
       global $DB;

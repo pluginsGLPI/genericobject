@@ -86,19 +86,22 @@ function plugin_init_genericobject() {
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
       }
 
-      $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
+      $PLUGIN_HOOKS['assign_to_ticket']['genericobject']   = true;
+      $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       // Onglets management
       $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
       $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
+      $PLUGIN_HOOKS['post_init']['genericobject']        = 'plugin_post_init_genericobject';
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
-
-      foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
-         call_user_func(array($objecttype['itemtype'], 'registerType'));
-      }
    }
 }
 
+function plugin_post_init_genericobject() {
+   foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
+      call_user_func(array($objecttype['itemtype'], 'registerType'));
+   }
+}
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    global $LANG;

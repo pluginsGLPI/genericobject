@@ -67,7 +67,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
             echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".
                call_user_func(array($itemtype, 'getTypeName'))."</th></tr>";
             echo "<tr class='tab_bg_2'>";
-            $right = $type['itemtype']."_right";
+            $right = $type['itemtype'];
             echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
             Profile::dropdownNoneReadWrite($right,  $profile['right'], 1, 1, 1);
             echo "</td></tr>";
@@ -131,12 +131,19 @@ class PluginGenericobjectProfile extends CommonDBTM {
       if (!empty ($types)) {
          foreach ($types as $tmp => $profile) {
             $query = "UPDATE `".getTableForItemType(__CLASS__)."` " .
-                     "SET `right`='".$params[$profile['itemtype']."_right"]."' ";
+                     "SET ";
+
+            if (isset($params[$profile['itemtype']]) && $params[$profile['itemtype']] == 'NULL') {
+               $query.="`right`='' ";
+            } else {
+               $query.="`right`='".$params[$profile['itemtype']]."'";
+            }
 
             if (isset($params[$profile['itemtype'].'_open_ticket'])) {
                $query.=", `open_ticket`='".$params[$profile['itemtype'].'_open_ticket']."' ";
             }
 
+      
             $query.="WHERE `profiles_id`='".$params['profiles_id']."' " .
                     "AND `itemtype`='".$profile['itemtype']."'";
             $DB->query($query);

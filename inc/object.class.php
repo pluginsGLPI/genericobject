@@ -46,11 +46,12 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    static function registerType() {
-      global $DB, $LANG, $PLUGIN_HOOKS;
+      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES;
       $class  = get_called_class();
       $item   = new $class();
       $fields = $DB->list_fields(getTableForItemType($class));
-      
+      $plugin = new Plugin();
+
       $options = array("document_types"         => $item->canUseDocuments(),
                        "helpdesk_visible_types" => $item->canUseTickets() 
                                                     && isset($fields['is_helpdesk_visible']),
@@ -64,40 +65,43 @@ class PluginGenericobjectObject extends CommonDBTM {
                        "reservation_types"      => $item->canBeReserved(),
                        "contract_types"         => $item->canUseContracts(),
                        "unicity_types"          => $item->canUseUnicity());
-         Plugin::registerClass($class, $options);
-         if (haveRight($class, "r")) {
-            //Change url for adding a new object, depending on template management activation
-            if ($item->objecttype->canUseTemplate()) {
-               //Template management is active
-               $add_url = "/front/setup.templates.php?itemtype=$class&amp;add=1";
-            } else {
-               //Template management is not active
-               $add_url = getItemTypeFormURL($class, false);
-            }
-           //Menu management
-           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
-                                                      = call_user_func(array($class, 'getTypeName'));
-           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
-                                                      = getItemTypeSearchURL($class, false);
-           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
-                                                      = getItemTypeSearchURL($class, false);
-           $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
+      Plugin::registerClass($class, $options);
+      if (haveRight($class, "r")) {
+         //Change url for adding a new object, depending on template management activation
+         if ($item->objecttype->canUseTemplate()) {
+            //Template management is active
+            $add_url = "/front/setup.templates.php?itemtype=$class&amp;add=1";
+         } else {
+            //Template management is not active
+            $add_url = getItemTypeFormURL($class, false);
+         }
+         //Menu management
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
+                                                   = call_user_func(array($class, 'getTypeName'));
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
+                                                   = getItemTypeSearchURL($class, false);
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
+                                                    = getItemTypeSearchURL($class, false);
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = $add_url;
-           if ($item->objecttype->canUseTemplate()) {
-              $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
-                                                         = "/front/setup.templates.php?itemtype=$class&amp;add=0";
-           }
-
-           //Add configuration icon, if user has right
-           if (haveRight('config', 'w')) {
-              $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
-                                          = getItemTypeSearchURL('PluginGenericobjectType',false);
-           }
-           
-           //Item can be linked to tickets
-           if ($item->canUseTickets()) {
-              $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
-           }
+         if ($item->objecttype->canUseTemplate()) {
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
+                                                        = "/front/setup.templates.php?itemtype=$class&amp;add=0";
+         }
+   
+         //Add configuration icon, if user has right
+         if (haveRight('config', 'w')) {
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
+                                        = getItemTypeSearchURL('PluginGenericobjectType',false);
+         }
+         
+         //Item can be linked to tickets
+         if ($item->canUseTickets()) {
+            $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
+         }
+         if ($plugin->isActivated('uninstall') && $item->canUsePluginUninstall()) {
+            array_push($UNINSTALL_TYPES, $class);
+         }
       }
    }
    
@@ -123,7 +127,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    public function __construct() {
       $this->table = getTableForItemType(get_called_class());
       if (class_exists(get_called_class())) {
-         $this->objecttype = new PluginGenericobjectType(get_called_class());
+         $this->objecttype = PluginGenericobjectType::getInstance(get_called_class());
       }
       $this->dohistory = $this->canUseHistory();
    }
@@ -192,7 +196,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseTickets() {
-      return ($this->objecttype->canUseTickets() && haveRight("show_all_ticket", "1"));
+      return ($this->objecttype->canUseTickets());
    }
 
    function canUseNotepad() {
@@ -225,6 +229,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function canUseDirectConnections() {
       return ($this->objecttype->canUseDirectConnections());
+   }
+
+   function canUsePluginUninstall() {
+      return ($this->objecttype->canUsePluginUninstall());
    }
 
    function title() {
@@ -500,20 +508,24 @@ class PluginGenericobjectObject extends CommonDBTM {
       $options = array();
       $table = getTableForItemType(get_called_class());
       foreach ($DB->list_fields($table) as $field => $values) {
-         if ($field == 'is_deleted') {
+         if (in_array($field,array('is_deleted'))) {
             continue;
          }
+
+         $item = new $this->objecttype->fields['itemtype'];
+
          //Table definition
          $tmp = getTableNameForForeignKeyField($field);
-         $itemtype = getItemTypeForTable($tmp);
-         $item     = new $itemtype();
 
          if ($tmp != '') {
+            $itemtype = getItemTypeForTable($tmp);
+            $tmpobj     = new $itemtype();
+
             //Set table
             $options[$index]['table'] = $tmp;
             
             //Set field
-            if ($item instanceof CommonTreeDropdown) {
+            if ($tmpobj instanceof CommonTreeDropdown) {
                $options[$index]['field'] = 'completename';
             } else {
                $options[$index]['field'] = 'name';
@@ -633,4 +645,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       return Search::getOptions($primary_type);
    }
    
+   function transfer($new_entity) {
+      global $DB;
+      return true;
+   }
 }

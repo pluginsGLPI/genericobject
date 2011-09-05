@@ -78,6 +78,17 @@ function plugin_genericobject_AssignToTicket($types) {
 function plugin_genericobject_getDropdown() {
    $dropdowns = array();
 
+   $plugin = new Plugin();
+   if ($plugin->isActivated("genericobject")) {
+      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'), 
+                                   "`is_active`='1'") as $itemtype) {
+         foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table) {
+            $dropdown_itemtype = getItemTypeForTable($table);
+            $dropdowns[$dropdown_itemtype] = call_user_func(array($dropdown_itemtype, 
+                                                                  'getTypeName')); 
+         }
+      }
+   }
    return $dropdowns;
 }
 
@@ -87,14 +98,14 @@ function plugin_genericobject_getDatabaseRelations() {
 /*
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
-      foreach (PluginGenericobjectType::getTypes(true) as $tmp => $values) {
-         PluginGenericobjectType::getDatabaseRelationsSpecificDropdown($dropdowns,$values);
-         if ($values["use_entity"]) {
-            $dropdowns["glpi_entities"][PluginGenericobjectType::getTableByName($values["name"])] = "entities_id";
+      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'), 
+                                   "`is_active`='1'") as $itemtype) {
+         foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
+            $dropdowns[$table][] = array() 
          }
       }
    }
-*/
+   */
    return $dropdowns;
 }
 
@@ -191,5 +202,45 @@ function plugin_datainjection_populate_genericobject() {
       if (class_exists($data ['itemtype']."Injection")) {
          $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = 'genericobject';
       }
+   }
+}
+
+function plugin_genericobject_MassiveActions($type) {
+   global $LANG;
+   $objecttype = PluginGenericobjectType::getInstance($type);
+   if ($objecttype->isTransferable()) {
+      return array('plugin_genericobject_transfer' => $LANG['buttons'][48]);
+   } else {
+      return array();
+   }
+}
+
+function plugin_genericobject_MassiveActionsDisplay($options=array()) {
+   global $LANG;
+
+   $objecttype = PluginGenericobjectType::getInstance($options['itemtype']);
+   switch ($options['action']) {
+      case 'plugin_genericobject_transfer':
+         if ($objecttype->isTransferable()) {
+            echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" . 
+               $LANG['buttons'][2] . "\" >";
+         }
+         break;
+   }
+   return "";
+}
+
+function plugin_genericobject_MassiveActionsProcess($data) {
+   global $LANG, $DB;
+
+   switch ($data['action']) {
+      case "plugin_genericobject_transfer" :
+         $item = new $data['itemtype']();
+         foreach ($data["item"] as $key => $val) {
+            if ($val == 1) {
+               $item->transfer($_POST['new_entity']);
+            }
+         }
+         break;
    }
 }
