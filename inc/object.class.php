@@ -53,8 +53,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $plugin = new Plugin();
 
       $options = array("document_types"         => $item->canUseDocuments(),
-                       "helpdesk_visible_types" => $item->canUseTickets() 
-                                                    && isset($fields['is_helpdesk_visible']),
+                       "helpdesk_visible_types" => $item->canUseTickets(),
                        "linkgroup_types"        => $item->canUseTickets() 
                                                     && isset ($fields["groups_id"]),
                        "linkuser_types"         => $item->canUseTickets() 
@@ -68,9 +67,11 @@ class PluginGenericobjectObject extends CommonDBTM {
       Plugin::registerClass($class, $options);
       if (haveRight($class, "r")) {
          //Change url for adding a new object, depending on template management activation
-         if ($item->objecttype->canUseTemplate()) {
+         if ($item->canUseTemplate()) {
             //Template management is active
             $add_url = "/front/setup.templates.php?itemtype=$class&amp;add=1";
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
+                                                        = "/front/setup.templates.php?itemtype=$class&amp;add=0";
          } else {
             //Template management is not active
             $add_url = getItemTypeFormURL($class, false);
@@ -84,10 +85,6 @@ class PluginGenericobjectObject extends CommonDBTM {
                                                     = getItemTypeSearchURL($class, false);
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = $add_url;
-         if ($item->objecttype->canUseTemplate()) {
-            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
-                                                        = "/front/setup.templates.php?itemtype=$class&amp;add=0";
-         }
    
          //Add configuration icon, if user has right
          if (haveRight('config', 'w')) {
@@ -125,9 +122,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    
    public function __construct() {
-      $this->table = getTableForItemType(get_called_class());
-      if (class_exists(get_called_class())) {
-         $this->objecttype = PluginGenericobjectType::getInstance(get_called_class());
+      $class = get_called_class();
+      $this->table = getTableForItemType($class);
+      if (class_exists($class)) {
+         $this->objecttype = PluginGenericobjectType::getInstance($class);
       }
       $this->dohistory = $this->canUseHistory();
    }
@@ -148,8 +146,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if ($this->fields['id'] > 0) {
 
-         if ($this->canUseDirectConnections() || $this->canUseNetworkPorts())
+         if ($this->canUseNetworkPorts()) {
             $ong[3] = $LANG['title'][27];
+         }
 
          if ($this->canUseInfocoms() || $this->canUseContracts()) {
             $ong[4] = $LANG['Menu'][26];
@@ -185,6 +184,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function canUseContracts() {
       return ($this->objecttype->canUseContracts() || haveRight("contract", "r"));
+   }
+
+   function canUseTemplate() {
+      return $this->objecttype->canUseTemplate();
    }
 
    function canUseUnicity() {
@@ -331,25 +334,41 @@ class PluginGenericobjectObject extends CommonDBTM {
                      $parameters['entity_sons'] = true;
                   }
                   Dropdown::show($itemtype, $parameters);
+               } else {
+                  $min = $max = $step = 0;
+                  foreach (array('min' => 0, 'max' => 100, 'step' => 1) as $key => $val) {
+                     if (isset($GO[$name]['min'])) {
+                        $key = $GO[$name][$key];
+                     } else {
+                        $key = $val;
+                     }
+                  }
+                  Dropdown::showInteger($name, $value, $min, $max, $step);
                }
                break;
+
             case "tinyint(1)":
                Dropdown::showYesNo($name, $value);
                break;
+
             case "varchar(255)":
                   autocompletionTextField($this, $name);
                break;
+
             case "longtext":
             case "text":
                echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value . 
                      "</textarea>";
                break;
+
             case "date":
                   showDateFormItem($name, $value, false, true);
                   break;
+
             case "datetime":
                   showDateTimeFormItem($name, $value, false, true);
                   break;
+
             default:
             case "float":
                   echo "<input type='text' name='$name' value='$value'>";

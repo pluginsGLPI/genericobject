@@ -415,7 +415,7 @@ class PluginGenericobjectType extends CommonDBTM {
       
       //Helpdesk post-only
       if ($this->canUseTickets()) {
-         PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'id');
+         PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'name');
       } else {
          PluginGenericobjectField::deleteField($table, 'is_helpdesk_visible');
       }
