@@ -49,6 +49,9 @@ class PluginGenericobjectProfile extends CommonDBTM {
          $this->getProfilesFromDB($id);
       }
 
+      $general_profile = new Profile();
+      $general_profile->getFromDB($id);
+      
       echo "<form action='" . $this->getSearchURL() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
@@ -66,11 +69,13 @@ class PluginGenericobjectProfile extends CommonDBTM {
             $profile    = self::getProfileforItemtype($id, $itemtype);
             echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".
                call_user_func(array($itemtype, 'getTypeName'))."</th></tr>";
-            echo "<tr class='tab_bg_2'>";
-            $right = $type['itemtype'];
-            echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
-            Profile::dropdownNoneReadWrite($right,  $profile['right'], 1, 1, 1);
-            echo "</td></tr>";
+            if ($general_profile->fields['interface'] == 'central') {
+               echo "<tr class='tab_bg_2'>";
+               $right = $type['itemtype'];
+               echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
+               Profile::dropdownNoneReadWrite($right,  $profile['right'], 1, 1, 1);
+               echo "</td></tr>";
+            }
             if ($objecttype->canUseTickets()) {
                echo "<tr class='tab_bg_2'>";
                echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
@@ -136,7 +141,11 @@ class PluginGenericobjectProfile extends CommonDBTM {
             if (isset($params[$profile['itemtype']]) && $params[$profile['itemtype']] == 'NULL') {
                $query.="`right`='' ";
             } else {
-               $query.="`right`='".$params[$profile['itemtype']]."'";
+               if (isset($params[$profile['itemtype']])) {
+                  $query.="`right`='".$params[$profile['itemtype']]."'";
+               } else {
+                  $query.="`right`=''";
+               }
             }
 
             if (isset($params[$profile['itemtype'].'_open_ticket'])) {
