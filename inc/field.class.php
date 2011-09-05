@@ -145,7 +145,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param field the field to delete
     * @return nothing
     */
-   public static function addNewField($table, $field) {
+   public static function addNewField($table, $field, $after=false) {
       global $DB, $GO_FIELDS;
 
       if (!FieldExists($table, $field)) {
@@ -174,6 +174,9 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'datetime':
                $query.="DATETIME DEFAULT NULL";
                break;
+         }
+         if ($after) {
+            $query.=" AFTER `$after`";
          }
          $DB->query($query);
          

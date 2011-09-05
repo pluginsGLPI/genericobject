@@ -177,8 +177,6 @@ function plugin_genericobject_uninstall() {
          }
       }
    }
-
-   //plugin_init_genericobject();
    return true;
 }
 
@@ -207,9 +205,13 @@ function plugin_datainjection_populate_genericobject() {
 
 function plugin_genericobject_MassiveActions($type) {
    global $LANG;
-   $objecttype = PluginGenericobjectType::getInstance($type);
-   if ($objecttype->isTransferable()) {
-      return array('plugin_genericobject_transfer' => $LANG['buttons'][48]);
+   if (in_array($type, PluginGenericobjectType::getTypes())) {
+      $objecttype = PluginGenericobjectType::getInstance($type);
+      if ($objecttype->isTransferable()) {
+         return array('plugin_genericobject_transfer' => $LANG['buttons'][48]);
+      } else {
+         return array();
+      }
    } else {
       return array();
    }

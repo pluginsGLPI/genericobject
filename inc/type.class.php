@@ -207,6 +207,26 @@ class PluginGenericobjectType extends CommonDBTM {
          echo "<td>";
 
          switch ($right) {
+            case 'use_deleted':
+               Dropdown::showYesno('use_deleted', $this->canBeDeleted());
+               break;
+
+            case 'use_entity':
+               Dropdown::showYesno('use_entity', $this->canBeEntityAssigned());
+               break;
+
+            case 'use_recursivity':
+               Dropdown::showYesno('use_recursivity', $this->canBeRecursive());
+               break;
+
+            case 'use_notes':
+               Dropdown::showYesno('use_notes', $this->canUseNotepad());
+               break;
+
+            case 'use_template':
+               Dropdown::showYesno('use_template', $this->canUseTemplate());
+               break;
+
             case 'use_recursivity' :
                if (!$this->fields['use_entity']) {
                   echo "<input type='hidden' name='use_recursivity' value='0'>\n";
@@ -253,7 +273,7 @@ class PluginGenericobjectType extends CommonDBTM {
                } else {
                   echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
                }
-
+            
                break;
             default :
                   Dropdown::showYesNo($right, $this->fields[$right]);
@@ -353,6 +373,7 @@ class PluginGenericobjectType extends CommonDBTM {
          //Delete profile informations associated with this type
          PluginGenericobjectProfile::deleteTypeFromProfile($itemtype);
          
+         self::deleteTicketAssignation($itemtype);
          
          //Remove existing datainjection models
          self::removeDataInjectionModels($itemtype);
@@ -376,45 +397,54 @@ class PluginGenericobjectType extends CommonDBTM {
       $item->getEmpty();
       $table    = getTableForItemType($itemtype);
       //Entity
-      if ($this->canBeEntityAssigned()) {
-         PluginGenericobjectField::addNewField($table, 'entities_id');
+      if (isset($this->input['use_entity']) && $this->input['use_entity']) {
+         PluginGenericobjectField::addNewField($table, 'entities_id', 'id');
+
+         //Recursivity
+         if (isset($this->input['use_recursivity']) && $this->input['use_recursivity']) {
+            PluginGenericobjectField::addNewField($table, 'is_recursive', 'entities_id');
+         } else {
+            PluginGenericobjectField::deleteField($table, 'is_recursive');
+         }
+
       } else {
          PluginGenericobjectField::deleteField($table, 'entities_id');
-      }
-
-      //Recursivity
-      if ($this->canBeRecursive()) {
-         PluginGenericobjectField::addNewField($table, 'is_recursive');
-      } else {
          PluginGenericobjectField::deleteField($table, 'is_recursive');
       }
+
       
       //Template
-      if ($this->canUseTemplate()) {
-         PluginGenericobjectField::addNewField($table, 'is_template');
-         PluginGenericobjectField::addNewField($table, 'template_name');
+      if (isset($this->input['use_template']) && $this->input['use_template']) {
+         PluginGenericobjectField::addNewField($table, 'is_template', 'id');
+         PluginGenericobjectField::addNewField($table, 'template_name', 'is_template');
       } else {
          PluginGenericobjectField::deleteField($table, 'is_template');
          PluginGenericobjectField::deleteField($table, 'template_name');
       }
 
       //Trash
-      if ($this->canBeDeleted()) {
-         PluginGenericobjectField::addNewField($table, 'is_deleted');
+      if (isset($this->input['use_deleted']) && $this->input['use_deleted']) {
+         PluginGenericobjectField::addNewField($table, 'is_deleted', 'id');
       } else {
          PluginGenericobjectField::deleteField($table, 'is_deleted');
+      }
+
+      //Reservation needs is_deleted field !
+      if ($this->canBeReserved()) {
+         PluginGenericobjectField::addNewField($table, 'is_deleted', 'id');
+         PluginGenericobjectField::addNewField($table, 'locations_id');
       }
       
       //Helpdesk post-only
       if ($this->canUseTickets()) {
-         PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible');
+         PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'id');
       } else {
          PluginGenericobjectField::deleteField($table, 'is_helpdesk_visible');
       }
       
-      //Helpdesk post-only
-      if ($this->canUseNotepad()) {
-         PluginGenericobjectField::addNewField($table, 'notepad');
+      //Notes
+      if (isset($this->input['use_notes']) && $this->input['use_notes']) {
+         PluginGenericobjectField::addNewField($table, 'notepad', 'id');
       } else {
          PluginGenericobjectField::deleteField($table, 'notepad');
       }
@@ -452,7 +482,8 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[6]['field']       = 'use_tickets';
       $sopt[6]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][31];
       $sopt[6]['datatype']    = 'bool';
-   
+
+/*   
       $sopt[7]['table']       = $this->getTable();
       $sopt[7]['field']       = 'use_deleted';
       $sopt[7]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['ocsconfig'][49];
@@ -462,12 +493,13 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[8]['field']       = 'use_notes';
       $sopt[8]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['title'][37];
       $sopt[8]['datatype']    = 'bool';
-   
+*/
       $sopt[9]['table']       = $this->getTable();
       $sopt[9]['field']       = 'use_history';
       $sopt[9]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['title'][38];
       $sopt[9]['datatype']    = 'bool';
-   
+
+/*
       $sopt[10]['table']      = $this->getTable();
       $sopt[10]['field']      = 'use_entity';
       $sopt[10]['name']       = $LANG['genericobject']['config'][1]." ". $LANG['Menu'][37];
@@ -477,12 +509,14 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[11]['field']      = 'use_recursivity';
       $sopt[11]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['entity'][9];
       $sopt[11]['datatype']   = 'bool';
-   
+
+
       $sopt[12]['table']      = $this->getTable();
       $sopt[12]['field']      = 'use_template';
       $sopt[12]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['common'][14];
       $sopt[12]['datatype']   = 'bool';
-   
+*/
+
       $sopt[13]['table']      = $this->getTable();
       $sopt[13]['field']      = 'use_infocoms';
       $sopt[13]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['financial'][3];
@@ -601,7 +635,8 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       $locale_file = $name.".".$_SESSION['glpilanguage'];
       self::addFileFromTemplate(array('NAME'      => $name, 
-                                      'CLASSNAME' => self::getClassByName($name)), self::LOCALE_TEMPLATE, $locale_dir, 
+                                      'CLASSNAME' => self::getClassByName($name)), 
+                                self::LOCALE_TEMPLATE, $locale_dir, 
                                 $locale_file);
       if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
          $locale_file = $name.".".$CFG_GLPI['language'];
@@ -749,6 +784,16 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
    
+   public static function deleteTicketAssignation($itemtype) {
+      global $DB;
+      $ticket = new Ticket();
+      foreach ($ticket->find("`itemtype`='$itemtype'") as $data) {
+         $data['itemtype'] = '';
+         $data['items_id'] = 0;
+         $ticket->update($data);
+      }
+   }
+   
    public static function removeDataInjectionModels($itemtype) {
       $plugin = new Plugin();
       //Delete if exists datainjection models
@@ -893,7 +938,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function canUseTemplate() {
-      return $this->fields['use_template'];
+      return FieldExists(getTableForItemType($this->fields['itemtype']), 'is_template');
    }
 
    function canUseUnicity() {
@@ -901,15 +946,15 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    function canBeDeleted() {
-      return $this->fields['use_deleted'];
+      return FieldExists(getTableForItemType($this->fields['itemtype']), 'is_deleted');
    }
    
    function canBeEntityAssigned() {
-      return $this->fields['use_entity'];
+      return FieldExists(getTableForItemType($this->fields['itemtype']), 'entities_id');
    }
    
    function canBeRecursive() {
-      return $this->fields['use_recursivity'];
+      return FieldExists(getTableForItemType($this->fields['itemtype']), 'is_recursive');
    }
    
    function canBeReserved() {
@@ -917,7 +962,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    function canUseNotepad() {
-      return $this->fields['use_notes'];
+      return FieldExists(getTableForItemType($this->fields['itemtype']), 'notepad');
    }
    
    function canUseHistory() {
@@ -984,12 +1029,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `is_active` tinyint(1) NOT NULL default '0',
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
                            `use_unicity` tinyint(1) NOT NULL default '0',
-                           `use_deleted` tinyint(1) NOT NULL default '0',
-                           `use_notes` tinyint(1) NOT NULL default '0',
                            `use_history` tinyint(1) NOT NULL default '0',
-                           `use_entity` tinyint(1) NOT NULL default '0',
-                           `use_recursivity` tinyint(1) NOT NULL default '0',
-                           `use_template` tinyint(1) NOT NULL default '0',
                            `use_infocoms` tinyint(1) NOT NULL default '0',
                            `use_contracts` tinyint(1) NOT NULL default '0',
                            `use_documents` tinyint(1) NOT NULL default '0',

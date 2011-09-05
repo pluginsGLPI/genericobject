@@ -204,7 +204,8 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canBeReserved() {
-      return ($this->objecttype->canBeReserved() && haveRight("reservation_central", "r"));
+      return ($this->objecttype->canBeReserved() 
+         && (haveRight("reservation_central", "r") || haveRight("reservation_helpdesk", '1')));
    }
 
    function canUseHistory() {
