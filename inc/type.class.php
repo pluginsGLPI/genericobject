@@ -180,8 +180,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo $LANG['genericobject']['config'][3];
       echo "</th></tr>";
 
-      $use = array ("use_entity"               => $LANG['Menu'][37],
-                    "use_recursivity"          => $LANG['entity'][9],
+      $use = array ("use_recursivity"          => $LANG['entity'][9],
                     "use_tickets"              => $LANG['title'][24],
                     "use_deleted"              => $LANG['ocsconfig'][49],
                     "use_notes"                => $LANG['title'][37],
@@ -211,10 +210,6 @@ class PluginGenericobjectType extends CommonDBTM {
                Dropdown::showYesno('use_deleted', $this->canBeDeleted());
                break;
 
-            case 'use_entity':
-               Dropdown::showYesno('use_entity', $this->canBeEntityAssigned());
-               break;
-
             case 'use_recursivity':
                Dropdown::showYesno('use_recursivity', $this->canBeRecursive());
                break;
@@ -225,14 +220,6 @@ class PluginGenericobjectType extends CommonDBTM {
 
             case 'use_template':
                Dropdown::showYesno('use_template', $this->canUseTemplate());
-               break;
-
-            case 'use_recursivity' :
-               if (!$this->fields['use_entity']) {
-                  echo "<input type='hidden' name='use_recursivity' value='0'>\n";
-                  echo $LANG['choice'][0];
-               } else
-                  Dropdown::showYesNo($right, $this->fields[$right]);
                break;
 
             case 'use_plugin_datainjection' :
@@ -396,19 +383,10 @@ class PluginGenericobjectType extends CommonDBTM {
       $item     = new $itemtype();
       $item->getEmpty();
       $table    = getTableForItemType($itemtype);
-      //Entity
-      if (isset($this->input['use_entity']) && $this->input['use_entity']) {
-         PluginGenericobjectField::addNewField($table, 'entities_id', 'id');
-
-         //Recursivity
-         if (isset($this->input['use_recursivity']) && $this->input['use_recursivity']) {
-            PluginGenericobjectField::addNewField($table, 'is_recursive', 'entities_id');
-         } else {
-            PluginGenericobjectField::deleteField($table, 'is_recursive');
-         }
-
+      //Recursivity
+      if (isset($this->input['use_recursivity']) && $this->input['use_recursivity']) {
+         PluginGenericobjectField::addNewField($table, 'is_recursive', 'entities_id');
       } else {
-         PluginGenericobjectField::deleteField($table, 'entities_id');
          PluginGenericobjectField::deleteField($table, 'is_recursive');
       }
 
@@ -554,6 +532,7 @@ class PluginGenericobjectType extends CommonDBTM {
       global $DB;
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."` (
                   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+                  `entities_id` INT( 11 ) NOT NULL DEFAULT '0',
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
                   `comment` TEXT NULL  ,
                   `notepad` TEXT NULL  ,
