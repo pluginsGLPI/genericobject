@@ -201,11 +201,10 @@ $GO_FIELDS['contact_num']['name']       = $LANG['common'][21];
 $GO_FIELDS['contact_num']['field']      = 'contact_num';
 $GO_FIELDS['contact_num']['linkfield']  = 'contact_num';
 $GO_FIELDS['contact_num']['input_type'] = 'text';
-/*
+
 $GO_FIELDS['testinteger']['name']       = 'testinteger';
 $GO_FIELDS['testinteger']['field']      = 'testinteger';
 $GO_FIELDS['testinteger']['input_type'] = 'integer';
 $GO_FIELDS['testinteger']['min']        = 10;
-$GO_FIELDS['testinteger']['max']       = 40;
+$GO_FIELDS['testinteger']['max']        = 40;
 $GO_FIELDS['testinteger']['step']       = 3;
-*/

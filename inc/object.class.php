@@ -336,12 +336,20 @@ class PluginGenericobjectObject extends CommonDBTM {
                   Dropdown::show($itemtype, $parameters);
                } else {
                   $min = $max = $step = 0;
-                  foreach (array('min' => 0, 'max' => 100, 'step' => 1) as $key => $val) {
-                     if (isset($GO[$name]['min'])) {
-                        $key = $GO[$name][$key];
-                     } else {
-                        $key = $val;
-                     }
+                  if (isset($GO_FIELDS[$name]['min'])) {
+                     $min = $GO_FIELDS[$name]['min'];
+                  } else {
+                     $min = 0;
+                  }
+                  if (isset($GO_FIELDS[$name]['max'])) {
+                     $max = $GO_FIELDS[$name]['max'];
+                  } else {
+                     $max = 100;
+                  }
+                  if (isset($GO_FIELDS[$name]['step'])) {
+                     $step = $GO_FIELDS[$name]['step'];
+                  } else {
+                     $step = 1;
                   }
                   Dropdown::showInteger($name, $value, $min, $max, $step);
                }
