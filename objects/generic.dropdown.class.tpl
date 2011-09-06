@@ -35,6 +35,6 @@
 /**
  * This class is automatically managed by genericobject plugin. Do not modify it !
  */
-class %%CLASSNAME%% extends CommonDropdown {
+class %%CLASSNAME%% extends %%EXTENDS%% {
 
 }

@@ -677,8 +677,9 @@ class PluginGenericobjectType extends CommonDBTM {
                                 $name.".form");
    }
 
-   public static function addDropdownClassFile($name, $field) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+   public static function addDropdownClassFile($name, $field, $tree) {
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name), 
+                                      'EXTENDS' => ($tree?"CommonTreeDropdown":"CommonDropdown")), 
                                 self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, 
                                 $name.".class");
    } 
@@ -720,7 +721,8 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    //-------------------- ADD / DELETE TABLES ----------------------------------//
-   public static function addDropdownTable($table) {
+   public static function addDropdownTable($table, $entity_assign = false, $recursive = false, 
+                                           $tree = false) {
       global $DB;
       if (!TableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
@@ -730,6 +732,22 @@ class PluginGenericobjectType extends CommonDBTM {
                        PRIMARY KEY  (`id`),
                        KEY `name` (`name`)
                      ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+         $DB->query($query);
+      }
+      if ($entity_assign) {
+         $query = "ALTER TABLE `$table` ADD `entities_id` INT(11) NOT NULL DEFAULT '0'";
+         $DB->query($query);
+         if ($recursive) {
+            $query = "ALTER TABLE `$table` " .
+                     "ADD `is_recursive` TINYINT(1) NOT NULL DEFAULT '0' AFTER `entities_id`";
+            $DB->query($query);
+         }
+      }
+      if ($tree) {
+         $query = "ALTER TABLE `$table` ADD `completename` text COLLATE utf8_unicode_ci, 
+                                        ADD `level` int(11) NOT NULL DEFAULT '0',
+                                        ADD `ancestors_cache` longtext COLLATE utf8_unicode_ci,
+                                        ADD `sons_cache` longtext COLLATE utf8_unicode_ci";
          $DB->query($query);
       }
    }
@@ -793,7 +811,6 @@ class PluginGenericobjectType extends CommonDBTM {
          $reservation_item->delete($data);
       }
    }
-
 
    /**
     * Delete all loans associated with a itemtype

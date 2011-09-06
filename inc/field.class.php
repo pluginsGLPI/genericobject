@@ -187,9 +187,18 @@ class PluginGenericobjectField extends CommonDBTM {
             $name = getSingular($name);
             //Build itemtype
             $itemtype = 'PluginGenericobject'.ucfirst($name);
+            
+            $entity_assign = isset($GO_FIELDS[$field]['entities_id']) 
+                                    && $GO_FIELDS[$field]['entities_id']; 
+            if ($entity_assign) {
+               $recursive = isset($GO_FIELDS[$field]['is_recursive']) 
+                                    && $GO_FIELDS[$field]['is_recursive'];
+            }
+            $tree = isset($GO_FIELDS[$field]['is_tree']) && $GO_FIELDS[$field]['is_tree']; 
+
             //Add files on the disk
-            PluginGenericobjectType::addDropdownClassFile($name, $itemtype);
-            PluginGenericobjectType::addDropdownTable($table);
+            PluginGenericobjectType::addDropdownClassFile($name, $itemtype, $tree);
+            PluginGenericobjectType::addDropdownTable($table, $entity_assign, $recursive, $tree);
             PluginGenericobjectType::addDropdownFrontFile($name);
             PluginGenericobjectType::addDropdownAjaxFile($name, $field);
             PluginGenericobjectType::addDropdownFrontformFile($name, $field);
