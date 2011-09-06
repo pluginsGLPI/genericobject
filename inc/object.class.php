@@ -89,7 +89,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          //Add configuration icon, if user has right
          if (haveRight('config', 'w')) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
-                                        = getItemTypeSearchURL('PluginGenericobjectType',false);
+                                        = getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
          }
          
          //Item can be linked to tickets
@@ -311,8 +311,6 @@ class PluginGenericobjectObject extends CommonDBTM {
    function displayField($canedit, $name, $value, $description = array()) {
       global $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
-      $donotdisplay_fields = array('id', 'is_recursive', 'is_template', 'template_name', 
-                                   'is_deleted', 'entities_id', 'notepad');
       if (isset ($GO_FIELDS[$name]) 
          && !in_array($name, self::getFieldsToHide())) {
 

@@ -33,10 +33,15 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-commonHeader($LANG['genericobject']['title'][2], $_SERVER['PHP_SELF'], "plugins", "genericobject",
-             "type");
-
 checkRight("config","w");
 
-Search::Show('PluginGenericobjectType');
-commonFooter();
+if (isset($_GET['itemtype'])) {
+   $type = new PluginGenericobjectType();
+   $type->getFromDBByType($_GET['itemtype']);
+   glpi_header(getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
+} else {
+   commonHeader($LANG['genericobject']['title'][2], $_SERVER['PHP_SELF'], "plugins", 
+                "genericobject", "type");
+   Search::Show('PluginGenericobjectType');
+   commonFooter();
+}
