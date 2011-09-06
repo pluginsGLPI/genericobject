@@ -32,10 +32,19 @@ define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT."/inc/includes.php");
 checkRight("profile","r");
 
+
+$prof = new PluginGenericobjectProfile();
+
 /* save profile */
 if (isset ($_POST['update_user_profile'])) {
-   $prof=new PluginGenericobjectProfile();
    $prof->saveProfileToDB($_POST);
+   PluginGenericobjectProfile::changeProfile();
+   glpi_header($_SERVER['HTTP_REFERER']);
+} elseif (isset($_POST['update_all_rights']) && isset($_POST['profiles'])) {
+   foreach ($_POST['profiles'] as $id => $values) {
+      $values['id'] = $id;
+      $prof->update($values);
+   }
    PluginGenericobjectProfile::changeProfile();
    glpi_header($_SERVER['HTTP_REFERER']);
 }

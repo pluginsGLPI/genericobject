@@ -57,7 +57,8 @@ switch($_POST['glpi_tab']){
       PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
       $type->getFromDB($_POST["id"]);
       PluginGenericobjectObject::showPrevisualisationForm($type);
-      Log::showForItem($type);
+      PluginGenericobjectProfile::showForItemtype($type);
+      //Log::showForItem($type);
      break;
         
    case 1 :
@@ -68,11 +69,15 @@ switch($_POST['glpi_tab']){
      PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
      break;
 
-  case 5 :
+   case 5 :
      $type->getFromDB($_POST["id"]);
      PluginGenericobjectObject::showPrevisualisationForm($type);
-   break;
+     break;
    
+   case 6 :
+      PluginGenericobjectProfile::showForItemtype($type);
+      break;
+      
    case 12 :
       Log::showForItem($type);
       break;

@@ -93,6 +93,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if (isset($this->fields['id']) && $this->fields['id'] > 0) {
          $ong[3]  = $LANG['rulesengine'][12];
          $ong[5]  = $LANG['genericobject']['config'][7];
+         $ong[6]  = $LANG['Menu'][35];
          //$ong[12] = $LANG['title'][38];
       }
 

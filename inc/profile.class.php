@@ -36,6 +36,56 @@ class PluginGenericobjectProfile extends CommonDBTM {
       $this->deleteByCriteria(array('id' => $id));
    }
 
+   static function showForItemtype($type) {
+      global $DB, $LANG;
+
+      if (!haveRight("profile", "r")) {
+         return false;
+      }
+      $canedit = haveRight("profile", "w");
+   
+      echo "<form action='" . getItemTypeSearchURL(__CLASS__) . "' method='post'>";
+      echo "<table class='tab_cadre_fixe'>";
+
+      echo "<tr><th colspan='2' align='center'><strong>"; 
+      echo $LANG["genericobject"]['profile'][0]."</strong></th></tr>";
+
+      foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
+         echo "<tr><th colspan='2' align='center'><strong>"; 
+         echo $LANG['profiles'][22]." ".$profile['name']."</strong></th></tr>";
+
+         $go_profile = new self();
+         if ($go_profile->getProfilesFromDB($profile['id'])) {
+            self::createAccess($profile['id']);
+         }
+         $prefix = "profiles[".$go_profile->getID()."]";
+         if ($profile['interface'] == 'central') {
+            echo "<tr class='tab_bg_2'>";
+            echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
+            Profile::dropdownNoneReadWrite($prefix."[right]",  
+                                           $go_profile->fields[$type->fields['itemtype']], 1, 1, 1);
+            echo "</td></tr>";
+         }
+         if ($type->canUseTickets()) {
+            echo "<tr class='tab_bg_2'>";
+            echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
+            Dropdown::showYesNo($prefix."[open_ticket]",  
+                                $go_profile->fields[$type->fields['itemtype'].'_open_ticket']);
+            echo "</td></tr>";
+         }
+         
+      }
+
+      if ($canedit) {
+         echo "<tr class='tab_bg_1'>";
+         echo "<td align='center' colspan='2'>";
+         echo "<input type='submit' name='update_all_rights' value=\"" . 
+            $LANG['buttons'][7] . "\" class='submit'>";
+         echo "</td></tr>";
+      }
+      echo "</table></form>";
+   }
+   
    /* profiles modification */
    function showForm($id) {
       global $LANG;
