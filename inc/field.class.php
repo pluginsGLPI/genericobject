@@ -67,14 +67,16 @@ class PluginGenericobjectField extends CommonDBTM {
 
       $index = 1;
       $total = count($fields_in_db);
-
+      $global_index = 1;
+      
       foreach ($fields_in_db as $field => $value) {
-         self::displayFieldDefinition($url, $itemtype, $field, $index, $total);
+         self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index==$total));
          //All backlisted fields cannot be moved, and are listed first
          if (!in_array($field, $GO_BLACKLIST_FIELDS)) {
             $index++;
          }
          $used_fields[$field] = $field; 
+         $global_index++;
       }
       echo "</table>";
       openArrowMassive('fields_definition', true);
@@ -104,7 +106,7 @@ class PluginGenericobjectField extends CommonDBTM {
       Dropdown::showFromArray($name,$dropdown_types);
    }
 
-   public static function displayFieldDefinition($target, $itemtype, $field, $index, $total) {
+   public static function displayFieldDefinition($target, $itemtype, $field, $index, $last = false) {
       global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS;
       $readonly = in_array($field, $GO_BLACKLIST_FIELDS);
 
@@ -123,14 +125,14 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td>" . $GO_FIELDS[$field]['name'] . "</td>";
 
       echo "<td width='10'>";
-      if (!$readonly && $index > 2) {
+      if (!$readonly && $index > 1) {
          echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;itemtype=$itemtype\">"; 
          echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_up.png\" alt=''></a>";
       }
       echo "</td>";
 
       echo "<td width='10'>";
-      if (!$readonly && $index > 1 && $index < $total) {
+      if (!$readonly && !$last) {
          echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;itemtype=$itemtype\">"; 
          echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
       }
