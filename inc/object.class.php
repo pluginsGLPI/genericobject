@@ -608,7 +608,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "int(11)":
-               $options[$index]['datatype'] = 'text';
+               $options[$index]['datatype'] = 'integer';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
                   $options[$index]['displaytype'] = 'dropdown_integer';
