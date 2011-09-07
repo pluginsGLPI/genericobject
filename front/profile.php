@@ -43,6 +43,7 @@ if (isset ($_POST['update_user_profile'])) {
 } elseif (isset($_POST['update_all_rights']) && isset($_POST['profiles'])) {
    foreach ($_POST['profiles'] as $id => $values) {
       $values['id'] = $id;
+      logDebug($values);
       $prof->update($values);
    }
    PluginGenericobjectProfile::changeProfile();

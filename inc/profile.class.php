@@ -57,6 +57,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
          $go_profile = new self();
          if ($go_profile->getProfilesFromDB($profile['id'])) {
             self::createAccess($profile['id']);
+            $go_profile->getProfilesFromDB($profile['id']);
          }
          $prefix = "profiles[".$go_profile->getID()."]";
          if ($profile['interface'] == 'central') {
@@ -140,7 +141,8 @@ class PluginGenericobjectProfile extends CommonDBTM {
             echo "<td align='center' colspan='2'>";
             echo "<input type='hidden' name='profiles_id' value='".$id."'>";
             echo "<input type='hidden' name='id' value=$id>";
-            echo "<input type='submit' name='update_user_profile' value=\"" . $LANG['buttons'][7] . "\" class='submit'>";
+            echo "<input type='submit' name='update_user_profile' value=\"" . 
+               $LANG['buttons'][7] . "\" class='submit'>";
             echo "</td></tr>";
          
          }
@@ -169,11 +171,12 @@ class PluginGenericobjectProfile extends CommonDBTM {
       $prof_datas = array ();
       foreach (getAllDatasFromTable(getTableForItemType(__CLASS__),
                                     "`profiles_id`='" . $id . "'") as $prof) {
-         $prof_datas[$prof['itemtype']]       = $prof['right'];
+         $prof_datas[$prof['itemtype']]                = $prof['right'];
          $prof_datas[$prof['itemtype'].'_open_ticket'] = $prof['open_ticket'];
+         $prof_datas['id']                             = $prof['id'];
       }
       
-      $prof_datas['id']   = $id;
+      $prof_datas['profiles_id']   = $id;
       $this->fields       = $prof_datas;
    
       return true;
