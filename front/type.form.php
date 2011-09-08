@@ -46,8 +46,9 @@ if (isset ($_GET["select"]) && $_GET["select"] == "all") {
 
 if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
+   //PluginGenericobjectType::includeLocales($type->fields["name"]);
+   //PluginGenericobjectType::includeConstants($type->fields["name"]);
    PluginGenericobjectType::registerOneType($type);
-   PluginGenericobjectType::includeLocales($type->fields["name"]);
    PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"], 
                                                $_GET["action"]);
    glpi_header($_SERVER['HTTP_REFERER']);

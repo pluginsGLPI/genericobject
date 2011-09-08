@@ -47,10 +47,14 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    static function registerType() {
       global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES;
+      
       $class  = get_called_class();
       $item   = new $class();
       $fields = $DB->list_fields(getTableForItemType($class));
       $plugin = new Plugin();
+
+      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
+      PluginGenericobjectType::includeConstants($item->objecttype->fields['name']);
 
       $options = array("document_types"         => $item->canUseDocuments(),
                        "helpdesk_visible_types" => $item->canUseTickets(),

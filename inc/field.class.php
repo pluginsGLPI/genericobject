@@ -182,6 +182,7 @@ class PluginGenericobjectField extends CommonDBTM {
          }
          $DB->query($query);
          
+         $recursive = $entity_assign = $tree = false;
          $table = getTableNameForForeignKeyField($field);
          if ($table != '' && !TableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !

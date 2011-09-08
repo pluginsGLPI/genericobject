@@ -62,10 +62,11 @@ function plugin_init_genericobject() {
    $plugin = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
+      /*
       //Include all fields constants files
       foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) {
          include_once ($file);
-      }
+      }*/
       
       include_once (GLPI_ROOT . "/plugins/genericobject/inc/field.constant.php");
 
@@ -99,9 +100,12 @@ function plugin_init_genericobject() {
 
 function plugin_post_init_genericobject() {
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
+      //PluginGenericobjectType::includeLocales($objecttype['name']);
+      //PluginGenericobjectType::includeConstants($objecttype['name']);
       call_user_func(array($objecttype['itemtype'], 'registerType'));
    }
 }
+
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    global $LANG;

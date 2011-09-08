@@ -116,6 +116,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $canedit = $this->can($ID, 'w');
 
       self::includeLocales($this->fields["name"]);
+      self::includeConstants($this->fields["name"]);
       
       $options['colspan'] = 1;
       $this->showTabs($options);
@@ -416,7 +417,7 @@ class PluginGenericobjectType extends CommonDBTM {
       
       //Helpdesk post-only
       if ($this->canUseTickets()) {
-         PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'name');
+         PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'comment');
       } else {
          PluginGenericobjectField::deleteField($table, 'is_helpdesk_visible');
       }
@@ -896,6 +897,13 @@ class PluginGenericobjectType extends CommonDBTM {
       return true;
    }
 
+   static function includeConstants($name) {
+      $file = GLPI_ROOT . "/plugins/genericobject/fields/constants/".$name.".constant.php";
+      if (file_exists($file)) {
+         include_once($file);
+      }
+   }
+   
    static function getDropdownForItemtype($itemtype) {
       global $DB;
       $associated_tables = array();
