@@ -313,13 +313,15 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function displayField($canedit, $name, $value, $description = array()) {
-      global $GO_FIELDS, $GO_BLACKLIST_FIELDS;
+      global $GO_BLACKLIST_FIELDS;
 
-      if (isset ($GO_FIELDS[$name]) 
+      $searchoption  = PluginGenericobjectField::getOptionsWithGlobal($name, get_called_class());
+
+      if (!empty($searchoption) 
          && !in_array($name, self::getFieldsToHide())) {
 
          $this->startColumn();
-         echo $GO_FIELDS[$name]['name'];
+         echo $searchoption['name'];
          $this->endColumn();
          $this->startColumn();
          switch ($description['Type']) {
@@ -338,18 +340,18 @@ class PluginGenericobjectObject extends CommonDBTM {
                   Dropdown::show($itemtype, $parameters);
                } else {
                   $min = $max = $step = 0;
-                  if (isset($GO_FIELDS[$name]['min'])) {
-                     $min = $GO_FIELDS[$name]['min'];
+                  if (isset($searchoption['min'])) {
+                     $min = $searchoption['min'];
                   } else {
                      $min = 0;
                   }
-                  if (isset($GO_FIELDS[$name]['max'])) {
-                     $max = $GO_FIELDS[$name]['max'];
+                  if (isset($searchoption['max'])) {
+                     $max = $searchoption['max'];
                   } else {
                      $max = 100;
                   }
-                  if (isset($GO_FIELDS[$name]['step'])) {
-                     $step = $GO_FIELDS[$name]['step'];
+                  if (isset($searchoption['step'])) {
+                     $step = $searchoption['step'];
                   } else {
                      $step = 1;
                   }
@@ -534,10 +536,14 @@ class PluginGenericobjectObject extends CommonDBTM {
    function getSearchOptions() {
       global $DB, $GO_FIELDS;
       
+      
       $index = 0;
       $options = array();
       $table = getTableForItemType(get_called_class());
       foreach ($DB->list_fields($table) as $field => $values) {
+         $searchoption  = PluginGenericobjectField::getOptionsWithGlobal($field, 
+                                                                         $this->objecttype->fields['itemtype']);
+
          if (in_array($field,array('is_deleted'))) {
             continue;
          }
@@ -565,12 +571,12 @@ class PluginGenericobjectObject extends CommonDBTM {
             $options[$index]['field'] = $field;
          }
 
-         $options[$index]['name']  = $GO_FIELDS[$field]['name'];
+         $options[$index]['name']  = $searchoption['name'];
          
          //Massive action or not
-         if (isset($GO_FIELDS[$field]['massiveaction'])) {
+         if (isset($searchoption['massiveaction'])) {
             $options[$index]['massiveaction'] 
-               = $GO_FIELDS[$field]['massiveaction'];
+               = $searchoption['massiveaction'];
          }
 
          if ($item->canUsePluginDataInjection()) {

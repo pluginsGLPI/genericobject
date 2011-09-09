@@ -65,9 +65,8 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<th width='10'></th>";
       echo "</tr>";
 
-      $index = 1;
-      $total = count($fields_in_db);
-      $global_index = 1;
+      $total        = count($fields_in_db);
+      $global_index = $index = 1;
       
       foreach ($fields_in_db as $field => $value) {
          self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index==$total));
@@ -86,7 +85,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . $LANG['genericobject']['fields'][4] . "</td>";
       echo "<td align='left'>";
-      self::dropdownFields("new_field", $used_fields);
+      self::dropdownFields("new_field", $itemtype, $used_fields);
       echo "</td>";
       echo "<td>";
       echo "<input type='submit' name='add_field' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
@@ -94,21 +93,57 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</table></div></form>";
    }
 
-   static function dropdownFields($name,$used = array()) {
+   /**
+    * Get the name of the field, as defined in a constant file
+    * The name may be the same, or not depending if it's a global dropdown or not
+    */
+   static function getFieldGlobalName($field, $itemtype, $options, $remove_prefix = false) {
+      if (isset($options['dropdown_type']) 
+            && $options['dropdown_type'] == 'global') {
+
+         $fk   = getForeignKeyFieldForTable(getTableForItemType($itemtype));
+         if (!$remove_prefix) {
+            $field = preg_replace("/s_id$/",$field, $fk);
+         } else {
+            $fk    = preg_replace("/s_id$/","", $fk);
+            $field = preg_replace("/".$fk."/","", $field);
+         }
+      }
+      return $field;
+   }
+   static function dropdownFields($name,$itemtype, $used = array()) {
       global $GO_FIELDS;
       
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
          if(!in_array($field,$used)) {
+            $field = self::getFieldGlobalName($field, $itemtype, $values, false);
+            //Global management : 
+            //meaning that a dropdown can be useful in all types (for example type, model, etc.)
             $dropdown_types[$field] = $values['name']." (".$field.")";
          }
       }
       Dropdown::showFromArray($name,$dropdown_types);
    }
 
+   static function getOptionsWithGlobal($field, $itemtype) {
+      global $GO_FIELDS;
+      
+      if (!isset($GO_FIELDS[$field])) {
+         $tmpfield = self::getFieldGlobalName($field, $itemtype, 
+                                           array('dropdown_type' => 'global'), true);
+         $options = $GO_FIELDS[$tmpfield];
+      } else {
+         $options = $GO_FIELDS[$field];
+      }
+      return $options;
+   }
+   
    public static function displayFieldDefinition($target, $itemtype, $field, $index, $last = false) {
       global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS;
+
       $readonly = in_array($field, $GO_BLACKLIST_FIELDS);
+      $options  = self::getOptionsWithGlobal($field, $itemtype);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
       if (isset ($_GET["select"]) && $_GET["select"] == "all") {
@@ -122,7 +157,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</td>";
       echo "<td>" . $field . "</td>";
-      echo "<td>" . $GO_FIELDS[$field]['name'] . "</td>";
+      echo "<td>" . $options['name'] . "</td>";
 
       echo "<td width='10'>";
       if (!$readonly && $index > 1) {
@@ -150,9 +185,11 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function addNewField($table, $field, $after=false) {
       global $DB, $GO_FIELDS;
 
+      $options  = self::getOptionsWithGlobal($field, getItemTypeForTable($table));
+      
       if (!FieldExists($table, $field)) {
          $query = "ALTER TABLE `$table` ADD `$field` ";
-         switch ($GO_FIELDS[$field]['input_type']) {
+         switch ($options['input_type']) {
             case 'dropdown_yesno' :
             case 'dropdown_global' :
             case 'bool' :
@@ -183,7 +220,7 @@ class PluginGenericobjectField extends CommonDBTM {
          $DB->query($query);
          
          $recursive = $entity_assign = $tree = false;
-         $table = getTableNameForForeignKeyField($field);
+         $table     = getTableNameForForeignKeyField($field);
          if ($table != '' && !TableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
             $name = str_replace("glpi_plugin_genericobject_","", $table);
@@ -191,13 +228,11 @@ class PluginGenericobjectField extends CommonDBTM {
             //Build itemtype
             $itemtype = 'PluginGenericobject'.ucfirst($name);
             
-            $entity_assign = isset($GO_FIELDS[$field]['entities_id']) 
-                                    && $GO_FIELDS[$field]['entities_id']; 
+            $entity_assign = isset($options['entities_id'])  && $options['entities_id']; 
             if ($entity_assign) {
-               $recursive = isset($GO_FIELDS[$field]['is_recursive']) 
-                                    && $GO_FIELDS[$field]['is_recursive'];
+               $recursive = isset($options['is_recursive'])  && $options['is_recursive'];
             }
-            $tree = isset($GO_FIELDS[$field]['is_tree']) && $GO_FIELDS[$field]['is_tree']; 
+            $tree = isset($options['is_tree']) && $options['is_tree']; 
 
             //Add files on the disk
             PluginGenericobjectType::addDropdownClassFile($name, $itemtype, $tree);
