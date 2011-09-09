@@ -42,13 +42,12 @@ $LANG['genericobject']['install'][0] = "Error: directories '/inc', '/head' and '
 
 $LANG['genericobject']['profile'][0] = "Rights management";
 $LANG['genericobject']['profile'][1] = "Associate tickets to this object";
-$LANG['genericobject']['setup'][1] = "Cannot use this plugin for the hepldesk";
+$LANG['genericobject']['profile'][2] = "Access object";
+$LANG['genericobject']['profile'][3] = "No type defined";
 
 $LANG['genericobject']['config'][1] = "Use";
 $LANG['genericobject']['config'][2] = "Object's state";
 $LANG['genericobject']['config'][3] = "Behaviour";
-$LANG['genericobject']['config'][4] = "Links";
-$LANG['genericobject']['config'][5] = "No locale files available. It cannot be used !";
 $LANG['genericobject']['config'][6] = "Objects types";
 $LANG['genericobject']['config'][7] = "Preview";
 $LANG['genericobject']['config'][8] = "Object preview";
@@ -66,8 +65,6 @@ $LANG['genericobject']['fields'][3] = "Label";
 $LANG['genericobject']['fields'][4] = "Add new field";
 $LANG['genericobject']['fields'][5] = "Field(s) deleted successfully";
 $LANG['genericobject']['fields'][6] = "Field added successfully";
-$LANG['genericobject']['fields'][7] = "Mandatory";
-$LANG['genericobject']['fields'][8] = "Unique";
 $LANG['genericobject']['fields'][9] = "You must configure rights to enable the preview";
 $LANG['genericobject']['fields'][10] = "URL";
 
@@ -76,6 +73,3 @@ $LANG['genericobject']['fields'][31] = "Creation date";
 
 $LANG['genericobject']['links'][1] = "Other object's links";
 $LANG['genericobject']['links'][2] = "Assicated items";
-
-
-?>

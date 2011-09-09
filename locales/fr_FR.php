@@ -45,14 +45,9 @@ $LANG['genericobject']['profile'][1] = "Associer des tickets à cet objet d'inve
 $LANG['genericobject']['profile'][2] = "Accès à l'objet";
 $LANG['genericobject']['profile'][3] = "Aucun type défini";
 
-
-$LANG['genericobject']['setup'][1] = "Plugin non utilisable depuis le helpdesk";
-
 $LANG['genericobject']['config'][1] = "Utiliser";
 $LANG['genericobject']['config'][2] = "Etat de l'objet";
 $LANG['genericobject']['config'][3] = "Comportement";
-$LANG['genericobject']['config'][4] = "Liaisons";
-$LANG['genericobject']['config'][5] = "Pas de fichier de langue disponible pour ce type d'objet : celui-ci ne peut-être utilisé!";
 $LANG['genericobject']['config'][6] = "Types d'objets";
 $LANG['genericobject']['config'][7] = "Prévisualisation";
 $LANG['genericobject']['config'][8] = "Prévisualisation d'un objet de ce type";
@@ -70,8 +65,6 @@ $LANG['genericobject']['fields'][3] = "Libellé";
 $LANG['genericobject']['fields'][4] = "Ajout d'un nouveau champ";
 $LANG['genericobject']['fields'][5] = "Champ(s) supprimé(s) avec succès";
 $LANG['genericobject']['fields'][6] = "Champ ajouté avec succès";
-$LANG['genericobject']['fields'][7] = "Obligatoire";
-$LANG['genericobject']['fields'][8] = "Unique";
 $LANG['genericobject']['fields'][9] = "Vous devez configurer les droits sur cet objet pour voir la prévisualisation";
 $LANG['genericobject']['fields'][10] = "URL";
 
@@ -80,6 +73,3 @@ $LANG['genericobject']['fields'][31] = "Date d'expiration";
 
 $LANG['genericobject']['links'][1] = "Liaison avec d'autres objets";
 $LANG['genericobject']['links'][2] = "Elément(s) associé(s)";
-
-
-?>
