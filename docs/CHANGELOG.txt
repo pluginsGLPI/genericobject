@@ -31,6 +31,14 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 0.80 Beta 1
+ #3114 (Feature) Rewrite the whole plugin to work with GLPI 0.80
+ #2119 (Bug) Table created without uft8 support
+ #2767 (Bug) Possibility to use the gabarits/templates
+ #2769 (Feature) Possibility to associate a contract with an object created with Generic Object
+ #1977 (Bug) Post-only to declare ticket for an object
+ #1757 (Bug) Impossible to acces model dropdown form
+
 Version 1.1.3
  #1762 SQL error with tplname field
 
