@@ -109,7 +109,8 @@ function plugin_post_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    global $LANG;
-   return array ('name'           => $LANG["genericobject"]["title"][1], 'version' => '0.80.0',
+   return array ('name'           => $LANG["genericobject"]["title"][1], 
+                 'version'        => '2.0',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
                  'minGlpiVersion' => '0.80');
