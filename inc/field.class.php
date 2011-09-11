@@ -112,15 +112,37 @@ class PluginGenericobjectField extends CommonDBTM {
       return $field;
    }
    static function dropdownFields($name,$itemtype, $used = array()) {
-      global $GO_FIELDS;
+      global $GO_FIELDS, $LANG;
       
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
-         if(!in_array($field,$used)) {
+         $message = "";
+         if(!in_array($field, $used)) {
             $field = self::getFieldGlobalName($field, $itemtype, $values, false);
             //Global management : 
             //meaning that a dropdown can be useful in all types (for example type, model, etc.)
-            $dropdown_types[$field] = $values['name']." (".$field.")";
+            if (isset($values['input_type']) && $values['input_type'] == 'dropdown') {
+               if (isset($values['entities_id'])) {
+                 $message = " ".$LANG['entity'][0]." : ".Dropdown::getYesNo($values['entities_id']);
+                  if ($values['entities_id']) {
+                     if (isset($values['is_recursive'])) {
+                        $message.= " ".$LANG['entity'][9]." : ".Dropdown::getYesNo($values['is_recursive']);
+                     }
+                  }
+               } else {
+                 $message = " ".$LANG['entity'][0]." : ".Dropdown::getYesNo(0);
+               }
+               if (isset($values['is_tree'])) {
+                  $message.= " ".$LANG['entity'][7]." : ".Dropdown::getYesNo($values['is_tree']);
+               } else {
+                  $message.= " ".$LANG['entity'][7]." : ".Dropdown::getYesNo(0);
+               }
+               
+            }
+            if ($message != '') {
+               $message = "(".trim($message).")";
+            }
+            $dropdown_types[$field] = $values['name']." ".$message;
          }
       }
       Dropdown::showFromArray($name,$dropdown_types);
