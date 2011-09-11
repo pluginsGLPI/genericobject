@@ -109,12 +109,12 @@ class PluginGenericobjectObject extends CommonDBTM {
    //Get itemtype name
    static function getTypeName() {
       global $LANG;
-      $class = get_called_class();
+      $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
       if(preg_match("/Injection$/i",$class)) {
          $class = str_replace("Injection", "", $class);
       }
-      $item  = new $class();
+      $item     = new $class();
       //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
       if(isset($LANG['genericobject'][$class][0])) {
@@ -126,7 +126,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    
    public function __construct() {
-      $class = get_called_class();
+      $class       = get_called_class();
       $this->table = getTableForItemType($class);
       if (class_exists($class)) {
          $this->objecttype = PluginGenericobjectType::getInstance($class);
@@ -328,8 +328,8 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "int(11)":
                $fk_table = getTableNameForForeignKeyField($name);
                if ($fk_table != '') {
-                  $itemtype = getItemTypeForTable($fk_table); 
-                  $dropdown = new $itemtype();
+                  $itemtype   = getItemTypeForTable($fk_table); 
+                  $dropdown   = new $itemtype();
                   $parameters = array('name' => $name, 'value' => $value, 'comments' => true);
                   if ($dropdown->isEntityAssign()) {
                      $parameters["entity"] = $this->fields['entities_id'];
@@ -468,7 +468,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $item = new $type();
             foreach ($item->find("items_id='" . $this->input["_oldID"] . "' 
                                  AND itemtype='" . $this->type . "'") as $tmpid => $data) {
-               $tmp = array();
+               $tmp             = array();
                $tmp['items_id'] = $this->input["_oldID"];
                $tmp['itemtype'] = $type;
                $tmp[$fk]        = $data[$fk];
@@ -478,13 +478,13 @@ class PluginGenericobjectObject extends CommonDBTM {
          
          if ($item->canUseNetworkPorts()) {
             // ADD Ports
-            $query = "SELECT `id`
-                      FROM `glpi_networkports`
-                      WHERE `items_id` = '".$this->input["_oldID"]."'
-                            AND `itemtype` = '".get_called_class()."';";
-            $result=$DB->query($query);
-            if ($DB->numrows($result)>0) {
-               while ($data=$DB->fetch_array($result)) {
+            $query  = "SELECT `id`
+                       FROM `glpi_networkports`
+                       WHERE `items_id` = '".$this->input["_oldID"]."'
+                          AND `itemtype` = '".get_called_class()."';";
+            $result = $DB->query($query);
+            if ($DB->numrows($result) > 0) {
+               while ($data = $DB->fetch_array($result)) {
                   $np  = new NetworkPort();
                   $npv = new NetworkPort_Vlan();
                   $np->getFromDB($data["id"]);
@@ -495,7 +495,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $np->fields["items_id"] = $this->fields['id'];
                   $portid = $np->addToDB();
                   foreach ($DB->request('glpi_networkports_vlans',
-                                        array('networkports_id' => $data["id"])) as $vlan) {
+                                        array('networkports_id' => $data["id"])
+                          ) as $vlan) {
                      $npv->assignVlan($portid, $vlan['vlans_id']);
                   }
                }
@@ -507,9 +508,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      
-      $types = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item', 
-                     'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
+      $types      = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item', 
+                          'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();
          $item->deleteByCriteria($parameters);
@@ -537,12 +537,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       global $DB, $GO_FIELDS;
       
       
-      $index = 0;
+      $index   = 0;
       $options = array();
-      $table = getTableForItemType(get_called_class());
+      $table   = getTableForItemType(get_called_class());
       foreach ($DB->list_fields($table) as $field => $values) {
-         $searchoption  = PluginGenericobjectField::getOptionsWithGlobal($field, 
-                                                                         $this->objecttype->fields['itemtype']);
+         $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field, 
+                                                                        $this->objecttype->fields['itemtype']);
 
          if (in_array($field,array('is_deleted'))) {
             continue;
@@ -551,10 +551,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          $item = new $this->objecttype->fields['itemtype'];
 
          //Table definition
-         $tmp = getTableNameForForeignKeyField($field);
+         $tmp  = getTableNameForForeignKeyField($field);
 
          if ($tmp != '') {
-            $itemtype = getItemTypeForTable($tmp);
+            $itemtype   = getItemTypeForTable($tmp);
             $tmpobj     = new $itemtype();
 
             //Set table
@@ -685,7 +685,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       global $DB;
       if ($this->fields['id'] > 0 && $this->fields['entities_id'] != $new_entity) {
          //Update entity for this object
-         $tmp['id'] = $this->fields['id'];
+         $tmp['id']          = $this->fields['id'];
          $tmp['entities_id'] = $new_entity;
          $this->update($tmp);
 
@@ -695,7 +695,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
             //It is a dropdown table !
             if ($field != 'entities_id' 
-               && $table != '' && isset($this->fields[$field]) && $this->fields[$field] > 0) {
+               && $table != '' 
+                  && isset($this->fields[$field]) && $this->fields[$field] > 0) {
                //Instanciate a new dropdown object
                $dropdown_itemtype = getItemTypeForTable($table);
                $dropdown          = new $dropdown_itemtype();
@@ -708,17 +709,18 @@ class PluginGenericobjectObject extends CommonDBTM {
                                                           $dropdown->getEntityID()))) {
                   continue;
                } else {
-                  $tmp = array();
+                  $tmp   = array();
                   $where = "";
                   if ($dropdown instanceof CommonTreeDropdown) {
                      $tmp['completename'] = $dropdown->fields['completename'];
-                     $where = "`completename`='".addslashes_deep($tmp['completename'])."'";
+                     $where               = "`completename`='".
+                                             addslashes_deep($tmp['completename'])."'";
                   } else {
                      $tmp['name'] = $dropdown->fields['name'];
-                     $where = "`name`='".addslashes_deep($tmp['name'])."'";
+                     $where       = "`name`='".addslashes_deep($tmp['name'])."'";
                   }
                   $tmp['entities_id'] = $new_entity;
-                  $where .= " AND `entities_id`='".$tmp['entities_id']."'";
+                  $where             .= " AND `entities_id`='".$tmp['entities_id']."'";
                   //There's a dropdown value in the target entity
                   if ($found = $this->find($where)) {
                      $myfound = array_pop($found);
@@ -732,8 +734,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                      }
                      unset($clone['id']);
                      $clone['entities_id'] = $new_entity;
-                     $new_id = $dropdown->import($clone);
-                     $toupdate[$field] = $new_id;
+                     $new_id               = $dropdown->import($clone);
+                     $toupdate[$field]     = $new_id;
                   }
                }
             }
