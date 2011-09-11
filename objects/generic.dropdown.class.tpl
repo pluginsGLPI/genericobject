@@ -37,4 +37,21 @@
  */
 class %%CLASSNAME%% extends %%EXTENDS%% {
 
+   //Get itemtype name
+   static function getTypeName() {
+      global $LANG;
+      $class    = get_called_class();
+      //Datainjection : Don't understand why I need this trick : need to be investigated !
+      if(preg_match("/Injection$/i",$class)) {
+         $class = str_replace("Injection", "", $class);
+      }
+      $item     = new $class();
+      //Itemtype name can be contained in a specific locale field : try to load it
+      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
+      if(isset($LANG['genericobject'][$class][0])) {
+         return $LANG['genericobject'][$class][0];
+      } else {
+         return $item->objecttype->fields['name'];
+      }
+   }
 }

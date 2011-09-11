@@ -288,7 +288,20 @@ class PluginGenericobjectType extends CommonDBTM {
    function prepareInputForAdd($input) {
       global $LANG;
       
+      //Name must not be empty
+      if (isset($input['name']) && $input['name'] == '') {
+         addMessageAfterRedirect($LANG['genericobject']['common'][5], ERROR, true);
+         return array();
+      }
+      
+      //Name must start with a letter
+      if (!preg_match("/^[a-zA-Z]+/i",$input['name'])) {
+         addMessageAfterRedirect($LANG['genericobject']['common'][6], ERROR, true);
+         return array();
+      }
       $input['name']     = self::filterInput($input['name']);
+      
+      //Name must not be present in DB
       if (countElementsInTable(getTableForItemType(__CLASS__), "`name`='".$input['name']."'")) {
          addMessageAfterRedirect($LANG['genericobject']['common'][4], ERROR, true);
          return array();
@@ -836,7 +849,12 @@ class PluginGenericobjectType extends CommonDBTM {
          $networkport->delete($port);
        }
    }
-
+   
+   /**
+    * Filter values inserted by users : remove accented chars
+    * @param value the value to be filtered
+    * @return the filtered value
+    */
    static function filterInput($value) {
       $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
       $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
