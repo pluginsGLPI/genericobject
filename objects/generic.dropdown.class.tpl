@@ -39,19 +39,21 @@ class %%CLASSNAME%% extends %%EXTENDS%% {
 
    //Get itemtype name
    static function getTypeName() {
-      global $LANG;
+      global $LANG, $GO_FIELDS;
       $class    = get_called_class();
-      //Datainjection : Don't understand why I need this trick : need to be investigated !
-      if(preg_match("/Injection$/i",$class)) {
-         $class = str_replace("Injection", "", $class);
+      $fk = getForeignKeyFieldForTable(getTableForItemType($class));
+       
+      $label = '';
+      foreach ($GO_FIELDS as $field => $values) {
+         if ($field == $fk) {
+            $label = $values['name'];
+            break;
+         }
       }
-      $item     = new $class();
-      //Itemtype name can be contained in a specific locale field : try to load it
-      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
-      if(isset($LANG['genericobject'][$class][0])) {
-         return $LANG['genericobject'][$class][0];
+      if($label != '') {
+         return $label;
       } else {
-         return $item->objecttype->fields['name'];
+         return $class;
       }
    }
 }

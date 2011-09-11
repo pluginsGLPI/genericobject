@@ -39,13 +39,11 @@ $prof = new PluginGenericobjectProfile();
 if (isset ($_POST['update_user_profile'])) {
    $prof->saveProfileToDB($_POST);
    PluginGenericobjectProfile::changeProfile();
-   glpi_header($_SERVER['HTTP_REFERER']);
 } elseif (isset($_POST['update_all_rights']) && isset($_POST['profiles'])) {
    foreach ($_POST['profiles'] as $id => $values) {
       $values['id'] = $id;
-      logDebug($values);
       $prof->update($values);
    }
    PluginGenericobjectProfile::changeProfile();
-   glpi_header($_SERVER['HTTP_REFERER']);
 }
+glpi_header($_SERVER['HTTP_REFERER']);

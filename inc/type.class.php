@@ -355,6 +355,9 @@ class PluginGenericobjectType extends CommonDBTM {
          $name     = $this->fields['name'];
          $itemtype = $this->fields['itemtype'];
          
+         //Delete all network ports
+         self::deleteNetworking($itemtype);
+         
          //Drop all dropdowns associated with itemtype
          self::deleteDropdownsForItemtype($itemtype);
          
@@ -458,6 +461,7 @@ class PluginGenericobjectType extends CommonDBTM {
          !file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::addDatainjectionFile($this->fields['name']);
       }
+
       if (!$this->canUsePluginDataInjection() && 
          file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::deleteInjectionFile($this->fields['name']);
@@ -743,6 +747,15 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    //-------------------- ADD / DELETE TABLES ----------------------------------//
+   
+   /**
+    * Add a new dropdown table
+    * @param table the table name
+    * @param entity_assign can the dropdown be assigned to an entity
+    * @param recursive can the dropdown be recursive
+    * @param tree can the dropdown be a tree dropdown
+    * @return nothing
+    */
    public static function addDropdownTable($table, $entity_assign = false, $recursive = false, 
                                            $tree = false) {
       global $DB;
@@ -803,6 +816,11 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
    
+   /**
+    * Delete all tickets for an itemtype
+    * @param the itemtype
+    * @return nothing
+    */
    public static function deleteTicketAssignation($itemtype) {
       global $DB;
       $ticket = new Ticket();
@@ -813,6 +831,11 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
    
+   /**
+    * Remove datainjection models for an itemtype
+    * @param the itemtype
+    * @return nothing
+    */
    public static function removeDataInjectionModels($itemtype) {
       $plugin = new Plugin();
       //Delete if exists datainjection models
@@ -826,6 +849,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
    /**
     * Delete all loans associated with a itemtype
+    * @param the itemtype
+    * @return nothing
     */
    public static function deleteLoans($itemtype) {
       $reservation_item = new ReservationItem();
@@ -836,14 +861,20 @@ class PluginGenericobjectType extends CommonDBTM {
 
    /**
     * Delete all loans associated with a itemtype
+    * @param the itemtype
+    * @return nothing
     */
    public static function deleteUnicity($itemtype) {
       $unicity = new FieldUnicity();
       $unicity->deleteByCriteria(array('itemtype' => $itemtype));
    }
 
+   /**
+    * Delete network ports for an itemtype
+    * @param the itemtype
+    * @return nothing
+    */
    static function deleteNetworking($itemtype) {
-       global $DB;
        $networkport = new NetworkPort();
        foreach ($networkport->find("`itemtype`='$itemtype'") as $port) {
          $networkport->delete($port);
@@ -911,7 +942,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function includeLocales($name) {
       global $CFG_GLPI, $LANG;
    
-      $prefix = GENERICOBJECT_LOCALES_PATH . "/" . $name . "/" . $name;
+      $prefix = GENERICOBJECT_LOCALES_PATH . "/$name/$name";
       if (isset ($_SESSION["glpilanguage"]) 
              && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
          include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
@@ -930,12 +961,17 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    static function includeConstants($name) {
-      $file = GLPI_ROOT . "/plugins/genericobject/fields/constants/".$name.".constant.php";
+      $file = GLPI_ROOT . "/plugins/genericobject/fields/constants/$name.constant.php";
       if (file_exists($file)) {
          include_once($file);
       }
    }
    
+   /**
+    * Get all dropdown fields associated with an itemtype
+    * @param itemtype the itemtype
+    * @return an array or fields that represents the dropdown tables
+    */
    static function getDropdownForItemtype($itemtype) {
       global $DB;
       $associated_tables = array();
@@ -960,7 +996,7 @@ class PluginGenericobjectType extends CommonDBTM {
          if (preg_match("/glpi_plugin_genericobject_(.*)/i", getSingular($table), $results) 
             && isset($results[1])) {
             $name = $results[1];
-            $DB->query("DROP TABLE IF EXISTS`$table`");
+            $DB->query("DROP TABLE IF EXISTS `$table`");
             self::deleteFormFile($name);
             self::deleteSearchFile($name);
             self::deleteAjaxFile($name);
@@ -1031,22 +1067,43 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function canUsePluginDataInjection() {
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("datainjection") || !$plugin->isActivated("datainjection")) {
+         return false;
+      }
       return $this->fields['use_plugin_datainjection'];
    }
 
    function canUsePluginOrder() {
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("order") || !$plugin->isActivated("order")) {
+         return false;
+      }
       return $this->fields['use_plugin_order'];
    }
 
    function canUsePluginPDF() {
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("pdf") || !$plugin->isActivated("pdf")) {
+         return false;
+      }
       return $this->fields['use_plugin_pdf'];
    }
 
    function canUsePluginUninstall() {
-      return $this->fields['use_plugin_uninstall'];
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("uninstall") || !$plugin->isActivated("uninstall")) {
+         return false;
+      }
+     return $this->fields['use_plugin_uninstall'];
    }
 
    function canUsePluginGeninventoryNumber() {
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("geninventorynumber") 
+         || !$plugin->isActivated("geninventorynumber")) {
+         return false;
+      }
       return $this->fields['use_plugin_geninventorynumber'];
    }
 

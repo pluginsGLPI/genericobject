@@ -59,8 +59,8 @@ class PluginGenericobjectField extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'>";
       echo "<th width='10'></th>";
-      echo "<th>" . $LANG['genericobject']['fields'][2] . "</th>";
       echo "<th>" . $LANG['genericobject']['fields'][3] . "</th>";
+      echo "<th>" . $LANG['genericobject']['fields'][2] . "</th>";
       echo "<th width='10'></th>";
       echo "<th width='10'></th>";
       echo "</tr>";
@@ -181,8 +181,8 @@ class PluginGenericobjectField extends CommonDBTM {
          echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
       }
       echo "</td>";
-      echo "<td>" . $field . "</td>";
       echo "<td>" . $options['name'] . "</td>";
+      echo "<td>" . $field . "</td>";
 
       echo "<td width='10'>";
       if (!$readonly && $index > 1) {

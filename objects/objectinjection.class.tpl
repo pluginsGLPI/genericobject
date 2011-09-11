@@ -59,7 +59,9 @@ class %%INJECTIONCLASS%% extends %%CLASSNAME%%
    }
 
    function getOptions($primary_type = '') {
-      return Search::getOptions(get_parent_class($this));
+      $parent = get_parent_class($this);
+      $parentclass = new $parent();
+      return $parentclass->getObjectSearchOptions(true);
    }
    
 }

@@ -534,8 +534,13 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function getSearchOptions() {
-      global $DB, $GO_FIELDS;
+      $this->getObjectSearchOptions(false);
+   }
+   
+   function getObjectSearchOptions($with_linkfield = false) {
+      global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
       
+      $datainjection_blacklisted = array('id', 'date_mod', 'entities_id');
       
       $index   = 0;
       $options = array();
@@ -566,9 +571,19 @@ class PluginGenericobjectObject extends CommonDBTM {
             } else {
                $options[$index]['field'] = 'name';
             }
+            
+            if ($with_linkfield) {
+               $options[$index]['linkfield'] = $field;
+            }
+
          } else {
             $options[$index]['table'] = $table;
             $options[$index]['field'] = $field;
+
+            if ($with_linkfield) {
+               $options[$index]['linkfield'] = '';
+            }
+
          }
 
          $options[$index]['name']  = $searchoption['name'];
@@ -579,8 +594,10 @@ class PluginGenericobjectObject extends CommonDBTM {
                = $searchoption['massiveaction'];
          }
 
-         if ($item->canUsePluginDataInjection()) {
-            $options[$index]['injectable'] = true;
+         if ($item->canUsePluginDataInjection() && !in_array($field, $datainjection_blacklisted)) {
+            $options[$index]['injectable'] = PluginDatainjectionCommonInjectionLib::FIELD_INJECTABLE;
+         } else {
+            $options[$index]['injectable'] = PluginDatainjectionCommonInjectionLib::FIELD_NOT_INJECTABLE;
          }
          
          //Field type
@@ -650,6 +667,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          $index++;
       }
+
       return $options;
    }
 
