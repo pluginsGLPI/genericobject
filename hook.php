@@ -205,7 +205,8 @@ function plugin_datainjection_populate_genericobject() {
 
 function plugin_genericobject_MassiveActions($type) {
    global $LANG;
-   if (in_array($type, PluginGenericobjectType::getTypes())) {
+   $types = PluginGenericobjectType::getTypes();
+   if (isset($types[$type])) {
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
          return array('plugin_genericobject_transfer' => $LANG['buttons'][48]);
@@ -224,6 +225,7 @@ function plugin_genericobject_MassiveActionsDisplay($options=array()) {
    switch ($options['action']) {
       case 'plugin_genericobject_transfer':
          if ($objecttype->isTransferable()) {
+            Dropdown::show('Entity', array('name' => 'new_entity'));
             echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" . 
                $LANG['buttons'][2] . "\" >";
          }
@@ -236,10 +238,11 @@ function plugin_genericobject_MassiveActionsProcess($data) {
    global $LANG, $DB;
 
    switch ($data['action']) {
-      case "plugin_genericobject_transfer" :
+      case 'plugin_genericobject_transfer':
          $item = new $data['itemtype']();
          foreach ($data["item"] as $key => $val) {
             if ($val == 1) {
+               $item->getFromDB($key);
                $item->transfer($_POST['new_entity']);
             }
          }

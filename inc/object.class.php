@@ -683,6 +683,63 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    function transfer($new_entity) {
       global $DB;
+      if ($this->fields['id'] > 0 && $this->fields['entities_id'] != $new_entity) {
+         //Update entity for this object
+         $tmp['id'] = $this->fields['id'];
+         $tmp['entities_id'] = $new_entity;
+         $this->update($tmp);
+
+         $toupdate = array('id' => $this->fields['id']);
+         foreach ($DB->list_fields(getTableForItemType(get_called_class())) as $field => $data) {
+            $table = getTableNameForForeignKeyField($field);
+
+            //It is a dropdown table !
+            if ($field != 'entities_id' 
+               && $table != '' && isset($this->fields[$field]) && $this->fields[$field] > 0) {
+               //Instanciate a new dropdown object
+               $dropdown_itemtype = getItemTypeForTable($table);
+               $dropdown          = new $dropdown_itemtype();
+               $dropdown->getFromDB($this->fields[$field]);
+               
+               //If dropdown is only accessible in the other entity
+               //do not go further
+               if (!$dropdown->isEntityAssign() 
+                  || in_array($new_entity, getAncestorsOf('glpi_entities', 
+                                                          $dropdown->getEntityID()))) {
+                  continue;
+               } else {
+                  $tmp = array();
+                  $where = "";
+                  if ($dropdown instanceof CommonTreeDropdown) {
+                     $tmp['completename'] = $dropdown->fields['completename'];
+                     $where = "`completename`='".addslashes_deep($tmp['completename'])."'";
+                  } else {
+                     $tmp['name'] = $dropdown->fields['name'];
+                     $where = "`name`='".addslashes_deep($tmp['name'])."'";
+                  }
+                  $tmp['entities_id'] = $new_entity;
+                  $where .= " AND `entities_id`='".$tmp['entities_id']."'";
+                  //There's a dropdown value in the target entity
+                  if ($found = $this->find($where)) {
+                     $myfound = array_pop($found);
+                     if ($myfound['id'] != $this->fields[$field]) {
+                        $toupdate[$field] = $myfound['id'];
+                     }
+                  } else {
+                     $clone = $dropdown->fields;
+                     if ($dropdown instanceof CommonTreeDropdown) {
+                        unset($clone['completename']);
+                     }
+                     unset($clone['id']);
+                     $clone['entities_id'] = $new_entity;
+                     $new_id = $dropdown->import($clone);
+                     $toupdate[$field] = $new_id;
+                  }
+               }
+            }
+         }
+         $this->update($toupdate);
+      }
       return true;
    }
 }

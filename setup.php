@@ -100,8 +100,6 @@ function plugin_init_genericobject() {
 
 function plugin_post_init_genericobject() {
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
-      //PluginGenericobjectType::includeLocales($objecttype['name']);
-      //PluginGenericobjectType::includeConstants($objecttype['name']);
       call_user_func(array($objecttype['itemtype'], 'registerType'));
    }
 }

@@ -850,7 +850,7 @@ class PluginGenericobjectType extends CommonDBTM {
          foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
-               $mytypes[] = $data;
+               $mytypes[$data['itemtype']] = $data;
             }
          }
          return $mytypes;
@@ -1019,7 +1019,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function isTransferable() {
-      return $this->canBeEntityAssigned();
+      return isMultiEntitiesMode();
       
    }
    //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//
@@ -1087,8 +1087,9 @@ class PluginGenericobjectType extends CommonDBTM {
       $tables = array ("glpi_displaypreferences", "glpi_documents_items", "glpi_bookmarks",
                        "glpi_logs");
       foreach ($tables as $table) {
-         $query = "DELETE FROM `$table` WHERE `itemtype`='".__CLASS__."'";
-         $DB->query($query);
+         $itemtype = getItemTypeForTable($table);
+         $item     = new $itemtype();
+         $item->deleteByCriteria(array('itemtype' => __CLASS__));
       }
    }
 }
