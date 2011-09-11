@@ -286,9 +286,16 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function prepareInputForAdd($input) {
-      $input['name'] = strtolower($input['name']);
-      $input['itemtype'] = self::getClassByName($input['name']);
-      return $input;
+      global $LANG;
+      
+      $input['name']     = self::filterInput($input['name']);
+      if (countElementsInTable(getTableForItemType(__CLASS__), "`name`='".$input['name']."'")) {
+         addMessageAfterRedirect($LANG['genericobject']['common'][4], ERROR, true);
+         return array();
+      } else {
+         $input['itemtype'] = self::getClassByName($input['name']);
+         return $input;
+      }
    }
 
    function post_addItem() {
@@ -830,13 +837,20 @@ class PluginGenericobjectType extends CommonDBTM {
        }
    }
 
+   static function filterInput($value) {
+      $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
+      $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
+      $value = str_replace(array(' ', '_', '-'), '', strtolower($value));
+      $value = str_replace($search, $replace, $value);
+      return $value;
+   }
+   
    /**
     * Get the object class, by giving the name
     * @param name the object's internal identifier
     * @return the class associated with the object
     */
    static function getClassByName($name) {
-      $name = str_replace(array(' ', '_', '-'), '', strtolower($name));
       return 'PluginGenericobject' . ucfirst($name);
    }
 

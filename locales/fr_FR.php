@@ -37,6 +37,7 @@ $LANG['genericobject']['title'][2] = "Types d'objets";
 $LANG['genericobject']['common'][1] = "Identifiant interne";
 $LANG['genericobject']['common'][2] = "Type interne";
 $LANG['genericobject']['common'][3] = "Etat";
+$LANG['genericobject']['common'][4] = "Un type avec le même nom existe déjà";
 
 $LANG['genericobject']['install'][0] = "Erreur : les dossiers '/inc', '/front' et '/ajax' du plugin doivent être en écriture pour le serveur web.";
 

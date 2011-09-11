@@ -37,6 +37,7 @@ $LANG['genericobject']['title'][2]="Type of objects";
 $LANG['genericobject']['common'][1]="Internal identifier";
 $LANG['genericobject']['common'][2]="Internal type";
 $LANG['genericobject']['common'][3]="State";
+$LANG['genericobject']['common'][4]="A type already exists with the same name";
 
 $LANG['genericobject']['install'][0] = "Error: directories '/inc', '/head' and '/ajax' of plugin must be writable by the web server.";
 
