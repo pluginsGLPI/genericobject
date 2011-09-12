@@ -31,6 +31,9 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 2.0 RC1
+ #3118 (Bug) Respect search options indexes
+
 Version 2.0 Beta 2
  #2766 (Bug) Object without name
  #2765 (Bug) Object which have the same name that an other object already created
