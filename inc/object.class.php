@@ -561,6 +561,11 @@ class PluginGenericobjectObject extends CommonDBTM {
          //Table definition
          $tmp  = getTableNameForForeignKeyField($field);
 
+
+         if ($with_linkfield) {
+            $options[$index]['linkfield'] = $field;
+         }
+
          if ($tmp != '') {
             $itemtype   = getItemTypeForTable($tmp);
             $tmpobj     = new $itemtype();
@@ -574,18 +579,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             } else {
                $options[$index]['field'] = 'name';
             }
-            
-            if ($with_linkfield) {
-               $options[$index]['linkfield'] = $field;
-            }
 
          } else {
             $options[$index]['table'] = $table;
             $options[$index]['field'] = $field;
-
-            if ($with_linkfield) {
-               $options[$index]['linkfield'] = '';
-            }
 
          }
 
@@ -640,9 +637,14 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "int(11)":
                $options[$index]['datatype'] = 'integer';
                if ($item->canUsePluginDataInjection()) {
-                  //Datainjection specific
-                  $options[$index]['displaytype'] = 'dropdown_integer';
-                  $options[$index]['checktype']   = 'integer';
+                  if ($tmp != '') {
+                     $options[$index]['displaytype'] = 'dropdown';
+                     $options[$index]['checktype']   = 'text';
+                  } else {
+                     //Datainjection specific
+                     $options[$index]['displaytype'] = 'dropdown_integer';
+                     $options[$index]['checktype']   = 'integer';
+                  }
                }
                break;
             case "float":
