@@ -68,8 +68,13 @@ function plugin_init_genericobject() {
          include_once ($file);
       }*/
       
+      //Load genericobject default constants
       include_once (GLPI_ROOT . "/plugins/genericobject/inc/field.constant.php");
-
+      
+      //Include user constants, that must be accessible for all itemtypes
+      if (file_exists(GLPI_ROOT . "/plugins/genericobject/inc/myconstant.php")) {
+         include_once (GLPI_ROOT . "/plugins/genericobject/inc/myconstant.php");
+      }
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       /* load changeprofile function */
