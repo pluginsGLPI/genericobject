@@ -31,7 +31,14 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
-Version 0.80 Beta 1
+Version 2.0 Beta 2
+ #2766 (Bug) Object without name
+ #2765 (Bug) Object which have the same name that an other object already created
+ #2764 (Bug) Object which begins by a number or a special type
+ #1976 (Bug) Dropdown import issue
+ #1729 (Feature) Manage transferts
+
+Version 2.0 Beta 1
  #3114 (Feature) Rewrite the whole plugin to work with GLPI 0.80
  #2119 (Bug) Table created without uft8 support
  #2767 (Bug) Possibility to use the gabarits/templates
