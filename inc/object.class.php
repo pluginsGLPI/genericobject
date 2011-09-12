@@ -46,7 +46,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    static function registerType() {
-      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES;
+      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES;
       
       $class  = get_called_class();
       $item   = new $class();
@@ -100,8 +100,11 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($item->canUseTickets()) {
             $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
          }
-         if ($plugin->isActivated('uninstall') && $item->canUsePluginUninstall()) {
+         if ($item->canUsePluginUninstall()) {
             array_push($UNINSTALL_TYPES, $class);
+         }
+         if ($item->canUsePluginOrder()) {
+            array_push($ORDER_TYPES, $class);
          }
       }
    }
@@ -534,7 +537,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function getSearchOptions() {
-      $this->getObjectSearchOptions(false);
+      return $this->getObjectSearchOptions(false);
    }
    
    function getObjectSearchOptions($with_linkfield = false) {

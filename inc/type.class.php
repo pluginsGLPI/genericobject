@@ -196,7 +196,7 @@ class PluginGenericobjectType extends CommonDBTM {
                     "use_network_ports"        => $LANG['genericobject']['config'][14],
                     "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
 //                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
-//                    "use_plugin_order"         => $LANG['genericobject']['config'][12],
+                    "use_plugin_order"         => $LANG['genericobject']['config'][12],
                     "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]);
 
       $plugin = new Plugin();

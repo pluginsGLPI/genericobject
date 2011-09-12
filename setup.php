@@ -62,12 +62,7 @@ function plugin_init_genericobject() {
    $plugin = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
-      /*
-      //Include all fields constants files
-      foreach (glob(GLPI_ROOT . '/plugins/genericobject/fields/constants/*.php') as $file) {
-         include_once ($file);
-      }*/
-      
+
       //Load genericobject default constants
       include_once (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
       
