@@ -415,7 +415,6 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectField::deleteField($table, 'is_recursive');
       }
 
-      
       //Template
       if (isset($this->input['use_template']) && $this->input['use_template']) {
          PluginGenericobjectField::addNewField($table, 'is_template', 'id');
@@ -560,8 +559,8 @@ class PluginGenericobjectType extends CommonDBTM {
                   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                   `entities_id` INT( 11 ) NOT NULL DEFAULT '0',
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
-                  `comment` TEXT NULL  ,
-                  `notepad` TEXT NULL  ,
+                  `comment` text COLLATE utf8_unicode_ci,
+                  `notepad` text COLLATE utf8_unicode_ci,
                   `date_mod` DATETIME NULL  ,
                   PRIMARY KEY ( `id` ) 
                   ) ENGINE = MYISAM COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
@@ -889,7 +888,8 @@ class PluginGenericobjectType extends CommonDBTM {
    static function filterInput($value) {
       $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
       $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
-      $value = str_replace(array(' ', '_', '-'), '', strtolower($value));
+      $value = str_replace(array(' ', '_', '-', '+', '|', '[', ']', '\'','"', '@', '&', '~', '#', '='), 
+                           '', strtolower($value));
       $value = str_replace($search, $replace, $value);
       return $value;
    }

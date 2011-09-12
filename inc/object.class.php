@@ -594,10 +594,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                = $searchoption['massiveaction'];
          }
 
-         if ($item->canUsePluginDataInjection() && !in_array($field, $datainjection_blacklisted)) {
-            $options[$index]['injectable'] = PluginDatainjectionCommonInjectionLib::FIELD_INJECTABLE;
+
+         //Datainjection option
+         if (!in_array($field, $datainjection_blacklisted)) {
+            $options[$index]['injectable'] = 1;
          } else {
-            $options[$index]['injectable'] = PluginDatainjectionCommonInjectionLib::FIELD_NOT_INJECTABLE;
+            $options[$index]['injectable'] = 0;
          }
          
          //Field type
