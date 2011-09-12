@@ -80,6 +80,20 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
 
+      $url = '/plugins/genericobject/index.php';
+      if (isset($_GET['id'])) {
+         $url.= '?itemtypes_id='.$_GET['id'];
+      }
+      $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
+                $LANG['genericobject']['title'][1].
+                  "\" alt=\"".$LANG['genericobject']['title'][1]."\">";
+      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image] 
+         = $url;
+      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']  
+         = getItemTypeFormURL('PluginGenericobjectType', false);
+      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']  
+         = getItemTypeSearchURL('PluginGenericobjectType', false);
+
       // Config page
       if (haveRight('config', 'w')) {
          $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
