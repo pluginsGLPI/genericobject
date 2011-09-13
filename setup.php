@@ -80,8 +80,10 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
 
-      $url = '/plugins/genericobject/index.php';
-      if (isset($_GET['id'])) {
+      //Do not display icon if not using the genericobject plugin
+      if (isset($_GET['id']) 
+         && strpos($_SERVER['REQUEST_URI'], getItemTypeFormURL("PluginGenericobjectType")) !== false) {
+         $url = '/plugins/genericobject/index.php';
          $type = new PluginGenericobjectType();
          $type->getFromDB($_GET['id']);
          if ($type->fields['is_active']) {
