@@ -82,13 +82,17 @@ function plugin_init_genericobject() {
 
       $url = '/plugins/genericobject/index.php';
       if (isset($_GET['id'])) {
-         $url.= '?itemtypes_id='.$_GET['id'];
+         $type = new PluginGenericobjectType();
+         $type->getFromDB($_GET['id']);
+         if ($type->fields['is_active']) {
+            $url.= '?itemtypes_id='.$_GET['id'];
+            $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
+                      $LANG['genericobject']['common'][7].
+                        "\" alt=\"".$LANG['genericobject']['common'][7]."\">";
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image] 
+               = $url;
+         }
       }
-      $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
-                $LANG['genericobject']['title'][1].
-                  "\" alt=\"".$LANG['genericobject']['title'][1]."\">";
-      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image] 
-         = $url;
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']  
          = getItemTypeFormURL('PluginGenericobjectType', false);
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']  
