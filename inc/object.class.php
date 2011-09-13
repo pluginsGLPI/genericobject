@@ -285,6 +285,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       $this->fields['id'] = $id;
       $this->showFormHeader($options);
 
+      if ($previsualisation) {
+         echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8]."</th></tr>";
+      }
+      
       foreach ($DB->list_fields(getTableForItemType($this->objecttype->fields['itemtype'])) 
                as $field => $description) {
          $this->displayField($canedit, $field, $this->fields[$field], $description);
@@ -529,7 +533,6 @@ class PluginGenericobjectObject extends CommonDBTM {
       $item     = new $itemtype();
       
       if (haveRight($itemtype, 'r')) {
-         echo "<br><strong>" . $LANG['genericobject']['config'][8] . "</strong><br>";
          $item->showForm(-1, array(), true);
       } else {
          echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";

@@ -100,8 +100,25 @@ class PluginGenericobjectType extends CommonDBTM {
       return $ong;
    }
 
-   function showForm($ID, $options=array()) {
+   function showForm($ID, $options = array()) {
+
+      if ($ID > 0) {
+         $this->check($ID, 'r');
+      } else {
+         // Create item
+         $this->check(-1, 'w');
+         $this->getEmpty();
+      }
+
+      $this->showTabs($options);
+      $this->addDivForTabs();
+
+      return true;
+   }
+
+   function showBehaviorForm($ID, $options=array()) {
       global $LANG;
+
       if ($ID > 0) {
          $this->check($ID, 'r');
       } else {
@@ -118,8 +135,6 @@ class PluginGenericobjectType extends CommonDBTM {
       self::includeLocales($this->fields["name"]);
       self::includeConstants($this->fields["name"]);
       
-      $options['colspan'] = 1;
-      $this->showTabs($options);
       $this->showFormHeader($options);
 
       echo "<tr class='tab_bg_1'>";
@@ -133,9 +148,6 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       echo "</td>";
-      echo "</tr>";
-
-      echo "<tr class='tab_bg_1'>";
       echo "<td>" . $LANG['genericobject']['config'][9] . "</td>";
       echo "<td>";
       if ($ID) {
@@ -153,137 +165,107 @@ class PluginGenericobjectType extends CommonDBTM {
       else {
          Dropdown::showYesNo("is_active", $this->fields["is_active"]);
       }
-      echo "</td>";
+      echo "</td><td colspan='2'></td>";
       echo "</tr>";
 
-      $this->showFormButtons($options);
-
-      echo "<div id='tabcontent'></div>";
-      echo "<script type='text/javascript'>loadDefaultTab();</script>";
-
-   }
-
-   function showBehaviourForm($id) {
-      global $LANG;
-      if ($id > 0) {
-         $this->check($id, 'r');
-      } else {
-         // Create item 
-         $this->check(-1, 'w');
-         $use_cache = false;
-         $this->getEmpty();
-      }
-
-      $canedit = $this->can($id, 'w');
-      echo "<form name='behaviour' method='post' action=\"".$this->getFormURL()."\">";
-      echo "<div class='center'>";
-      echo "<table class='tab_cadre_fixe' >";
-      echo "<tr class='tab_bg_1'><th colspan='2'>";
-      echo $LANG['genericobject']['config'][3];
-      echo "</th></tr>";
-
-      $use = array ("use_recursivity"          => $LANG['entity'][9],
-                    "use_tickets"              => $LANG['title'][24],
-                    "use_deleted"              => $LANG['ocsconfig'][49],
-                    "use_notes"                => $LANG['title'][37],
-                    "use_history"              => $LANG['title'][38],
-                    "use_template"             => $LANG['common'][14],
-                    "use_infocoms"             => $LANG['financial'][3],
-                    "use_contracts"            => $LANG['Menu'][25],
-                    "use_documents"            => $LANG['Menu'][27],
-                    "use_loans"                => $LANG['Menu'][17],
-                    "use_unicity"              => $LANG['setup'][811],
-                    "use_network_ports"        => $LANG['genericobject']['config'][14],
-                    "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
-//                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
-                    "use_plugin_order"         => $LANG['genericobject']['config'][12],
-                    "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]);
-
-      $plugin = new Plugin();
-      $odd=0;
-      foreach ($use as $right => $label) {
-         $odd++;
-         echo "<tr class='tab_bg_".(($odd%2)+1)."'>";
-         echo "<td>" . $LANG['genericobject']['config'][1] . " " . $label . "</td>";
-         echo "<td>";
-
-         switch ($right) {
-            case 'use_deleted':
-               Dropdown::showYesno('use_deleted', $this->canBeDeleted());
-               break;
-
-            case 'use_recursivity':
-               Dropdown::showYesno('use_recursivity', $this->canBeRecursive());
-               break;
-
-            case 'use_notes':
-               Dropdown::showYesno('use_notes', $this->canUseNotepad());
-               break;
-
-            case 'use_template':
-               Dropdown::showYesno('use_template', $this->canUseTemplate());
-               break;
-
-            case 'use_plugin_datainjection' :
-               if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
-                  Plugin::load("datainjection");
-                  $infos = plugin_version_datainjection();
-                  if ($infos['version'] >= '1.7.0') {
-                  Dropdown::showYesNo($right, $this->fields[$right]);
-                  }
-               } else {
-                  echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
-               }
-               break;
-            case 'use_plugin_pdf' :
-               if ($plugin->isInstalled("pdf") && $plugin->isActivated("pdf")) {
-                  Dropdown::showYesNo($right, $this->fields[$right]);
-               }
-                  
-               else
-                  echo "<input type='hidden' name='use_plugin_pdf' value='0'>\n";
-               break;
-            case 'use_plugin_order' :
-               if ($plugin->isInstalled("order") && $plugin->isActivated("order")) {
-                  Dropdown::showYesNo($right, $this->fields[$right]);
-               }
-               else
-                  echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
-               break;
-
-            case 'use_plugin_uninstall' :
-               if ($plugin->isInstalled("uninstall") && $plugin->isActivated("uninstall")) {
-                  //usePlugin("uninstall");
-                  Plugin::load("uninstall");
-                  $infos = plugin_version_uninstall();
-                  if ($infos['version'] >= '1.2.1') {
+      if (!$this->isNewID($ID)) {
+         $canedit = $this->can($ID, 'w');
+         echo "<tr class='tab_bg_1'><th colspan='4'>";
+         echo $LANG['genericobject']['config'][3];
+         echo "</th></tr>";
+   
+         $use = array ("use_recursivity"          => $LANG['entity'][9],
+                       "use_tickets"              => $LANG['title'][24],
+                       "use_deleted"              => $LANG['ocsconfig'][49],
+                       "use_notes"                => $LANG['title'][37],
+                       "use_history"              => $LANG['title'][38],
+                       "use_template"             => $LANG['common'][14],
+                       "use_infocoms"             => $LANG['financial'][3],
+                       "use_contracts"            => $LANG['Menu'][25],
+                       "use_documents"            => $LANG['Menu'][27],
+                       "use_loans"                => $LANG['Menu'][17],
+                       "use_unicity"              => $LANG['setup'][811],
+                       "use_network_ports"        => $LANG['genericobject']['config'][14],
+                       "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
+   //                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
+                       "use_plugin_order"         => $LANG['genericobject']['config'][12],
+                       "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]);
+   
+         $plugin = new Plugin();
+         $odd=0;
+         foreach ($use as $right => $label) {
+            if (!$odd) {
+               echo "<tr class='tab_bg_2'>";
+            }
+            echo "<td>" . $LANG['genericobject']['config'][1] . " " . $label . "</td>";
+            echo "<td>";
+   
+            switch ($right) {
+               case 'use_deleted':
+                  Dropdown::showYesno('use_deleted', $this->canBeDeleted());
+                  break;
+   
+               case 'use_recursivity':
+                  Dropdown::showYesno('use_recursivity', $this->canBeRecursive());
+                  break;
+   
+               case 'use_notes':
+                  Dropdown::showYesno('use_notes', $this->canUseNotepad());
+                  break;
+   
+               case 'use_template':
+                  Dropdown::showYesno('use_template', $this->canUseTemplate());
+                  break;
+   
+               case 'use_plugin_datainjection' :
+                  if ($this->canUsePluginDataInjection()) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
+                  } else {
+                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
                   }
-               } else {
-                  echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
-               }
-            
-               break;
-            default :
-                  Dropdown::showYesNo($right, $this->fields[$right]);
-               break;
+                  break;
+               case 'use_plugin_pdf' :
+                  if ($this->canUsePluginPDF()) {
+                     Dropdown::showYesNo($right, $this->fields[$right]);
+                  } else {
+                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_pdf' value='0'>\n";
+                  }
+                  break;
+               case 'use_plugin_order' :
+                  if ($this->canUsePluginOrder()) {
+                     Dropdown::showYesNo($right, $this->fields[$right]);
+                  } else {
+                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_order' value='0'>\n";
+                  }
+                  break;
+   
+               case 'use_plugin_uninstall' :
+                  if ($this->canUsePluginUninstall()) {
+                     Dropdown::showYesNo($right, $this->fields[$right]);
+                  } else {
+                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
+                  }
+               
+                  break;
+               default :
+                     Dropdown::showYesNo($right, $this->fields[$right]);
+                  break;
+            }
+            echo "</td>";
+            if ($odd == 1) {
+               $odd = 0;
+               echo "</tr>";
+            } else {
+               $odd++;
+            }
          }
-         echo "</td>";
-         echo "</tr>";
+         if ($odd != 0) {
+            echo "<td></td></tr>";
+         }
       }
 
-      if ($canedit) {
-         echo "<tr>";
-         echo "<td class='tab_bg_2' colspan='2' align='center'>";
-
-         echo "<input type='hidden' name='id' value='$id'>\n";
-         echo "<input type='submit' name='update' value=\"" . $LANG['buttons'][7] . 
-                  "\" class='submit'>";
-         echo "</td>";
-         echo "</tr>";
-      }
+      $this->showFormButtons($options);
    }
-
 
    function prepareInputForAdd($input) {
       global $LANG;

@@ -34,10 +34,14 @@ include (GLPI_ROOT . "/inc/includes.php");
 header("Content-Type: text/html; charset=UTF-8");
 header_nocache();
 
+$type = new PluginGenericobjectType();
+if ($_POST['glpi_tab'] == 1) {
+   $type->showBehaviorForm($_POST["id"]);
+}
+
 if(!isset($_POST["id"]) || $_POST['id'] == '') {
    exit();
 }
-$type = new PluginGenericobjectType();
 
 if ($_POST["id"] != '') {
    $type->getFromDB($_POST["id"]);
@@ -53,18 +57,13 @@ foreach (array ('sort', 'order') as $field) {
 
 switch($_POST['glpi_tab']){
    case -1:
-      $type->showBehaviourForm($_POST["id"]);
+//      $type->showBehaviourForm($_POST["id"]);
       PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
       $type->getFromDB($_POST["id"]);
       PluginGenericobjectObject::showPrevisualisationForm($type);
       PluginGenericobjectProfile::showForItemtype($type);
       //Log::showForItem($type);
      break;
-        
-   case 1 :
-     $type->showBehaviourForm($_POST["id"]);
-     break;
-
    case 3 :
      PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
      break;
