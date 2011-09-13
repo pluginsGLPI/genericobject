@@ -57,7 +57,7 @@ foreach (array ('sort', 'order') as $field) {
 
 switch($_POST['glpi_tab']){
    case -1:
-//      $type->showBehaviourForm($_POST["id"]);
+      $type->showBehaviorForm($_POST["id"]);
       PluginGenericobjectField::showObjectFieldsForm($_POST["id"]);
       $type->getFromDB($_POST["id"]);
       PluginGenericobjectObject::showPrevisualisationForm($type);
@@ -76,8 +76,9 @@ switch($_POST['glpi_tab']){
    case 6 :
       PluginGenericobjectProfile::showForItemtype($type);
       break;
-      
+/*      
    case 12 :
       Log::showForItem($type);
       break;
+*/
 }
