@@ -218,21 +218,21 @@ class PluginGenericobjectType extends CommonDBTM {
                   break;
    
                case 'use_plugin_datainjection' :
-                  if ($this->canUsePluginDataInjection()) {
+                  if ($plugin->isActivated('datainjection')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
                      echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
                   }
                   break;
                case 'use_plugin_pdf' :
-                  if ($this->canUsePluginPDF()) {
+                  if ($plugin->isActivated('pdf')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
                      echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_pdf' value='0'>\n";
                   }
                   break;
                case 'use_plugin_order' :
-                  if ($this->canUsePluginOrder()) {
+                  if ($plugin->isActivated('order')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
                      echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_order' value='0'>\n";
@@ -240,7 +240,7 @@ class PluginGenericobjectType extends CommonDBTM {
                   break;
    
                case 'use_plugin_uninstall' :
-                  if ($this->canUsePluginUninstall()) {
+                  if ($plugin->isActivated('uninstall')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
                      echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
