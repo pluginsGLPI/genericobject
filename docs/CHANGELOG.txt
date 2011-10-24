@@ -33,6 +33,8 @@
 // ----------------------------------------------------------------------
 Version 2.0.1
  #3215 Cannot activate other plugins integration
+ #3216 Add LICENSE file and change file headers
+ #3217 field, object and type must not be reserved
 
 Version 2.0 RC2
  #3153 Missing file in the RC1 tarball
