@@ -74,7 +74,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</table>";
       Html::openArrowMassives('fields_definition', true);
-      Html::closeArrowMassives('delete', $LANG['buttons'][6]);
+      Html::closeArrowMassives(array('delete' => $LANG['buttons'][6]));
 
       echo "<table class='tab_cadre'>";
       echo "<tr class='tab_bg_1'>";

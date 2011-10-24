@@ -45,6 +45,11 @@ class PluginGenericobjectType extends CommonDBTM {
    const OBJECTINJECTION_TEMPLATE    = "../objects/objectinjection.class.tpl";
 
    var $dohistory = true;
+
+   static function getTypeName($nb=0) {
+      global $LANG;
+      return $LANG['genericobject']['title'][2];
+   }
    
    static function &getInstance($itemtype, $refresh = false) {
       static $singleton = array();
@@ -80,18 +85,52 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
 
-   function defineTabs($options=array()) {
-      global $LANG;
-      $ong        = array ();
-      $ong[1]     = $LANG['title'][26];
-      if (isset($this->fields['id']) && $this->fields['id'] > 0) {
-         $ong[3]  = $LANG['rulesengine'][12];
-         $ong[5]  = $LANG['genericobject']['config'][7];
-         $ong[6]  = $LANG['Menu'][35];
-         //$ong[12] = $LANG['title'][38];
-      }
 
-      return $ong;
+   //Tabs management
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+      global $LANG;
+
+      if (!$withtemplate) {
+         switch ($item->getType()) {
+            case __CLASS__ :
+               return array (1 => $LANG['title'][26],
+                             3 => $LANG['rulesengine'][12],
+                             5 => $LANG['genericobject']['config'][7], 
+                             6 => $LANG['Menu'][35]);
+         }
+      }
+      return '';
+
+   }
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+      if ($item->getType() == __CLASS__) {
+         switch ($tabnum) {
+            case 1 :
+               $item->showBehaviorForm($item->getID());
+               break;
+                  
+            case 3:
+               PluginGenericobjectField::showObjectFieldsForm($item->getID());
+               break;
+               
+            case 5:
+              PluginGenericobjectObject::showPrevisualisationForm($item);
+               break;
+   
+            case 6:
+               PluginGenericobjectProfile::showForItemtype($item);
+               break;
+         }
+      }
+      return true;
+   }
+   //End tabs management 
+
+   function defineTabs($options=array()) {
+      $tabs = array();
+      $this->addStandardTab(__CLASS__, $tabs, $options);
+      return $tabs;
    }
 
    function showForm($ID, $options = array()) {
@@ -106,7 +145,13 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $this->showTabs($options);
       $this->addDivForTabs();
-
+      
+      $item = new self();
+      //I know this is REALLY ugly...
+      if ($ID == 0) {
+         $item->showBehaviorForm($ID);
+      }
+      
       return true;
    }
 
@@ -215,21 +260,21 @@ class PluginGenericobjectType extends CommonDBTM {
                   if ($plugin->isActivated('datainjection')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
-                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
+                     echo Dropdown::EMPTY_VALUE."<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
                   }
                   break;
                case 'use_plugin_pdf' :
                   if ($plugin->isActivated('pdf')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
-                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_pdf' value='0'>\n";
+                     echo Dropdown::EMPTY_VALUE."<input type='hidden' name='use_plugin_pdf' value='0'>\n";
                   }
                   break;
                case 'use_plugin_order' :
                   if ($plugin->isActivated('order')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
-                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_order' value='0'>\n";
+                     echo Dropdown::EMPTY_VALUE."<input type='hidden' name='use_plugin_order' value='0'>\n";
                   }
                   break;
    
@@ -237,7 +282,7 @@ class PluginGenericobjectType extends CommonDBTM {
                   if ($plugin->isActivated('uninstall')) {
                      Dropdown::showYesNo($right, $this->fields[$right]);
                   } else {
-                     echo DROPDOWN_EMPTY_VALUE."<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
+                     echo Dropdown::EMPTY_VALUE."<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
                   }
                
                   break;

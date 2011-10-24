@@ -34,8 +34,9 @@ include (GLPI_ROOT . "/inc/includes.php");
 
 //checkRight("config","r");
 
-commonHeader(%%CLASSNAME%%::getTypeName(),$_SERVER['PHP_SELF'],"plugins","genericobject","%%CLASSNAME%%");
+Html::header(%%CLASSNAME%%::getTypeName(),$_SERVER['PHP_SELF'], "plugins", "genericobject", 
+             "%%CLASSNAME%%");
 
 Search::show('%%CLASSNAME%%');
 
-commonFooter();
+Html::footer();

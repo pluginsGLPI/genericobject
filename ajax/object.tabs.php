@@ -26,7 +26,7 @@
  ---------------------------------------------------------------------- */
  
 header("Content-Type: text/html; charset=UTF-8");
-header_nocache();
+Html::header_nocache();
 
 //useplugin('genericobject', true);
 if (!isset ($_POST["itemtype"])) {
