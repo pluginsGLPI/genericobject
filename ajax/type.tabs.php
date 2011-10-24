@@ -72,9 +72,4 @@ switch($_POST['glpi_tab']){
    case 6 :
       PluginGenericobjectProfile::showForItemtype($type);
       break;
-/*      
-   case 12 :
-      Log::showForItem($type);
-      break;
-*/
 }

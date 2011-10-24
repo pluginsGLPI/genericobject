@@ -31,23 +31,23 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
    $type = new PluginGenericobjectType();
    $type->getFromDB($_GET['itemtypes_id']);
-   $url = getItemTypeSearchURL($type->fields['itemtype']);
-   glpi_header($url);
+   $url = Toolbox::getItemTypeSearchURL($type->fields['itemtype']);
+   Html::redirect($url);
 } else {
-   commonHeader($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
+   Html::header($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
    
    echo "<table class='tab_cadre_fixe'>";
    echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
          
    foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
-      if (haveRight($value['itemtype'], 'r')) {
+      if (Session::haveRight($value['itemtype'], 'r')) {
          echo "<tr class='tab_bg_1'><td align='center'>"; 
-         echo "<a href='".getItemTypeSearchURL($value['itemtype'])."'>";
+         echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
          echo call_user_func(array($value['itemtype'], 'getTypeName'));
          echo "</a></td></tr>";
       }
    }
    
    echo "</table></div>";
-   commonFooter();	
+   Html::footer();
 }

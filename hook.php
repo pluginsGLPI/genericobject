@@ -59,7 +59,7 @@ function plugin_headings_genericobject($item, $withtemplate) {
 
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
-      if ($value['use_tickets'] && haveRight($value["itemtype"].'_open_ticket',"1")) {
+      if ($value['use_tickets'] && Session::haveRight($value["itemtype"].'_open_ticket',"1")) {
          $types[$value['itemtype']] = call_user_func(array($value['itemtype'], 'getTypeName'));
       }
    }
@@ -180,7 +180,7 @@ function check_directories() {
    foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH, 
                   GENERICOBJECT_LOCALES_PATH) as $path) {
       if (!is_dir($path) || !is_writable($path)) {
-         addMessageAfterRedirect($LANG['genericobject']['install'][0]);
+         Session::addMessageAfterRedirect($LANG['genericobject']['install'][0]);
          return false;
       }
    }

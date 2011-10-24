@@ -34,12 +34,12 @@ class PluginGenericobjectProfile extends CommonDBTM {
    static function showForItemtype($type) {
       global $DB, $LANG;
 
-      if (!haveRight("profile", "r")) {
+      if (!Session::haveRight("profile", "r")) {
          return false;
       }
-      $canedit = haveRight("profile", "w");
+      $canedit = Session::haveRight("profile", "w");
    
-      echo "<form action='" . getItemTypeSearchURL(__CLASS__) . "' method='post'>";
+      echo "<form action='" . Toolbox::getItemTypeSearchURL(__CLASS__) . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
       echo "<tr><th colspan='2' align='center'><strong>"; 
@@ -87,10 +87,10 @@ class PluginGenericobjectProfile extends CommonDBTM {
       global $LANG;
 
 
-      if (!haveRight("profile", "r")) {
+      if (!Session::haveRight("profile", "r")) {
          return false;
       }
-      $canedit = haveRight("profile", "w");
+      $canedit = Session::haveRight("profile", "w");
       if ($id) {
          $this->getProfilesFromDB($id);
       }

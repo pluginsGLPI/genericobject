@@ -45,21 +45,21 @@ if (isset ($_GET["action"])) {
    PluginGenericobjectType::registerOneType($type);
    PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"], 
                                                $_GET["action"]);
-   glpi_header($_SERVER['HTTP_REFERER']);
+   Html::redirect($_SERVER['HTTP_REFERER']);
 }
 if (isset ($_POST["add"])) {
    $new_id = $type->add($_POST);
-   glpi_header(getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
+   Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
 } elseif (isset ($_POST["update"])) {
    $type->update($_POST);
-   glpi_header($_SERVER["HTTP_REFERER"]);
+   Html::redirect($_SERVER["HTTP_REFERER"]);
 } elseif (isset ($_POST["delete"])) {
    $type->delete($_POST);
    $type->redirectToList();
 }
 
-commonHeader($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject", 
+Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject", 
              "type");
 $type->showForm($_REQUEST["id"]);
 
-commonFooter();
+Html::footer();

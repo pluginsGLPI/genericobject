@@ -74,7 +74,8 @@ function plugin_init_genericobject() {
 
       //Do not display icon if not using the genericobject plugin
       if (isset($_GET['id']) &&  $_GET['id'] != ''
-         && strpos($_SERVER['REQUEST_URI'], getItemTypeFormURL("PluginGenericobjectType")) !== false) {
+         && strpos($_SERVER['REQUEST_URI'], 
+                     Toolbox::getItemTypeFormURL("PluginGenericobjectType")) !== false) {
          $url = '/plugins/genericobject/index.php';
          $type = new PluginGenericobjectType();
          $type->getFromDB($_GET['id']);
@@ -88,12 +89,12 @@ function plugin_init_genericobject() {
          }
       }
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']  
-         = getItemTypeFormURL('PluginGenericobjectType', false);
+         = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']  
-         = getItemTypeSearchURL('PluginGenericobjectType', false);
+         = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
 
       // Config page
-      if (haveRight('config', 'w')) {
+      if (Session::haveRight('config', 'w')) {
          $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
@@ -120,16 +121,16 @@ function plugin_post_init_genericobject() {
 function plugin_version_genericobject() {
    global $LANG;
    return array ('name'           => $LANG["genericobject"]["title"][1], 
-                 'version'        => '2.0.1',
+                 'version'        => '2.1.0',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
-                 'minGlpiVersion' => '0.80');
+                 'minGlpiVersion' => '0.83');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.80','lt') || version_compare(GLPI_VERSION,'0.81','ge')) {
-      echo "This plugin requires GLPI 0.80";
+   if (version_compare(GLPI_VERSION,'0.83','lt') || version_compare(GLPI_VERSION,'0.84','ge')) {
+      echo "This plugin requires GLPI 0.83";
    }
    return true;
 }
@@ -151,9 +152,9 @@ function plugin_genericobject_check_config($verbose = false) {
 function plugin_genericobject_haveTypeRight($itemtype, $right) {
    switch ($itemtype) {
       case 'PluginGenericobjectType' :
-         return haveRight("config", $right);
+         return Session::haveRight("config", $right);
       default :
-         return haveRight($itemtype, $right);
+         return Session::haveRight($itemtype, $right);
    }
 
 }

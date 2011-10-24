@@ -27,7 +27,7 @@
  
 define('GLPI_ROOT', '../../..'); 
 include (GLPI_ROOT."/inc/includes.php");
-checkRight("profile","r");
+Session::checkRight("profile","r");
 
 
 $prof = new PluginGenericobjectProfile();
@@ -43,4 +43,4 @@ if (isset ($_POST['update_user_profile'])) {
    }
    PluginGenericobjectProfile::changeProfile();
 }
-glpi_header($_SERVER['HTTP_REFERER']);
+Html::redirect($_SERVER['HTTP_REFERER']);

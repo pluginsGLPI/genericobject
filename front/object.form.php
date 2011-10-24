@@ -39,15 +39,15 @@ if (!isset($_GET["withtemplate"])) {
 if (isset ($_POST["add"])) {
    $item->check($id,'w');
    $item->add($_POST);
-   glpi_header($_SERVER["HTTP_REFERER"]);
+   Html::redirect($_SERVER["HTTP_REFERER"]);
 } elseif (isset ($_POST["update"])) {
    $item->check($id,'w');
    $item->update($_POST);
-   glpi_header($_SERVER["HTTP_REFERER"]);
+   Html::redirect($_SERVER["HTTP_REFERER"]);
 } elseif (isset ($_POST["restore"])) {
    $item->check($id,'w');
    $item->restore($_POST);
-   glpi_header($_SERVER["HTTP_REFERER"]);
+   Html::redirect($_SERVER["HTTP_REFERER"]);
 } elseif (isset($_REQUEST["purge"])) {
    $item->check($id,'w');
    $item->delete($_POST,1);
@@ -58,10 +58,10 @@ if (isset ($_POST["add"])) {
    $item->redirectToList();
 }
 $itemtype = get_class($item);
-commonHeader(call_user_func(array($itemtype, 'getTypeName')), $_SERVER['PHP_SELF'], 
+Html::header(call_user_func(array($itemtype, 'getTypeName')), $_SERVER['PHP_SELF'], 
              "plugins", "genericobject", $itemtype);
 
 $item->title();
 $item->showForm($id, array('withtemplate' => $_GET["withtemplate"]));
 
-commonFooter();
+Html::footer();

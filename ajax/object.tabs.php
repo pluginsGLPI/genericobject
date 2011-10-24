@@ -77,7 +77,7 @@ if (empty ($_POST["id"])) {
             Ticket::showListForItem($itemtype, $_POST["id"]);
          }
          if ($item->canUseNotepad()) {
-            showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
+            CommonDBTM::showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
          }
          if ($item->canBeReserved()) {
             Reservation::showForItem($itemtype, $_POST["id"]);
@@ -120,7 +120,7 @@ if (empty ($_POST["id"])) {
          break;
       case 10 :
          if ($item->canUseNotepad()) {
-            showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
+            CommonDBTM::showNotesForm($_POST['target'], $itemtype, $_POST["id"]);
          }
          break;
       case 11 :

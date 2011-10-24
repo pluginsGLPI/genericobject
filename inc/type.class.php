@@ -61,11 +61,11 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    function canCreate() {
-      return haveRight("config", "w");
+      return Session::haveRight("config", "w");
    }
 
    function canView() {
-      return haveRight("config", "r");
+      return Session::haveRight("config", "r");
    }
 
    function getFromDBByType($itemtype) {
@@ -135,7 +135,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td>" . $LANG['genericobject']['common'][1] . "</td>";
       echo "<td>";
       if (!$ID) {
-         autocompletionTextField($this, 'name', array('value' => $this->fields["name"]));
+         Html::autocompletionTextField($this, 'name', array('value' => $this->fields["name"]));
       } else {
          echo "<input type='hidden' name='name' value='" . $this->fields["name"] . "'>";
          echo $this->fields["name"];
@@ -266,26 +266,26 @@ class PluginGenericobjectType extends CommonDBTM {
       
       //Name must not be empty
       if (isset($input['name']) && $input['name'] == '') {
-         addMessageAfterRedirect($LANG['genericobject']['common'][5], ERROR, true);
+         Session::addMessageAfterRedirect($LANG['genericobject']['common'][5], ERROR, true);
          return array();
       }
 
       //Name must not be empty
       if (in_array($input['name'], array('field', 'object', 'type'))) {
-         addMessageAfterRedirect($LANG['genericobject']['common'][8], ERROR, true);
+         Session::addMessageAfterRedirect($LANG['genericobject']['common'][8], ERROR, true);
          return array();
       }
       
       //Name must start with a letter
       if (!preg_match("/^[a-zA-Z]+/i",$input['name'])) {
-         addMessageAfterRedirect($LANG['genericobject']['common'][6], ERROR, true);
+         Session::addMessageAfterRedirect($LANG['genericobject']['common'][6], ERROR, true);
          return array();
       }
       $input['name']     = self::filterInput($input['name']);
       
       //Name must not be present in DB
       if (countElementsInTable(getTableForItemType(__CLASS__), "`name`='".$input['name']."'")) {
-         addMessageAfterRedirect($LANG['genericobject']['common'][4], ERROR, true);
+         Session::addMessageAfterRedirect($LANG['genericobject']['common'][4], ERROR, true);
          return array();
       } else {
          $input['itemtype'] = self::getClassByName($input['name']);
@@ -1090,7 +1090,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function isTransferable() {
-      return isMultiEntitiesMode();
+      return Session::isMultiEntitiesMode();
       
    }
    //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//

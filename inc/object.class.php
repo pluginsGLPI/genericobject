@@ -62,7 +62,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                        "contract_types"         => $item->canUseContracts(),
                        "unicity_types"          => $item->canUseUnicity());
       Plugin::registerClass($class, $options);
-      if (haveRight($class, "r")) {
+      if (Session::haveRight($class, "r")) {
          //Change url for adding a new object, depending on template management activation
          if ($item->canUseTemplate()) {
             //Template management is active
@@ -71,22 +71,22 @@ class PluginGenericobjectObject extends CommonDBTM {
                                                         = "/front/setup.templates.php?itemtype=$class&amp;add=0";
          } else {
             //Template management is not active
-            $add_url = getItemTypeFormURL($class, false);
+            $add_url = Toolbox::getItemTypeFormURL($class, false);
          }
          //Menu management
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
                                                    = call_user_func(array($class, 'getTypeName'));
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
-                                                   = getItemTypeSearchURL($class, false);
+                                                   = Toolbox::getItemTypeSearchURL($class, false);
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
-                                                    = getItemTypeSearchURL($class, false);
+                                                    = Toolbox::getItemTypeSearchURL($class, false);
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = $add_url;
    
          //Add configuration icon, if user has right
-         if (haveRight('config', 'w')) {
+         if (Session::haveRight('config', 'w')) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
-                                        = getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
+                                        = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
          }
          
          //Item can be linked to tickets
@@ -131,11 +131,11 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function canCreate() {
-      return haveRight(get_called_class(), 'w');
+      return Session::haveRight(get_called_class(), 'w');
    }
 
    function canView() {
-      return haveRight(get_called_class(), 'r');
+      return Session::haveRight(get_called_class(), 'r');
    }
 
    function defineTabs($options=array()) {
@@ -162,7 +162,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ong[6] = $LANG['title'][28];
          }
 
-         if ($this->canUseNotepad() && haveRight("notes", "r")) {
+         if ($this->canUseNotepad() && Session::haveRight("notes", "r")) {
             $ong[10] = $LANG['title'][37];
          }
 
@@ -179,11 +179,11 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    //------------------------ CAN methods -------------------------------------//
    function canUseInfocoms() {
-      return ($this->objecttype->canUseInfocoms() || haveRight("infocom", "r"));
+      return ($this->objecttype->canUseInfocoms() || Session::haveRight("infocom", "r"));
    }
 
    function canUseContracts() {
-      return ($this->objecttype->canUseContracts() || haveRight("contract", "r"));
+      return ($this->objecttype->canUseContracts() || Session::haveRight("contract", "r"));
    }
 
    function canUseTemplate() {
@@ -191,11 +191,11 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseUnicity() {
-      return ($this->objecttype->canUseUnicity() || haveRight("config", "r"));
+      return ($this->objecttype->canUseUnicity() || Session::haveRight("config", "r"));
    }
 
    function canUseDocuments() {
-      return ($this->objecttype->canUseDocuments() && haveRight("document", "r"));
+      return ($this->objecttype->canUseDocuments() && Session::haveRight("document", "r"));
    }
 
    function canUseTickets() {
@@ -203,12 +203,13 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseNotepad() {
-      return ($this->objecttype->canUseNotepad() && haveRight("notes", "r"));
+      return ($this->objecttype->canUseNotepad() && Session::haveRight("notes", "r"));
    }
 
    function canBeReserved() {
       return ($this->objecttype->canBeReserved() 
-         && (haveRight("reservation_central", "r") || haveRight("reservation_helpdesk", '1')));
+         && (Session::haveRight("reservation_central", "r") 
+            || Session::haveRight("reservation_helpdesk", '1')));
    }
 
    function canUseHistory() {
@@ -264,14 +265,14 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (isset($options['withtemplate']) && $options['withtemplate'] == 2) {
          $template   = "newcomp";
          $datestring = $LANG['computers'][14]." : ";
-         $date       = convDateTime($_SESSION["glpi_currenttime"]);
+         $date       = Html::convDateTime($_SESSION["glpi_currenttime"]);
       } else if (isset($options['withtemplate']) && $options['withtemplate'] == 1) {
          $template   = "newtemplate";
          $datestring = $LANG['computers'][14]." : ";
-         $date       = convDateTime($_SESSION["glpi_currenttime"]);
+         $date       = Html::convDateTime($_SESSION["glpi_currenttime"]);
       } else {
          $datestring = $LANG['common'][26].": ";
-         $date       = convDateTime($this->fields["date_mod"]);
+         $date       = Html::convDateTime($this->fields["date_mod"]);
          $template   = false;
       }
 
@@ -364,7 +365,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
 
             case "varchar(255)":
-                  autocompletionTextField($this, $name);
+                  Html::autocompletionTextField($this, $name);
                break;
 
             case "longtext":
@@ -374,11 +375,11 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
 
             case "date":
-                  showDateFormItem($name, $value, false, true);
+                  Html::showDateFormItem($name, $value, false, true);
                   break;
 
             case "datetime":
-                  showDateTimeFormItem($name, $value, false, true);
+                  Html::showDateTimeFormItem($name, $value, false, true);
                   break;
 
             default:
@@ -525,7 +526,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
       
-      if (haveRight($itemtype, 'r')) {
+      if (Session::haveRight($itemtype, 'r')) {
          $item->showForm(-1, array(), true);
       } else {
          echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";

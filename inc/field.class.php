@@ -30,7 +30,7 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function showObjectFieldsForm($id) {
       global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
-      $url          = getItemTypeFormURL(__CLASS__);
+      $url          = Toolbox::getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
       $object_type->getFromDB($id);
       $itemtype     = $object_type->fields['itemtype'];
@@ -73,8 +73,8 @@ class PluginGenericobjectField extends CommonDBTM {
          $global_index++;
       }
       echo "</table>";
-      openArrowMassive('fields_definition', true);
-      closeArrowMassive('delete', $LANG['buttons'][6]);
+      Html::openArrowMassives('fields_definition', true);
+      Html::closeArrowMassives('delete', $LANG['buttons'][6]);
 
       echo "<table class='tab_cadre'>";
       echo "<tr class='tab_bg_1'>";
