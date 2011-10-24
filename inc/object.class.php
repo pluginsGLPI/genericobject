@@ -614,7 +614,11 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $options[$currentindex]['itemlink_type'] = get_called_class();
                   $options[$currentindex]['massiveaction'] = false;
                } else {
-                  $options[$currentindex]['datatype'] = 'string';
+                  if (isset($searchoption['datatype']) && $searchoption['datatype'] == 'weblink') {
+                     $options[$currentindex]['datatype'] = 'weblink';
+                  } else {
+                     $options[$currentindex]['datatype'] = 'string';
+                  }
                }
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific

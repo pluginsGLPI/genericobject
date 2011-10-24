@@ -127,8 +127,8 @@ $GO_FIELDS['users_id_tech']['input_type'] = 'dropdown';
 $GO_FIELDS['domains_id']['name']       = $LANG['setup'][89];
 $GO_FIELDS['domains_id']['input_type'] = 'dropdown';
 
-$GO_FIELDS['contacts_id']['name']       = $LANG['common'][18];
-$GO_FIELDS['contacts_id']['input_type'] = 'text';
+$GO_FIELDS['contact']['name']       = $LANG['common'][18];
+$GO_FIELDS['contact']['input_type'] = 'text';
 
 $GO_FIELDS['contact_num']['name']       = $LANG['common'][21];
 $GO_FIELDS['contact_num']['input_type'] = 'text';

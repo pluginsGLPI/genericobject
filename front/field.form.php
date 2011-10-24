@@ -42,7 +42,7 @@ if (isset($_GET['action'])) {
          && $value == 1  
             && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
          PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
-         addMessageAfterRedirect($LANG['genericobject']['fields'][5].": $field", true);
+         addMessageAfterRedirect($LANG['genericobject']['fields'][5]);
       }
    }
 } elseif (isset ($_POST["add_field"])) {
@@ -52,7 +52,7 @@ if (isset($_GET['action'])) {
 
       $itemtype = $type->fields['itemtype'];
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
-      addMessageAfterRedirect($LANG['genericobject']['fields'][6].": $field");
+      addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
    }
 }
 
