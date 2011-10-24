@@ -35,6 +35,7 @@ $LANG['genericobject']['common'][4] = "Un type avec le même nom existe déjà";
 $LANG['genericobject']['common'][5] = "Nom de type manquant";
 $LANG['genericobject']['common'][6] = "Le type doit commencer par une lettre";
 $LANG['genericobject']['common'][7] = "Aller à la liste des objets";
+$LANG['genericobject']['common'][8] = "Les types 'field', 'object' et 'type' sont réservés. Veuillez en choisir un autre";
 
 $LANG['genericobject']['install'][0] = "Erreur : les dossiers '/inc', '/front', '/locales' et '/ajax' du plugin doivent être en écriture pour le serveur web.";
 

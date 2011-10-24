@@ -275,6 +275,12 @@ class PluginGenericobjectType extends CommonDBTM {
          addMessageAfterRedirect($LANG['genericobject']['common'][5], ERROR, true);
          return array();
       }
+
+      //Name must not be empty
+      if (in_array($input['name'], array('field', 'object', 'type'))) {
+         addMessageAfterRedirect($LANG['genericobject']['common'][8], ERROR, true);
+         return array();
+      }
       
       //Name must start with a letter
       if (!preg_match("/^[a-zA-Z]+/i",$input['name'])) {

@@ -35,6 +35,7 @@ $LANG['genericobject']['common'][4]="A type already exists with the same name";
 $LANG['genericobject']['common'][5] = "Type name is missing";
 $LANG['genericobject']['common'][6] = "Type must start with a letter";
 $LANG['genericobject']['common'][7] = "Go to objects list";
+$LANG['genericobject']['common'][8] = "Types 'field', 'object' and 'type' are reserved. Please choose another one";
 
 $LANG['genericobject']['install'][0] = "Error: directories '/inc', '/head', '/locales' and '/ajax' of plugin must be writable by the web server.";
 
