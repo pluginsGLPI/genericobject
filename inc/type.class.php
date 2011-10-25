@@ -349,7 +349,7 @@ class PluginGenericobjectType extends CommonDBTM {
      //Write the form on the filesystem
       self::addFormFile($this->input["name"],$this->input["itemtype"]);
       self::addSearchFile($this->input["name"],$this->input["itemtype"]);
-      self::addAjaxFile($this->input["name"],$this->input["itemtype"]);
+      //self::addAjaxFile($this->input["name"],$this->input["itemtype"]);
       
       //Create rights for this new object
       PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], true);
@@ -404,7 +404,7 @@ class PluginGenericobjectType extends CommonDBTM {
          self::deleteSearchFile($name);
    
          //Remove ajax file
-         self::deleteAjaxFile($name);
+         //self::deleteAjaxFile($name);
 
          //Remove datainjection specific file
          self::deleteInjectionFile($name);

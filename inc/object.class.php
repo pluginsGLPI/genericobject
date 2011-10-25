@@ -142,37 +142,39 @@ class PluginGenericobjectObject extends CommonDBTM {
       global $LANG;
       $ong = array ();
 
-      $ong[1] = $LANG['title'][26];
-
-      if ($this->fields['id'] > 0) {
+      if (!$this->isNewItem()) {
 
          if ($this->canUseNetworkPorts()) {
-            $ong[3] = $LANG['title'][27];
+            $this->addStandardTab('NetworkPort', $ong, $options);
          }
 
-         if ($this->canUseInfocoms() || $this->canUseContracts()) {
-            $ong[4] = $LANG['Menu'][26];
+         if ($this->canUseInfocoms()) {
+            $this->addStandardTab('Infocom', $ong, $options);
+         }
+
+         if ($this->canUseContracts()) {
+            $this->addStandardTab('Contract_Item', $ong, $options);
          }
 
          if ($this->canUseDocuments()) {
-            $ong[5] = $LANG['Menu'][27];
+            $this->addStandardTab('Document', $ong, $options);
          }
 
          if ($this->canUseTickets()) {
-            $ong[6] = $LANG['title'][28];
+            $this->addStandardTab('Ticket', $ong, $options);
          }
 
          if ($this->canUseNotepad() && Session::haveRight("notes", "r")) {
-            $ong[10] = $LANG['title'][37];
+            $this->addStandardTab('Note',$ong, $options);
          }
 
          if ($this->canBeReserved()) {
-            $ong[11] = $LANG['Menu'][17];
+            $this->addStandardTab('Reservation', $ong, $options);
          }
 
-         if ($this->canUseHistory())
-            $ong[12] = $LANG['title'][38];
-
+         if ($this->canUseHistory()) {
+            $this->addStandardTab('Log',$ong, $options);
+         }
       }
       return $ong;
    }
