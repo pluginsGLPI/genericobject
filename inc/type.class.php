@@ -1026,7 +1026,7 @@ class PluginGenericobjectType extends CommonDBTM {
             $DB->query("DROP TABLE IF EXISTS `$table`");
             self::deleteFormFile($name);
             self::deleteSearchFile($name);
-            self::deleteAjaxFile($name);
+            //self::deleteAjaxFile($name);
             self::deleteClassFile($name);
          }
       }
@@ -1142,8 +1142,9 @@ class PluginGenericobjectType extends CommonDBTM {
    static function install(Migration $migration) {
       global $DB;
       
-      if (!TableExists(getTableForItemType(__CLASS__))) {
-         $query = "CREATE TABLE `glpi_plugin_genericobject_types` (
+      $table = getTableForItemType(__CLASS__);
+      if (!TableExists($table)) {
+         $query = "CREATE TABLE `$table` (
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
                            `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
@@ -1169,15 +1170,11 @@ class PluginGenericobjectType extends CommonDBTM {
          $DB->query($query) or die($DB->error());
       }
       
-      $migration->addField(getTableForItemType(__CLASS__), "use_network_ports", 
-                           "tinyint(1) NOT NULL default '0'");
-      $migration->addField(getTableForItemType(__CLASS__), "use_direct_connections", 
-                           "tinyint(1) NOT NULL default '0'");
-      $migration->addField(getTableForItemType(__CLASS__), "use_plugin_geninventorynumber", 
-                           "tinyint(1) NOT NULL default '0'");
-      $migration->addField(getTableForItemType(__CLASS__), "use_contracts", 
-                           "tinyint(1) NOT NULL default '0'");
-      $migration->migrationOneTable(getTableForItemType(__CLASS__));
+      $migration->addField($table, "use_network_ports", "bool");
+      $migration->addField($table, "use_direct_connections", "bool");
+      $migration->addField($table, "use_plugin_geninventorynumber", "bool");
+      $migration->addField($table, "use_contracts", "bool");
+      $migration->migrationOneTable($table);
       
 
       //Displayprefs
@@ -1192,6 +1189,8 @@ class PluginGenericobjectType extends CommonDBTM {
                or die($DB->error());
          }
       }
+      
+      
    }
    
    static function uninstall() {

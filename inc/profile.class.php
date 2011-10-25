@@ -282,8 +282,9 @@ class PluginGenericobjectProfile extends CommonDBTM {
 
    static function install(Migration $migration) {
       global $DB;
-      if (!TableExists(getTableForItemType(__CLASS__))) {
-         $query = "CREATE TABLE `".getTableForItemType(__CLASS__)."` (
+      $table = getTableForItemType(__CLASS__);
+      if (!TableExists($table)) {
+         $query = "CREATE TABLE `$table` (
                            `id` int(11) NOT NULL auto_increment,
                            `profiles_id` int(11) NOT NULL  DEFAULT '0',
                            `itemtype` VARCHAR( 255 ) default NULL,

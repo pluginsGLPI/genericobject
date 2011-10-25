@@ -121,7 +121,7 @@ function plugin_genericobject_install() {
       return false;
    } 
 
-   $migration = new Migration('0.80.0');
+   $migration = new Migration('2.1.0');
    
    foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile', 
                   'PluginGenericobjectField') as $itemtype) {
