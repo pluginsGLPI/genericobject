@@ -131,6 +131,11 @@ function plugin_version_genericobject() {
 function plugin_genericobject_check_prerequisites() {
    if (version_compare(GLPI_VERSION,'0.83','lt') || version_compare(GLPI_VERSION,'0.84','ge')) {
       echo "This plugin requires GLPI 0.83";
+      return false;
+   }
+   if (version_compare(PHP_VERSION, '5.3.0', 'lt')) {
+      echo "PHP 5.3.0 or higher is required";
+      return false;
    }
    return true;
 }
