@@ -180,7 +180,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
    function saveProfileToDB($params) {
       global $DB;
 
-      $types = PluginGenericobjectType::getTypes();
+      $types = PluginGenericobjectType::getTypes(true);
       if (!empty ($types)) {
          foreach ($types as $tmp => $profile) {
             $query = "UPDATE `".getTableForItemType(__CLASS__)."` " .

@@ -258,7 +258,7 @@ class PluginGenericobjectField extends CommonDBTM {
             PluginGenericobjectType::addDropdownClassFile($name, $itemtype, $tree);
             PluginGenericobjectType::addDropdownTable($table, $entity_assign, $recursive, $tree);
             PluginGenericobjectType::addDropdownFrontFile($name);
-            PluginGenericobjectType::addDropdownAjaxFile($name, $field);
+            //PluginGenericobjectType::addDropdownAjaxFile($name, $field);
             PluginGenericobjectType::addDropdownFrontformFile($name, $field);
          }
       }
@@ -324,7 +324,7 @@ class PluginGenericobjectField extends CommonDBTM {
    }
    
    public static function checkNecessaryFieldsDelete($itemtype,$field) {
-      $type = new PluginGenericobjectType;
+      $type = new PluginGenericobjectType();
       $type->getFromDBByType($itemtype);
       
       if ($type->canUseNetworkPorts() && 'locations_id' == $field) {
