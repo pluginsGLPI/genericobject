@@ -117,6 +117,7 @@ $GO_FIELDS['users_id']['input_type'] = 'dropdown';
 
 $GO_FIELDS['groups_id']['name']       = $LANG['common'][35];
 $GO_FIELDS['groups_id']['input_type'] = 'dropdown';
+$GO_FIELDS['groups_id']['condition']  = '`is_itemgroup`';
 
 $GO_FIELDS['manufacturers_id']['name']       = $LANG['common'][5];
 $GO_FIELDS['manufacturers_id']['input_type'] = 'dropdown';
@@ -132,3 +133,7 @@ $GO_FIELDS['contact']['input_type'] = 'text';
 
 $GO_FIELDS['contact_num']['name']       = $LANG['common'][21];
 $GO_FIELDS['contact_num']['input_type'] = 'text';
+
+$GO_FIELDS['groups_id_tech']['name']       = $LANG['common'][109];
+$GO_FIELDS['groups_id_tech']['input_type'] = 'dropdown';
+$GO_FIELDS['groups_id_tech']['condition']  = '`is_assign`';

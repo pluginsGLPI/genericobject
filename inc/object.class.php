@@ -340,6 +340,9 @@ class PluginGenericobjectObject extends CommonDBTM {
                   if ($dropdown->maybeRecursive()) {
                      $parameters['entity_sons'] = true;
                   }
+                  if(isset($searchoption['condition'])) {
+                     $parameters['condition'] = $searchoption['condition'];
+                  }
                   Dropdown::show($itemtype, $parameters);
                } else {
                   $min = $max = $step = 0;
