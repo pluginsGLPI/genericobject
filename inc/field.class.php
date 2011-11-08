@@ -34,7 +34,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $object_type  = new PluginGenericobjectType();
       $object_type->getFromDB($id);
       $itemtype     = $object_type->fields['itemtype'];
-      $fields_in_db = $DB->list_fields(getTableForItemType($itemtype));
+      $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
       $used_fields  = array();
 
       foreach ($GO_BLACKLIST_FIELDS as $autofield) {
@@ -203,11 +203,10 @@ class PluginGenericobjectField extends CommonDBTM {
     * @return nothing
     */
    public static function addNewField($table, $field, $after=false) {
-      global $DB, $GO_FIELDS;
-
-      $options  = self::getOptionsWithGlobal($field, getItemTypeForTable($table));
-      
+      global $DB;
+      Toolbox::logDebug($DB->list_fields($table));
       if (!FieldExists($table, $field)) {
+         $options  = self::getOptionsWithGlobal($field, getItemTypeForTable($table));
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {
             case 'dropdown_yesno' :
@@ -239,6 +238,9 @@ class PluginGenericobjectField extends CommonDBTM {
          }
          $DB->query($query);
          
+         //Reload list of fields for this itemtype in the singleton
+         PluginGenericobjectSingletonObjectField::getInstance(getItemTypeForTable($table), true);
+         
          $recursive = $entity_assign = $tree = false;
          $table     = getTableNameForForeignKeyField($field);
          if ($table != '' && !TableExists($table)) {
@@ -258,7 +260,6 @@ class PluginGenericobjectField extends CommonDBTM {
             PluginGenericobjectType::addDropdownClassFile($name, $itemtype, $tree);
             PluginGenericobjectType::addDropdownTable($table, $entity_assign, $recursive, $tree);
             PluginGenericobjectType::addDropdownFrontFile($name);
-            //PluginGenericobjectType::addDropdownAjaxFile($name, $field);
             PluginGenericobjectType::addDropdownFrontformFile($name, $field);
          }
       }
@@ -297,7 +298,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $itemtype = $params['itemtype'];
       $field    = $params['field'];
       $table    = getTableForItemType($itemtype);
-      $fields   = $DB->list_fields(getTableForItemType($params['itemtype']));
+      $fields   = PluginGenericobjectSingletonObjectField::getInstance($params['itemtype']);
       
       //If action is down, reverse array first
       if ($params['action'] == 'down') {

@@ -43,7 +43,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       
       $class  = get_called_class();
       $item   = new $class();
-      $fields = $DB->list_fields(getTableForItemType($class));
+      $fields = PluginGenericobjectSingletonObjectField::getInstance($class);
       $plugin = new Plugin();
 
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
@@ -285,7 +285,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8]."</th></tr>";
       }
       
-      foreach ($DB->list_fields(getTableForItemType($this->objecttype->fields['itemtype'])) 
+      foreach (PluginGenericobjectSingletonObjectField::getInstance($this->objecttype->fields['itemtype']) 
                as $field => $description) {
          $this->displayField($canedit, $field, $this->fields[$field], $description);
       }
@@ -551,7 +551,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $index   = 3;
       $options = array();
       $table   = getTableForItemType(get_called_class());
-      foreach ($DB->list_fields($table) as $field => $values) {
+      foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $values) {
          $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field, 
                                                                         $this->objecttype->fields['itemtype']);
          
@@ -728,7 +728,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->update($tmp);
 
          $toupdate = array('id' => $this->fields['id']);
-         foreach ($DB->list_fields(getTableForItemType(get_called_class())) as $field => $data) {
+         foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $data) {
             $table = getTableNameForForeignKeyField($field);
 
             //It is a dropdown table !

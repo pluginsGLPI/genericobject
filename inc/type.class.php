@@ -466,6 +466,7 @@ class PluginGenericobjectType extends CommonDBTM {
       
       //Helpdesk post-only
       if ($this->canUseTickets()) {
+         //TODO rename is_helpdesk_visible into is_helpdeskvisible
          PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'comment');
       } else {
          PluginGenericobjectField::deleteField($table, 'is_helpdesk_visible');
@@ -1004,7 +1005,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $associated_tables = array();
       if (class_exists($itemtype)) {
          $source_table = getTableForItemType($itemtype);
-         foreach ($DB->list_fields($source_table) as $field => $value) {
+         foreach (PluginGenericobjectSingletonObjectField::getInstance($itemtype) as $field => $value) {
             $table = getTableNameForForeignKeyField($field);
             //If it's a drodpdown
             if ($table && preg_match("/".getSingular($source_table)."/",$table)) {

@@ -76,7 +76,7 @@ function plugin_init_genericobject() {
       if (isset($_GET['id']) &&  $_GET['id'] != ''
          && strpos($_SERVER['REQUEST_URI'], 
                      Toolbox::getItemTypeFormURL("PluginGenericobjectType")) !== false) {
-         $url = '/plugins/genericobject/index.php';
+         $url  = '/plugins/genericobject/index.php';
          $type = new PluginGenericobjectType();
          $type->getFromDB($_GET['id']);
          if ($type->fields['is_active']) {
