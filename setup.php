@@ -124,6 +124,7 @@ function plugin_version_genericobject() {
                  'version'        => '2.1.0',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
+                 'license'        => 'GPLv2+',
                  'minGlpiVersion' => '0.83');
 }
 
