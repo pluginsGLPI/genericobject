@@ -156,7 +156,9 @@ function plugin_genericobject_uninstall() {
 
    //For each type
    foreach (PluginGenericobjectType::getTypes(true) as $tmp => $value) {
-      call_user_func(array($value['itemtype'], 'uninstall'));
+      if (class_exists($value['itemtype'])) {
+         call_user_func(array($value['itemtype'], 'uninstall'));
+      }
    }
 
    foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile', 

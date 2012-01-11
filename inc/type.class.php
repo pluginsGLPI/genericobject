@@ -1185,9 +1185,12 @@ class PluginGenericobjectType extends CommonDBTM {
          if (!countElementsInTable("glpi_displaypreferences", 
                                     "`itemtype`='".__CLASS__."' AND `num`='$num' 
                                        AND `rank`='$rank' AND `users_id`='0'")) {
-            $DB->query("INSERT INTO glpi_displaypreferences 
-                        VALUES (NULL,'".__CLASS__."','$num','$rank','0');") 
-               or die($DB->error());
+            $preference = new DisplayPreference();
+            $tmp['itemtype'] = __CLASS__;
+            $tmp['num']      = $num;
+            $tmp['rank']     = $rank;
+            $tmp['users_id'] = 0;
+            $preference->add($tmp);
          }
       }
       
