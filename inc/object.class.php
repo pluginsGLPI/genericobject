@@ -452,7 +452,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (isset ($this->input["_oldID"])) {
          // ADD Infocoms
          $ic = new Infocom();
-         if ($item->canUseInfocoms() 
+         if ($this->canUseInfocoms() 
             && $ic->getFromDBforDevice($this->type, $this->input["_oldID"])) {
             $ic->fields["items_id"] = $this->fields['id'];
             unset ($ic->fields["id"]);
