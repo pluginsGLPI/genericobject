@@ -482,7 +482,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             }
          }
          
-         if ($item->canUseNetworkPorts()) {
+         if ($this->canUseNetworkPorts()) {
             // ADD Ports
             $query  = "SELECT `id`
                        FROM `glpi_networkports`
