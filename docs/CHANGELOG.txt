@@ -31,6 +31,12 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 2.1.0
+ see https://forge.indepnet.net/projects/genericobject/issues?query_id=23
+
+Version 2.0.2
+ see https://forge.indepnet.net/projects/genericobject/issues?query_id=20
+
 Version 2.0.1
  #3215 Cannot activate other plugins integration
  #3216 Add LICENSE file and change file headers
