@@ -33,16 +33,16 @@ class PluginGenericobjectType extends CommonDBTM {
    const DRAFT     = 0;
    const PUBLISHED = 1;
 
-   const CLASS_TEMPLATE              = "../objects/generic.class.tpl";
-   const FORM_TEMPLATE               = "../objects/generic.form.tpl";
-   const CLASS_DROPDOWN_TEMPLATE     = "../objects/generic.dropdown.class.tpl";
-   const FRONTFORM_DROPDOWN_TEMPLATE = "../objects/front.form.tpl";
-   const FRONT_DROPDOWN_TEMPLATE     = "../objects/front.tpl";
-   const SEARCH_TEMPLATE             = "../objects/front.tpl";
-   const AJAX_DROPDOWN_TEMPLATE      = "../objects/dropdown.tabs.tpl";
-   const AJAX_TEMPLATE               = "../objects/ajax.tabs.tpl";
-   const LOCALE_TEMPLATE             = "../objects/locale.tpl";
-   const OBJECTINJECTION_TEMPLATE    = "../objects/objectinjection.class.tpl";
+   const CLASS_TEMPLATE              = "/objects/generic.class.tpl";
+   const FORM_TEMPLATE               = "/objects/generic.form.tpl";
+   const CLASS_DROPDOWN_TEMPLATE     = "/objects/generic.dropdown.class.tpl";
+   const FRONTFORM_DROPDOWN_TEMPLATE = "/objects/front.form.tpl";
+   const FRONT_DROPDOWN_TEMPLATE     = "/objects/front.tpl";
+   const SEARCH_TEMPLATE             = "/objects/front.tpl";
+   const AJAX_DROPDOWN_TEMPLATE      = "/objects/dropdown.tabs.tpl";
+   const AJAX_TEMPLATE               = "/objects/ajax.tabs.tpl";
+   const LOCALE_TEMPLATE             = "/objects/locale.tpl";
+   const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
 
    var $dohistory = true;
 
@@ -95,7 +95,7 @@ class PluginGenericobjectType extends CommonDBTM {
             case __CLASS__ :
                return array (1 => $LANG['title'][26],
                              3 => $LANG['rulesengine'][12],
-                             5 => $LANG['genericobject']['config'][7], 
+                             5 => $LANG['genericobject']['config'][7],
                              6 => $LANG['Menu'][35]);
          }
       }
@@ -125,7 +125,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       return true;
    }
-   //End tabs management 
+   //End tabs management
 
    function defineTabs($options=array()) {
       $tabs = array();
@@ -161,7 +161,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if ($ID > 0) {
          $this->check($ID, 'r');
       } else {
-         // Create item 
+         // Create item
          $this->check(-1, 'w');
          $use_cache = false;
          $this->getEmpty();
@@ -349,7 +349,6 @@ class PluginGenericobjectType extends CommonDBTM {
      //Write the form on the filesystem
       self::addFormFile($this->input["name"],$this->input["itemtype"]);
       self::addSearchFile($this->input["name"],$this->input["itemtype"]);
-      //self::addAjaxFile($this->input["name"],$this->input["itemtype"]);
       
       //Create rights for this new object
       PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], true);
@@ -484,12 +483,12 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectField::addNewField($table, 'locations_id');
       }
 
-      if ($this->canUsePluginDataInjection() && 
+      if ($this->canUsePluginDataInjection() &&
          !file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::addDatainjectionFile($this->fields['name']);
       }
 
-      if (!$this->canUsePluginDataInjection() && 
+      if (!$this->canUsePluginDataInjection() &&
          file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::deleteInjectionFile($this->fields['name']);
       }
@@ -514,7 +513,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[6]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][31];
       $sopt[6]['datatype']    = 'bool';
 
-/*   
+/*
       $sopt[7]['table']       = $this->getTable();
       $sopt[7]['field']       = 'use_deleted';
       $sopt[7]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['ocsconfig'][49];
@@ -590,7 +589,7 @@ class PluginGenericobjectType extends CommonDBTM {
                   `comment` text COLLATE utf8_unicode_ci,
                   `notepad` text COLLATE utf8_unicode_ci,
                   `date_mod` DATETIME NULL  ,
-                  PRIMARY KEY ( `id` ) 
+                  PRIMARY KEY ( `id` )
                   ) ENGINE = MYISAM COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
 
@@ -666,13 +665,13 @@ class PluginGenericobjectType extends CommonDBTM {
          @ mkdir($locale_dir, 0777, true);
       }
       $locale_file = $name.".".$_SESSION['glpilanguage'];
-      self::addFileFromTemplate(array('NAME'      => $name, 
-                                      'CLASSNAME' => self::getClassByName($name)), 
-                                self::LOCALE_TEMPLATE, $locale_dir, 
+      self::addFileFromTemplate(array('NAME'      => $name,
+                                      'CLASSNAME' => self::getClassByName($name)),
+                                self::LOCALE_TEMPLATE, $locale_dir,
                                 $locale_file);
       if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
          $locale_file = $name.".".$CFG_GLPI['language'];
-         self::addFileFromTemplate(array('CLASSNAME' => $name), self::LOCALE_TEMPLATE, $locale_dir, 
+         self::addFileFromTemplate(array('CLASSNAME' => $name), self::LOCALE_TEMPLATE, $locale_dir,
                                    $locale_file);
       }
    }
@@ -686,9 +685,9 @@ class PluginGenericobjectType extends CommonDBTM {
 
    public static function addFileFromTemplate($mappings = array(), $template, $directory, $filename) {
       if (!empty($mappings)) {
-         $file_read = @fopen($template, "rt");
+         $file_read = @fopen(GENERICOBJECT_DIR.$template, "rt");
          if ($file_read) {
-            $template_file = fread($file_read, filesize($template));
+            $template_file = fread($file_read, filesize(GENERICOBJECT_DIR.$template));
             foreach ($mappings as $name => $value) {
                $template_file = str_replace("%%$name%%", $value, $template_file);
             }
@@ -703,39 +702,39 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    public static function addDatainjectionFile($name) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name), 
-                                      'INJECTIONCLASS' => self::getClassByName($name)."Injection"), 
-                                self::OBJECTINJECTION_TEMPLATE, GENERICOBJECT_CLASS_PATH, 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name),
+                                      'INJECTIONCLASS' => self::getClassByName($name)."Injection"),
+                                self::OBJECTINJECTION_TEMPLATE, GENERICOBJECT_CLASS_PATH,
                                 $name."injection.class");
    }
    
    public static function addDropdownFrontFile($name) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::FRONT_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
    }
 
    public static function addDropdownAjaxFile($name, $field) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::AJAX_DROPDOWN_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
    }
 
    public static function addAjaxFile($name, $field) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::AJAX_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
    }
    
    public static function addDropdownFrontformFile($name, $field) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
-                                self::FRONTFORM_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
+                                self::FRONTFORM_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH,
                                 $name.".form");
    }
 
    public static function addDropdownClassFile($name, $field, $tree) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name), 
-                                      'EXTENDS' => ($tree?"CommonTreeDropdown":"CommonDropdown")), 
-                                self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name),
+                                      'EXTENDS' => ($tree?"CommonTreeDropdown":"CommonDropdown")),
+                                self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH,
                                 $name.".class");
-   } 
+   }
 
    /**
     * Write on the the class file for the new object type
@@ -745,7 +744,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addClassFile($name, $classname) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::CLASS_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
    }
    
@@ -757,7 +756,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addFormFile($name, $classname) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::FORM_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name.".form");
    }
 
@@ -769,7 +768,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function addSearchFile($name, $classname) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)), 
+      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::SEARCH_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
    }
 
@@ -783,7 +782,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @param tree can the dropdown be a tree dropdown
     * @return nothing
     */
-   public static function addDropdownTable($table, $entity_assign = false, $recursive = false, 
+   public static function addDropdownTable($table, $entity_assign = false, $recursive = false,
                                            $tree = false) {
       global $DB;
       if (!TableExists($table)) {
@@ -806,7 +805,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
       }
       if ($tree) {
-         $query = "ALTER TABLE `$table` ADD `completename` text COLLATE utf8_unicode_ci, 
+         $query = "ALTER TABLE `$table` ADD `completename` text COLLATE utf8_unicode_ci,
                                         ADD `level` int(11) NOT NULL DEFAULT '0',
                                         ADD `ancestors_cache` longtext COLLATE utf8_unicode_ci,
                                         ADD `sons_cache` longtext COLLATE utf8_unicode_ci";
@@ -916,7 +915,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function filterInput($value) {
       $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
       $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
-      $value = str_replace(array(' ', '_', '-', '+', '|', '[', ']', '\'','"', '@', '&', '~', '#', '='), 
+      $value = str_replace(array(' ', '_', '-', '+', '|', '[', ']', '\'','"', '@', '&', '~', '#', '='),
                            '', strtolower($value));
       $value = str_replace($search, $replace, $value);
       return $value;
@@ -971,7 +970,7 @@ class PluginGenericobjectType extends CommonDBTM {
       global $CFG_GLPI, $LANG;
    
       $prefix = GENERICOBJECT_LOCALES_PATH . "/$name/$name";
-      if (isset ($_SESSION["glpilanguage"]) 
+      if (isset ($_SESSION["glpilanguage"])
              && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
          include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
    
@@ -1021,7 +1020,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Foreach dropdown : drop table & remove files !
       foreach (self::getDropdownForItemtype($itemtype) as $table) {
          $results = array();
-         if (preg_match("/glpi_plugin_genericobject_(.*)/i", getSingular($table), $results) 
+         if (preg_match("/glpi_plugin_genericobject_(.*)/i", getSingular($table), $results)
             && isset($results[1])) {
             $name = $results[1];
             $DB->query("DROP TABLE IF EXISTS `$table`");
@@ -1068,7 +1067,7 @@ class PluginGenericobjectType extends CommonDBTM {
    
    function canUseHistory() {
       return $this->fields['use_history'];
-   } 
+   }
    
    function canUseDocuments() {
       return $this->fields['use_documents'];
@@ -1128,7 +1127,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    function canUsePluginGeninventoryNumber() {
       $plugin = new Plugin();
-      if (!$plugin->isInstalled("geninventorynumber") 
+      if (!$plugin->isInstalled("geninventorynumber")
          || !$plugin->isActivated("geninventorynumber")) {
          return false;
       }
@@ -1166,7 +1165,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_plugin_order` tinyint(1) NOT NULL default '0',
                            `use_plugin_uninstall` tinyint(1) NOT NULL default '0',
                            `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
-                           PRIMARY KEY ( `id` ) 
+                           PRIMARY KEY ( `id` )
                            ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
       }
@@ -1179,11 +1178,11 @@ class PluginGenericobjectType extends CommonDBTM {
       
 
       //Displayprefs
-      $prefs = array(10 => 6, 9 => 5, 8 => 4, 7 => 3, 6 => 2, 2 => 1, 4 => 1, 11 => 7,  12 => 8, 
+      $prefs = array(10 => 6, 9 => 5, 8 => 4, 7 => 3, 6 => 2, 2 => 1, 4 => 1, 11 => 7,  12 => 8,
                      14 => 10, 15 => 11);
       foreach ($prefs as $num => $rank) {
-         if (!countElementsInTable("glpi_displaypreferences", 
-                                    "`itemtype`='".__CLASS__."' AND `num`='$num' 
+         if (!countElementsInTable("glpi_displaypreferences",
+                                    "`itemtype`='".__CLASS__."' AND `num`='$num'
                                        AND `rank`='$rank' AND `users_id`='0'")) {
             $preference = new DisplayPreference();
             $tmp['itemtype'] = __CLASS__;
@@ -1194,7 +1193,16 @@ class PluginGenericobjectType extends CommonDBTM {
          }
       }
       
-      
+      //For front/* search file migration
+      foreach (getAllDatasFromTable($table) as $type) {
+         //Permanently remove ajax files because it's not needed anymore
+         self::deleteAjaxFile($type["name"]);
+         //Recreate front files because some function name changed
+         self::deleteSearchFile($type["name"]);
+         self::deleteFormFile($type["name"]);
+         self::addFormFile($type["name"], $type["itemtype"]);
+         self::addSearchFile($type["name"], $type["itemtype"]);
+      }
    }
    
    static function uninstall() {
