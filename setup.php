@@ -43,17 +43,17 @@ if (!defined("GENERICOBJECT_LOCALES_PATH")) {
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
-   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS, 
+   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
           $GENERICOBJECT_PDF_TYPES;
           
-   $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id", 
-                                 "is_recursive", "is_template", "notepad", "template_name", 
+   $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
+                                 "is_recursive", "is_template", "notepad", "template_name",
                                  "is_helpdesk_visible", "comment", "name", "date_mod");
 
    $GENERICOBJECT_PDF_TYPES = array ();
    $plugin = new Plugin();
 
-   if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {  
+   if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
 
       //Load genericobject default constants
       include_once (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
@@ -65,7 +65,7 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       /* load changeprofile function */
-      $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile', 
+      $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile',
                                                                'changeProfile');
 
       // Display a menu entry ?
@@ -74,7 +74,7 @@ function plugin_init_genericobject() {
 
       //Do not display icon if not using the genericobject plugin
       if (isset($_GET['id']) &&  $_GET['id'] != ''
-         && strpos($_SERVER['REQUEST_URI'], 
+         && strpos($_SERVER['REQUEST_URI'],
                      Toolbox::getItemTypeFormURL("PluginGenericobjectType")) !== false) {
          $url  = '/plugins/genericobject/index.php';
          $type = new PluginGenericobjectType();
@@ -84,13 +84,13 @@ function plugin_init_genericobject() {
             $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
                       $LANG['genericobject']['common'][7].
                         "\" alt=\"".$LANG['genericobject']['common'][7]."\">";
-            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image] 
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image]
                = $url;
          }
       }
-      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']  
+      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']
          = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
-      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']  
+      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
          = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
 
       // Config page
@@ -120,8 +120,8 @@ function plugin_post_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    global $LANG;
-   return array ('name'           => $LANG["genericobject"]["title"][1], 
-                 'version'        => '2.1.0',
+   return array ('name'           => $LANG["genericobject"]["title"][1],
+                 'version'        => '2.1.1',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
                  'license'        => 'GPLv2+',
