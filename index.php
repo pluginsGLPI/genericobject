@@ -25,8 +25,8 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define('GLPI_ROOT', '../..'); 
-include (GLPI_ROOT . "/inc/includes.php"); 
+define('GLPI_ROOT', '../..');
+include (GLPI_ROOT . "/inc/includes.php");
 
 if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
    $type = new PluginGenericobjectType();
@@ -34,20 +34,31 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
    $url = Toolbox::getItemTypeSearchURL($type->fields['itemtype']);
    Html::redirect($url);
 } else {
-   Html::header($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
-   
-   echo "<table class='tab_cadre_fixe'>";
-   echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
-         
-   foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
-      if (Session::haveRight($value['itemtype'], 'r')) {
-         echo "<tr class='tab_bg_1'><td align='center'>"; 
-         echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
-         echo call_user_func(array($value['itemtype'], 'getTypeName'));
-         echo "</a></td></tr>";
+   $types = PluginGenericobjectType::getTypes();
+   foreach ($types as $ID => $value) {
+      if (!haveRight($value['itemtype'], 'r')) {
+         unset($types[$ID]);
       }
    }
-   
-   echo "</table></div>";
-   Html::footer();
+   if (count($types) == 1) {
+      $type = array_pop($types);
+      glpi_header(getItemTypeSearchURL($type['itemtype']));
+   } else {
+      Html::header($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
+      if (!count($types)) {
+         echo "<tr class='tab_bg_1'><td align='center'>".$LANG['stats'][2]."</td></tr>";
+      } else {
+         foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
+            echo "<tr class='tab_bg_1'><td align='center'>";
+            echo "<a href='".getItemTypeSearchURL($value['itemtype'])."'>";
+            echo call_user_func(array($value['itemtype'], 'getTypeName'));
+            echo "</a></td></tr>";
+         }
+      }
+      
+      echo "</table></div>";
+      Html::footer();
+   }
 }
