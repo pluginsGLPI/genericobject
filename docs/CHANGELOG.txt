@@ -31,11 +31,17 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 2.1.2
+ see https://forge.indepnet.net/projects/genericobject/issues?query_id=33
+
 Version 2.1.1
  see https://forge.indepnet.net/projects/genericobject/issues?query_id=26
  
 Version 2.1.0
  see https://forge.indepnet.net/projects/genericobject/issues?query_id=23
+
+Version 2.0.3
+ see https://forge.indepnet.net/projects/genericobject/issues?query_id=34
 
 Version 2.0.2
  see https://forge.indepnet.net/projects/genericobject/issues?query_id=20
