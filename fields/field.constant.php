@@ -34,6 +34,7 @@ $GO_FIELDS['id']['massiveaction'] = false;
 $GO_FIELDS['name']['name']       = $LANG['common'][16];
 $GO_FIELDS['name']['field']      = 'name';
 $GO_FIELDS['name']['input_type'] = 'text';
+$GO_FIELDS['name']['autoname']   = true;
 
 $GO_FIELDS['serial']['name']       = $LANG['common'][19];
 $GO_FIELDS['serial']['field']      = 'serial';
@@ -42,6 +43,7 @@ $GO_FIELDS['serial']['input_type'] = 'text';
 $GO_FIELDS['otherserial']['name']       = $LANG['common'][20];
 $GO_FIELDS['otherserial']['field']      = 'otherserial';
 $GO_FIELDS['otherserial']['input_type'] = 'text';
+$GO_FIELDS['otherserial']['autoname']   = true;
 
 $GO_FIELDS['comment']['name']       = $LANG['common'][25];
 $GO_FIELDS['comment']['field']      = 'comment';
@@ -67,7 +69,7 @@ $GO_FIELDS['url']['datatype']   = 'weblink';
 $GO_FIELDS['types_id']['name']          = $LANG['common'][17];
 $GO_FIELDS['types_id']['linkfield']     = 'type';
 $GO_FIELDS['types_id']['input_type']    = 'dropdown';
-$GO_FIELDS['types_id']['dropdown_type'] = 'global'; //Means that 
+$GO_FIELDS['types_id']['dropdown_type'] = 'global'; //Means that
 
 $GO_FIELDS['models_id']['name']          = $LANG['common'][22];
 $GO_FIELDS['models_id']['input_type']    = 'dropdown';

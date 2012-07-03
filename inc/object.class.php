@@ -51,9 +51,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       $options = array("document_types"         => $item->canUseDocuments(),
                        "helpdesk_visible_types" => $item->canUseTickets(),
-                       "linkgroup_types"        => $item->canUseTickets() 
+                       "linkgroup_types"        => $item->canUseTickets()
                                                     && isset ($fields["groups_id"]),
-                       "linkuser_types"         => $item->canUseTickets() 
+                       "linkuser_types"         => $item->canUseTickets()
                                                    && isset ($fields["users_id"]),
                        "ticket_types"           => $item->canUseTickets(),
                        "infocom_types"          => $item->canUseInfocoms(),
@@ -85,7 +85,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    
          //Add configuration icon, if user has right
          if (Session::haveRight('config', 'w')) {
-            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config'] 
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config']
                                         = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
          }
          
@@ -209,8 +209,8 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canBeReserved() {
-      return ($this->objecttype->canBeReserved() 
-         && (Session::haveRight("reservation_central", "r") 
+      return ($this->objecttype->canBeReserved()
+         && (Session::haveRight("reservation_central", "r")
             || Session::haveRight("reservation_helpdesk", '1')));
    }
 
@@ -255,7 +255,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($id > 0) {
             $this->check($id, 'r');
          } else {
-            // Create item 
+            // Create item
             $this->check(-1, 'w');
             $this->getEmpty();
          }
@@ -285,9 +285,9 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8]."</th></tr>";
       }
       
-      foreach (PluginGenericobjectSingletonObjectField::getInstance($this->objecttype->fields['itemtype']) 
+      foreach (PluginGenericobjectSingletonObjectField::getInstance($this->objecttype->fields['itemtype'])
                as $field => $description) {
-         $this->displayField($canedit, $field, $this->fields[$field], $description);
+         $this->displayField($canedit, $field, $this->fields[$field], $template, $description);
       }
       $this->closeColumn();
       
@@ -311,27 +311,30 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    static function getFieldsToHide() {
-      return array('id', 'is_recursive', 'is_template', 'template_name', 'is_deleted', 
+      return array('id', 'is_recursive', 'is_template', 'template_name', 'is_deleted',
                    'entities_id', 'notepad', 'date_mod');
    }
    
-   function displayField($canedit, $name, $value, $description = array()) {
+   function displayField($canedit, $name, $value, $template, $description = array()) {
       global $GO_BLACKLIST_FIELDS;
 
       $searchoption  = PluginGenericobjectField::getOptionsWithGlobal($name, get_called_class());
 
-      if (!empty($searchoption) 
+      if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
          $this->startColumn();
          echo $searchoption['name'];
+         if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
+            echo "*&nbsp;";
+         }
          $this->endColumn();
          $this->startColumn();
          switch ($description['Type']) {
             case "int(11)":
                $fk_table = getTableNameForForeignKeyField($name);
                if ($fk_table != '') {
-                  $itemtype   = getItemTypeForTable($fk_table); 
+                  $itemtype   = getItemTypeForTable($fk_table);
                   $dropdown   = new $itemtype();
                   $parameters = array('name' => $name, 'value' => $value, 'comments' => true);
                   if ($dropdown->isEntityAssign()) {
@@ -370,12 +373,18 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
 
             case "varchar(255)":
-                  Html::autocompletionTextField($this, $name);
+               if (isset($searchoption['autoname']) && $searchoption['autoname']) {
+                  $objectName = autoName($this->fields[$name], $name, ($template === "newcomp"),
+                                         $this->getType(), $this->fields["entities_id"]);
+               } else {
+                   $objectName = $this->fields[$name];
+               }
+               Html::autocompletionTextField($this, $name, array('value' => $objectName));
                break;
 
             case "longtext":
             case "text":
-               echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value . 
+               echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value .
                      "</textarea>";
                break;
 
@@ -452,12 +461,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (isset ($this->input["_oldID"])) {
          // ADD Infocoms
          $ic = new Infocom();
-         if ($this->canUseInfocoms() 
+         if ($this->canUseInfocoms()
             && $ic->getFromDBforDevice($this->type, $this->input["_oldID"])) {
             $ic->fields["items_id"] = $this->fields['id'];
             unset ($ic->fields["id"]);
             if (isset ($ic->fields["immo_number"])) {
-               $ic->fields["immo_number"] = autoName($ic->fields["immo_number"], "immo_number", 1, 
+               $ic->fields["immo_number"] = autoName($ic->fields["immo_number"], "immo_number", 1,
                                                      'Infocom', $this->input['entities_id']);
             }
             if (empty ($ic->fields['use_date'])) {
@@ -469,10 +478,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             $ic->addToDB();
          }
 
-         foreach (array('Document_Item' => 'documents_id', 
+         foreach (array('Document_Item' => 'documents_id',
                         'Contract_Item' => 'contracts_id') as $type => $fk) {
             $item = new $type();
-            foreach ($item->find("items_id='" . $this->input["_oldID"] . "' 
+            foreach ($item->find("items_id='" . $this->input["_oldID"] . "'
                                  AND itemtype='" . $this->type . "'") as $tmpid => $data) {
                $tmp             = array();
                $tmp['items_id'] = $this->input["_oldID"];
@@ -514,7 +523,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      $types      = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item', 
+      $types      = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item',
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();
@@ -546,13 +555,13 @@ class PluginGenericobjectObject extends CommonDBTM {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
       
       $datainjection_blacklisted = array('id', 'date_mod', 'entities_id');
-      $index_exceptions = array('entities_id' => 80, 'is_recursive' => 86, 'date_mod' => 19, 
+      $index_exceptions = array('entities_id' => 80, 'is_recursive' => 86, 'date_mod' => 19,
                                 'comment' => 16, 'notepad' => 90, 'name' => 1, 'id' => 2);
       $index   = 3;
       $options = array();
       $table   = getTableForItemType(get_called_class());
       foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $values) {
-         $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field, 
+         $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field,
                                                                         $this->objecttype->fields['itemtype']);
          
          //Some fields have fixed index values...
@@ -599,7 +608,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          
          //Massive action or not
          if (isset($searchoption['massiveaction'])) {
-            $options[$currentindex]['massiveaction'] 
+            $options[$currentindex]['massiveaction']
                = $searchoption['massiveaction'];
          }
 
@@ -732,8 +741,8 @@ class PluginGenericobjectObject extends CommonDBTM {
             $table = getTableNameForForeignKeyField($field);
 
             //It is a dropdown table !
-            if ($field != 'entities_id' 
-               && $table != '' 
+            if ($field != 'entities_id'
+               && $table != ''
                   && isset($this->fields[$field]) && $this->fields[$field] > 0) {
                //Instanciate a new dropdown object
                $dropdown_itemtype = getItemTypeForTable($table);
@@ -742,8 +751,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                
                //If dropdown is only accessible in the other entity
                //do not go further
-               if (!$dropdown->isEntityAssign() 
-                  || in_array($new_entity, getAncestorsOf('glpi_entities', 
+               if (!$dropdown->isEntityAssign()
+                  || in_array($new_entity, getAncestorsOf('glpi_entities',
                                                           $dropdown->getEntityID()))) {
                   continue;
                } else {

@@ -42,11 +42,11 @@ class PluginGenericobjectProfile extends CommonDBTM {
       echo "<form action='" . Toolbox::getItemTypeSearchURL(__CLASS__) . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
-      echo "<tr><th colspan='2' align='center'><strong>"; 
+      echo "<tr><th colspan='2' align='center'><strong>";
       echo $LANG["genericobject"]['profile'][0]."</strong></th></tr>";
 
       foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
-         echo "<tr><th colspan='2' align='center'><strong>"; 
+         echo "<tr><th colspan='2' align='center'><strong>";
          echo $LANG['profiles'][22]." ".$profile['name']."</strong></th></tr>";
 
          $go_profile = new self();
@@ -58,14 +58,14 @@ class PluginGenericobjectProfile extends CommonDBTM {
          if ($profile['interface'] == 'central') {
             echo "<tr class='tab_bg_2'>";
             echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
-            Profile::dropdownNoneReadWrite($prefix."[right]",  
+            Profile::dropdownNoneReadWrite($prefix."[right]",
                                            $go_profile->fields[$type->fields['itemtype']], 1, 1, 1);
             echo "</td></tr>";
          }
          if ($type->canUseTickets()) {
             echo "<tr class='tab_bg_2'>";
             echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
-            Dropdown::showYesNo($prefix."[open_ticket]",  
+            Dropdown::showYesNo($prefix."[open_ticket]",
                                 $go_profile->fields[$type->fields['itemtype'].'_open_ticket']);
             echo "</td></tr>";
          }
@@ -75,7 +75,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       if ($canedit) {
          echo "<tr class='tab_bg_1'>";
          echo "<td align='center' colspan='2'>";
-         echo "<input type='submit' name='update_all_rights' value=\"" . 
+         echo "<input type='submit' name='update_all_rights' value=\"" .
             $LANG['buttons'][7] . "\" class='submit'>";
          echo "</td></tr>";
       }
@@ -106,7 +106,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       
       if (!empty ($types)) {
 
-         echo "<tr><th colspan='2' align='center'><strong>"; 
+         echo "<tr><th colspan='2' align='center'><strong>";
          echo $LANG["genericobject"]['profile'][0]."</strong></th></tr>";
          
          foreach ($types as $tmp => $type) {
@@ -136,14 +136,14 @@ class PluginGenericobjectProfile extends CommonDBTM {
             echo "<td align='center' colspan='2'>";
             echo "<input type='hidden' name='profiles_id' value='".$id."'>";
             echo "<input type='hidden' name='id' value=$id>";
-            echo "<input type='submit' name='update_user_profile' value=\"" . 
+            echo "<input type='submit' name='update_user_profile' value=\"" .
                $LANG['buttons'][7] . "\" class='submit'>";
             echo "</td></tr>";
          
          }
 
       } else {
-         echo "<tr><td class='center'><strong>"; 
+         echo "<tr><td class='center'><strong>";
          echo $LANG["genericobject"]['profile'][3]."</strong></td></tr>";
       }
 
@@ -152,7 +152,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
    }
 
    static function getProfileforItemtype($profiles_id, $itemtype) {
-      $results = getAllDatasFromTable(getTableForItemType(__CLASS__), 
+      $results = getAllDatasFromTable(getTableForItemType(__CLASS__),
                                       "`itemtype`='$itemtype' AND `profiles_id`='$profiles_id'");
       if (!empty($results)) {
          return array_pop($results);
@@ -223,7 +223,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
    /**
     * Check if rights for a profile still exists
     * @param profiles_id the profile ID
-    * @param itemtype name of the type 
+    * @param itemtype name of the type
     * @return true if exists, no if not
     */
    public static function profileExists($profiles_id, $itemtype = false) {
@@ -302,5 +302,5 @@ class PluginGenericobjectProfile extends CommonDBTM {
       global $DB;
       $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
       $DB->query($query) or die($DB->error());
-   } 
+   }
 }

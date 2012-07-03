@@ -36,13 +36,13 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
 } else {
    $types = PluginGenericobjectType::getTypes();
    foreach ($types as $ID => $value) {
-      if (!haveRight($value['itemtype'], 'r')) {
+      if (!Session::haveRight($value['itemtype'], 'r')) {
          unset($types[$ID]);
       }
    }
    if (count($types) == 1) {
       $type = array_pop($types);
-      glpi_header(getItemTypeSearchURL($type['itemtype']));
+      Html::redirect(Toolbox::getItemTypeSearchURL($type['itemtype']));
    } else {
       Html::header($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
       echo "<table class='tab_cadre_fixe'>";
@@ -52,7 +52,7 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       } else {
          foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
             echo "<tr class='tab_bg_1'><td align='center'>";
-            echo "<a href='".getItemTypeSearchURL($value['itemtype'])."'>";
+            echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
             echo call_user_func(array($value['itemtype'], 'getTypeName'));
             echo "</a></td></tr>";
          }

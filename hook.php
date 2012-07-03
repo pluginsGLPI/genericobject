@@ -40,9 +40,13 @@ function plugin_get_headings_genericobject($item, $withtemplate) {
 
    switch (get_class($item)) {
       case 'Profile':
-         $prof = new Profile();
+         if (!$item->isNewID($item->getID())) {
+            $prof = new Profile();
             return array(1 => $LANG["genericobject"]["title"][1]);
-            break;
+         } else {
+            return false;
+         }
+         break;
    }
    return false;
 }
@@ -50,9 +54,11 @@ function plugin_get_headings_genericobject($item, $withtemplate) {
 function plugin_headings_genericobject($item, $withtemplate) {
    switch (get_class($item)) {
       case 'Profile' :
-         PluginGenericobjectProfile::createAccess($item->getID());
-         $prof = new PluginGenericobjectProfile();
-         $prof->showForm($item->getID());
+         if (!$item->isNewID($item->getID())) {
+            PluginGenericobjectProfile::createAccess($item->getID());
+            $prof = new PluginGenericobjectProfile();
+            $prof->showForm($item->getID());
+         }
          break;
    }
 }
@@ -72,12 +78,12 @@ function plugin_genericobject_getDropdown() {
 
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
-      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'), 
+      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
                                    "`is_active`='1'") as $itemtype) {
          foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table) {
             $dropdown_itemtype = getItemTypeForTable($table);
-            $dropdowns[$dropdown_itemtype] = call_user_func(array($dropdown_itemtype, 
-                                                                  'getTypeName')); 
+            $dropdowns[$dropdown_itemtype] = call_user_func(array($dropdown_itemtype,
+                                                                  'getTypeName'));
          }
       }
    }
@@ -92,10 +98,10 @@ function plugin_genericobject_getDatabaseRelations() {
 /*
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
-      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'), 
+      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
                                    "`is_active`='1'") as $itemtype) {
          foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
-            $dropdowns[$table][] = array() 
+            $dropdowns[$table][] = array()
          }
       }
    }
@@ -119,11 +125,11 @@ function plugin_genericobject_install() {
    //check directories rights
    if (!check_directories()) {
       return false;
-   } 
+   }
 
    $migration = new Migration('2.1.0');
    
-   foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile', 
+   foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile',
                   'PluginGenericobjectField') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
@@ -137,7 +143,7 @@ function plugin_genericobject_install() {
    }
 
    if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
-      @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true) 
+      @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true)
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
    }
 
@@ -161,7 +167,7 @@ function plugin_genericobject_uninstall() {
       }
    }
 
-   foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile', 
+   foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile',
                   'PluginGenericobjectField') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
@@ -179,7 +185,7 @@ function plugin_genericobject_uninstall() {
 function check_directories() {
    global $LANG;
    
-   foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH, 
+   foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH,
                   GENERICOBJECT_LOCALES_PATH) as $path) {
       if (!is_dir($path) || !is_writable($path)) {
          Session::addMessageAfterRedirect($LANG['genericobject']['install'][0]);
@@ -222,7 +228,7 @@ function plugin_genericobject_MassiveActionsDisplay($options=array()) {
       case 'plugin_genericobject_transfer':
          if ($objecttype->isTransferable()) {
             Dropdown::show('Entity', array('name' => 'new_entity'));
-            echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" . 
+            echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" .
                $LANG['buttons'][2] . "\" >";
          }
          break;
@@ -257,7 +263,7 @@ function plugin_genericobject_giveItem($type, $ID, $data, $num) {
    $genericobjecttype->getFromDB($data['id']);
 
    switch ($table . '.' . $field) {
-      // display associated items with order 
+      // display associated items with order
       case "glpi_plugin_genericobject_types.use_deleted" :
          Drodpdown::getYesNo($genericobjecttype->canBeDeleted());
          break;
