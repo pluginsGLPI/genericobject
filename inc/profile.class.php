@@ -79,7 +79,8 @@ class PluginGenericobjectProfile extends CommonDBTM {
             $LANG['buttons'][7] . "\" class='submit'>";
          echo "</td></tr>";
       }
-      echo "</table></form>";
+      echo "</table>";
+      Html::closeForm();
    }
    
    /* profiles modification */
@@ -147,7 +148,8 @@ class PluginGenericobjectProfile extends CommonDBTM {
          echo $LANG["genericobject"]['profile'][3]."</strong></td></tr>";
       }
 
-      echo "</table></form>";
+      echo "</table>";
+      Html::closeForm();
 
    }
 

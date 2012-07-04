@@ -54,7 +54,9 @@ function plugin_init_genericobject() {
    $plugin = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
-
+      
+      $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
+      
       //Load genericobject default constants
       include_once (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
       

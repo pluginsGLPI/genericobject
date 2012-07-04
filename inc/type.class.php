@@ -1165,6 +1165,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_plugin_order` tinyint(1) NOT NULL default '0',
                            `use_plugin_uninstall` tinyint(1) NOT NULL default '0',
                            `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
+                           `use_menu_entry` tinyint(1) NOT NULL default '0',
                            PRIMARY KEY ( `id` )
                            ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
@@ -1174,6 +1175,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_direct_connections", "bool");
       $migration->addField($table, "use_plugin_geninventorynumber", "bool");
       $migration->addField($table, "use_contracts", "bool");
+      $migration->addField($table, "use_menu_entry", "bool");
       $migration->migrationOneTable($table);
       
 
@@ -1184,7 +1186,7 @@ class PluginGenericobjectType extends CommonDBTM {
          if (!countElementsInTable("glpi_displaypreferences",
                                     "`itemtype`='".__CLASS__."' AND `num`='$num'
                                        AND `rank`='$rank' AND `users_id`='0'")) {
-            $preference = new DisplayPreference();
+            $preference      = new DisplayPreference();
             $tmp['itemtype'] = __CLASS__;
             $tmp['num']      = $num;
             $tmp['rank']     = $rank;

@@ -306,7 +306,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "<div id='tabcontent'></div>";
          echo "<script type='text/javascript'>loadDefaultTab();</script>";
       } else {
-         echo "</table></div></form>";
+         echo "</table></div>";
+         Html::closeForm();
       }
    }
 
