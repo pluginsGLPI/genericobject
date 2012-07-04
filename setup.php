@@ -123,17 +123,17 @@ function plugin_post_init_genericobject() {
 function plugin_version_genericobject() {
    global $LANG;
    return array ('name'           => $LANG["genericobject"]["title"][1],
-                 'version'        => '2.1.2',
+                 'version'        => '2.1.3',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
                  'license'        => 'GPLv2+',
-                 'minGlpiVersion' => '0.83');
+                 'minGlpiVersion' => '0.83.3');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.83','lt') || version_compare(GLPI_VERSION,'0.84','ge')) {
-      echo "This plugin requires GLPI 0.83";
+   if (version_compare(GLPI_VERSION,'0.83.3','lt') || version_compare(GLPI_VERSION,'0.84','ge')) {
+      echo "This plugin requires GLPI 0.83.3";
       return false;
    }
    if (version_compare(PHP_VERSION, '5.3.0', 'lt')) {
