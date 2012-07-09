@@ -28,10 +28,7 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (isset($_POST['action'])) {
-   //Move field
-   PluginGenericobjectField::changeFieldOrder($_POST);
-} elseif (isset ($_POST["delete"])) {
+if (isset ($_POST["delete"])) {
    $type = new PluginGenericobjectType();
    $type->getFromDB($_POST["id"]);
    PluginGenericobjectType::registerOneType($type);
@@ -54,6 +51,9 @@ if (isset($_POST['action'])) {
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
       Session::addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
    }
+} elseif (isset($_POST['action'])) {
+   //Move field
+   PluginGenericobjectField::changeFieldOrder($_POST);
 }
 
 Html::redirect($_SERVER['HTTP_REFERER']);

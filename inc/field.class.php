@@ -317,13 +317,20 @@ class PluginGenericobjectField extends CommonDBTM {
             $index = $id;
          }
       }
+      Toolbox::logDebug($fields, $index, $index -2);
       //Get 2 positions before and move field
-      $previous = $index -2;
+      if ($params['action'] == 'down') {
+         $previous = $index - 1;
+      } else {
+         $previous = $index - 2;
+      }
+      
       if (isset($keys[$previous])) {
          $parent = $fields[$keys[$previous]];
          $query  = "ALTER TABLE `$table` MODIFY `$field` ".$fields[$field]['Type'];
          $query .= " AFTER `".$fields[$keys[$previous]]['Field']."`";
          $DB->query($query) or die ($DB->error());
+         Toolbox::logDebug($query);
       }
    }
    
