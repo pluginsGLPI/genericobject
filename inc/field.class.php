@@ -30,7 +30,6 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function showObjectFieldsForm($id) {
       global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
-      
       $url          = Toolbox::getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
       $object_type->getFromDB($id);
@@ -60,7 +59,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
       echo $LANG['genericobject']['fields'][1] . " : ";
-      call_user_func(array($itemtype, 'getTypeName'));
+      echo call_user_func(array($itemtype, 'getTypeName'));
       echo "</th></tr>";
 
       echo "<tr class='tab_bg_1'>";
