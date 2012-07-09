@@ -57,13 +57,8 @@ function plugin_init_genericobject() {
       
       $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
       
-      //Load genericobject default constants
-      include_once (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
+      plugin_genericobject_includeCommonFields();
       
-      //Include user constants, that must be accessible for all itemtypes
-      if (file_exists(GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php")) {
-         include_once (GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php");
-      }
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       /* load changeprofile function */
@@ -165,4 +160,22 @@ function plugin_genericobject_haveTypeRight($itemtype, $right) {
          return Session::haveRight($itemtype, $right);
    }
 
+}
+
+function plugin_genericobject_includeCommonFields($force = false) {
+   //Load genericobject default constants
+   if (!$force) {
+      include_once (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
+   } else {
+      include (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
+   }
+      
+   //Include user constants, that must be accessible for all itemtypes
+   if (file_exists(GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php")) {
+      if (!$force) {
+         include_once (GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php");
+      } else {
+         include (GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php");
+      }
+   }
 }

@@ -86,7 +86,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          //Add configuration icon, if user has right
          if (Session::haveRight('config', 'w')) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config']
-                                        = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
+               = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
          }
          
          //Item can be linked to tickets

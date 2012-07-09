@@ -30,6 +30,7 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function showObjectFieldsForm($id) {
       global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
+      
       $url          = Toolbox::getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
       $object_type->getFromDB($id);
@@ -37,6 +38,16 @@ class PluginGenericobjectField extends CommonDBTM {
       $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
       $used_fields  = array();
 
+      //Reset fields definition only to keep the itemtype ones
+      $GO_FIELDS = array();
+      plugin_genericobject_includeCommonFields(true);
+      $file = GLPI_ROOT."/plugins/genericobject/fields/constants/".
+               $object_type->fields['name'].".constant.php";
+      if (file_exists($file)) {
+         include $file;
+      }
+      PluginGenericobjectType::includeConstants($itemtype, true);
+      
       foreach ($GO_BLACKLIST_FIELDS as $autofield) {
          if (!in_array($autofield, $used_fields)) {
             $used_fields[$autofield] = $autofield;

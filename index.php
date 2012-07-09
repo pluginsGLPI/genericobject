@@ -50,7 +50,7 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       if (!count($types)) {
          echo "<tr class='tab_bg_1'><td align='center'>".$LANG['stats'][2]."</td></tr>";
       } else {
-         foreach(PluginGenericobjectType::getTypes() as $ID => $value) {
+         foreach($types as $ID => $value) {
             echo "<tr class='tab_bg_1'><td align='center'>";
             echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
             echo call_user_func(array($value['itemtype'], 'getTypeName'));
