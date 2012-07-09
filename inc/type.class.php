@@ -46,6 +46,10 @@ class PluginGenericobjectType extends CommonDBTM {
 
    var $dohistory = true;
 
+   function isEntityAssign() {
+      return false;
+   }
+   
    static function getTypeName($nb=0) {
       global $LANG;
       return $LANG['genericobject']['title'][2];
