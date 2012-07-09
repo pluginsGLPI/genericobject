@@ -44,7 +44,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
 
       echo "<div class='center'>";
-      echo "<form name='fields_definition' method='post' action='$url'>";
+      echo "<form name='fields_definition' method='POST' action='$url'>";
       echo "<table class='tab_cadre_fixe' >";
       echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
@@ -168,9 +168,9 @@ class PluginGenericobjectField extends CommonDBTM {
       $options  = self::getOptionsWithGlobal($field, $itemtype);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
-      if (isset ($_GET["select"]) && $_GET["select"] == "all") {
-         $sel = "checked";
-      }
+      //if (isset ($_POST["select"]) && $_POST["select"] == "all") {
+      //   $sel = "checked";
+      //}
       $sel ="";
 
       echo "<td width='10'>";
@@ -183,15 +183,15 @@ class PluginGenericobjectField extends CommonDBTM {
 
       echo "<td width='10'>";
       if (!$readonly && $index > 1) {
-         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=up&amp;itemtype=$itemtype\">";
-         echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_up.png\" alt=''></a>";
+         Html::showMinimalForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
+                               array('field' => $field, 'action' => 'up', 'itemtype' => $itemtype));
       }
       echo "</td>";
 
       echo "<td width='10'>";
       if (!$readonly && !$last) {
-         echo "<a href=\"" . $target . "?field=" . $field . "&amp;action=down&amp;itemtype=$itemtype\">";
-         echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/deplier_down.png\" alt=''></a>";
+         Html::showMinimalForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
+                               array('field' => $field, 'action' => 'down', 'itemtype' => $itemtype));
       }
       echo "</td>";
 

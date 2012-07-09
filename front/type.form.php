@@ -34,16 +34,14 @@ if (!isset ($_REQUEST["id"])) {
 $type = new PluginGenericobjectType();
 
 $extraparams = array ();
-if (isset ($_GET["select"]) && $_GET["select"] == "all") {
+if (isset ($_POST["select"]) && $_POST["select"] == "all") {
    $extraparams["selected"] = "checked";
 }
 
 if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
-   //PluginGenericobjectType::includeLocales($type->fields["name"]);
-   //PluginGenericobjectType::includeConstants($type->fields["name"]);
    PluginGenericobjectType::registerOneType($type);
-   PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"], 
+   PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"],
                                                $_GET["action"]);
    Html::redirect($_SERVER['HTTP_REFERER']);
 }
@@ -58,7 +56,7 @@ if (isset ($_POST["add"])) {
    $type->redirectToList();
 }
 
-Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject", 
+Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject",
              "type");
 $type->showForm($_REQUEST["id"]);
 

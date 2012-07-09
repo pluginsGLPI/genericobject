@@ -28,9 +28,9 @@
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-if (isset($_GET['action'])) {
+if (isset($_POST['action'])) {
    //Move field
-   PluginGenericobjectField::changeFieldOrder($_GET);
+   PluginGenericobjectField::changeFieldOrder($_POST);
 } elseif (isset ($_POST["delete"])) {
    $type = new PluginGenericobjectType();
    $type->getFromDB($_POST["id"]);
@@ -38,8 +38,8 @@ if (isset($_GET['action'])) {
 
    foreach ($_POST["fields"] as $field => $value) {
       $itemtype = $type->fields['itemtype'];
-      if ($type->can($_POST["id"], "w") 
-         && $value == 1  
+      if ($type->can($_POST["id"], "w")
+         && $value == 1
             && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
          PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
          Session::addMessageAfterRedirect($LANG['genericobject']['fields'][5]);
