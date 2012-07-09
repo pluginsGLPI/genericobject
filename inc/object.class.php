@@ -282,7 +282,9 @@ class PluginGenericobjectObject extends CommonDBTM {
       $this->showFormHeader($options);
 
       if ($previsualisation) {
-         echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8]."</th></tr>";
+         echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8].":&nbsp;";
+         echo call_user_func(array($this->objecttype->fields['itemtype'], 'getTypeName'));
+         echo "</th></tr>";
       }
       
       foreach (PluginGenericobjectSingletonObjectField::getInstance($this->objecttype->fields['itemtype'])

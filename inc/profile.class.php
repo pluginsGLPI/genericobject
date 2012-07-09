@@ -43,7 +43,9 @@ class PluginGenericobjectProfile extends CommonDBTM {
       echo "<table class='tab_cadre_fixe'>";
 
       echo "<tr><th colspan='2' align='center'><strong>";
-      echo $LANG["genericobject"]['profile'][0]."</strong></th></tr>";
+      echo $LANG["genericobject"]['profile'][0].":&nbsp;";
+      echo call_user_func(array($type->fields['itemtype'], 'getTypeName'));
+      echo "</strong></th></tr>";
 
       foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
          echo "<tr><th colspan='2' align='center'><strong>";
