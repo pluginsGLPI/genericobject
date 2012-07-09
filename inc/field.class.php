@@ -44,7 +44,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
 
       echo "<div class='center'>";
-      echo "<form name='fields_definition' method='POST' action='$url'>";
+      echo "<form name='fieldslist' method='POST' action='$url'>";
       echo "<table class='tab_cadre_fixe' >";
       echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
@@ -73,7 +73,7 @@ class PluginGenericobjectField extends CommonDBTM {
          $global_index++;
       }
       echo "</table>";
-      Html::openArrowMassives('fields_definition', true);
+      Html::openArrowMassives('fieldslist', true);
       Html::closeArrowMassives(array('delete' => $LANG['buttons'][6]));
 
       echo "<table class='tab_cadre'>";
@@ -85,8 +85,9 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td>";
       echo "<input type='submit' name='add_field' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
       echo "</tr>";
-      echo "</table></div>";
+      echo "</table>";
       Html::closeForm();
+      echo "</div>";
    }
 
    /**
