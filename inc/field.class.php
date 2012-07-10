@@ -194,15 +194,17 @@ class PluginGenericobjectField extends CommonDBTM {
 
       echo "<td width='10'>";
       if (!$readonly && $index > 1) {
-         Html::showMinimalForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
-                               array('field' => $field, 'action' => 'up', 'itemtype' => $itemtype));
+         Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
+                               array('field' => $field, 'action' => 'up', 'itemtype' => $itemtype),
+                               $CFG_GLPI["root_doc"] . "/pics/deplier_up.png");
       }
       echo "</td>";
 
       echo "<td width='10'>";
       if (!$readonly && !$last) {
-         Html::showMinimalForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
-                               array('field' => $field, 'action' => 'down', 'itemtype' => $itemtype));
+         Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
+                               array('field' => $field, 'action' => 'down', 'itemtype' => $itemtype),
+                               $CFG_GLPI["root_doc"] . "/pics/deplier_down.png");
       }
       echo "</td>";
 
