@@ -66,8 +66,9 @@ function plugin_init_genericobject() {
                                                                'changeProfile');
 
       // Display a menu entry ?
-      $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
-      $PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
+      if (PluginGenericobjectType::canViewAtLeastOneType()) {
+         $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
+      }
 
       //Do not display icon if not using the genericobject plugin
       if (isset($_GET['id']) &&  $_GET['id'] != ''
@@ -92,6 +93,7 @@ function plugin_init_genericobject() {
 
       // Config page
       if (Session::haveRight('config', 'w')) {
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
          $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';

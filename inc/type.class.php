@@ -1146,6 +1146,18 @@ class PluginGenericobjectType extends CommonDBTM {
       return Session::isMultiEntitiesMode();
       
    }
+
+   static function canViewAtLeastOneType() {
+      $types = self::getTypes();
+      $view  = false;
+      foreach ($types as $ID => $value) {
+         if (Session::haveRight($value['itemtype'], 'r')) {
+            $view = true;
+            break;
+         }
+      }
+      return $view;
+   }
    //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//
    static function install(Migration $migration) {
       global $DB;
