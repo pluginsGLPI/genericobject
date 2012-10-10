@@ -31,6 +31,12 @@
 // Original Author of file: Walid NOUH
 // Purpose of file:
 // ----------------------------------------------------------------------
+Version 2.1.4
+ see https://forge.indepnet.net/projects/genericobject/issues?query_id=41
+
+Version 2.1.3
+ see https://forge.indepnet.net/projects/genericobject/issues?query_id=42
+
 Version 2.1.2
  see https://forge.indepnet.net/projects/genericobject/issues?query_id=33
 
