@@ -50,12 +50,11 @@ function plugin_init_genericobject() {
                                  "is_recursive", "is_template", "notepad", "template_name",
                                  "is_helpdesk_visible", "comment", "name", "date_mod");
 
+   $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
    $GENERICOBJECT_PDF_TYPES = array ();
    $plugin = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
-      
-      $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
       
       plugin_genericobject_includeCommonFields();
       
@@ -66,9 +65,7 @@ function plugin_init_genericobject() {
                                                                'changeProfile');
 
       // Display a menu entry ?
-      if (PluginGenericobjectType::canViewAtLeastOneType()) {
-         $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
-      }
+      $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
 
       //Do not display icon if not using the genericobject plugin
       if (isset($_GET['id']) &&  $_GET['id'] != ''
@@ -90,10 +87,10 @@ function plugin_init_genericobject() {
          = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
          = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
-
+         
       // Config page
       if (Session::haveRight('config', 'w')) {
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['config'] = 'front/type.php';
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['config']         = 'front/type.php';
          $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';

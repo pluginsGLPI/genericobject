@@ -809,7 +809,9 @@ class PluginGenericobjectType extends CommonDBTM {
          }
       }
       if ($tree) {
+         $fk    = getForeignKeyFieldForTable($table);
          $query = "ALTER TABLE `$table` ADD `completename` text COLLATE utf8_unicode_ci,
+                                        ADD `$fk` int(11) NOT NULL DEFAULT '0',
                                         ADD `level` int(11) NOT NULL DEFAULT '0',
                                         ADD `ancestors_cache` longtext COLLATE utf8_unicode_ci,
                                         ADD `sons_cache` longtext COLLATE utf8_unicode_ci";

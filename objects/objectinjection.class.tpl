@@ -36,6 +36,14 @@ class %%INJECTIONCLASS%% extends %%CLASSNAME%%
       $this->table = getTableForItemType(get_parent_class($this));
    }
 
+   function isPrimaryType() {
+      return true;
+   }
+
+   function connectedTo() {
+      return array();
+   }
+   
    /**
     * Standard method to add an object into glpi
     *
