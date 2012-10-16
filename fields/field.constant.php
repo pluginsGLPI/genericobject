@@ -83,7 +83,7 @@ $GO_FIELDS['entities_id']['name']          = $LANG['entity'][0];
 $GO_FIELDS['entities_id']['input_type']    = 'dropdown';
 $GO_FIELDS['entities_id']['massiveaction'] = false;
 
-$GO_FIELDS['template_name']['name']          = $LANG['entity'][0];
+$GO_FIELDS['template_name']['name']          = $LANG['common'][6]; 
 $GO_FIELDS['template_name']['input_type']    = 'text';
 $GO_FIELDS['template_name']['massiveaction'] = false;
 

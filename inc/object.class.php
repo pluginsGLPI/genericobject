@@ -551,12 +551,12 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function getSearchOptions() {
-      return $this->getObjectSearchOptions(false);
+      return $this->getObjectSearchOptions(true);
    }
    
    function getObjectSearchOptions($with_linkfield = false) {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
-      
+
       $datainjection_blacklisted = array('id', 'date_mod', 'entities_id');
       $index_exceptions = array('entities_id' => 80, 'is_recursive' => 86, 'date_mod' => 19,
                                 'comment' => 16, 'notepad' => 90, 'name' => 1, 'id' => 2);
@@ -566,13 +566,13 @@ class PluginGenericobjectObject extends CommonDBTM {
       foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $values) {
          $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field,
                                                                         $this->objecttype->fields['itemtype']);
-         
+
          //Some fields have fixed index values...
          $currentindex = $index;
          if (isset($index_exceptions[$field])) {
             $currentindex = $index_exceptions[$field];
          }
-         
+
          if (in_array($field,array('is_deleted'))) {
             continue;
          }
@@ -581,7 +581,6 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          //Table definition
          $tmp  = getTableNameForForeignKeyField($field);
-
 
          if ($with_linkfield) {
             $options[$currentindex]['linkfield'] = $field;
