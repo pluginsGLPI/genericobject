@@ -566,11 +566,14 @@ class PluginGenericobjectObject extends CommonDBTM {
       foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $values) {
          $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field,
                                                                         $this->objecttype->fields['itemtype']);
-
+         
          //Some fields have fixed index values...
          $currentindex = $index;
          if (isset($index_exceptions[$field])) {
             $currentindex = $index_exceptions[$field];
+         } elseif (in_array($currentindex, $index_exceptions)) {
+            //If this index is reserved, jump to next
+            $currentindex++;
          }
 
          if (in_array($field,array('is_deleted'))) {
