@@ -65,8 +65,9 @@ function plugin_headings_genericobject($item, $withtemplate) {
 
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
-      if ($value['use_tickets'] && Session::haveRight($value["itemtype"].'_open_ticket',"1")) {
-         $types[$value['itemtype']] = call_user_func(array($value['itemtype'], 'getTypeName'));
+      $itemtype = $value['itemtype'];
+      if ($value['use_tickets'] && Session::haveRight($itemtype.'_open_ticket',"1")) {
+         $types[$itemtype] = $itemtype::getTypeName();
       }
    }
    return $types;
@@ -81,9 +82,8 @@ function plugin_genericobject_getDropdown() {
       foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
                                    "`is_active`='1'") as $itemtype) {
          foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table) {
-            $dropdown_itemtype = getItemTypeForTable($table);
-            $dropdowns[$dropdown_itemtype] = call_user_func(array($dropdown_itemtype,
-                                                                  'getTypeName'));
+            $dropdown_itemtype             = getItemTypeForTable($table);
+            $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
          }
       }
    }
@@ -137,7 +137,7 @@ function plugin_genericobject_install() {
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            call_user_func(array($itemtype,'install'), $migration);
+            $itemtype::install($migration);
          }
       }
    }
@@ -162,8 +162,9 @@ function plugin_genericobject_uninstall() {
 
    //For each type
    foreach (PluginGenericobjectType::getTypes(true) as $tmp => $value) {
-      if (class_exists($value['itemtype'])) {
-         call_user_func(array($value['itemtype'], 'uninstall'));
+      $itemtype = $value['itemtype'];
+      if (class_exists(itemtype)) {
+         $itemtype::uninstall();
       }
    }
 
@@ -175,7 +176,7 @@ function plugin_genericobject_uninstall() {
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            call_user_func(array($itemtype, 'uninstall'));
+            $itemtype::uninstall();
          }
       }
    }

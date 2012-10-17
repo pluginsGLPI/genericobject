@@ -194,7 +194,8 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td>" . $LANG['genericobject']['config'][9] . "</td>";
       echo "<td>";
       if ($ID) {
-         echo call_user_func(array($this->fields["itemtype"], "getTypeName"));
+         $itemtype = $this->fields["itemtype"];
+         echo $itemtype::getTypeName();
       }
       echo "</td>";
       echo "</tr>";
@@ -960,10 +961,10 @@ class PluginGenericobjectType extends CommonDBTM {
     * @param type the type's attributes
     * @return nothing
     */
-   static function registerOneType(PluginGenericobjectType $objecttype) {
+   static function registerOneType($itemtype) {
       //If table doesn't exists, do not try to register !
-      if (class_exists($objecttype->fields['itemtype'])) {
-         call_user_func(array($objecttype->fields['itemtype'], 'registerType'));
+      if (class_exists($itemtype)) {
+         $itemtype::registerType();
       }
    }
    

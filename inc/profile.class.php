@@ -41,10 +41,10 @@ class PluginGenericobjectProfile extends CommonDBTM {
    
       echo "<form action='" . Toolbox::getItemTypeSearchURL(__CLASS__) . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
-
+      $itemtype = $type->fields['itemtype'];
       echo "<tr><th colspan='2' align='center'><strong>";
       echo $LANG["genericobject"]['profile'][0].":&nbsp;";
-      echo call_user_func(array($type->fields['itemtype'], 'getTypeName'));
+      echo $itemtype::getTypeName();
       echo "</strong></th></tr>";
 
       foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
@@ -117,7 +117,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
             $objecttype = new PluginGenericobjectType($itemtype);
             $profile    = self::getProfileforItemtype($id, $itemtype);
             echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".
-               call_user_func(array($itemtype, 'getTypeName'))."</th></tr>";
+               $itemtype::getTypeName()."</th></tr>";
             if ($general_profile->fields['interface'] == 'central') {
                echo "<tr class='tab_bg_2'>";
                $right = $type['itemtype'];

@@ -27,14 +27,14 @@
  
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
-
+Toolbox::logDebug($_POST);
 if (isset ($_POST["delete"])) {
    $type = new PluginGenericobjectType();
    $type->getFromDB($_POST["id"]);
-   PluginGenericobjectType::registerOneType($type);
+   $itemtype = $type->fields['itemtype'];
+   PluginGenericobjectType::registerOneType($itemtype);
 
    foreach ($_POST["fields"] as $field => $value) {
-      $itemtype = $type->fields['itemtype'];
       if ($type->can($_POST["id"], "w")
          && $value == 1
             && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
@@ -45,9 +45,9 @@ if (isset ($_POST["delete"])) {
 } elseif (isset ($_POST["add_field"])) {
    $type     = new PluginGenericobjectType();
    if ($_POST["new_field"] && $type->can($_POST["id"], "w")) {
-      PluginGenericobjectType::registerOneType($type);
-
       $itemtype = $type->fields['itemtype'];
+      PluginGenericobjectType::registerOneType($itemtype);
+
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
       Session::addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
    }
@@ -56,4 +56,4 @@ if (isset ($_POST["delete"])) {
    PluginGenericobjectField::changeFieldOrder($_POST);
 }
 
-Html::redirect($_SERVER['HTTP_REFERER']);
+Html::back();

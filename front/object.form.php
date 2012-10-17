@@ -37,28 +37,28 @@ if (!isset($_GET["withtemplate"])) {
 }
 
 if (isset ($_POST["add"])) {
-   $item->check($id,'w');
+   $item->check($id, 'w');
    $item->add($_POST);
-   Html::redirect($_SERVER["HTTP_REFERER"]);
+   Html::back();
 } elseif (isset ($_POST["update"])) {
-   $item->check($id,'w');
+   $item->check($id, 'w');
    $item->update($_POST);
-   Html::redirect($_SERVER["HTTP_REFERER"]);
+   Html::back();
 } elseif (isset ($_POST["restore"])) {
-   $item->check($id,'w');
+   $item->check($id, 'w');
    $item->restore($_POST);
-   Html::redirect($_SERVER["HTTP_REFERER"]);
-} elseif (isset($_REQUEST["purge"])) {
-   $item->check($id,'w');
-   $item->delete($_POST,1);
+   Html::back();
+} elseif (isset($_POST["purge"])) {
+   $item->check($id, 'w');
+   $item->delete($_POST, 1);
    $item->redirectToList();
-} elseif (isset($_SERVER["delete"])) {
-   $item->check($id,'w');
+} elseif (isset($_POST["delete"])) {
+   $item->check($id, 'w');
    $item->delete($_POST);
    $item->redirectToList();
 }
 $itemtype = get_class($item);
-Html::header(call_user_func(array($itemtype, 'getTypeName')), $_SERVER['PHP_SELF'], 
+Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
              "plugins", "genericobject", $itemtype);
 
 $item->title();

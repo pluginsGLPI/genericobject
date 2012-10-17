@@ -75,7 +75,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          //Menu management
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['title']
-                                                   = call_user_func(array($class, 'getTypeName'));
+                                                   = $class::getTypeName();
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['page']
                                                    = Toolbox::getItemTypeSearchURL($class, false);
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
@@ -100,6 +100,8 @@ class PluginGenericobjectObject extends CommonDBTM {
             array_push($ORDER_TYPES, $class);
          }
       }
+      
+      
    }
    
    //Get itemtype name
@@ -283,7 +285,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if ($previsualisation) {
          echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8].":&nbsp;";
-         echo call_user_func(array($this->objecttype->fields['itemtype'], 'getTypeName'));
+         $itemype = $this->objecttype->fields['itemtype'];
+         echo $itemtype::getTypeName();
          echo "</th></tr>";
       }
       
@@ -526,7 +529,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      $types      = array('Ticket', 'NetworkPort', 'NetworkPort_NetworkPort', 'Computer_Item',
+      $types      = array('Ticket', 'NetworkPort', 'Computer_Item',
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();

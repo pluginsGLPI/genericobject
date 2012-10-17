@@ -109,7 +109,8 @@ function plugin_init_genericobject() {
 
 function plugin_post_init_genericobject() {
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
-      call_user_func(array($objecttype['itemtype'], 'registerType'));
+      $itemtype = $objecttype['itemtype'];
+      $itemtype::registerType();
    }
 }
 

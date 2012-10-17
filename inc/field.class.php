@@ -59,7 +59,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
       echo $LANG['genericobject']['fields'][1] . " : ";
-      echo call_user_func(array($itemtype, 'getTypeName'));
+      echo $itemtype::getTypeName();
       echo "</th></tr>";
 
       echo "<tr class='tab_bg_1'>";

@@ -53,7 +53,8 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
          foreach($types as $ID => $value) {
             echo "<tr class='tab_bg_1'><td align='center'>";
             echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
-            echo call_user_func(array($value['itemtype'], 'getTypeName'));
+            $itemtype = $value['itemtype'];
+            echo $itemtype::getTypeName();
             echo "</a></td></tr>";
          }
       }
