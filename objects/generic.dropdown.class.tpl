@@ -28,25 +28,5 @@
 /**
  * This class is automatically managed by genericobject plugin. Do not modify it !
  */
-class %%CLASSNAME%% extends %%EXTENDS%% {
-
-   //Get itemtype name
-   static function getTypeName() {
-      global $LANG, $GO_FIELDS;
-      $class    = get_called_class();
-      $fk = getForeignKeyFieldForTable(getTableForItemType($class));
-       
-      $label = '';
-      foreach ($GO_FIELDS as $field => $values) {
-         if ($field == $fk) {
-            $label = $values['name'];
-            break;
-         }
-      }
-      if($label != '') {
-         return $label;
-      } else {
-         return $class;
-      }
-   }
+class %%CLASSNAME%% extends PluginGenericobjectDropdown {
 }

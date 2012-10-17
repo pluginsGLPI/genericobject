@@ -27,7 +27,6 @@
  
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
-Toolbox::logDebug($_POST);
 if (isset ($_POST["delete"])) {
    $type = new PluginGenericobjectType();
    $type->getFromDB($_POST["id"]);
@@ -39,7 +38,7 @@ if (isset ($_POST["delete"])) {
          && $value == 1
             && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
          PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
-         Session::addMessageAfterRedirect($LANG['genericobject']['fields'][5]);
+         Session::addMessageAfterRedirect($LANG['genericobject']['fields'][5], true, INFO);
       }
    }
 } elseif (isset ($_POST["add_field"])) {

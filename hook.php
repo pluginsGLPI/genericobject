@@ -25,44 +25,6 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-function plugin_headings_actions_genericobject($item) {
-
-   switch (get_class($item)) {
-      case 'Profile' :
-         return array (1 => "plugin_headings_genericobject");
-         break;
-   }
-   return false;
-}
-
-function plugin_get_headings_genericobject($item, $withtemplate) {
-   global $LANG;
-
-   switch (get_class($item)) {
-      case 'Profile':
-         if (!$item->isNewID($item->getID())) {
-            $prof = new Profile();
-            return array(1 => $LANG["genericobject"]["title"][1]);
-         } else {
-            return false;
-         }
-         break;
-   }
-   return false;
-}
-
-function plugin_headings_genericobject($item, $withtemplate) {
-   switch (get_class($item)) {
-      case 'Profile' :
-         if (!$item->isNewID($item->getID())) {
-            PluginGenericobjectProfile::createAccess($item->getID());
-            $prof = new PluginGenericobjectProfile();
-            $prof->showForm($item->getID());
-         }
-         break;
-   }
-}
-
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
       $itemtype = $value['itemtype'];

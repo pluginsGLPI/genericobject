@@ -274,6 +274,7 @@ class PluginGenericobjectField extends CommonDBTM {
             //Add files on the disk
             PluginGenericobjectType::addDropdownClassFile($name, $itemtype, $tree);
             PluginGenericobjectType::addDropdownTable($table, $entity_assign, $recursive, $tree);
+            //Dropdown files
             PluginGenericobjectType::addDropdownFrontFile($name);
             PluginGenericobjectType::addDropdownFrontformFile($name, $field);
          }
@@ -295,11 +296,15 @@ class PluginGenericobjectField extends CommonDBTM {
 
      $table = getTableNameForForeignKeyField($field);
      //If dropdown is managed by the plugin
-     if ($table != '' && preg_match('/plugin_genericobject/', $table)) {
+     if ($table != '' && preg_match('/plugin_genericobject_(.*)/', $table, $results)) {
         //Delete dropdown table
         $query = "DROP TABLE `$table`";
         $DB->query($query);
-        //
+        //Delete dropdown files & class
+        $name = getSingular($results[1]);
+        PluginGenericobjectType::deleteClassFile($name);
+        PluginGenericobjectType::deleteFormFile($name);
+        PluginGenericobjectType::deletesearchFile($name);
      }
    }
    
@@ -329,7 +334,6 @@ class PluginGenericobjectField extends CommonDBTM {
             $index = $id;
          }
       }
-      Toolbox::logDebug($fields, $index, $index -2);
       //Get 2 positions before and move field
       if ($params['action'] == 'down') {
          $previous = $index - 1;
@@ -342,7 +346,6 @@ class PluginGenericobjectField extends CommonDBTM {
          $query  = "ALTER TABLE `$table` MODIFY `$field` ".$fields[$field]['Type'];
          $query .= " AFTER `".$fields[$keys[$previous]]['Field']."`";
          $DB->query($query) or die ($DB->error());
-         Toolbox::logDebug($query);
       }
    }
    

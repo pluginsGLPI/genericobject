@@ -100,8 +100,20 @@ class PluginGenericobjectObject extends CommonDBTM {
             array_push($ORDER_TYPES, $class);
          }
       }
-      
-      
+
+      foreach(PluginGenericobjectType::getDropdownForItemtype($class) as $table) {
+         $itemtype = getItemTypeForTable($table);
+         $item     = new $itemtype();
+         //If entity dropdown, check rights to view & create
+         if ($item->canView()) {
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$itemtype]['links']['search']
+                                                       = Toolbox::getItemTypeSearchURL($itemtype, false);
+            if ($item->canCreate()) {
+               $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
+                                                            = Toolbox::getItemTypeFormURL($class, false);
+            }
+         }
+      }
    }
    
    //Get itemtype name

@@ -25,18 +25,12 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT . "/inc/includes.php");
-
 /**
  * This file is automatically managed by genericobject plugin. Do not modify it !
  */
 
-//checkRight("config","r");
+define('GLPI_ROOT', '../../..');
+include (GLPI_ROOT . "/inc/includes.php");
 
-Html::header(%%CLASSNAME%%::getTypeName(),$_SERVER['PHP_SELF'], "plugins", "genericobject", 
-             "%%CLASSNAME%%");
-
-Search::show('%%CLASSNAME%%');
-
-Html::footer();
+$dropdown = new %%CLASSNAME%%();
+include (GLPI_ROOT . "/front/dropdown.common.php");

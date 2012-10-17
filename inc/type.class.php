@@ -648,7 +648,7 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function deleteAjaxFile($name) {
       self::deleteFile(self::getCompleteAjaxTabFilename($name));
    }
-
+   
    /**
     * Delete an used class file
     * @param name the name of the object type
@@ -716,11 +716,6 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function addDropdownFrontFile($name) {
       self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
                                 self::FRONT_DROPDOWN_TEMPLATE, GENERICOBJECT_FRONT_PATH, $name);
-   }
-
-   public static function addDropdownAjaxFile($name, $field) {
-      self::addFileFromTemplate(array('CLASSNAME' => self::getClassByName($name)),
-                                self::AJAX_DROPDOWN_TEMPLATE, GENERICOBJECT_AJAX_PATH, $name.".tabs");
    }
 
    public static function addAjaxFile($name, $field) {
