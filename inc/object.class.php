@@ -31,6 +31,34 @@ class PluginGenericobjectObject extends CommonDBTM {
    
    //Internal field counter
    private $cpt = 0;
+
+   //Get itemtype name
+   static function getTypeName() {
+      global $LANG;
+      $class    = get_called_class();
+      //Datainjection : Don't understand why I need this trick : need to be investigated !
+      if(preg_match("/Injection$/i",$class)) {
+         $class = str_replace("Injection", "", $class);
+      }
+      $item     = new $class();
+      //Itemtype name can be contained in a specific locale field : try to load it
+      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
+      if(isset($LANG['genericobject'][$class][0])) {
+         return $LANG['genericobject'][$class][0];
+      } else {
+         return $item->objecttype->fields['name'];
+      }
+   }
+   
+   
+   public function __construct() {
+      $class       = get_called_class();
+      $this->table = getTableForItemType($class);
+      if (class_exists($class)) {
+         $this->objecttype = PluginGenericobjectType::getInstance($class);
+      }
+      $this->dohistory = $this->canUseHistory();
+   }
    
    static function install() {
    }
@@ -39,15 +67,14 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    static function registerType() {
-      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES;
+      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI;
       
       $class  = get_called_class();
       $item   = new $class();
       $fields = PluginGenericobjectSingletonObjectField::getInstance($class);
-      $plugin = new Plugin();
 
-      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
-      PluginGenericobjectType::includeConstants($item->objecttype->fields['name']);
+      PluginGenericobjectType::includeLocales($item->getObjectTypename());
+      PluginGenericobjectType::includeConstants($item->getObjectTypename());
 
       $options = array("document_types"         => $item->canUseDocuments(),
                        "helpdesk_visible_types" => $item->canUseTickets(),
@@ -62,6 +89,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                        "contract_types"         => $item->canUseContracts(),
                        "unicity_types"          => $item->canUseUnicity());
       Plugin::registerClass($class, $options);
+      
       if (Session::haveRight($class, "r")) {
          //Change url for adding a new object, depending on template management activation
          if ($item->canUseTemplate()) {
@@ -91,13 +119,24 @@ class PluginGenericobjectObject extends CommonDBTM {
          
          //Item can be linked to tickets
          if ($item->canUseTickets()) {
-            $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
+            if (!in_array($class, $_SESSION['glpiactiveprofile']['helpdesk_item_type'])) {
+               $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
+            }
          }
          if ($item->canUsePluginUninstall()) {
-            array_push($UNINSTALL_TYPES, $class);
+            if (!in_array($class, $UNINSTALL_TYPES)) {
+               array_push($UNINSTALL_TYPES, $class);
+            }
          }
          if ($item->canUsePluginOrder()) {
-            array_push($ORDER_TYPES, $class);
+            if (!in_array($class, $ORDER_TYPES)) {
+               array_push($ORDER_TYPES, $class);
+            }
+         }
+         if ($item->canUseGlobalSearch()) {
+            if (!in_array($class, $CFG_GLPI['state_types'])) {
+               array_push($CFG_GLPI['state_types'], $class);
+            }
          }
       }
 
@@ -115,35 +154,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
       }
    }
-   
-   //Get itemtype name
-   static function getTypeName() {
-      global $LANG;
-      $class    = get_called_class();
-      //Datainjection : Don't understand why I need this trick : need to be investigated !
-      if(preg_match("/Injection$/i",$class)) {
-         $class = str_replace("Injection", "", $class);
-      }
-      $item     = new $class();
-      //Itemtype name can be contained in a specific locale field : try to load it
-      PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
-      if(isset($LANG['genericobject'][$class][0])) {
-         return $LANG['genericobject'][$class][0];
-      } else {
-         return $item->objecttype->fields['name'];
-      }
-   }
-   
-   
-   public function __construct() {
-      $class       = get_called_class();
-      $this->table = getTableForItemType($class);
-      if (class_exists($class)) {
-         $this->objecttype = PluginGenericobjectType::getInstance($class);
-      }
-      $this->dohistory = $this->canUseHistory();
-   }
-   
+      
+
    function canCreate() {
       return Session::haveRight(get_called_class(), 'w');
    }
@@ -193,7 +205,13 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $ong;
    }
 
+
    //------------------------ CAN methods -------------------------------------//
+
+   function getObjectTypename() {
+      return $this->objecttype->getName();
+   }
+   
    function canUseInfocoms() {
       return ($this->objecttype->canUseInfocoms() || Session::haveRight("infocom", "r"));
    }
@@ -202,25 +220,35 @@ class PluginGenericobjectObject extends CommonDBTM {
       return ($this->objecttype->canUseContracts() || Session::haveRight("contract", "r"));
    }
 
+
    function canUseTemplate() {
       return $this->objecttype->canUseTemplate();
    }
 
+
+   function canUseNotepad() {
+      return $this->objecttype->canUseNotepad();
+   }
+   
    function canUseUnicity() {
       return ($this->objecttype->canUseUnicity() || Session::haveRight("config", "r"));
    }
+
 
    function canUseDocuments() {
       return ($this->objecttype->canUseDocuments() && Session::haveRight("document", "r"));
    }
 
+
    function canUseTickets() {
       return ($this->objecttype->canUseTickets());
    }
 
-   function canUseNotepad() {
-      return ($this->objecttype->canUseNotepad() && Session::haveRight("notes", "r"));
+
+   function canUseGlobalSearch() {
+      return ($this->objecttype->canUseGlobalSearch());
    }
+
 
    function canBeReserved() {
       return ($this->objecttype->canBeReserved()
@@ -228,36 +256,45 @@ class PluginGenericobjectObject extends CommonDBTM {
             || Session::haveRight("reservation_helpdesk", '1')));
    }
 
+
    function canUseHistory() {
       return ($this->objecttype->canUseHistory());
    }
+
 
    function canUsePluginDataInjection() {
       return ($this->objecttype->canUsePluginDataInjection());
    }
 
+
    function canUsePluginPDF() {
       return ($this->objecttype->canUsePluginPDF());
    }
+
 
    function canUsePluginOrder() {
       return ($this->objecttype->canUsePluginOrder());
    }
 
+
    function canUseNetworkPorts() {
       return ($this->objecttype->canUseNetworkPorts());
    }
+
 
    function canUseDirectConnections() {
       return ($this->objecttype->canUseDirectConnections());
    }
 
+
    function canUsePluginUninstall() {
       return ($this->objecttype->canUsePluginUninstall());
    }
 
+
    function title() {
    }
+
 
    function showForm($id, $options=array(), $previsualisation = false) {
       global $LANG, $DB;
@@ -297,7 +334,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if ($previsualisation) {
          echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8].":&nbsp;";
-         $itemype = $this->objecttype->fields['itemtype'];
+         $itemtype = $this->objecttype->fields['itemtype'];
          echo $itemtype::getTypeName();
          echo "</th></tr>";
       }
@@ -328,11 +365,13 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+
    static function getFieldsToHide() {
       return array('id', 'is_recursive', 'is_template', 'template_name', 'is_deleted',
                    'entities_id', 'notepad', 'date_mod');
    }
    
+
    function displayField($canedit, $name, $value, $template, $description = array()) {
       global $GO_BLACKLIST_FIELDS;
 
@@ -418,11 +457,17 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "float":
                   echo "<input type='text' name='$name' value='$value'>";
                   break;
+                  
+            case 'decimal':
+                  echo "<input type='text' name='$name' value='".Html::formatNumber($value)."'>";
+                  break;
          }
          $this->endColumn();
       }
    }
 
+
+   
    /**
    * Add a new column
    **/
@@ -435,6 +480,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       $this->cpt++;
    }
 
+
+   
    /**
    * End a column
    **/
@@ -448,6 +495,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    }
 
+
+   
    /**
    * Close a column
    **/
@@ -461,6 +510,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+
    function prepareInputForAdd($input) {
 
       //Template management
@@ -472,6 +522,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       return $input;
    }
+
 
    function post_addItem() {
       global $DB;
@@ -539,6 +590,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
       $types      = array('Ticket', 'NetworkPort', 'Computer_Item',
@@ -549,11 +601,13 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
    
+
+   
    /**
     * Display object preview form
     * @param type the object type
     */
-   public static function showPrevisualisationForm(PluginGenericobjectType $type) {
+   static function showPrevisualisationForm(PluginGenericobjectType $type) {
       global $LANG;
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
@@ -565,10 +619,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
    
+
    function getSearchOptions() {
       return $this->getObjectSearchOptions(true);
    }
    
+
    function getObjectSearchOptions($with_linkfield = false) {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
@@ -690,11 +746,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "float":
-                $options[$currentindex]['datatype'] = 'decimal';
+            case "decimal":
+               $options[$currentindex]['datatype'] = $values['Type'];
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['display']   = 'multiline_text';
-                  $options[$currentindex]['checktype'] = 'integer';
+                  $options[$currentindex]['display']   = 'text';
+                  $options[$currentindex]['checktype'] = $values['Type'];
                }
                break;
             case "date":
@@ -720,14 +777,19 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $options;
    }
 
+
+   
    //Datainjection specific methods
    function isPrimaryType() {
       return true;
    }
    
+
    function connectedTo() {
       return array();
    }
+   
+
    
    /**
     * Standard method to add an object into glpi
@@ -744,10 +806,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $lib->getInjectionResults();
    }
 
+
    function getOptions($primary_type = '') {
       return Search::getOptions($primary_type);
    }
    
+
    function transfer($new_entity) {
       global $DB;
       if ($this->fields['id'] > 0 && $this->fields['entities_id'] != $new_entity) {
@@ -811,4 +875,5 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       return true;
    }
+
 }

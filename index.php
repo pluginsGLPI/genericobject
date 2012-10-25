@@ -31,8 +31,7 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
    $type = new PluginGenericobjectType();
    $type->getFromDB($_GET['itemtypes_id']);
-   $url = Toolbox::getItemTypeSearchURL($type->fields['itemtype']);
-   Html::redirect($url);
+   Html::redirect(Toolbox::getItemTypeSearchURL($type->fields['itemtype']));
 } else {
    $types = PluginGenericobjectType::getTypes();
    foreach ($types as $ID => $value) {
@@ -44,7 +43,8 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       $type = array_pop($types);
       Html::redirect(Toolbox::getItemTypeSearchURL($type['itemtype']));
    } else {
-      Html::header($LANG['genericobject']['title'][1],$_SERVER['PHP_SELF'], "plugins", "genericobject");
+      Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins",
+                   "genericobject");
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
       if (!count($types)) {

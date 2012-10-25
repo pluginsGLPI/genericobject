@@ -118,7 +118,7 @@ function plugin_post_init_genericobject() {
 function plugin_version_genericobject() {
    global $LANG;
    return array ('name'           => $LANG["genericobject"]["title"][1],
-                 'version'        => '2.1.4',
+                 'version'        => '2.2.0',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
                  'license'        => 'GPLv2+',

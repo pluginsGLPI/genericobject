@@ -24,13 +24,16 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
-
-/**
- * This file is automatically managed by genericobject plugin. Do not modify it !
- */
-
 define('GLPI_ROOT', '../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 
-$dropdown = new %%CLASSNAME%%();
-include (GLPI_ROOT . "/front/dropdown.common.php");
+/**
+ * This file is automatically managed by genericobject plugin. Do not edit it !
+ */
+
+Html::header(%%CLASSNAME%%::getTypeName(), $_SERVER['PHP_SELF'], "plugins", "genericobject",
+             "%%CLASSNAME%%");
+
+Search::show('%%CLASSNAME%%');
+
+Html::footer();

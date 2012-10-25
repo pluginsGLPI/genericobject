@@ -247,6 +247,12 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'datetime':
                $query.="DATETIME DEFAULT NULL";
                break;
+            case 'float' :
+               $query .= "FLOAT NOT NULL DEFAULT '0'";
+               break;
+            case 'decimal' :
+               $query .= "DECIMAL(20,4) NOT NULL DEFAULT '0.0000'";
+               break;
          }
          if ($after) {
             $query.=" AFTER `$after`";
@@ -264,19 +270,7 @@ class PluginGenericobjectField extends CommonDBTM {
             $name = getSingular($name);
             //Build itemtype
             $itemtype = 'PluginGenericobject'.ucfirst($name);
-            
-            $entity_assign = isset($options['entities_id'])  && $options['entities_id'];
-            if ($entity_assign) {
-               $recursive = isset($options['is_recursive'])  && $options['is_recursive'];
-            }
-            $tree = isset($options['is_tree']) && $options['is_tree'];
-
-            //Add files on the disk
-            PluginGenericobjectType::addDropdownClassFile($name, $itemtype, $tree);
-            PluginGenericobjectType::addDropdownTable($table, $entity_assign, $recursive, $tree);
-            //Dropdown files
-            PluginGenericobjectType::addDropdownFrontFile($name);
-            PluginGenericobjectType::addDropdownFrontformFile($name, $field);
+            PluginGenericobjectType::addNewDropdown($name, $itemtype, $options);
          }
       }
    }
