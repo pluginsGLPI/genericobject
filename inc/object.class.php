@@ -208,7 +208,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    //------------------------ CAN methods -------------------------------------//
 
-   function getObjectTypename() {
+   function getObjectTypeName() {
       return $this->objecttype->getName();
    }
    
@@ -339,6 +339,12 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "</th></tr>";
       }
       
+
+      //Reset fields definition only to keep the itemtype ones
+      $GO_FIELDS = array();
+      plugin_genericobject_includeCommonFields(true);
+      PluginGenericobjectType::includeConstants($this->getObjectTypeName(), true);
+
       foreach (PluginGenericobjectSingletonObjectField::getInstance($this->objecttype->fields['itemtype'])
                as $field => $description) {
          $this->displayField($canedit, $field, $this->fields[$field], $template, $description);

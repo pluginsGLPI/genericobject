@@ -97,10 +97,14 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!$withtemplate) {
          switch ($item->getType()) {
             case __CLASS__ :
-               return array (1 => $LANG['title'][26],
-                             3 => $LANG['rulesengine'][12],
-                             5 => $LANG['genericobject']['config'][7],
-                             6 => $LANG['Menu'][35]);
+               $tabs = array (1 => $LANG['title'][26],
+                               3 => $LANG['rulesengine'][12],
+                               5 => $LANG['genericobject']['config'][7],
+                               6 => $LANG['Menu'][35]);
+               if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) {
+                  $tabs[4] = $LANG['genericobject']['config'][16];
+               }
+               return $tabs;
          }
       }
       return '';
@@ -118,6 +122,9 @@ class PluginGenericobjectType extends CommonDBTM {
                PluginGenericobjectField::showObjectFieldsForm($item->getID());
                break;
                
+            case 4:
+               $item->showFilesForm($item->getID());
+               break;
             case 5:
               PluginGenericobjectObject::showPrevisualisationForm($item);
                break;
@@ -312,6 +319,21 @@ class PluginGenericobjectType extends CommonDBTM {
       $this->showFormButtons($options);
    }
 
+   function showFilesForm($ID) {
+      global $LANG;
+      
+      echo "<form name='generate' method='post'>";
+      echo "<div class='center'>";
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tr class='tab_bg_1'>";
+      echo "<td class='center'>";
+      echo "<input type='hidden' name='id' value='".$ID."'>";
+      echo "<input type='submit' class='submit' name='regenerate'
+                    value='".$LANG['genericobject']['config'][17]."'>";
+      echo "</td></tr></table></div>";
+      Html::closeForm();
+   }
+   
    function prepareInputForAdd($input) {
       global $LANG;
       
@@ -843,28 +865,38 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
 
+   /**
+    *
+    * Create, if needed files for an itemtype and it's dropdown
+    * @since 2.2.0
+    */
    static function checkClassAndFilesForItemType() {
       global $DB;
       
       foreach ($DB->request("glpi_plugin_genericobject_types") as $type) {
+         self::checkClassAndFilesForOneItemType($type['itemtype'], $type['name']);
          $itemtype = $type['itemtype'];
-         $table = getTableForItemType($itemtype);
-         //If class doesn't exists but table exists, create class
-         if (TableExists($table) && !class_exists($itemtype, false)) {
-            PluginGenericobjectType::addNewObject($type["name"], $itemtype,
-                                                  array('add_table' => 0,
-                                                        'create_default_profile' => 0));
-         }
-         $fields = $DB->list_fields($table);
-         foreach ($fields as $field => $options) {
-            if (preg_match("/s_id$/", $field)) {
-               $dropdowntable = getTableNameForForeignKeyField($field);
-               $dropdownclass = getItemTypeForTable($dropdowntable);
-               
-               if (TableExists($dropdowntable) && ! class_exists($dropdownclass)) {
-                  $fielddefinition = self::getOptionsWithGlobal($field, $dropdownclass);
-                  PluginGenericobjectType::addNewDropdown($name, $itemtype, $fielddefinition);
-               }
+      }
+   }
+   
+   static function checkClassAndFilesForOneItemType($itemtype, $name) {
+      global $DB;
+      $table = getTableForItemType($itemtype);
+      //If class doesn't exists but table exists, create class
+      if (TableExists($table) && !class_exists($itemtype, false)) {
+         PluginGenericobjectType::addNewObject($type["name"], $itemtype,
+                                               array('add_table' => 0,
+                                                     'create_default_profile' => 0));
+      }
+      $fields = $DB->list_fields($table);
+      foreach ($fields as $field => $options) {
+         if (preg_match("/s_id$/", $field)) {
+            $dropdowntable = getTableNameForForeignKeyField($field);
+            $dropdownclass = getItemTypeForTable($dropdowntable);
+            
+            if (TableExists($dropdowntable) && ! class_exists($dropdownclass)) {
+               $fielddefinition = self::getOptionsWithGlobal($field, $dropdownclass);
+               PluginGenericobjectType::addNewDropdown($name, $itemtype, $fielddefinition);
             }
          }
       }

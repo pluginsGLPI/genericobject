@@ -54,6 +54,11 @@ if (isset ($_POST["add"])) {
 } elseif (isset ($_POST["delete"])) {
    $type->delete($_POST);
    $type->redirectToList();
+} elseif (isset($_POST['regenerate'])) {
+   $type->getFromDB($_POST["id"]);
+   PluginGenericobjectType::checkClassAndFilesForOneItemType($type->fields['itemtype'],
+                                                             $type->fields['name']);
+   Html::back();
 }
 
 Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject",

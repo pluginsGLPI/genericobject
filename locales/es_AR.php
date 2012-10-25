@@ -56,6 +56,8 @@ $LANG['genericobject']['config'][12] = "Plugin Orden de compras";
 $LANG['genericobject']['config'][13] = "Plugins desinstalación de items";
 $LANG['genericobject']['config'][14] = "Conexiones de red";
 $LANG['genericobject']['config'][15] = "Plugin generacion de numero de inventario";
+$LANG['genericobject']['config'][16] = "Files";
+$LANG['genericobject']['config'][17] = "Regenerate files";
 
 $LANG['genericobject']['fields'][1] = "Campos asociados con el objeto";
 $LANG['genericobject']['fields'][2] = "Nombre en DB";

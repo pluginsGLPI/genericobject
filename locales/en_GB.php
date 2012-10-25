@@ -57,6 +57,8 @@ $LANG['genericobject']['config'][12] = "order plugin";
 $LANG['genericobject']['config'][13] = "item's uninstallation plugin";
 $LANG['genericobject']['config'][14] = "Network connections";
 $LANG['genericobject']['config'][15] = "inventory number generation plugin";
+$LANG['genericobject']['config'][16] = "Files";
+$LANG['genericobject']['config'][17] = "Regenerate files";
 
 $LANG['genericobject']['fields'][1] = "Fields associated with the object";
 $LANG['genericobject']['fields'][2] = "Name in DB";
