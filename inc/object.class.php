@@ -73,8 +73,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       $item   = new $class();
       $fields = PluginGenericobjectSingletonObjectField::getInstance($class);
 
-      PluginGenericobjectType::includeLocales($item->getObjectTypename());
-      PluginGenericobjectType::includeConstants($item->getObjectTypename());
+      PluginGenericobjectType::includeLocales($item->getObjectTypeName());
+      PluginGenericobjectType::includeConstants($item->getObjectTypeName());
 
       $options = array("document_types"         => $item->canUseDocuments(),
                        "helpdesk_visible_types" => $item->canUseTickets(),
