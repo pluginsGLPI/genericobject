@@ -26,7 +26,7 @@
  ---------------------------------------------------------------------- */
 
 /**
- * This class is automatically managed by genericobject plugin. Do not modify it !
+ * This class is automatically managed by genericobject plugin. Do not edit it !
  */
 class %%CLASSNAME%% extends PluginGenericobjectObject {
 }

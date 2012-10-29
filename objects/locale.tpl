@@ -26,7 +26,7 @@
  ---------------------------------------------------------------------- */
 
 /**
- * This file is automatically managed by genericobject plugin. Do not modify it !
+ * This file is automatically managed by genericobject plugin. Do not edit it !
  */
 
 $LANG['genericobject']['%%CLASSNAME%%'][0]="%%NAME%%";

@@ -31,33 +31,40 @@ include (GLPI_ROOT . "/inc/includes.php");
 if (!isset ($_REQUEST["id"])) {
    $_REQUEST["id"] = '';
 }
-$type = new PluginGenericobjectType();
-
+$type        = new PluginGenericobjectType();
 $extraparams = array ();
 if (isset ($_POST["select"]) && $_POST["select"] == "all") {
    $extraparams["selected"] = "checked";
 }
 
+//Change fields order
 if (isset ($_GET["action"])) {
    $type->getFromDB($_REQUEST["id"]);
    PluginGenericobjectType::registerOneType($type);
    PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"],
                                                $_GET["action"]);
-   Html::redirect($_SERVER['HTTP_REFERER']);
-}
-if (isset ($_POST["add"])) {
+   Html::back();
+   
+//Add a new itemtype
+} elseif (isset ($_POST["add"])) {
    $new_id = $type->add($_POST);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
+   
+//Update an existing itemtype
 } elseif (isset ($_POST["update"])) {
    $type->update($_POST);
-   Html::redirect($_SERVER["HTTP_REFERER"]);
+   Html::back();
+   
+//Delete an itemtype
 } elseif (isset ($_POST["delete"])) {
    $type->delete($_POST);
    $type->redirectToList();
+   
+//Regenerate files for an itemtype
 } elseif (isset($_POST['regenerate'])) {
    $type->getFromDB($_POST["id"]);
    PluginGenericobjectType::checkClassAndFilesForOneItemType($type->fields['itemtype'],
-                                                             $type->fields['name']);
+                                                             $type->fields['name'], true);
    Html::back();
 }
 

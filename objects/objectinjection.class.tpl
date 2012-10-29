@@ -25,6 +25,10 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
+/**
+ * This file is automatically managed by genericobject plugin. Do not edit it !
+ */
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }

@@ -27,6 +27,12 @@
  
 class PluginGenericobjectField extends CommonDBTM {
 
+   /**
+    *
+    * Enter description here ...
+    * @since
+    * @param unknown_type $id
+    */
    public static function showObjectFieldsForm($id) {
       global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
@@ -165,9 +171,11 @@ class PluginGenericobjectField extends CommonDBTM {
       if (!isset($GO_FIELDS[$field])) {
          $tmpfield = self::getFieldGlobalName($field, $itemtype,
                                            array('dropdown_type' => 'global'), true);
-         $options = $GO_FIELDS[$tmpfield];
+         $options             = $GO_FIELDS[$tmpfield];
+         $options['realname'] = $tmpfield;
       } else {
-         $options = $GO_FIELDS[$field];
+         $options             = $GO_FIELDS[$field];
+         $options['realname'] = $field;
       }
       return $options;
    }
@@ -220,8 +228,9 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function addNewField($table, $field, $after=false) {
       global $DB;
 
+      $itemtype = getItemTypeForTable($table);
       if (!FieldExists($table, $field)) {
-         $options  = self::getOptionsWithGlobal($field, getItemTypeForTable($table));
+         $options  = self::getOptionsWithGlobal($field, $itemtype);
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {
             case 'dropdown_yesno' :
@@ -236,8 +245,6 @@ class PluginGenericobjectField extends CommonDBTM {
                $query .= "TEXT NULL";
                break;
             case 'dropdown' :
-               $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
-               break;
             case 'integer' :
                $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
                break;
@@ -260,18 +267,18 @@ class PluginGenericobjectField extends CommonDBTM {
          $DB->query($query);
          
          //Reload list of fields for this itemtype in the singleton
-         PluginGenericobjectSingletonObjectField::getInstance(getItemTypeForTable($table), true);
          
          $recursive = $entity_assign = $tree = false;
          $table     = getTableNameForForeignKeyField($field);
          if ($table != '' && !TableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
-            $name = str_replace("glpi_plugin_genericobject_","", $table);
-            $name = getSingular($name);
-            //Build itemtype
-            $itemtype = 'PluginGenericobject'.ucfirst($name);
-            PluginGenericobjectType::addNewDropdown($name, $itemtype, $options);
+            $name                       = str_replace("glpi_plugin_genericobject_","", $table);
+            $name                       = getSingular($name);
+            $options['linked_itemtype'] = $itemtype;
+            PluginGenericobjectType::addNewDropdown($name, 'PluginGenericobject'.ucfirst($name),
+                                                    $options);
          }
+         PluginGenericobjectSingletonObjectField::getInstance($itemtype, true);
       }
    }
 
