@@ -37,7 +37,7 @@ $LANG['genericobject']['common'][6] = "Le type doit commencer par une lettre";
 $LANG['genericobject']['common'][7] = "Aller à la liste des objets";
 $LANG['genericobject']['common'][8] = "Les types 'field', 'object' et 'type' sont réservés. Veuillez en choisir un autre";
 
-$LANG['genericobject']['install'][0] = "Erreur : les dossiers '/inc', '/front', '/locales' et '/ajax' du plugin doivent être en écriture pour le serveur web.";
+$LANG['genericobject']['install'][0] = "Erreur : les dossiers '/inc', '/front' et '/locales' du plugin doivent être en écriture pour le serveur web.";
 
 $LANG['genericobject']['profile'][0] = "Gestion des droits";
 $LANG['genericobject']['profile'][1] = "Associer des tickets à cet objet d'inventaire";

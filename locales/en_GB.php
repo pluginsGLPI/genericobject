@@ -37,7 +37,7 @@ $LANG['genericobject']['common'][6] = "Type must start with a letter";
 $LANG['genericobject']['common'][7] = "Go to objects list";
 $LANG['genericobject']['common'][8] = "Types 'field', 'object' and 'type' are reserved. Please choose another one";
 
-$LANG['genericobject']['install'][0] = "Error: directories '/inc', '/head', '/locales' and '/ajax' of plugin must be writable by the web server.";
+$LANG['genericobject']['install'][0] = "Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server.";
 
 $LANG['genericobject']['profile'][0] = "Rights management";
 $LANG['genericobject']['profile'][1] = "Associate tickets to this object";

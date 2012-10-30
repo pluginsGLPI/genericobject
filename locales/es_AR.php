@@ -36,7 +36,7 @@ $LANG['genericobject']['common'][5] = "Tipo de objeto no existe";
 $LANG['genericobject']['common'][6] = "El tipo de objeto debe comenzar con una letra";
 $LANG['genericobject']['common'][7] = "Ir a la lista de objetos";
 
-$LANG['genericobject']['install'][0] = "Error: los directorios '/inc', '/head' and '/ajax' del plugin se deben poder escribir en el servidor web.";
+$LANG['genericobject']['install'][0] = "Error: los directorios '/inc', '/front' and '/locales' del plugin se deben poder escribir en el servidor web.";
 
 $LANG['genericobject']['profile'][0] = "Gestión de derechos";
 $LANG['genericobject']['profile'][1] = "Asociar tickets con este objeto";
