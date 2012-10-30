@@ -29,9 +29,8 @@ class PluginGenericobjectField extends CommonDBTM {
 
    /**
     *
-    * Enter description here ...
-    * @since
-    * @param unknown_type $id
+    * Displat all fields present in DB for an itemtype
+    * @param $id the itemtype's id
     */
    public static function showObjectFieldsForm($id) {
       global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
@@ -85,7 +84,14 @@ class PluginGenericobjectField extends CommonDBTM {
          if (!in_array($field, $GO_BLACKLIST_FIELDS)) {
             $index++;
          }
-         $used_fields[$field] = $field;
+         $table = getTableNameForForeignKeyField($field);
+         if ($table != '' && isPluginItemType(getItemTypeForTable($table))) {
+            $classname = getItemTypeForTable($table);
+            $class     = new $classname();
+            $used_fields[$class->getFieldName()] = $class->getFieldName();
+         } else {
+            $used_fields[$field] = $field;
+         }
          $global_index++;
       }
       echo "</table>";
@@ -162,7 +168,7 @@ class PluginGenericobjectField extends CommonDBTM {
          }
       }
       ksort($dropdown_types);
-      Dropdown::showFromArray($name,$dropdown_types);
+      Dropdown::showFromArray($name, $dropdown_types);
    }
 
    static function getOptionsWithGlobal($field, $itemtype) {
