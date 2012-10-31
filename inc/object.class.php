@@ -67,7 +67,8 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    static function registerType() {
-      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI;
+      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI,
+              $GO_LINKED_TYPES;
       
       $class  = get_called_class();
       $item   = new $class();
@@ -136,6 +137,13 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($item->canUseGlobalSearch()) {
             if (!in_array($class, $CFG_GLPI['state_types'])) {
                array_push($CFG_GLPI['state_types'], $class);
+            }
+         }
+         
+         if ($item->canUseDirectConnections()) {
+            Toolbox::logDebug();
+            if (!in_array($class, $GO_LINKED_TYPES)) {
+               array_push($GO_LINKED_TYPES, $class);
             }
          }
       }
@@ -881,5 +889,5 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       return true;
    }
-
+    
 }

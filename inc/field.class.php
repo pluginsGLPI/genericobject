@@ -84,6 +84,8 @@ class PluginGenericobjectField extends CommonDBTM {
          if (!in_array($field, $GO_BLACKLIST_FIELDS)) {
             $index++;
          }
+         //If it's a plugin dropdowns, get it's real name
+         //(it may not be the one from the DB, in case it's a global field)
          $table = getTableNameForForeignKeyField($field);
          if ($table != '' && isPluginItemType(getItemTypeForTable($table))) {
             $classname = getItemTypeForTable($table);
@@ -131,6 +133,16 @@ class PluginGenericobjectField extends CommonDBTM {
       return $field;
    }
 
+   /**
+    *
+    * Display a dropdown with all available fields for an itemtype
+    * @since
+    * @param $name the dropdown name
+    * @param $itemtype the itemtype
+    * @param $used an array which contains all fields already added
+    *
+    * @return the dropdown random ID
+    */
    static function dropdownFields($name,$itemtype, $used = array()) {
       global $GO_FIELDS, $LANG;
       
@@ -168,9 +180,17 @@ class PluginGenericobjectField extends CommonDBTM {
          }
       }
       ksort($dropdown_types);
-      Dropdown::showFromArray($name, $dropdown_types);
+      return Dropdown::showFromArray($name, $dropdown_types);
    }
 
+   /**
+    *
+    * Get field definition for a field
+    *
+    * @param $field the current field
+    * @param $itemtype the itemtype
+    * @return an array which contains the full field definition
+    */
    static function getOptionsWithGlobal($field, $itemtype) {
       global $GO_FIELDS;
       

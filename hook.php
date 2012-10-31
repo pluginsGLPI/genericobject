@@ -148,7 +148,7 @@ function plugin_genericobject_uninstall() {
 function check_directories() {
    global $LANG;
    
-   foreach (array(GENERICOBJECT_AJAX_PATH, GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH,
+   foreach (array(GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH,
                   GENERICOBJECT_LOCALES_PATH) as $path) {
       if (!is_dir($path) || !is_writable($path)) {
          Session::addMessageAfterRedirect($LANG['genericobject']['install'][0]);

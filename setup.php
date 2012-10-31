@@ -44,20 +44,22 @@ if (!defined("GENERICOBJECT_LOCALES_PATH")) {
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
-          $GENERICOBJECT_PDF_TYPES;
+          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES;
           
    $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
                                  "is_recursive", "is_template", "notepad", "template_name",
                                  "is_helpdesk_visible", "comment", "name", "date_mod");
 
+   $GO_LINKED_TYPES     = array ('Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
+                                  'Printer', 'NetworkEquipment');
+   
    $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
-   $GENERICOBJECT_PDF_TYPES = array ();
-   $plugin = new Plugin();
+   $GENERICOBJECT_PDF_TYPES                         = array ();
+   $plugin                                          = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
       
       plugin_genericobject_includeCommonFields();
-      
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       /* load changeprofile function */
@@ -65,7 +67,7 @@ function plugin_init_genericobject() {
                                                                'changeProfile');
 
       // Display a menu entry ?
-      $PLUGIN_HOOKS['menu_entry']['genericobject']              = true;
+      $PLUGIN_HOOKS['menu_entry']['genericobject'] = true;
 
       //Do not display icon if not using the genericobject plugin
       if (isset($_GET['id']) &&  $_GET['id'] != ''
@@ -95,13 +97,10 @@ function plugin_init_genericobject() {
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
       }
-
+      
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject']   = true;
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
-      // Onglets management
-      $PLUGIN_HOOKS['headings']['genericobject']         = 'plugin_get_headings_genericobject';
-      $PLUGIN_HOOKS['headings_action']['genericobject']  = 'plugin_headings_actions_genericobject';
       $PLUGIN_HOOKS['post_init']['genericobject']        = 'plugin_post_init_genericobject';
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
    }

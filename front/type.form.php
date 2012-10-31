@@ -52,6 +52,9 @@ if (isset ($_GET["action"])) {
    
 //Update an existing itemtype
 } elseif (isset ($_POST["update"])) {
+   if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
+      $_POST['linked_itemtypes'] = json_encode($_POST['itemtypes']);
+   }
    $type->update($_POST);
    Html::back();
    

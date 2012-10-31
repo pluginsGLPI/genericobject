@@ -43,7 +43,8 @@ class PluginGenericobjectType extends CommonDBTM {
    const AJAX_TEMPLATE               = "/objects/ajax.tabs.tpl";
    const LOCALE_TEMPLATE             = "/objects/locale.tpl";
    const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
-
+   const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
+    
    var $dohistory = true;
 
    function __construct($itemtype = false) {
@@ -107,8 +108,8 @@ class PluginGenericobjectType extends CommonDBTM {
                                3 => $LANG['rulesengine'][12],
                                5 => $LANG['genericobject']['config'][7],
                                6 => $LANG['Menu'][35]);
-               if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) {
-                  $tabs[4] = $LANG['genericobject']['config'][16];
+               if ($item->canUseDirectConnections()) {
+                  $tabs[7] = $LANG['setup'][624];
                }
                return $tabs;
          }
@@ -128,15 +129,16 @@ class PluginGenericobjectType extends CommonDBTM {
                PluginGenericobjectField::showObjectFieldsForm($item->getID());
                break;
                
-            case 4:
-               $item->showFilesForm($item->getID());
-               break;
             case 5:
               PluginGenericobjectObject::showPrevisualisationForm($item);
                break;
    
             case 6:
                PluginGenericobjectProfile::showForItemtype($item);
+               break;
+               
+            case 7:
+               $item->showLinkedTypesForm();
                break;
          }
       }
@@ -351,6 +353,12 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       echo "</td>";
+      
+      echo "<td rowspan='4' class='middle right'>".$LANG['common'][25]."&nbsp;: </td>";
+      echo "<td class='center middle' rowspan='4'><textarea cols='45' rows='4'
+             name='comment' >".$this->fields["comment"]."</textarea></td></tr>";
+      
+      echo "<tr class='tab_bg_1'>";
       echo "<td>" . $LANG['genericobject']['config'][9] . "</td>";
       echo "<td>";
       if ($ID) {
@@ -369,9 +377,13 @@ class PluginGenericobjectType extends CommonDBTM {
       else {
          Dropdown::showYesNo("is_active", $this->fields["is_active"]);
       }
-      echo "</td><td colspan='2'></td>";
+      echo "</td></td>";
       echo "</tr>";
 
+      echo "<tr class='tab_bg_1'>";
+      echo "<td colspan='2'></td>";
+      echo "</tr>";
+      
       if (!$this->isNewID($ID)) {
          $canedit = $this->can($ID, 'w');
          echo "<tr class='tab_bg_1'><th colspan='4'>";
@@ -390,6 +402,7 @@ class PluginGenericobjectType extends CommonDBTM {
                        "use_loans"                => $LANG['Menu'][17],
                        "use_unicity"              => $LANG['setup'][811],
                        "use_global_search"        => $LANG['setup'][83],
+                        "use_direct_connections"  => $LANG['genericobject']['config'][18],
                        "use_network_ports"        => $LANG['genericobject']['config'][14],
                        "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
    //                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
@@ -483,7 +496,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @param $ID type ID
     * @return nothing
     */
-   function showFilesForm($ID) {
+   function showFilesForm() {
       global $LANG;
       
       echo "<form name='generate' method='post'>";
@@ -491,11 +504,46 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='tab_bg_1'>";
       echo "<td class='center'>";
-      echo "<input type='hidden' name='id' value='".$ID."'>";
+      echo "<input type='hidden' name='id' value='".$this->getID()."'>";
       echo "<input type='submit' class='submit' name='regenerate'
                     value='".$LANG['genericobject']['config'][17]."'>";
       echo "</td></tr></table></div>";
       Html::closeForm();
+   }
+
+   function showLinkedTypesForm() {
+      global $GO_LINKED_TYPES, $LANG;
+      
+      $this->showFormHeader();
+      echo "<form name='link' method='post'>";
+      echo "<div class='center'>";
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tr class='tab_bg_1'>";
+      echo "<th colspan='2'>".$LANG['genericobject']['config'][18]."</th></tr>";
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>".$LANG['rulesengine'][66]."</td>";
+      echo "<td class='center'>";
+      echo "<select name='itemtypes[]' multiple size='10'>";
+      $selected = array();
+      if (!empty($this->fields['linked_itemtypes'])) {
+         $selected = json_decode($this->fields['linked_itemtypes'], false);
+      }
+      foreach ($GO_LINKED_TYPES as $itemtype) {
+         if ($itemtype == $this->fields['itemtype']) {
+            continue;
+         }
+         echo "<option value='$itemtype'";
+         if (in_array($itemtype, $selected)) {
+            echo " selected ";
+         }
+         echo ">".$itemtype::getTypeName()."</options>";
+      }
+      echo "</select>";
+      echo "</td></tr>";
+      echo "<input type='hidden' name='id' value='".$this->getID()."'>";
+      $this->showFormButtons(array('candel' => false, 'canadd' => false));
+      Html::closeForm();
+      
    }
    //------------------------------------- End Forms --------------------------------------
 
@@ -508,11 +556,15 @@ class PluginGenericobjectType extends CommonDBTM {
     * @param options create options :
     *    - add_table : add the object table (default is no)
     *    - create_default_profile : add default right (default is no) for current user profile
+    *    - add_injection_file : add file to integrate itemtype into the datainjection plugin
+    *    - add_language_file : create a default language for the itemtype
     * @return none
     */
    static function addNewObject($name, $itemtype, $options = array()) {
       $params['add_table']              = false;
       $params['create_default_profile'] = false;
+      $params['add_injection_file']     = false;
+      $params['add_language_file']      = true;
       foreach ($options as $key => $value) {
          $params[$key] = $value;
       }
@@ -528,9 +580,15 @@ class PluginGenericobjectType extends CommonDBTM {
       self::addFormFile($name, $itemtype);
       self::addSearchFile($name, $itemtype);
       
-      //Write object class on the filesystem
-      self::addLocales($name, $itemtype);
+      //Add language file
+      if ($params['add_injection_file']) {
+         self::addLocales($name, $itemtype);
+      }
       
+      //Add file needed by datainjectin plugin
+      if ($params['add_injection_file']) {
+         self::addDatainjectionFile($name);
+      }
       if ($params['create_default_profile']) {
          //Create rights for this new object
          PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], true);
@@ -562,6 +620,13 @@ class PluginGenericobjectType extends CommonDBTM {
       self::addDropdownFrontformFile($name);
    }
    
+   /**
+    *
+    * Add or delete, if needed some fields to make sure that the itemtype is compatible with
+    * GLPI framework
+    *
+    * @return nothing
+    */
    function checkNecessaryFieldsUpdate() {
       $itemtype = $this->fields["itemtype"];
       $item     = new $itemtype();
@@ -629,6 +694,12 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectField::addNewField($table, 'locations_id');
       }
 
+      if ($this->canUseDirectConnections()) {
+         self::addItemsTable($itemtype);
+      } else {
+         self::deleteItemsTable($itemtype);
+      }
+      
       if ($this->canUsePluginDataInjection() &&
          !file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::addDatainjectionFile($this->fields['name']);
@@ -664,6 +735,28 @@ class PluginGenericobjectType extends CommonDBTM {
       $DB->query($query);
 
    }
+   
+   /**
+    * Add object_items table to connect an object to others
+    * @name object type's name
+    * @return nothing
+    */
+   public static function addItemsTable($itemtype) {
+      global $DB;
+      $table = getTableForItemType($itemtype);
+      $fk    = getForeignKeyFieldForTable($table);
+      $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."_items` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
+        `$fk` int(11) NOT NULL DEFAULT '0',
+        `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `$fk` (`$fk`),
+        KEY `item` (`itemtype`,`items_id`)
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+      $DB->query($query);
+   }
+    
    
    //-------------------------------- FILE CREATION / DELETION ----------------------------//
    public static function deleteFile($filename) {
@@ -873,30 +966,29 @@ class PluginGenericobjectType extends CommonDBTM {
       global $DB;
       
       foreach ($DB->request("glpi_plugin_genericobject_types") as $type) {
-         self::checkClassAndFilesForOneItemType($type['itemtype'], $type['name']);
-         $itemtype = $type['itemtype'];
+         self::checkClassAndFilesForOneItemType($type['itemtype'], $type['name'], true);
       }
    }
    
    /**
     *
-    * Enter description here ...
+    * Create or overwrite files for an itemtype
     * @since 2.2.0
-    * @param unknown_type $itemtype
-    * @param unknown_type $name
-    * @param unknown_type $force_delete
+    * @param $itemtype the itemtype to check
+    * @param $name type's short name
+    * @param $overwrite force to overwrite existing files
+    * @return nothing
     */
-   static function checkClassAndFilesForOneItemType($itemtype, $name, $force_delete = false) {
+   static function checkClassAndFilesForOneItemType($itemtype, $name, $overwrite = false) {
       global $DB;
       $table = getTableForItemType($itemtype);
-      if ($force_delete) {
-         self::deleteItemTypeFilesAndClasses($name, $table);
-      }
       
       //If class doesn't exist but table exists, create class
-      if (TableExists($table) && !class_exists($itemtype, false)) {
-         self::addNewObject($name, $itemtype, array('add_table'             => 0,
-                                                     'create_default_profile' => 0));
+      if (TableExists($table) && ($overwrite || !class_exists($itemtype))) {
+         self::addNewObject($name, $itemtype, array('add_table'             => false,
+                                                     'create_default_profile' => false,
+                                                      'add_injection_file'    => false,
+                                                      'add_language_file'     => false));
       }
 
       foreach ($DB->list_fields($table) as $field => $options) {
@@ -1014,6 +1106,16 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
 
+   /**
+    * Delete object _items table
+    * @name object type's name
+    * @return nothing
+    */
+   public static function deleteItemsTable($itemtype) {
+      global $DB;
+      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType($itemtype)."_items`");
+   }
+   
    /**
     * Get object name by ID
     * @param ID the internal ID
@@ -1304,11 +1406,11 @@ class PluginGenericobjectType extends CommonDBTM {
       return $this->fields['use_global_search'];
    }
    
+
    function canUseNetworkPorts() {
       return $this->fields['use_network_ports'];
    }
    
-
    
    function canUseDirectConnections() {
       return $this->fields['use_direct_connections'];
@@ -1378,6 +1480,14 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       return $view;
    }
+
+   /**
+    * Display debug information for current object
+    **/
+    function showDebug() {
+       $this->showFilesForm();
+      //NotificationEvent::debugEvent($this);
+   }
    //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//
 
 
@@ -1392,6 +1502,8 @@ class PluginGenericobjectType extends CommonDBTM {
                            `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
                            `is_active` tinyint(1) NOT NULL default '0',
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
+                           `comment` text NULL,
+                           `date_mod` datetime NOT NULL default '0000-00-00 00:00:00',
                            `use_global_search` tinyint(1) NOT NULL default '0',
                            `use_unicity` tinyint(1) NOT NULL default '0',
                            `use_history` tinyint(1) NOT NULL default '0',
@@ -1409,6 +1521,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_plugin_uninstall` tinyint(1) NOT NULL default '0',
                            `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
                            `use_menu_entry` tinyint(1) NOT NULL default '0',
+                           `linked_itemtypes` text NULL,
                            PRIMARY KEY ( `id` )
                            ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
@@ -1420,6 +1533,9 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_contracts", "bool");
       $migration->addField($table, "use_menu_entry", "bool");
       $migration->addField($table, "use_global_search", "bool");
+      $migration->addField($table, "comment", "text");
+      $migration->addField($table, "date_mod", "datetime");
+      $migration->addField($table, "linked_itemtypes", "text");
       $migration->migrationOneTable($table);
       
 
@@ -1437,11 +1553,6 @@ class PluginGenericobjectType extends CommonDBTM {
             $tmp['users_id'] = 0;
             $preference->add($tmp);
          }
-      }
-      
-      //For front/* search file migration
-      foreach ($DB->request("SELECT `name`, `itemtype` FROM `$table`") as $type) {
-         self::deleteItemTypeFilesAndClasses($type["name"]);
       }
       
       //If files are missing, recreate them!

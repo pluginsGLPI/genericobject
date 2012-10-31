@@ -59,6 +59,7 @@ $LANG['genericobject']['config'][14] = "Connexions réseaux";
 $LANG['genericobject']['config'][15] = "Plugin de génération de numéros d'inventaires";
 $LANG['genericobject']['config'][16] = "Fichiers";
 $LANG['genericobject']['config'][17] = "Regénérer les fichiers";
+$LANG['genericobject']['config'][18] = "Liaison avec d'autres objets";
 
 $LANG['genericobject']['fields'][1] = "Champs associés à l'objet";
 $LANG['genericobject']['fields'][2] = "Nom dans la base";
