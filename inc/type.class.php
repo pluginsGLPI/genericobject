@@ -696,8 +696,10 @@ class PluginGenericobjectType extends CommonDBTM {
 
       if ($this->canUseDirectConnections()) {
          self::addItemsTable($itemtype);
+         self::addItemClassFile($this->fields['name'], $itemtype);
       } else {
          self::deleteItemsTable($itemtype);
+         self::deleteClassFile($this->fields['name']."_item");
       }
       
       if ($this->canUsePluginDataInjection() &&
@@ -930,7 +932,21 @@ class PluginGenericobjectType extends CommonDBTM {
                                 self::CLASS_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name.".class");
    }
    
-
+   /**
+    * Write on the the _Item class file for the new object type
+    * @param name the name of the object type
+    * @param classname the name of the new object
+    * @param itemtype the object device type
+    * @return nothing
+    */
+   public static function addItemClassFile($name, $classname) {
+      $class = self::getClassByName($name)."_Item";
+      self::addFileFromTemplate(array('CLASSNAME'    => $class,
+                                       'FOREIGNKEY'   => getForeignKeyFieldForItemType($classname),
+                                       'SOURCEOBJECT' => $classname),
+            self::OBJECTITEM_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name."_item.class");
+   }
+    
    /**
     * Write on the the form file for the new object type
     * @param name the name of the object type
@@ -1468,6 +1484,13 @@ class PluginGenericobjectType extends CommonDBTM {
       
    }
 
+   function getLinkedItemTypesAsArray() {
+      if (!empty($this->fields['linked_itemtypes'])) {
+         return json_decode($this->fields['linked_itemtypes'], true);
+      } else {
+         return array();
+      }
+   }
 
    static function canViewAtLeastOneType() {
       $types = self::getTypes();

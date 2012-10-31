@@ -255,7 +255,7 @@ class PluginGenericobjectField extends CommonDBTM {
       global $DB;
 
       $itemtype = getItemTypeForTable($table);
-      if (!FieldExists($table, $field)) {
+      if (!FieldExists($table, $field, false)) {
          $options  = self::getOptionsWithGlobal($field, $itemtype);
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {

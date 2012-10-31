@@ -141,10 +141,13 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          
          if ($item->canUseDirectConnections()) {
-            Toolbox::logDebug();
             if (!in_array($class, $GO_LINKED_TYPES)) {
                array_push($GO_LINKED_TYPES, $class);
             }
+            $items_class = $class."_Item";
+            //if (class_exists($items_class)) {
+               $items_class::registerType();
+            //}
          }
       }
 
@@ -299,7 +302,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       return ($this->objecttype->canUsePluginUninstall());
    }
 
-
+   function getLinkedItemTypesAsArray() {
+      return $this->objecttype->getLinkedItemTypesAsArray();
+   }
+   
    function title() {
    }
 

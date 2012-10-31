@@ -61,4 +61,67 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    function canCreate() {
       return Session::haveRight($this->$itemtype_1, 'w');
    }
+
+   /**
+    *
+    * Enter description here ...
+    * @since 2.2.0
+    * @param CommonDBTM $item
+    */
+   static function showItemsForSource(CommonDBTM $item) {
+      
+   }
+   
+   /**
+    *
+    * Enter description here ...
+    * @since 2.2.0
+    * @param CommonDBTM $item
+    */
+   static function showItemsForTarget(CommonDBTM $item) {
+      
+   }
+   
+   /**
+    *
+    * Enter description here ...
+    * @since 2.2.0
+    */
+   static function registerType() {
+      Plugin::registerClass(get_called_class(),
+                            array('addtabon' => self::getLinkedItemTypes()));
+   }
+   
+   static function getLinkedItemTypes() {
+      $source_item = self::getItemType1();
+      return $source_item->getLinkedItemTypesAsArray();
+   }
+   
+   function getItemType1() {
+      $classname   = get_called_class();
+      $class       = new $classname();
+      return $class->itemtype_1;
+   }
+   
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+      global $LANG;
+      if (!$withtemplate) {
+         $itemtypes = self::getLinkedItemTypes();
+         if (in_array(get_class($item), $itemtypes) || get_class($item) == self::getItemType1()) {
+            return array(1 => $LANG['genericobject']['title'][1]);
+         }
+      }
+      return '';
+   }
+   
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+      $itemtypes = self::getLinkedItemTypes();
+      if (get_class($item) == self::getItemType1()) {
+         self::showItemsForSource($item);
+      } elseif (in_array(get_class($item), $itemtypes)) {
+         self::showItemsForTarget($item);
+      }
+      return true;
+   }
+    
 }
