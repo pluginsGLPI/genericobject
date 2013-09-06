@@ -99,17 +99,15 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      global $LANG;
-
       if (!$withtemplate) {
          switch ($item->getType()) {
             case __CLASS__ :
-               $tabs = array (1 => $LANG['title'][26],
-                               3 => $LANG['rulesengine'][12],
-                               5 => $LANG['genericobject']['config'][7],
-                               6 => $LANG['Menu'][35]);
+               $tabs = array (1  => __("Main"),
+                               3 => _n("Field", "Fields", 2),
+                               5 => __("Preview"),
+                               6 => _n("Profile", "Profiles", 2));
                if ($item->canUseDirectConnections()) {
-                  $tabs[7] = $LANG['setup'][624];
+                  $tabs[7] = __("Associated element");
                }
                return $tabs;
          }
@@ -255,42 +253,42 @@ class PluginGenericobjectType extends CommonDBTM {
    
       $sopt[6]['table']       = $this->getTable();
       $sopt[6]['field']       = 'use_tickets';
-      $sopt[6]['name']        = __("Use")." ".__("Simplified interface");
+      $sopt[6]['name']        = _sx('button','Use')." ".__("Simplified interface");
       $sopt[6]['datatype']    = 'bool';
 
       $sopt[9]['table']       = $this->getTable();
       $sopt[9]['field']       = 'use_history';
-      $sopt[9]['name']        = __("Use")." ".__("Historical");
+      $sopt[9]['name']        = _sx('button','Use')." ".__("Historical");
       $sopt[9]['datatype']    = 'bool';
 
       $sopt[13]['table']      = $this->getTable();
       $sopt[13]['field']      = 'use_infocoms';
-      $sopt[13]['name']       = __("Use")." ".__("Financial and administratives information");
+      $sopt[13]['name']       = _sx('button','Use')." ".__("Financial and administratives information");
       $sopt[13]['datatype']   = 'bool';
    
       $sopt[14]['table']      = $this->getTable();
       $sopt[14]['field']      = 'use_documents';
-      $sopt[14]['name']       = __("Use")." "._n("Document", "Documents", 2);
+      $sopt[14]['name']       = _sx('button','Use')." "._n("Document", "Documents", 2);
       $sopt[14]['datatype']   = 'bool';
    
       $sopt[15]['table']      = $this->getTable();
       $sopt[15]['field']      = 'use_loans';
-      $sopt[15]['name']       = __("Use")." "._n("Reservation", "Reservations", 2);
+      $sopt[15]['name']       = _sx('button','Use')." "._n("Reservation", "Reservations", 2);
       $sopt[15]['datatype']   = 'bool';
 
       $sopt[16]['table']      = $this->getTable();
       $sopt[16]['field']      = 'use_contracts';
-      $sopt[16]['name']       = __("Use")." "._n("Contract", "Contracts", 2);
+      $sopt[16]['name']       = _sx('button','Use')." "._n("Contract", "Contracts", 2);
       $sopt[16]['datatype']   = 'bool';
 
       $sopt[17]['table']       = $this->getTable();
       $sopt[17]['field']       = 'use_unicity';
-      $sopt[17]['name']        = __("Use")." ".__("Fields unicity");
+      $sopt[17]['name']        = _sx('button','Use')." ".__("Fields unicity");
       $sopt[17]['datatype']    = 'bool';
 
       $sopt[18]['table']       = $this->getTable();
       $sopt[18]['field']       = 'use_global_search';
-      $sopt[18]['name']        = __("Status of items");
+      $sopt[18]['name']        = __("Global search");
       $sopt[18]['datatype']    = 'bool';
       
       return $sopt;
@@ -354,7 +352,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       echo "</td>";
       
-      echo "<td rowspan='4' class='middle right'>".$LANG['common'][25]."&nbsp;: </td>";
+      echo "<td rowspan='4' class='middle right'>".__("Comments")."&nbsp;: </td>";
       echo "<td class='center middle' rowspan='4'><textarea cols='45' rows='4'
              name='comment' >".$this->fields["comment"]."</textarea></td></tr>";
       
@@ -369,10 +367,10 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>" . $LANG['common'][60] . "</td>";
+      echo "<td>".__("Active")."</td>";
       echo "<td>";
       if (!$ID) {
-         echo $LANG['choice'][0];
+         echo __("No");
       }
       else {
          Dropdown::showYesNo("is_active", $this->fields["is_active"]);
@@ -390,18 +388,18 @@ class PluginGenericobjectType extends CommonDBTM {
          echo $LANG['genericobject']['config'][3];
          echo "</th></tr>";
    
-         $use = array ("use_recursivity"          => $LANG['entity'][9],
-                       "use_tickets"              => $LANG['title'][24],
-                       "use_deleted"              => $LANG['ocsconfig'][49],
-                       "use_notes"                => $LANG['title'][37],
-                       "use_history"              => $LANG['title'][38],
-                       "use_template"             => $LANG['common'][14],
-                       "use_infocoms"             => $LANG['financial'][3],
-                       "use_contracts"            => $LANG['Menu'][25],
-                       "use_documents"            => $LANG['Menu'][27],
-                       "use_loans"                => $LANG['Menu'][17],
-                       "use_unicity"              => $LANG['setup'][811],
-                       "use_global_search"        => $LANG['setup'][83],
+         $use = array ("use_recursivity"          => __("Child entities"),
+                       "use_tickets"              => __("Assistance"),
+                       "use_deleted"              => __("Item in the dustbin"),
+                       "use_notes"                => _n('Note', 'Notes', 2),
+                       "use_history"              => __("Historical"),
+                       "use_template"             => __("Templates"),
+                       "use_infocoms"             => __("Financial and administratives information"),
+                       "use_contracts"            => _n("Contract", "Contracts", 2),
+                       "use_documents"            => _n("Document", "Documents", 2),
+                       "use_loans"                => _n("Reservation", "Reservations", 2),
+                       "use_unicity"              => __("Fields unicity"),
+                       "use_global_search"        => __("Global search"),
                         "use_direct_connections"  => $LANG['genericobject']['config'][18],
                        "use_network_ports"        => $LANG['genericobject']['config'][14],
                        "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
@@ -415,7 +413,7 @@ class PluginGenericobjectType extends CommonDBTM {
             if (!$odd) {
                echo "<tr class='tab_bg_2'>";
             }
-            echo "<td>" . __("Use") . " " . $label . "</td>";
+            echo "<td>" . _sx('button','Use') . " " . $label . "</td>";
             echo "<td>";
    
             switch ($right) {
@@ -521,7 +519,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<th colspan='2'>".$LANG['genericobject']['config'][18]."</th></tr>";
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".$LANG['rulesengine'][66]."</td>";
+      echo "<td>"._n("Type", "Types", 2)."</td>";
       echo "<td class='center'>";
       echo "<select name='itemtypes[]' multiple size='10'>";
       $selected = array();

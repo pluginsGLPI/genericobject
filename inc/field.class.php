@@ -98,7 +98,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</table>";
       Html::openArrowMassives('fieldslist', true);
-      Html::closeArrowMassives(array('delete' => $LANG['buttons'][6]));
+      Html::closeArrowMassives(array('delete' => __("Delete permanently")));
 
       echo "<table class='tab_cadre'>";
       echo "<tr class='tab_bg_1'>";
@@ -107,7 +107,7 @@ class PluginGenericobjectField extends CommonDBTM {
       self::dropdownFields("new_field", $itemtype, $used_fields);
       echo "</td>";
       echo "<td>";
-      echo "<input type='submit' name='add_field' value=\"" . $LANG['buttons'][8] . "\" class='submit'>";
+      echo "<input type='submit' name='add_field' value=\"" . _sx('button','Add') . "\" class='submit'>";
       echo "</tr>";
       echo "</table>";
       Html::closeForm();
@@ -144,7 +144,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @return the dropdown random ID
     */
    static function dropdownFields($name,$itemtype, $used = array()) {
-      global $GO_FIELDS, $LANG;
+      global $GO_FIELDS;
       
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
@@ -156,19 +156,19 @@ class PluginGenericobjectField extends CommonDBTM {
                //meaning that a dropdown can be useful in all types (for example type, model, etc.)
                if (isset($values['input_type']) && $values['input_type'] == 'dropdown') {
                   if (isset($values['entities_id'])) {
-                    $message = " ".$LANG['entity'][0]." : ".Dropdown::getYesNo($values['entities_id']);
+                    $message = " ".__("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
                      if ($values['entities_id']) {
                         if (isset($values['is_recursive'])) {
-                           $message.= " ".$LANG['entity'][9]." : ".Dropdown::getYesNo($values['is_recursive']);
+                           $message.= " ".__("Child entities")." : ".Dropdown::getYesNo($values['is_recursive']);
                         }
                      }
                   } else {
-                    $message = " ".$LANG['entity'][0]." : ".Dropdown::getYesNo(0);
+                    $message = " ".__("Entity")." : ".Dropdown::getYesNo(0);
                   }
                   if (isset($values['is_tree'])) {
-                     $message.= " ".$LANG['entity'][7]." : ".Dropdown::getYesNo($values['is_tree']);
+                     $message.= " ".__("tree structure")." : ".Dropdown::getYesNo($values['is_tree']);
                   } else {
-                     $message.= " ".$LANG['entity'][7]." : ".Dropdown::getYesNo(0);
+                     $message.= " ".__("tree structure")." : ".Dropdown::getYesNo(0);
                   }
                   
                }

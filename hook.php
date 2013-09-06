@@ -169,12 +169,11 @@ function plugin_datainjection_populate_genericobject() {
 }
 
 function plugin_genericobject_MassiveActions($type) {
-   global $LANG;
    $types = PluginGenericobjectType::getTypes();
    if (isset($types[$type])) {
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
-         return array('plugin_genericobject_transfer' => $LANG['buttons'][48]);
+         return array('plugin_genericobject_transfer' => __("Transfer"));
       } else {
          return array();
       }
@@ -184,15 +183,13 @@ function plugin_genericobject_MassiveActions($type) {
 }
 
 function plugin_genericobject_MassiveActionsDisplay($options=array()) {
-   global $LANG;
-
    $objecttype = PluginGenericobjectType::getInstance($options['itemtype']);
    switch ($options['action']) {
       case 'plugin_genericobject_transfer':
          if ($objecttype->isTransferable()) {
             Dropdown::show('Entity', array('name' => 'new_entity'));
             echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" .
-               $LANG['buttons'][2] . "\" >";
+               _sx('button','Post') . "\" >";
          }
          break;
    }

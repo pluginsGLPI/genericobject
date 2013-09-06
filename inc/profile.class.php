@@ -49,7 +49,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
 
       foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
          echo "<tr><th colspan='2' align='center'><strong>";
-         echo $LANG['profiles'][22]." ".$profile['name']."</strong></th></tr>";
+         echo __("Profile")." ".$profile['name']."</strong></th></tr>";
 
          $go_profile = new self();
          if ($go_profile->getProfilesFromDB($profile['id'])) {
@@ -78,7 +78,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
          echo "<tr class='tab_bg_1'>";
          echo "<td align='center' colspan='2'>";
          echo "<input type='submit' name='update_all_rights' value=\"" .
-            $LANG['buttons'][7] . "\" class='submit'>";
+            _sx('button', 'Post') . "\" class='submit'>";
          echo "</td></tr>";
       }
       echo "</table>";
@@ -140,7 +140,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
             echo "<input type='hidden' name='profiles_id' value='".$id."'>";
             echo "<input type='hidden' name='id' value=$id>";
             echo "<input type='submit' name='update_user_profile' value=\"" .
-               $LANG['buttons'][7] . "\" class='submit'>";
+               _sx('button', 'Post') . "\" class='submit'>";
             echo "</td></tr>";
          
          }

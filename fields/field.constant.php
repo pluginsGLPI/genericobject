@@ -25,7 +25,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
  
-global $GO_FIELDS, $LANG;
+global $GO_FIELDS;
 
 $GO_FIELDS['id']['name']          = __("ID");
 $GO_FIELDS['id']['input_type']    = 'text';

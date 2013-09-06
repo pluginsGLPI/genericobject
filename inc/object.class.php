@@ -176,7 +176,6 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function defineTabs($options=array()) {
-      global $LANG;
       $ong = array ();
 
       if (!$this->isNewItem()) {
@@ -331,15 +330,12 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if (isset($options['withtemplate']) && $options['withtemplate'] == 2) {
          $template   = "newcomp";
-         $datestring = $LANG['computers'][14]." : ";
-         $date       = Html::convDateTime($_SESSION["glpi_currenttime"]);
+         $date = sprintf(__('Created on %s'), Html::convDateTime($_SESSION["glpi_currenttime"]));
       } else if (isset($options['withtemplate']) && $options['withtemplate'] == 1) {
          $template   = "newtemplate";
-         $datestring = $LANG['computers'][14]." : ";
-         $date       = Html::convDateTime($_SESSION["glpi_currenttime"]);
+         $date = sprintf(__('Created on %s'), Html::convDateTime($_SESSION["glpi_currenttime"]));
       } else {
-         $datestring = $LANG['common'][26].": ";
-         $date       = Html::convDateTime($this->fields["date_mod"]);
+         $date = sprintf(__('Last update on %s'), Html::convDateTime($this->fields["date_mod"]));
          $template   = false;
       }
 
@@ -369,7 +365,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "<tr class='tab_bg_1'>";
          echo "<td colspan='2' class='center'>".$datestring.$date;
          if (!$template && !empty($this->fields['template_name'])) {
-            echo "<span class='small_space'>(".$LANG['common'][13]."&nbsp;: ".
+            echo "<span class='small_space'>(".__("Template name")."&nbsp;: ".
                   $this->fields['template_name'].")</span>";
          }
          echo "</td></tr>";
