@@ -363,7 +363,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       
       if (!$this->isNewID($id)) {
          echo "<tr class='tab_bg_1'>";
-         echo "<td colspan='2' class='center'>".$datestring.$date;
+         echo "<td colspan='2' class='center'>".$date;
          if (!$template && !empty($this->fields['template_name'])) {
             echo "<span class='small_space'>(".__("Template name")."&nbsp;: ".
                   $this->fields['template_name'].")</span>";
