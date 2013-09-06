@@ -146,12 +146,10 @@ function plugin_genericobject_uninstall() {
 }
 
 function check_directories() {
-   global $LANG;
-   
    foreach (array(GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH,
                   GENERICOBJECT_LOCALES_PATH) as $path) {
       if (!is_dir($path) || !is_writable($path)) {
-         Session::addMessageAfterRedirect($LANG['genericobject']['install'][0]);
+         Session::addMessageAfterRedirect(__("Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server.", "genericobject"));
          return false;
       }
    }
@@ -197,7 +195,7 @@ function plugin_genericobject_MassiveActionsDisplay($options=array()) {
 }
 
 function plugin_genericobject_MassiveActionsProcess($data) {
-   global $LANG, $DB;
+   global $DB;
 
    switch ($data['action']) {
       case 'plugin_genericobject_transfer':

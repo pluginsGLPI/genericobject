@@ -67,7 +67,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    static function registerType() {
-      global $DB, $LANG, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI,
+      global $DB, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI,
               $GO_LINKED_TYPES;
       
       $class  = get_called_class();
@@ -310,7 +310,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function showForm($id, $options=array(), $previsualisation = false) {
-      global $LANG, $DB;
+      global $DB;
 
       if ($previsualisation) {
          $canedit = true;
@@ -343,7 +343,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $this->showFormHeader($options);
 
       if ($previsualisation) {
-         echo "<tr><th colspan='4'>".$LANG['genericobject']['config'][8].":&nbsp;";
+         echo "<tr><th colspan='4'>".__("Object preview", "genericobject").":&nbsp;";
          $itemtype = $this->objecttype->fields['itemtype'];
          echo $itemtype::getTypeName();
          echo "</th></tr>";
@@ -624,14 +624,14 @@ class PluginGenericobjectObject extends CommonDBTM {
     * @param type the object type
     */
    static function showPrevisualisationForm(PluginGenericobjectType $type) {
-      global $LANG;
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
       
       if (Session::haveRight($itemtype, 'r')) {
          $item->showForm(-1, array(), true);
       } else {
-         echo "<br><strong>" . $LANG['genericobject']['fields'][9] . "</strong><br>";
+         echo "<br><strong>" . __("You must configure rights to enable the preview", 
+                                  "genericobject") . "</strong><br>";
       }
    }
    

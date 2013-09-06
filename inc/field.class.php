@@ -33,7 +33,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param $id the itemtype's id
     */
    public static function showObjectFieldsForm($id) {
-      global $LANG, $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
+      global $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
       $url          = Toolbox::getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
@@ -63,14 +63,14 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<table class='tab_cadre_fixe' >";
       echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
-      echo $LANG['genericobject']['fields'][1] . " : ";
+      echo __("Fields associated with the object", "genericobject") . " : ";
       echo $itemtype::getTypeName();
       echo "</th></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<th width='10'></th>";
-      echo "<th>" . $LANG['genericobject']['fields'][3] . "</th>";
-      echo "<th>" . $LANG['genericobject']['fields'][2] . "</th>";
+      echo "<th>" . __("Label", "genericobject") . "</th>";
+      echo "<th>" . __("Name in DB", "genericobject") . "</th>";
       echo "<th width='10'></th>";
       echo "<th width='10'></th>";
       echo "</tr>";
@@ -102,7 +102,7 @@ class PluginGenericobjectField extends CommonDBTM {
 
       echo "<table class='tab_cadre'>";
       echo "<tr class='tab_bg_1'>";
-      echo "<td>" . $LANG['genericobject']['fields'][4] . "</td>";
+      echo "<td>" . __("Add new field", "genericobject") . "</td>";
       echo "<td align='left'>";
       self::dropdownFields("new_field", $itemtype, $used_fields);
       echo "</td>";

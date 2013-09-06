@@ -1,0 +1,126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-06 14:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: hook.php:152
+msgid ""
+"Error: directories '/inc', '/front' and '/locales' of plugin must be "
+"writable by the web server."
+msgstr ""
+
+#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
+#: inc/object_item.class.php:110 inc/type.class.php:239
+msgid "Objects management"
+msgstr ""
+
+#: front/field.form.php:40
+msgid "Field(s) deleted successfully"
+msgstr ""
+
+#: front/field.form.php:50
+msgid "Field added successfully"
+msgstr ""
+
+#: front/type.php:37 inc/type.class.php:61
+msgid "Type of objects"
+msgstr ""
+
+#: inc/field.class.php:66
+msgid "Fields associated with the object"
+msgstr ""
+
+#: inc/field.class.php:72
+msgid "Label"
+msgstr ""
+
+#: inc/field.class.php:73
+msgid "Name in DB"
+msgstr ""
+
+#: inc/field.class.php:105
+msgid "Add new field"
+msgstr ""
+
+#: inc/object.class.php:346
+msgid "Object preview"
+msgstr ""
+
+#: inc/object.class.php:633
+msgid "You must configure rights to enable the preview"
+msgstr ""
+
+#: inc/profile.class.php:62 inc/profile.class.php:121
+msgid "Access object"
+msgstr ""
+
+#: inc/profile.class.php:69 inc/profile.class.php:127
+msgid "Associate tickets to this object"
+msgstr ""
+
+#: inc/profile.class.php:147
+msgid "No type defined"
+msgstr ""
+
+#: inc/type.class.php:150
+msgid "Type name is missing"
+msgstr ""
+
+#: inc/type.class.php:156
+msgid ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr ""
+
+#: inc/type.class.php:163
+msgid "Type must start with a letter"
+msgstr ""
+
+#: inc/type.class.php:170
+msgid "A type already exists with the same name"
+msgstr ""
+
+#: inc/type.class.php:339
+msgid "Internal identifier"
+msgstr ""
+
+#: inc/type.class.php:383
+msgid "Behaviour"
+msgstr ""
+
+#: inc/type.class.php:398 inc/type.class.php:513
+msgid "Link to other objects"
+msgstr ""
+
+#: inc/type.class.php:399
+msgid "Network connections"
+msgstr ""
+
+#: inc/type.class.php:400
+msgid "injection file plugin"
+msgstr ""
+
+#: inc/type.class.php:402
+msgid "order plugin"
+msgstr ""
+
+#: inc/type.class.php:403
+msgid "item's uninstallation plugin"
+msgstr ""
+
+#: inc/type.class.php:500
+msgid "Regenerate files"
+msgstr ""

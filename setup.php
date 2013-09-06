@@ -43,7 +43,7 @@ if (!defined("GENERICOBJECT_LOCALES_PATH")) {
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
-   global $PLUGIN_HOOKS, $LANG, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
+   global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES;
           
    $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
@@ -79,8 +79,8 @@ function plugin_init_genericobject() {
          if ($type->fields['is_active']) {
             $url.= '?itemtypes_id='.$_GET['id'];
             $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
-                      $LANG['genericobject']['common'][7].
-                        "\" alt=\"".$LANG['genericobject']['common'][7]."\">";
+                      __("Preview").
+                        "\" alt=\"".__("Preview")."\">";
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image]
                = $url;
          }
@@ -115,8 +115,7 @@ function plugin_post_init_genericobject() {
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
-   global $LANG;
-   return array ('name'           => $LANG["genericobject"]["title"][1],
+   return array ('name'           => __("Objects management", "genericobject"),
                  'version'        => '2.3.0',
                  'author'         => 'Alexandre Delaunay & Walid Nouh',
                  'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
@@ -140,13 +139,11 @@ function plugin_genericobject_check_prerequisites() {
 // Check configuration process for plugin : need to return true if succeeded
 // Can display a message only if failure and $verbose is true
 function plugin_genericobject_check_config($verbose = false) {
-   global $LANG;
-
    if (true) { // Your configuration check
       return true;
    }
    if ($verbose) {
-      echo $LANG['plugins'][2];
+      echo __('Installed / not configured');
    }
    return false;
 }

@@ -43,12 +43,12 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       $type = array_pop($types);
       Html::redirect(Toolbox::getItemTypeSearchURL($type['itemtype']));
    } else {
-      Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins",
+      Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
                    "genericobject");
       echo "<table class='tab_cadre_fixe'>";
-      echo "<tr class='tab_bg_2'><th>" . $LANG["genericobject"]["title"][1]."</th></tr>";
+      echo "<tr class='tab_bg_2'><th>" . __("Objects management", "genericobject")."</th></tr>";
       if (!count($types)) {
-         echo "<tr class='tab_bg_1'><td align='center'>".$LANG['stats'][2]."</td></tr>";
+         echo "<tr class='tab_bg_1'><td align='center'>".__("No item to display")."</td></tr>";
       } else {
          foreach($types as $ID => $value) {
             echo "<tr class='tab_bg_1'><td align='center'>";

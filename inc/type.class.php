@@ -58,8 +58,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
    
    static function getTypeName($nb=0) {
-      global $LANG;
-      return $LANG['genericobject']['title'][2];
+      return __("Type of objects", "genericobject");
    }
    
    static function &getInstance($itemtype, $refresh = false) {
@@ -146,30 +145,29 @@ class PluginGenericobjectType extends CommonDBTM {
    
    //------------------------------------- Framework hooks ----------------------------------
    function prepareInputForAdd($input) {
-      global $LANG;
-      
       //Name must not be empty
       if (isset($input['name']) && $input['name'] == '') {
-         Session::addMessageAfterRedirect($LANG['genericobject']['common'][5], ERROR, true);
+         Session::addMessageAfterRedirect(__("Type name is missing", "genericobject"), ERROR, true);
          return array();
       }
 
       //Name must not be empty
       if (in_array($input['name'], array('field', 'object', 'type'))) {
-         Session::addMessageAfterRedirect($LANG['genericobject']['common'][8], ERROR, true);
+         Session::addMessageAfterRedirect(__("Types 'field', 'object' and 'type' are reserved. Please choose another one", 
+                                             "genericobject"), ERROR, true);
          return array();
       }
       
       //Name must start with a letter
       if (!preg_match("/^[a-zA-Z]+/i",$input['name'])) {
-         Session::addMessageAfterRedirect($LANG['genericobject']['common'][6], ERROR, true);
+         Session::addMessageAfterRedirect(__("Type must start with a letter", "genericobject"), ERROR, true);
          return array();
       }
       $input['name']     = self::filterInput($input['name']);
       
       //Name must not be present in DB
       if (countElementsInTable(getTableForItemType(__CLASS__), "`name`='".$input['name']."'")) {
-         Session::addMessageAfterRedirect($LANG['genericobject']['common'][4], ERROR, true);
+         Session::addMessageAfterRedirect(__("A type already exists with the same name", "genericobject"), ERROR, true);
          return array();
       } else {
          $input['itemtype'] = self::getClassByName($input['name']);
@@ -238,8 +236,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function getSearchOptions() {
-      global $LANG;
-      $sopt['common'] = $LANG["genericobject"]["title"][1];
+      $sopt['common'] = __("Objects management", "genericobject");
    
       $sopt[1]['table']       = $this->getTable();
       $sopt[1]['field']       = 'name';
@@ -320,8 +317,6 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function showBehaviorForm($ID, $options=array()) {
-      global $LANG;
-
       if ($ID > 0) {
          $this->check($ID, 'r');
       } else {
@@ -341,7 +336,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $this->showFormHeader($options);
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>" . $LANG['genericobject']['common'][1] . "</td>";
+      echo "<td>" . __("Internal identifier", "genericobject") . "</td>";
       echo "<td>";
       if (!$ID) {
          Html::autocompletionTextField($this, 'name', array('value' => $this->fields["name"]));
@@ -357,7 +352,7 @@ class PluginGenericobjectType extends CommonDBTM {
              name='comment' >".$this->fields["comment"]."</textarea></td></tr>";
       
       echo "<tr class='tab_bg_1'>";
-      echo "<td>" . $LANG['genericobject']['config'][9] . "</td>";
+      echo "<td>" . __("Label") . "</td>";
       echo "<td>";
       if ($ID) {
          $itemtype = $this->fields["itemtype"];
@@ -385,7 +380,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!$this->isNewID($ID)) {
          $canedit = $this->can($ID, 'w');
          echo "<tr class='tab_bg_1'><th colspan='4'>";
-         echo $LANG['genericobject']['config'][3];
+         echo __("Behaviour", "genericobject");
          echo "</th></tr>";
    
          $use = array ("use_recursivity"          => __("Child entities"),
@@ -400,12 +395,12 @@ class PluginGenericobjectType extends CommonDBTM {
                        "use_loans"                => _n("Reservation", "Reservations", 2),
                        "use_unicity"              => __("Fields unicity"),
                        "use_global_search"        => __("Global search"),
-                        "use_direct_connections"  => $LANG['genericobject']['config'][18],
-                       "use_network_ports"        => $LANG['genericobject']['config'][14],
-                       "use_plugin_datainjection" => $LANG['genericobject']['config'][10],
-   //                    "use_plugin_pdf"           => $LANG['genericobject']['config'][11],
-                       "use_plugin_order"         => $LANG['genericobject']['config'][12],
-                       "use_plugin_uninstall"     => $LANG['genericobject']['config'][13]);
+                        "use_direct_connections"  => __("Link to other objects", "genericobject"),
+                       "use_network_ports"        => __("Network connections", "genericobject"),
+                       "use_plugin_datainjection" => __("injection file plugin", "genericobject"),
+   //                    "use_plugin_pdf"           => __("PDF plugin", "genericobject"),
+                       "use_plugin_order"         => __("order plugin", "genericobject"),
+                       "use_plugin_uninstall"     => __("item's uninstallation plugin", "genericobject"));
    
          $plugin = new Plugin();
          $odd=0;
@@ -495,8 +490,6 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    function showFilesForm() {
-      global $LANG;
-      
       echo "<form name='generate' method='post'>";
       echo "<div class='center'>";
       echo "<table class='tab_cadre_fixe'>";
@@ -504,20 +497,20 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td class='center'>";
       echo "<input type='hidden' name='id' value='".$this->getID()."'>";
       echo "<input type='submit' class='submit' name='regenerate'
-                    value='".$LANG['genericobject']['config'][17]."'>";
+                    value='".__("Regenerate files", "genericobject")."'>";
       echo "</td></tr></table></div>";
       Html::closeForm();
    }
 
    function showLinkedTypesForm() {
-      global $GO_LINKED_TYPES, $LANG;
+      global $GO_LINKED_TYPES;
       
       $this->showFormHeader();
       echo "<form name='link' method='post'>";
       echo "<div class='center'>";
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='tab_bg_1'>";
-      echo "<th colspan='2'>".$LANG['genericobject']['config'][18]."</th></tr>";
+      echo "<th colspan='2'>".__("Link to other objects", "genericobject")."</th></tr>";
       echo "<tr class='tab_bg_1'>";
       echo "<td>"._n("Type", "Types", 2)."</td>";
       echo "<td class='center'>";
@@ -1281,7 +1274,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    static function includeLocales($name) {
-      global $CFG_GLPI, $LANG;
+      global $CFG_GLPI;
    
       $prefix = GENERICOBJECT_LOCALES_PATH . "/$name/$name";
       if (isset ($_SESSION["glpilanguage"])

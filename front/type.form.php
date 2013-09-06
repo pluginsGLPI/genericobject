@@ -70,7 +70,7 @@ if (isset ($_GET["action"])) {
    Html::back();
 }
 
-Html::header($LANG['genericobject']['title'][1], $_SERVER['PHP_SELF'], "plugins", "genericobject",
+Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins", "genericobject",
              "type");
 $type->showForm($_REQUEST["id"]);
 

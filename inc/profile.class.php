@@ -32,7 +32,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
    }
 
    static function showForItemtype($type) {
-      global $DB, $LANG;
+      global $DB;
 
       if (!Session::haveRight("profile", "r")) {
          return false;
@@ -43,7 +43,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       echo "<table class='tab_cadre_fixe'>";
       $itemtype = $type->fields['itemtype'];
       echo "<tr><th colspan='2' align='center'><strong>";
-      echo $LANG["genericobject"]['profile'][0].":&nbsp;";
+      echo __("Rights assignment").":&nbsp;";
       echo $itemtype::getTypeName();
       echo "</strong></th></tr>";
 
@@ -59,14 +59,14 @@ class PluginGenericobjectProfile extends CommonDBTM {
          $prefix = "profiles[".$go_profile->getID()."]";
          if ($profile['interface'] == 'central') {
             echo "<tr class='tab_bg_2'>";
-            echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
+            echo "<td>" . __("Access object", "genericobject") . ":</td><td>";
             Profile::dropdownNoneReadWrite($prefix."[right]",
                                            $go_profile->fields[$type->fields['itemtype']], 1, 1, 1);
             echo "</td></tr>";
          }
          if ($type->canUseTickets()) {
             echo "<tr class='tab_bg_2'>";
-            echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
+            echo "<td>" . __("Associate tickets to this object", "genericobject") . ":</td><td>";
             Dropdown::showYesNo($prefix."[open_ticket]",
                                 $go_profile->fields[$type->fields['itemtype'].'_open_ticket']);
             echo "</td></tr>";
@@ -87,9 +87,6 @@ class PluginGenericobjectProfile extends CommonDBTM {
    
    /* profiles modification */
    function showForm($id) {
-      global $LANG;
-
-
       if (!Session::haveRight("profile", "r")) {
          return false;
       }
@@ -110,7 +107,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       if (!empty ($types)) {
 
          echo "<tr><th colspan='2' align='center'><strong>";
-         echo $LANG["genericobject"]['profile'][0]."</strong></th></tr>";
+         echo __("Rights assignment")."</strong></th></tr>";
          
          foreach ($types as $tmp => $type) {
             $itemtype   = $type['itemtype'];
@@ -121,13 +118,13 @@ class PluginGenericobjectProfile extends CommonDBTM {
             if ($general_profile->fields['interface'] == 'central') {
                echo "<tr class='tab_bg_2'>";
                $right = $type['itemtype'];
-               echo "<td>" . $LANG['genericobject']['profile'][2] . ":</td><td>";
+               echo "<td>" . __("Access object", "genericobject") . ":</td><td>";
                Profile::dropdownNoneReadWrite($right,  $profile['right'], 1, 1, 1);
                echo "</td></tr>";
             }
             if ($objecttype->canUseTickets()) {
                echo "<tr class='tab_bg_2'>";
-               echo "<td>" . $LANG["genericobject"]['profile'][1] . ":</td><td>";
+               echo "<td>" . __("Associate tickets to this object", "genericobject") . ":</td><td>";
                $right_openticket = $type['itemtype']."_open_ticket";
                Dropdown::showYesNo($right_openticket,  $profile['open_ticket']);
                echo "</td></tr>";
@@ -147,7 +144,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
 
       } else {
          echo "<tr><td class='center'><strong>";
-         echo $LANG["genericobject"]['profile'][3]."</strong></td></tr>";
+         echo __("No type defined", "genericobject")."</strong></td></tr>";
       }
 
       echo "</table>";

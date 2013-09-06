@@ -104,11 +104,10 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    }
    
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      global $LANG;
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes();
          if (in_array(get_class($item), $itemtypes) || get_class($item) == self::getItemType1()) {
-            return array(1 => $LANG['genericobject']['title'][1]);
+            return array(1 => __("Objects management", "genericobject"));
          }
       }
       return '';

@@ -37,7 +37,7 @@ if (isset ($_POST["delete"])) {
          && $value == 1
             && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
          PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
-         Session::addMessageAfterRedirect($LANG['genericobject']['fields'][5], true, INFO);
+         Session::addMessageAfterRedirect(__("Field(s) deleted successfully", "genericobject"), true, INFO);
       }
    }
 } elseif (isset ($_POST["add_field"])) {
@@ -47,7 +47,7 @@ if (isset ($_POST["delete"])) {
       PluginGenericobjectType::registerOneType($itemtype);
 
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
-      Session::addMessageAfterRedirect($LANG['genericobject']['fields'][6]);
+      Session::addMessageAfterRedirect(__("Field added successfully", "genericobject"));
    }
 } elseif (isset($_POST['action'])) {
    //Move field
