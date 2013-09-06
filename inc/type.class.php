@@ -279,7 +279,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[15]['datatype']   = 'bool';
 
       $sopt[16]['table']      = $this->getTable();
-      $sopt[16]['field']      = 'use_loans';
+      $sopt[16]['field']      = 'use_contracts';
       $sopt[16]['name']       = __("Use")." "._n("Contract", "Contracts", 2);
       $sopt[16]['datatype']   = 'bool';
 
