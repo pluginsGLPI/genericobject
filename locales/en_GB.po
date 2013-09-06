@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-06 14:39+0200\n"
+"POT-Creation-Date: 2013-09-06 14:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,10 @@ msgstr "Error: directories '/inc', '/front' and '/locales' of plugin must be wri
 #: inc/object_item.class.php:110 inc/type.class.php:239
 msgid "Objects management"
 msgstr "Objects management"
+
+#: setup.php:82 setup.php:83
+msgid "Go to objects list"
+msgstr "Go to objects list"
 
 #: front/field.form.php:40
 msgid "Field(s) deleted successfully"

@@ -79,8 +79,8 @@ function plugin_init_genericobject() {
          if ($type->fields['is_active']) {
             $url.= '?itemtypes_id='.$_GET['id'];
             $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
-                      __("Preview").
-                        "\" alt=\"".__("Preview")."\">";
+                      __("Go to objects list", "genericobject").
+                        "\" alt=\"".__("Go to objects list", "genericobject")."\">";
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image]
                = $url;
          }

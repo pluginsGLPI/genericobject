@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-06 14:39+0200\n"
+"POT-Creation-Date: 2013-09-06 14:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,10 @@ msgstr ""
 #: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
 #: inc/object_item.class.php:110 inc/type.class.php:239
 msgid "Objects management"
+msgstr ""
+
+#: setup.php:82 setup.php:83
+msgid "Go to objects list"
 msgstr ""
 
 #: front/field.form.php:40
