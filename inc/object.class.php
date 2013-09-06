@@ -223,11 +223,11 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function canUseInfocoms() {
-      return ($this->objecttype->canUseInfocoms() || Session::haveRight("infocom", "r"));
+      return ($this->objecttype->canUseInfocoms() && Session::haveRight("infocom", "r"));
    }
 
    function canUseContracts() {
-      return ($this->objecttype->canUseContracts() || Session::haveRight("contract", "r"));
+      return ($this->objecttype->canUseContracts() && Session::haveRight("contract", "r"));
    }
 
 
@@ -241,7 +241,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
    
    function canUseUnicity() {
-      return ($this->objecttype->canUseUnicity() || Session::haveRight("config", "r"));
+      return ($this->objecttype->canUseUnicity() && Session::haveRight("config", "r"));
    }
 
 
