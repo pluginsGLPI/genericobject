@@ -54,15 +54,15 @@ if (!isset($_GET['lang'])) {
 
 define('GLPI_ROOT', realpath('../../..'));
 
-if (!is_readable(GLPI_ROOT . "/plugins/escalade/locales/".$_GET['lang'].".php")) {
+if (!is_readable(GLPI_ROOT . "/plugins/genericobject/locales/".$_GET['lang'].".php")) {
    print "Unable to read dictionnary file\n";
    exit();
 }
-include (GLPI_ROOT . "/plugins/escalade/locales/en_GB.php");
+include (GLPI_ROOT . "/plugins/genericobject/locales/en_GB.php");
 $REFLANG = $LANG;
 
-$lf     = fopen(GLPI_ROOT . "/plugins/escalade/locales/".$_GET['lang'].".php", "r");
-$lf_new = fopen(GLPI_ROOT . "/plugins/escalade/locales/temp.php", "w+");
+$lf     = fopen(GLPI_ROOT . "/plugins/genericobject/locales/".$_GET['lang'].".php", "r");
+$lf_new = fopen(GLPI_ROOT . "/plugins/genericobject/locales/temp.php", "w+");
 
 while (($content = fgets($lf, 4096)) !== false) {
    if (!preg_match('/string to be translated/',$content,$reg)) {
@@ -77,16 +77,16 @@ fclose($lf);
 fclose($lf_new);
 
 
-include (GLPI_ROOT . "/plugins/escalade/locales/temp.php");
+include (GLPI_ROOT . "/plugins/genericobject/locales/temp.php");
 
-if (!is_readable(GLPI_ROOT . "/plugins/escalade/locales/glpi.pot")) {
+if (!is_readable(GLPI_ROOT . "/plugins/genericobject/locales/glpi.pot")) {
    print "Unable to read glpi.pot file\n";
    exit();
 }
 $current_string_plural = '';
 
-$pot = fopen(GLPI_ROOT . "/plugins/escalade/locales/glpi.pot", "r");
-$po  = fopen(GLPI_ROOT . "/plugins/escalade/locales/".$_GET['lang'].".po", "w+");
+$pot = fopen(GLPI_ROOT . "/plugins/genericobject/locales/glpi.pot", "r");
+$po  = fopen(GLPI_ROOT . "/plugins/genericobject/locales/".$_GET['lang'].".po", "w+");
 
 $in_plural = false;
 
