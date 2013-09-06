@@ -245,52 +245,52 @@ class PluginGenericobjectType extends CommonDBTM {
    
       $sopt[1]['table']       = $this->getTable();
       $sopt[1]['field']       = 'name';
-      $sopt[1]['name']        = $LANG["common"][22];
+      $sopt[1]['name']        = __("Model");
       $sopt[1]['datatype']    = 'itemlink';
 
       $sopt[5]['table']       = $this->getTable();
       $sopt[5]['field']       = 'is_active';
-      $sopt[5]['name']        = $LANG['common'][60];
+      $sopt[5]['name']        = __("Active");
       $sopt[5]['datatype']    = 'bool';
    
       $sopt[6]['table']       = $this->getTable();
       $sopt[6]['field']       = 'use_tickets';
-      $sopt[6]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][31];
+      $sopt[6]['name']        = __("Use")." ".__("Simplified interface");
       $sopt[6]['datatype']    = 'bool';
 
       $sopt[9]['table']       = $this->getTable();
       $sopt[9]['field']       = 'use_history';
-      $sopt[9]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['title'][38];
+      $sopt[9]['name']        = __("Use")." ".__("Historical");
       $sopt[9]['datatype']    = 'bool';
 
       $sopt[13]['table']      = $this->getTable();
       $sopt[13]['field']      = 'use_infocoms';
-      $sopt[13]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['financial'][3];
+      $sopt[13]['name']       = __("Use")." ".__("Financial and administratives information");
       $sopt[13]['datatype']   = 'bool';
    
       $sopt[14]['table']      = $this->getTable();
       $sopt[14]['field']      = 'use_documents';
-      $sopt[14]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][27];
+      $sopt[14]['name']       = __("Use")." "._n("Document", "Documents", 2);
       $sopt[14]['datatype']   = 'bool';
    
       $sopt[15]['table']      = $this->getTable();
       $sopt[15]['field']      = 'use_loans';
-      $sopt[15]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][17];
+      $sopt[15]['name']       = __("Use")." "._n("Reservation", "Reservations", 2);
       $sopt[15]['datatype']   = 'bool';
 
       $sopt[16]['table']      = $this->getTable();
       $sopt[16]['field']      = 'use_loans';
-      $sopt[16]['name']       = $LANG['genericobject']['config'][1]." ".$LANG['Menu'][25];
+      $sopt[16]['name']       = __("Use")." "._n("Contract", "Contracts", 2);
       $sopt[16]['datatype']   = 'bool';
 
       $sopt[17]['table']       = $this->getTable();
       $sopt[17]['field']       = 'use_unicity';
-      $sopt[17]['name']        = $LANG['genericobject']['config'][1]." ".$LANG['setup'][811];
+      $sopt[17]['name']        = __("Use")." ".__("Fields unicity");
       $sopt[17]['datatype']    = 'bool';
 
       $sopt[18]['table']       = $this->getTable();
       $sopt[18]['field']       = 'use_global_search';
-      $sopt[18]['name']        = $LANG['setup'][83];
+      $sopt[18]['name']        = __("Status of items");
       $sopt[18]['datatype']    = 'bool';
       
       return $sopt;
@@ -415,7 +415,7 @@ class PluginGenericobjectType extends CommonDBTM {
             if (!$odd) {
                echo "<tr class='tab_bg_2'>";
             }
-            echo "<td>" . $LANG['genericobject']['config'][1] . " " . $label . "</td>";
+            echo "<td>" . __("Use") . " " . $label . "</td>";
             echo "<td>";
    
             switch ($right) {
