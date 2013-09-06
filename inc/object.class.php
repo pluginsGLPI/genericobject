@@ -33,7 +33,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    private $cpt = 0;
 
    //Get itemtype name
-   static function getTypeName() {
+   static function getTypeName($nb=0) {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
@@ -155,10 +155,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          $itemtype = getItemTypeForTable($table);
          $item     = new $itemtype();
          //If entity dropdown, check rights to view & create
-         if ($item->canView()) {
+         if ($itemtype::canView()) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$itemtype]['links']['search']
                                                        = Toolbox::getItemTypeSearchURL($itemtype, false);
-            if ($item->canCreate()) {
+            if ($itemtype::canCreate()) {
                $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                             = Toolbox::getItemTypeFormURL($class, false);
             }
@@ -167,11 +167,11 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
       
 
-   function canCreate() {
+   static function canCreate() {
       return Session::haveRight(get_called_class(), 'w');
    }
 
-   function canView() {
+   static function canView() {
       return Session::haveRight(get_called_class(), 'r');
    }
 

@@ -37,7 +37,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    public $items_id_2 = 'items_id';
     
    //Get itemtype name
-   static function getTypeName() {
+   static function getTypeName($nb=0) {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
@@ -54,11 +54,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       }
    }
    
-   function canView() {
+   static function canView() {
       return Session::haveRight($this->$itemtype_1, 'r');
    }
    
-   function canCreate() {
+   static function canCreate() {
       return Session::haveRight($this->$itemtype_1, 'w');
    }
 

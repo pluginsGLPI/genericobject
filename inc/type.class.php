@@ -70,11 +70,11 @@ class PluginGenericobjectType extends CommonDBTM {
       return $singleton[$itemtype];
    }
    
-   function canCreate() {
+   static function canCreate() {
       return Session::haveRight("config", "w");
    }
 
-   function canView() {
+   static function canView() {
       return Session::haveRight("config", "r");
    }
 
