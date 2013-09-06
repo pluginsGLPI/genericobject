@@ -117,17 +117,17 @@ $GO_FIELDS['states_id']['input_type'] = 'dropdown';
 $GO_FIELDS['users_id']['name']       = __("User");
 $GO_FIELDS['users_id']['input_type'] = 'dropdown';
 
-$GO_FIELDS['groups_id']['name']       = __("group");
+$GO_FIELDS['groups_id']['name']       = __("Group");
 $GO_FIELDS['groups_id']['input_type'] = 'dropdown';
 $GO_FIELDS['groups_id']['condition']  = '`is_itemgroup`';
 
-$GO_FIELDS['manufacturers_id']['name']       = __("manufacturer");
+$GO_FIELDS['manufacturers_id']['name']       = __("Manufacturer");
 $GO_FIELDS['manufacturers_id']['input_type'] = 'dropdown';
 
 $GO_FIELDS['users_id_tech']['name']       = __("Technician in charge of the hardware");
 $GO_FIELDS['users_id_tech']['input_type'] = 'dropdown';
 
-$GO_FIELDS['domains_id']['name']       = __("domaain");
+$GO_FIELDS['domains_id']['name']       = __("Domain");
 $GO_FIELDS['domains_id']['input_type'] = 'dropdown';
 
 $GO_FIELDS['contact']['name']       = __("Alternate username");
