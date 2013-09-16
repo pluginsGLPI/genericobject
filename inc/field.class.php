@@ -87,13 +87,13 @@ class PluginGenericobjectField extends CommonDBTM {
          //If it's a plugin dropdowns, get it's real name
          //(it may not be the one from the DB, in case it's a global field)
          $table = getTableNameForForeignKeyField($field);
-         if ($table != '' && isPluginItemType(getItemTypeForTable($table))) {
+         /*if ($table != '' && isPluginItemType(getItemTypeForTable($table))) {
             $classname = getItemTypeForTable($table);
             $class     = new $classname();
             $used_fields[$class->getFieldName()] = $class->getFieldName();
-         } else {
+         } else {*/
             $used_fields[$field] = $field;
-         }
+         //}
          $global_index++;
       }
       echo "</table>";
