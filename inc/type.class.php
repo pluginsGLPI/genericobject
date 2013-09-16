@@ -1006,7 +1006,7 @@ class PluginGenericobjectType extends CommonDBTM {
             if (TableExists($dropdowntable) && ! class_exists($dropdownclass)) {
                $params= PluginGenericobjectField::getOptionsWithGlobal($field, $dropdownclass);
                $params['linked_itemtype'] = $itemtype;
-               sef::addNewDropdown($name, $itemtype, $params);
+               self::addNewDropdown($name, $itemtype, $params);
             }
          }
       }
