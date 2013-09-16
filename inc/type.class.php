@@ -1004,9 +1004,11 @@ class PluginGenericobjectType extends CommonDBTM {
             $dropdownclass = getItemTypeForTable($dropdowntable);
             
             if (TableExists($dropdowntable) && ! class_exists($dropdownclass)) {
+               $name                       = str_replace("glpi_plugin_genericobject_","", $dropdowntable);
+               $name                       = getSingular($name);
                $params= PluginGenericobjectField::getOptionsWithGlobal($field, $dropdownclass);
                $params['linked_itemtype'] = $itemtype;
-               self::addNewDropdown($name, $itemtype, $params);
+               self::addNewDropdown($name, 'PluginGenericobject'.ucfirst($name),$params);
             }
          }
       }
