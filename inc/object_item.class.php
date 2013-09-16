@@ -30,11 +30,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    public $dohistory = true;
    
    // From CommonDBRelation
-   public $itemtype_1 = "PluginGenericobjectObject";
-   public $items_id_1 = 'plugin_genericobject_objects_id';
+   static public $itemtype_1 = "PluginGenericobjectObject";
+   static public $items_id_1 = 'plugin_genericobject_objects_id';
    
-   public $itemtype_2 = 'itemtype';
-   public $items_id_2 = 'items_id';
+   static public $itemtype_2 = 'itemtype';
+   static public $items_id_2 = 'items_id';
     
    //Get itemtype name
    static function getTypeName($nb=0) {
@@ -93,14 +93,14 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    }
    
    static function getLinkedItemTypes() {
-      $source_item = self::getItemType1();
+      $source_itemtype = self::getItemType1();
+      $source_item = new $source_itemtype;
       return $source_item->getLinkedItemTypesAsArray();
    }
    
-   function getItemType1() {
+   static function getItemType1() {
       $classname   = get_called_class();
-      $class       = new $classname();
-      return $class->itemtype_1;
+      return $classname::$itemtype_1;
    }
    
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {

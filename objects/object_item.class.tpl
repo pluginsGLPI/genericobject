@@ -34,11 +34,11 @@ class %%CLASSNAME%% extends PluginGenericobjectObject_Item {
    public $dohistory = true;
 
    // From CommonDBRelation
-   public $itemtype_1 = '%%SOURCEOBJECT%%';
-   public $items_id_1 = '%%FOREIGNKEY%%';
+   static public $itemtype_1 = '%%SOURCEOBJECT%%';
+   static public $items_id_1 = '%%FOREIGNKEY%%';
 
-   public $itemtype_2 = 'itemtype';
-   public $items_id_2 = 'items_id';
+   static public $itemtype_2 = 'itemtype';
+   static public $items_id_2 = 'items_id';
 }
 
 ?>
