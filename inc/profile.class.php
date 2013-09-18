@@ -162,19 +162,23 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
    }
    
-   function getProfilesFromDB($id) {
+   function getProfilesFromDB($id, $config = true) {
       global $DB;
       $prof_datas = array ();
       foreach (getAllDatasFromTable(getTableForItemType(__CLASS__),
                                     "`profiles_id`='" . $id . "'") as $prof) {
-         $prof_datas[$prof['itemtype']]                = $prof['right'];
-         $prof_datas[$prof['itemtype'].'_open_ticket'] = $prof['open_ticket'];
-         $prof_datas['id']                             = $prof['id'];
+         if ($prof['right'] != "" || $config) {
+            $prof_datas[$prof['itemtype']]                = $prof['right'];
+            $prof_datas[$prof['itemtype'].'_open_ticket'] = $prof['open_ticket'];
+            $prof_datas['id']                             = $prof['id'];
+         }
       }
+
+      if (empty($prof_datas) && !$config) return false;
       
       $prof_datas['profiles_id']   = $id;
       $this->fields       = $prof_datas;
-   
+      
       return true;
    }
 
@@ -266,7 +270,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
    
    public static function changeProfile() {
       $profile = new self();
-      if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'])) {
+      if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'], false)) {
          foreach ($profile->fields as $key => $value) {
             if ($key != 'id') {
                $_SESSION["glpiactiveprofile"][$key] = $value;
