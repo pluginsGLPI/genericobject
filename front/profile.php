@@ -24,7 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 include ("../../../inc/includes.php");
 Session::checkRight("profile","r");
 

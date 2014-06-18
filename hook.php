@@ -83,15 +83,15 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
 
 function plugin_genericobject_install() {
    global $DB;
-   
+
    //check directories rights
    if (!check_directories()) {
       return false;
    }
 
    $migration = new Migration('2.1.0');
-   
-   foreach (array('PluginGenericobjectField', 'PluginGenericobjectType', 
+
+   foreach (array('PluginGenericobjectField', 'PluginGenericobjectType',
                   'PluginGenericobjectProfile', 'PluginGenericobjectTypeFamily') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
@@ -119,7 +119,7 @@ function plugin_genericobject_install() {
 
 function plugin_genericobject_uninstall() {
    global $DB;
-   
+
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
    //For each type

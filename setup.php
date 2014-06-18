@@ -45,22 +45,22 @@ if (!defined("GENERICOBJECT_LOCALES_PATH")) {
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS;
-          
+
    $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
 
    $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
-                                 "is_recursive", "is_template", "notepad", "template_name", "date_mod", "name", 
+                                 "is_recursive", "is_template", "notepad", "template_name", "date_mod", "name",
                                  "is_helpdesk_visible", "comment");
 
    $GO_LINKED_TYPES     = array ('Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
                                   'Printer', 'NetworkEquipment');
-   
+
    $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
    $GENERICOBJECT_PDF_TYPES                         = array ();
    $plugin                                          = new Plugin();
 
    if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
-      
+
       plugin_genericobject_includeCommonFields();
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
@@ -91,7 +91,7 @@ function plugin_init_genericobject() {
          = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
          = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
-         
+
       // Config page
       if (Session::haveRight('config', 'w')) {
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['config']         = 'front/type.php';
@@ -99,7 +99,7 @@ function plugin_init_genericobject() {
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
       }
-      
+
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject']   = true;
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
@@ -167,7 +167,7 @@ function plugin_genericobject_includeCommonFields($force = false) {
    } else {
       include (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
    }
-      
+
    //Include user constants, that must be accessible for all itemtypes
    if (file_exists(GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php")) {
       if (!$force) {
@@ -186,8 +186,12 @@ function plugin_genericobject_haveRight($module,$right) {
          "1" => array("1"),
          "0" => array("0","1"), // ne doit pas arriver non plus
             );
-   if (isset($_SESSION["glpi_plugin_genericobject_profile"][$module]) 
-      && in_array($_SESSION["glpi_plugin_genericobject_profile"][$module],$matches[$right]))
+   if (
+      isset($_SESSION["glpi_plugin_genericobject_profile"][$module])
+      && in_array($_SESSION["glpi_plugin_genericobject_profile"][$module],$matches[$right])
+   ) {
       return true;
-   else return false;
+   }
+
+   return false;
 }

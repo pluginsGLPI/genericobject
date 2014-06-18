@@ -38,7 +38,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
          return false;
       }
       $canedit = Session::haveRight("profile", "w");
-   
+
       echo "<form action='" . Toolbox::getItemTypeSearchURL(__CLASS__) . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
       $itemtype = $type->fields['itemtype'];
@@ -76,7 +76,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
                               $PluginGenericobjectProfile->fields['open_ticket']);
             echo "</td></tr>";
          }
-         
+
       }
 
       if ($canedit) {
@@ -89,7 +89,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       echo "</table>";
       Html::closeForm();
    }
-   
+
    /* profiles modification */
    function showForm($id) {
       if (!Session::haveRight("profile", "r")) {
@@ -102,18 +102,18 @@ class PluginGenericobjectProfile extends CommonDBTM {
 
       $general_profile = new Profile();
       $general_profile->getFromDB($id);
-      
+
       echo "<form action='" . $this->getSearchURL() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
 
       $types = PluginGenericobjectType::getTypes(true);
-      
+
       if (!empty ($types)) {
 
          echo "<tr><th colspan='2' align='center'><strong>";
          echo __("Rights assignment")."</strong></th></tr>";
-         
+
          foreach ($types as $tmp => $type) {
             $itemtype   = $type['itemtype'];
             $objecttype = new PluginGenericobjectType($itemtype);
@@ -144,7 +144,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
             echo "<input type='submit' name='update_user_profile' value=\"" .
                _sx('button', 'Post') . "\" class='submit'>";
             echo "</td></tr>";
-         
+
          }
 
       } else {
@@ -166,7 +166,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
          return array();
       }
    }
-   
+
    function getProfilesFromDB($id, $config = true) {
       global $DB;
       $prof_datas = array ();
@@ -180,10 +180,10 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
 
       if (empty($prof_datas) && !$config) return false;
-      
+
       $prof_datas['profiles_id']   = $id;
       $this->fields       = $prof_datas;
-      
+
       return true;
    }
 
@@ -210,15 +210,15 @@ class PluginGenericobjectProfile extends CommonDBTM {
                $query.=", `open_ticket`='".$params[$profile['itemtype'].'_open_ticket']."' ";
             }
 
-      
+
             $query.="WHERE `profiles_id`='".$params['profiles_id']."' " .
                     "AND `itemtype`='".$profile['itemtype']."'";
             $DB->query($query);
          }
       }
    }
-   
-   
+
+
    /**
     * Create rights for the current profile
     * @param profileID the profile ID
@@ -229,7 +229,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
          self::createAccess($_SESSION["glpiactiveprofile"]["id"],true);
       }
    }
-   
+
    /**
     * Check if rights for a profile still exists
     * @param profiles_id the profile ID
@@ -243,7 +243,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
       return (countElementsInTable(getTableForItemType(__CLASS__),$condition) >0?true:false);
    }
-   
+
    /**
     * Create rights for the profile if it doesn't exists
     * @param profileID the profile ID
@@ -272,7 +272,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       $profile = new self();
       $profile->deleteByCriteria(array("itemtype" => $itemtype));
    }
-   
+
    public static function changeProfile() {
       $profile = new self();
       if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'])) {
@@ -303,7 +303,7 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
       self::createFirstAccess();
    }
-   
+
    static function uninstall() {
       global $DB;
       $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";

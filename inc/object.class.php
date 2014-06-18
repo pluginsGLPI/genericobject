@@ -24,11 +24,11 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 class PluginGenericobjectObject extends CommonDBTM {
 
    protected $objecttype;
-   
+
    //Internal field counter
    private $cpt = 0;
 
@@ -49,8 +49,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          return $item->objecttype->fields['name'];
       }
    }
-   
-   
+
+
    public function __construct() {
       $class       = get_called_class();
       $this->table = getTableForItemType($class);
@@ -59,17 +59,17 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       $this->dohistory = $this->canUseHistory();
    }
-   
+
    static function install() {
    }
-   
+
    static function uninstall() {
    }
-   
+
    static function registerType() {
       global $DB, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI,
               $GO_LINKED_TYPES;
-      
+
       $class  = get_called_class();
       $item   = new $class();
       $fields = PluginGenericobjectSingletonObjectField::getInstance($class);
@@ -90,7 +90,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                        "contract_types"         => $item->canUseContracts(),
                        "unicity_types"          => $item->canUseUnicity());
       Plugin::registerClass($class, $options);
-      
+
       if (plugin_genericobject_haveRight($class, "r")) {
          //Change url for adding a new object, depending on template management activation
          if ($item->canUseTemplate()) {
@@ -113,14 +113,15 @@ class PluginGenericobjectObject extends CommonDBTM {
          if (plugin_genericobject_haveRight($class, "w")) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = $add_url;
+
          }
-   
+
          //Add configuration icon, if user has right
          if (Session::haveRight('config', 'w')) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config']
                = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
          }
-         
+
          //Item can be linked to tickets
          if ($item->canUseTickets()) {
             if (!in_array($class, $_SESSION['glpiactiveprofile']['helpdesk_item_type'])) {
@@ -142,7 +143,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                array_push($CFG_GLPI['state_types'], $class);
             }
          }
-         
+
          if ($item->canUseDirectConnections()) {
             if (!in_array($class, $GO_LINKED_TYPES)) {
                array_push($GO_LINKED_TYPES, $class);
@@ -168,7 +169,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
       }
    }
-      
+
 
    static function canCreate() {
       $class    = get_called_class();
@@ -230,7 +231,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function getObjectTypeName() {
       return $this->objecttype->getName();
    }
-   
+
    function canUseInfocoms() {
       return ($this->objecttype->canUseInfocoms() && Session::haveRight("infocom", "r"));
    }
@@ -248,7 +249,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function canUseNotepad() {
       return $this->objecttype->canUseNotepad();
    }
-   
+
    function canUseUnicity() {
       return ($this->objecttype->canUseUnicity() && Session::haveRight("config", "r"));
    }
@@ -313,7 +314,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function getLinkedItemTypesAsArray() {
       return $this->objecttype->getLinkedItemTypesAsArray();
    }
-   
+
    function title() {
    }
 
@@ -357,7 +358,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo $itemtype::getTypeName();
          echo "</th></tr>";
       }
-      
+
 
       //Reset fields definition only to keep the itemtype ones
       $GO_FIELDS = array();
@@ -369,7 +370,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->displayField($canedit, $field, $this->fields[$field], $template, $description);
       }
       $this->closeColumn();
-      
+
       if (!$this->isNewID($id)) {
          echo "<tr class='tab_bg_1'>";
          echo "<td colspan='2' class='center'>".$date;
@@ -379,7 +380,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          echo "</td></tr>";
       }
-      
+
       if (!$previsualisation) {
          $this->showFormButtons($options);
          echo "<div id='tabcontent'></div>";
@@ -395,7 +396,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       return array('id', 'is_recursive', 'is_template', 'template_name', 'is_deleted',
                    'entities_id', 'notepad', 'date_mod');
    }
-   
+
 
    function displayField($canedit, $name, $value, $template, $description = array()) {
       global $GO_BLACKLIST_FIELDS;
@@ -482,7 +483,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "float":
                   echo "<input type='text' name='$name' value='$value'>";
                   break;
-                  
+
             case 'decimal':
                   echo "<input type='text' name='$name' value='".Html::formatNumber($value)."'>";
                   break;
@@ -492,7 +493,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
 
-   
+
    /**
    * Add a new column
    **/
@@ -506,7 +507,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
 
-   
+
    /**
    * End a column
    **/
@@ -521,7 +522,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
 
-   
+
    /**
    * Close a column
    **/
@@ -584,7 +585,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                $item->add($tmp);
             }
          }
-         
+
          if ($this->canUseNetworkPorts()) {
             // ADD Ports
             $query  = "SELECT `id`
@@ -625,9 +626,9 @@ class PluginGenericobjectObject extends CommonDBTM {
          $item->deleteByCriteria($parameters);
       }
    }
-   
 
-   
+
+
    /**
     * Display object preview form
     * @param type the object type
@@ -635,26 +636,27 @@ class PluginGenericobjectObject extends CommonDBTM {
    static function showPrevisualisationForm(PluginGenericobjectType $type) {
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
-      
+
+
       if (plugin_genericobject_haveRight($itemtype, 'r')) {
          $item->showForm(-1, array(), true);
       } else {
-         echo "<br><strong>" . __("You must configure rights to enable the preview", 
+         echo "<br><strong>" . __("You must configure rights to enable the preview",
                                   "genericobject") . "</strong><br>";
       }
    }
-   
+
 
    function getSearchOptions() {
       return $this->getObjectSearchOptions(true);
    }
-   
+
 
    function getObjectSearchOptions($with_linkfield = false) {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
       $datainjection_blacklisted = array('id', 'date_mod', 'entities_id');
-      $index_exceptions = array('name' => 1, 'id' => 2, 'comment' => 16, 'date_mod' => 19, 
+      $index_exceptions = array('name' => 1, 'id' => 2, 'comment' => 16, 'date_mod' => 19,
                                  'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90);
       $index   = 3;
       $options = array();
@@ -662,7 +664,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $values) {
          $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field,
                                                                         $this->objecttype->fields['itemtype']);
-         
+
          //Some fields have fixed index values...
          $currentindex = $index;
          if (isset($index_exceptions[$field])) {
@@ -691,7 +693,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
             //Set table
             $options[$currentindex]['table'] = $tmp;
-            
+
             //Set field
             if ($tmpobj instanceof CommonTreeDropdown) {
                $options[$currentindex]['field'] = 'completename';
@@ -706,7 +708,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
 
          $options[$currentindex]['name']  = $searchoption['name'];
-         
+
          //Massive action or not
          if (isset($searchoption['massiveaction'])) {
             $options[$currentindex]['massiveaction']
@@ -763,7 +765,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                } else {
                   $options[$currentindex]['datatype'] = 'integer';
                }
-               
+
                if ($item->canUsePluginDataInjection()) {
                   if ($tmp != '') {
                      $options[$currentindex]['displaytype'] = 'dropdown';
@@ -808,19 +810,19 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
 
-   
+
    //Datainjection specific methods
    function isPrimaryType() {
       return true;
    }
-   
+
 
    function connectedTo() {
       return array();
    }
-   
 
-   
+
+
    /**
     * Standard method to add an object into glpi
     *
@@ -840,7 +842,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function getOptions($primary_type = '') {
       return Search::getOptions($primary_type);
    }
-   
+
 
    function transfer($new_entity) {
       global $DB;
@@ -862,7 +864,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                $dropdown_itemtype = getItemTypeForTable($table);
                $dropdown          = new $dropdown_itemtype();
                $dropdown->getFromDB($this->fields[$field]);
-               
+
                //If dropdown is only accessible in the other entity
                //do not go further
                if (!$dropdown->isEntityAssign()
@@ -905,5 +907,5 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       return true;
    }
-    
+
 }

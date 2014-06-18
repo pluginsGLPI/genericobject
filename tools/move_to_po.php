@@ -207,17 +207,17 @@ function search_in_dict($string, $context) {
          $right  .= $reg[5];
       }
    }
-   
+
 //    echo $left.' <- '.$string.' -> '.$right."\n";
    foreach ($REFLANG as $mod => $data) {
-      
+
       foreach ($data as $key => $val) {
-         
+
          if (!is_array($val)){
             if (!isset($LANG[$mod][$key])) {
                continue;
             }
-            
+
             // Search same case with punc
             if (strcmp($val,$left.$string.$right) === 0) {
                return $LANG[$mod][$key];
@@ -261,7 +261,7 @@ function search_in_dict($string, $context) {
                if (!isset($LANG[$mod][$key][$k])) {
                   continue;
                }
-               
+
                // Search same case with punc
                if (strcmp($v,$left.$string.$right) === 0) {
                   return $LANG[$mod][$key][$k];

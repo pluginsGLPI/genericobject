@@ -24,7 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 include ("../../../inc/includes.php");
 
 if (!isset ($_REQUEST["id"])) {
@@ -43,12 +43,12 @@ if (isset ($_GET["action"])) {
    PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"],
                                                $_GET["action"]);
    Html::back();
-   
+
 //Add a new itemtype
 } elseif (isset ($_POST["add"])) {
    $new_id = $type->add($_POST);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
-   
+
 //Update an existing itemtype
 } elseif (isset ($_POST["update"])) {
    if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
@@ -56,12 +56,12 @@ if (isset ($_GET["action"])) {
    }
    $type->update($_POST);
    Html::back();
-   
+
 //Delete an itemtype
 } elseif (isset ($_POST["delete"])) {
    $type->delete($_POST);
    $type->redirectToList();
-   
+
 //Regenerate files for an itemtype
 } elseif (isset($_POST['regenerate'])) {
    $type->getFromDB($_POST["id"]);

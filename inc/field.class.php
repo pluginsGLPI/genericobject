@@ -24,7 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 class PluginGenericobjectField extends CommonDBTM {
 
    /**
@@ -51,7 +51,7 @@ class PluginGenericobjectField extends CommonDBTM {
          include $file;
       }
       PluginGenericobjectType::includeConstants($itemtype, true);
-      
+
       foreach ($GO_BLACKLIST_FIELDS as $autofield) {
          if (!in_array($autofield, $used_fields)) {
             $used_fields[$autofield] = $autofield;
@@ -77,7 +77,7 @@ class PluginGenericobjectField extends CommonDBTM {
 
       $total        = count($fields_in_db);
       $global_index = $index = 1;
-      
+
       foreach ($fields_in_db as $field => $value) {
          self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index==$total));
          //All backlisted fields cannot be moved, and are listed first
@@ -145,7 +145,7 @@ class PluginGenericobjectField extends CommonDBTM {
     */
    static function dropdownFields($name,$itemtype, $used = array()) {
       global $GO_FIELDS;
-      
+
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
          $message = "";
@@ -170,7 +170,7 @@ class PluginGenericobjectField extends CommonDBTM {
                   } else {
                      $message.= " ".__("tree structure")." : ".Dropdown::getYesNo(0);
                   }
-                  
+
                }
                if ($message != '') {
                   $message = "(".trim($message).")";
@@ -193,7 +193,7 @@ class PluginGenericobjectField extends CommonDBTM {
     */
    static function getOptionsWithGlobal($field, $itemtype) {
       global $GO_FIELDS;
-      
+
       if (!isset($GO_FIELDS[$field])) {
          $tmpfield = self::getFieldGlobalName($field, $itemtype,
                                            array('dropdown_type' => 'global'), true);
@@ -205,7 +205,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       return $options;
    }
-   
+
    public static function displayFieldDefinition($target, $itemtype, $field, $index, $last = false) {
       global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS;
 
@@ -289,9 +289,9 @@ class PluginGenericobjectField extends CommonDBTM {
             $query.=" AFTER `$after`";
          }
          $DB->query($query);
-         
+
          //Reload list of fields for this itemtype in the singleton
-         
+
          $recursive = $entity_assign = $tree = false;
          $table     = getTableNameForForeignKeyField($field);
          if ($table != '' && !TableExists($table)) {
@@ -332,7 +332,7 @@ class PluginGenericobjectField extends CommonDBTM {
         PluginGenericobjectType::deletesearchFile($name);
      }
    }
-   
+
    /**
     * Change field order in DB
     * @params an array which contains the itemtype, the field to move and the action (up/down)
@@ -344,7 +344,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $field    = $params['field'];
       $table    = getTableForItemType($itemtype);
       $fields   = PluginGenericobjectSingletonObjectField::getInstance($params['itemtype']);
-      
+
       //If action is down, reverse array first
       if ($params['action'] == 'down') {
          $fields = array_reverse($fields);
@@ -365,7 +365,7 @@ class PluginGenericobjectField extends CommonDBTM {
       } else {
          $previous = $index - 2;
       }
-      
+
       if (isset($keys[$previous])) {
          $parent = $fields[$keys[$previous]];
          $query  = "ALTER TABLE `$table` MODIFY `$field` ".$fields[$field]['Type'];
@@ -373,11 +373,11 @@ class PluginGenericobjectField extends CommonDBTM {
          $DB->query($query) or die ($DB->error());
       }
    }
-   
+
    public static function checkNecessaryFieldsDelete($itemtype,$field) {
       $type = new PluginGenericobjectType();
       $type->getFromDBByType($itemtype);
-      
+
       if ($type->canUseNetworkPorts() && 'locations_id' == $field) {
          return false;
       }
@@ -391,10 +391,10 @@ class PluginGenericobjectField extends CommonDBTM {
       }*/
       return true;
    }
-   
+
    static function install(Migration $migration) {
    }
-   
+
    static function uninstall() {
    }
 

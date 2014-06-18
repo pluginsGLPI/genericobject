@@ -41,12 +41,12 @@ class PluginGenericobjectSingletonObjectField {
 
    /**
     * Singleton to store DB fields definition
-    * 
+    *
     * @since 2.1.0
     * @param itemtype itemtype to query
     * @param reload reload db fields configuration from DB
-    * 
-    * @return an array which contains DB fields definition 
+    *
+    * @return an array which contains DB fields definition
     */
    public static function getInstance($itemtype, $reload = false) {
       global $DB;
