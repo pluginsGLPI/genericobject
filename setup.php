@@ -118,7 +118,7 @@ function plugin_post_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
-                 'version'        => '2.3.2',
+                 'version'        => '2.4.0',
                  'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a>",
                  'homepage'       => 'https://forge.indepnet.net/projects/genericobject',
                  'license'        => 'GPLv2+',
@@ -127,8 +127,8 @@ function plugin_version_genericobject() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.84','lt') || version_compare(GLPI_VERSION,'0.85','ge')) {
-      echo "This plugin requires GLPI 0.84";
+   if (version_compare(GLPI_VERSION,'0.85','lt') || version_compare(GLPI_VERSION,'0.86','ge')) {
+      echo "This plugin requires GLPI 0.85";
       return false;
    }
    if (version_compare(PHP_VERSION, '5.3.0', 'lt')) {
