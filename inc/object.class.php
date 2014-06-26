@@ -168,7 +168,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       
 
    static function canCreate() {
-      return Session::haveRight(get_called_class(), 'w');
+      $class    = get_called_class();
+      //Datainjection : Don't understand why I need this trick : need to be investigated !
+      if(preg_match("/Injection$/i",$class)) {
+         $class = str_replace("Injection", "", $class);
+      }
+      return Session::haveRight($class, 'w');
    }
 
    static function canView() {

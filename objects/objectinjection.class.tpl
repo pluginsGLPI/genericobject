@@ -40,6 +40,13 @@ class %%INJECTIONCLASS%% extends %%CLASSNAME%%
       $this->table = getTableForItemType(get_parent_class($this));
    }
 
+   static function getTable() {
+
+      $parenttype = get_parent_class();
+      return $parenttype::getTable();
+
+   }
+
    function isPrimaryType() {
       return true;
    }
