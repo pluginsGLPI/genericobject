@@ -51,24 +51,29 @@ class PluginGenericobjectProfile extends CommonDBTM {
          echo "<tr><th colspan='2' align='center'><strong>";
          echo __("Profile")." ".$profile['name']."</strong></th></tr>";
 
-         $go_profile = new self();
-         if ($go_profile->getProfilesFromDB($profile['id'])) {
+         $pgf_find = self::getProfileforItemtype($profile['id'], $itemtype);
+
+         if (!count($pgf_find) > 0) {
             self::createAccess($profile['id']);
-            $go_profile->getProfilesFromDB($profile['id']);
+            $pgf_find = self::getProfileforItemtype($profile['id'], $itemtype);
          }
-         $prefix = "profiles[".$go_profile->getID()."]";
+
+         $PluginGenericobjectProfile = new self();
+         $PluginGenericobjectProfile->getFromDB($pgf_find['id']);
+
+         $prefix = "profiles[".$pgf_find['id']."]";
          if ($profile['interface'] == 'central') {
             echo "<tr class='tab_bg_2'>";
             echo "<td>" . __("Access object", "genericobject") . ":</td><td>";
             Profile::dropdownNoneReadWrite($prefix."[right]",
-                                           $go_profile->fields[$type->fields['itemtype']], 1, 1, 1);
+                              $PluginGenericobjectProfile->fields['right'], 1, 1, 1);
             echo "</td></tr>";
          }
          if ($type->canUseTickets()) {
             echo "<tr class='tab_bg_2'>";
             echo "<td>" . __("Associate tickets to this object", "genericobject") . ":</td><td>";
             Dropdown::showYesNo($prefix."[open_ticket]",
-                                $go_profile->fields[$type->fields['itemtype'].'_open_ticket']);
+                              $PluginGenericobjectProfile->fields['open_ticket']);
             echo "</td></tr>";
          }
          
