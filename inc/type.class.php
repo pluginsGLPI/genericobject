@@ -226,8 +226,11 @@ class PluginGenericobjectType extends CommonDBTM {
          //Delete specific locale directory
          self::deleteLocales($name, $itemtype);
 
+         self::deleteItemtypeReferencesInGLPI($itemtype);
+         
          self::deleteItemTypeFilesAndClasses($name, $this->getTable(), $itemtype);
          
+
          return true;
       } else {
          return false;
@@ -1024,12 +1027,17 @@ class PluginGenericobjectType extends CommonDBTM {
       global $DB;
       
       //Delete files related to dropdowns
-      
       foreach ($DB->list_fields($table) as $field => $options) {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
+            $table = getTableNameForForeignKeyField($field);
             self::deleteFilesAndClassesForOneItemtype(getSingular($results[1]));
+            $DB->query("DROP TABLE IF EXISTS `$table`");
          }
       }
+
+      //Delete reference in various GLPI core tables
+      self::deleteItemtypeReferencesInGLPI($itemtype);
+      
       //Delete itemtype files
       self::deleteFilesAndClassesForOneItemtype($name);
       
@@ -1046,6 +1054,8 @@ class PluginGenericobjectType extends CommonDBTM {
     * @param name class file name
     */
    static function deleteFilesAndClassesForOneItemtype($name) {
+      global $DB;
+      
       //This is for compatibility with older versions of GLPI
       //(where ajax files were used for tabs display, which is not the case anymore with GLPI 0.83+)
       self::deleteAjaxFile($name);
@@ -1056,6 +1066,15 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteFormFile($name);
       //Delete datainjection compatiblity file
       self::deleteInjectionFile($name);
+   }
+   
+   static function deleteItemtypeReferencesInGLPI($itemtype) {
+      //Delete references to PluginGenericobjectType in the following tables
+      $itemtypes = array ("DisplayPreference", "Document_Item", "Bookmark", "Log");
+      foreach ($itemtypes as $type) {
+         $item     = new $type();
+         $item->deleteByCriteria(array('itemtype' => $itemtype));
+      }
    }
    
    //-------------------- ADD / DELETE TABLES ----------------------------------//
@@ -1586,20 +1605,19 @@ class PluginGenericobjectType extends CommonDBTM {
       global $DB;
       
       //Delete references to PluginGenericobjectType in the following tables
-      $tables = array ("glpi_displaypreferences", "glpi_documents_items", "glpi_bookmarks",
-                       "glpi_logs");
-      foreach ($tables as $table) {
-         $itemtype = getItemTypeForTable($table);
-         $item     = new $itemtype();
-         $item->deleteByCriteria(array('itemtype' => __CLASS__));
+      self::deleteItemtypeReferencesInGLPI(__CLASS__);
+
+      foreach ($DB->request("glpi_plugin_genericobject_types") as $type) {
+         //Delete references to PluginGenericobjectType in the following tables
+         self::deleteItemtypeReferencesInGLPI($type['itemtype']);
+         //Dropd files and classes
+         self::deleteItemTypeFilesAndClasses($type['name'], getTableForItemType($type['itemtype']), $type['itemtype']);
       }
       
-      //Delete table
-      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
-      $DB->query($query) or die($DB->error());
 
-      //Dropd files and classes
-      self::deleteItemTypeFilesAndClasses($name);
-      
+
+      //Delete table
+      $query = "DROP TABLE IF EXISTS `glpi_plugin_genericobject_types`";
+      $DB->query($query) or die($DB->error());
    }
 }
