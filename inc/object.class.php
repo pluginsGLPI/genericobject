@@ -198,7 +198,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
 
          if ($this->canUseDocuments()) {
-            $this->addStandardTab('Document', $ong, $options);
+            $this->addStandardTab('Document_Item', $ong, $options);
          }
 
          if ($this->canUseTickets()) {
