@@ -250,7 +250,7 @@ class PluginGenericobjectType extends CommonDBTM {
    
       $sopt[6]['table']       = $this->getTable();
       $sopt[6]['field']       = 'use_tickets';
-      $sopt[6]['name']        = _sx('button','Use')." ".__("Simplified interface");
+      $sopt[6]['name']        = __("Associable to a ticket");
       $sopt[6]['datatype']    = 'bool';
 
       $sopt[9]['table']       = $this->getTable();
