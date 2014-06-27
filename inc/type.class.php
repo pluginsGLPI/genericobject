@@ -133,10 +133,10 @@ class PluginGenericobjectType extends CommonDBTM {
             case 6:
                PluginGenericobjectProfile::showForItemtype($item);
                break;
-               
+               /*
             case 7:
                $item->showLinkedTypesForm();
-               break;
+               break;*/
          }
       }
       return true;
@@ -395,7 +395,7 @@ class PluginGenericobjectType extends CommonDBTM {
                        "use_loans"                => _n("Reservation", "Reservations", 2),
                        "use_unicity"              => __("Fields unicity"),
                        "use_global_search"        => __("Global search"),
-                        "use_direct_connections"  => __("Link to other objects", "genericobject"),
+   //                     "use_direct_connections"  => __("Link to other objects", "genericobject"),
                        "use_network_ports"        => __("Network connections", "genericobject"),
                        "use_plugin_datainjection" => __("injection file plugin", "genericobject"),
    //                    "use_plugin_pdf"           => __("PDF plugin", "genericobject"),
