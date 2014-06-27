@@ -35,7 +35,7 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
 } else {
    $types = PluginGenericobjectType::getTypes();
    foreach ($types as $ID => $value) {
-      if (!Session::haveRight($value['itemtype'], 'r')) {
+      if (!plugin_genericobject_haveRight($value['itemtype'], 'r')) {
          unset($types[$ID]);
       }
    }

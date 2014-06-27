@@ -55,11 +55,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    }
    
    static function canView() {
-      return Session::haveRight($this->$itemtype_1, 'r');
+      return plugin_genericobject_haveRight($this->$itemtype_1, 'r');
    }
    
    static function canCreate() {
-      return Session::haveRight($this->$itemtype_1, 'w');
+      return plugin_genericobject_haveRight($this->$itemtype_1, 'w');
    }
 
    /**

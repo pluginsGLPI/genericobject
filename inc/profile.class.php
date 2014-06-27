@@ -275,18 +275,14 @@ class PluginGenericobjectProfile extends CommonDBTM {
    
    public static function changeProfile() {
       $profile = new self();
-      if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'], false)) {
+      if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'])) {
          foreach ($profile->fields as $key => $value) {
-            if ($key != 'id') {
-               $_SESSION["glpiactiveprofile"][$key] = $value;
+            if (preg_match("/^PluginGenericobject/",$key)) {
+               $_SESSION["glpi_plugin_genericobject_profile"][$key] = $value;
             }
          }
       } else {
-         foreach ($_SESSION["glpiactiveprofile"] as $key => $value) {
-            if (preg_match("/^PluginGenericobject/",$key)) {
-               unset($_SESSION["glpiactiveprofile"][$key]);
-            }
-         }
+         unset($_SESSION["glpi_plugin_genericobject_profile"]);
       }
    }
 

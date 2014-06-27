@@ -91,7 +91,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                        "unicity_types"          => $item->canUseUnicity());
       Plugin::registerClass($class, $options);
       
-      if (Session::haveRight($class, "r")) {
+      if (plugin_genericobject_haveRight($class, "r")) {
          //Change url for adding a new object, depending on template management activation
          if ($item->canUseTemplate()) {
             //Template management is active
@@ -109,8 +109,11 @@ class PluginGenericobjectObject extends CommonDBTM {
                                                    = Toolbox::getItemTypeSearchURL($class, false);
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
                                                     = Toolbox::getItemTypeSearchURL($class, false);
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
+
+         if (plugin_genericobject_haveRight($class, "w")) {
+            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = $add_url;
+         }
    
          //Add configuration icon, if user has right
          if (Session::haveRight('config', 'w')) {
@@ -173,11 +176,11 @@ class PluginGenericobjectObject extends CommonDBTM {
       if(preg_match("/Injection$/i",$class)) {
          $class = str_replace("Injection", "", $class);
       }
-      return Session::haveRight($class, 'w');
+      return plugin_genericobject_haveRight($class, 'w');
    }
 
    static function canView() {
-      return Session::haveRight(get_called_class(), 'r');
+      return plugin_genericobject_haveRight(get_called_class(), 'r');
    }
 
    function defineTabs($options=array()) {
@@ -632,7 +635,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
       
-      if (Session::haveRight($itemtype, 'r')) {
+      if (plugin_genericobject_haveRight($itemtype, 'r')) {
          $item->showForm(-1, array(), true);
       } else {
          echo "<br><strong>" . __("You must configure rights to enable the preview", 

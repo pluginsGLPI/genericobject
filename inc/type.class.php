@@ -1495,7 +1495,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $types = self::getTypes();
       $view  = false;
       foreach ($types as $ID => $value) {
-         if (Session::haveRight($value['itemtype'], 'r')) {
+         if (plugin_genericobject_haveRight($value['itemtype'], 'r')) {
             $view = true;
             break;
          }
