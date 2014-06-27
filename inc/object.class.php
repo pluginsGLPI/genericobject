@@ -650,8 +650,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
       $datainjection_blacklisted = array('id', 'date_mod', 'entities_id');
-      $index_exceptions = array('entities_id' => 80, 'is_recursive' => 86, 'date_mod' => 19,
-                                'comment' => 16, 'notepad' => 90, 'name' => 1, 'id' => 2);
+      $index_exceptions = array('name' => 1, 'id' => 2, 'comment' => 16, 'date_mod' => 19, 
+                                 'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90);
       $index   = 3;
       $options = array();
       $table   = getTableForItemType(get_called_class());
@@ -716,7 +716,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          } else {
             $options[$currentindex]['injectable'] = 0;
          }
-         
+
          //Field type
          switch ($values['Type']) {
             default:
@@ -754,7 +754,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "int(11)":
-               $options[$currentindex]['datatype'] = 'integer';
+               if ($tmp != '') {
+                  $options[$currentindex]['datatype'] = 'dropdown';
+               } else {
+                  $options[$currentindex]['datatype'] = 'integer';
+               }
+               
                if ($item->canUsePluginDataInjection()) {
                   if ($tmp != '') {
                      $options[$currentindex]['displaytype'] = 'dropdown';
@@ -794,7 +799,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          $index++;
       }
-
+      asort($options);
       return $options;
    }
 
