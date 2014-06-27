@@ -226,7 +226,7 @@ class PluginGenericobjectType extends CommonDBTM {
          //Delete specific locale directory
          self::deleteLocales($name, $itemtype);
 
-         self::deleteItemTypeFilesAndClasses($name, $this->getTable());
+         self::deleteItemTypeFilesAndClasses($name, $this->getTable(), $itemtype);
          
          return true;
       } else {
@@ -572,9 +572,7 @@ class PluginGenericobjectType extends CommonDBTM {
       self::addSearchFile($name, $itemtype);
       
       //Add language file
-      if ($params['add_injection_file']) {
-         self::addLocales($name, $itemtype);
-      }
+      self::addLocales($name, $itemtype);
       
       //Add file needed by datainjectin plugin
       if ($params['add_injection_file']) {
@@ -687,7 +685,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       if ($this->canUseDirectConnections()) {
          self::addItemsTable($itemtype);
-         self::addItemClassFile($this->fields['name'], $itemtype);
+         //self::addItemClassFile($this->fields['name'], $itemtype);
       } else {
          self::deleteItemsTable($itemtype);
          self::deleteClassFile($this->fields['name']."_item");
@@ -840,10 +838,12 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    public static function deleteLocales($name, $itemtype) {
-      foreach (glob(GLPI_ROOT . '/plugins/genericobject/locales/'.$name.'/*.php') as $file) {
-         @unlink($file);
+      if (file_exists(GLPI_ROOT . '/plugins/genericobject/locales/'.$name)) {
+         foreach (glob(GLPI_ROOT . '/plugins/genericobject/locales/'.$name.'/*.php') as $file) {
+            @unlink($file);
+         }
+         @rmdir(GLPI_ROOT . '/plugins/genericobject/locales/'.$name);
       }
-      @rmdir(GLPI_ROOT . '/plugins/genericobject/locales/'.$name);
    }
 
 
@@ -1020,10 +1020,11 @@ class PluginGenericobjectType extends CommonDBTM {
     * @since 2.2.0
     * @param unknown_type $name file name
     */
-   static function deleteItemTypeFilesAndClasses($name, $table) {
+   static function deleteItemTypeFilesAndClasses($name, $table, $itemtype) {
       global $DB;
       
       //Delete files related to dropdowns
+      
       foreach ($DB->list_fields($table) as $field => $options) {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
             self::deleteFilesAndClassesForOneItemtype(getSingular($results[1]));
@@ -1031,6 +1032,11 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       //Delete itemtype files
       self::deleteFilesAndClassesForOneItemtype($name);
+      
+      //Drop itemtype table
+      self::deleteItemsTable($itemtype);
+      self::deleteTable($itemtype);
+
    }
 
    /**
