@@ -117,8 +117,8 @@ function plugin_post_init_genericobject() {
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
                  'version'        => '2.3.1',
-                 'author'         => 'Alexandre Delaunay & Walid Nouh',
-                 'homepage'       => 'https://forge.indepnet.net/projects/show/genericobject',
+                 'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a>",
+                 'homepage'       => 'https://forge.indepnet.net/projects/genericobject',
                  'license'        => 'GPLv2+',
                  'minGlpiVersion' => '0.84');
 }
