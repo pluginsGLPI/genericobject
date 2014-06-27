@@ -1,1 +1,1 @@
-directories "inc", "ajax" and "front" should be available in writing
+The Genericobject plugin needs directories "inc", and "front" and "locales" to be available in writing for the webservice user.
