@@ -33,7 +33,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param $id the itemtype's id
     */
    public static function showObjectFieldsForm($id) {
-      global $DB, $GO_BLACKLIST_FIELDS, $GO_FIELDS, $CFG_GLPI;
+      global $DB, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS, $GO_FIELDS, $CFG_GLPI;
 
       $url          = Toolbox::getItemTypeFormURL(__CLASS__);
       $object_type  = new PluginGenericobjectType();
@@ -81,7 +81,7 @@ class PluginGenericobjectField extends CommonDBTM {
       foreach ($fields_in_db as $field => $value) {
          self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index==$total));
          //All backlisted fields cannot be moved, and are listed first
-         if (!in_array($field, $GO_BLACKLIST_FIELDS)) {
+         if (!in_array($field, $GO_READONLY_FIELDS)) {
             $index++;
          }
          //If it's a plugin dropdowns, get it's real name
@@ -207,19 +207,17 @@ class PluginGenericobjectField extends CommonDBTM {
    }
    
    public static function displayFieldDefinition($target, $itemtype, $field, $index, $last = false) {
-      global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS;
+      global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS;
 
-      $readonly = in_array($field, $GO_BLACKLIST_FIELDS);
+      $readonly  = in_array($field, $GO_READONLY_FIELDS);
+      $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
       $options  = self::getOptionsWithGlobal($field, $itemtype);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
-      //if (isset ($_POST["select"]) && $_POST["select"] == "all") {
-      //   $sel = "checked";
-      //}
       $sel ="";
 
       echo "<td width='10'>";
-      if (!$readonly) {
+      if (!$blacklist) {
          echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
       }
       echo "</td>";
@@ -227,7 +225,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td>" . $field . "</td>";
 
       echo "<td width='10'>";
-      if (!$readonly && $index > 1) {
+      if ((!$blacklist || $readonly) && $index > 1) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
                                array('field' => $field, 'action' => 'up', 'itemtype' => $itemtype),
                                $CFG_GLPI["root_doc"] . "/pics/deplier_up.png");
@@ -235,7 +233,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</td>";
 
       echo "<td width='10'>";
-      if (!$readonly && !$last) {
+      if ((!$blacklist || $readonly) && !$last) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
                                array('field' => $field, 'action' => 'down', 'itemtype' => $itemtype),
                                $CFG_GLPI["root_doc"] . "/pics/deplier_down.png");
