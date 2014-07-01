@@ -92,7 +92,7 @@ function plugin_genericobject_install() {
    $migration = new Migration('2.1.0');
    
    foreach (array('PluginGenericobjectField', 'PluginGenericobjectType', 
-                  'PluginGenericobjectProfile') as $itemtype) {
+                  'PluginGenericobjectProfile', 'PluginGenericobjectTypeFamily') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
@@ -131,7 +131,7 @@ function plugin_genericobject_uninstall() {
    }
 
    foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile',
-                  'PluginGenericobjectField') as $itemtype) {
+                  'PluginGenericobjectField', 'PluginGenericobjectTypeFamily') as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";

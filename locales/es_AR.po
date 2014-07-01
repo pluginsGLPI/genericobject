@@ -23,6 +23,10 @@ msgid ""
 "writable by the web server."
 msgstr "Error: los directorios '/inc', '/front' and '/locales' del plugin se deben poder escribir en el servidor web."
 
+#: index.php:60
+msgid "Empty family"
+msgstr ""
+
 #: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
 #: inc/object_item.class.php:110 inc/type.class.php:239
 msgid "Objects management"
@@ -127,4 +131,12 @@ msgstr "Plugins desinstalación de items"
 
 #: inc/type.class.php:500
 msgid "Regenerate files"
+msgstr ""
+
+#: inc/typefamily.class.php:35
+msgid "Family of type of objects"
+msgstr ""
+
+#: inc/typefamily.class.php:35
+msgid "Families object types"
 msgstr ""
