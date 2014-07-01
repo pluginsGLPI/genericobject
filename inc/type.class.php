@@ -377,6 +377,14 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
+      echo "<td>".__("Family of type of objects")."</td>";
+      echo "<td>";
+         PluginGenericobjectTypeFamily::dropdown(
+                        array('value' => $this->fields["plugin_genericobject_typefamilies_id"]));
+      echo "</td></td>";
+      echo "</tr>";
+      
+      echo "<tr class='tab_bg_1'>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
       
@@ -1284,6 +1292,25 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
    
+   /**
+    * Get all types of active&published objects
+    * order by family
+    */
+   static function getTypesByFamily($all = false) {
+      $table = getTableForItemType(__CLASS__);
+      if (TableExists($table)) {
+         $mytypes = array();
+         foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
+            //If class is not present on the filesystem, do not list itemtype
+            if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
+               $mytypes[$data['plugin_genericobject_typefamilies_id']][$data['itemtype']] = $data;
+            }
+         }
+         return $mytypes;
+      } else {
+         return array ();
+      }
+   }
 
    /**
     * Register all variables for a type
@@ -1566,6 +1593,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
                            `use_menu_entry` tinyint(1) NOT NULL default '0',
                            `linked_itemtypes` text NULL,
+                           `plugin_genericobject_typefamilies_id` INT( 11 ) NOT NULL DEFAULT 0,
                            PRIMARY KEY ( `id` )
                            ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
@@ -1580,6 +1608,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "comment", "text");
       $migration->addField($table, "date_mod", "datetime");
       $migration->addField($table, "linked_itemtypes", "text");
+      $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->migrationOneTable($table);
       
 
