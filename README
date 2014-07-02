@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 directories "inc", "locales" and "front" should be available in writing
+=======
+The Genericobject plugin needs directories "inc", and "front" and "locales" to be available in writing for the webservice user.
+>>>>>>> fixed #4610 Update README file and add an AUTHORS file
