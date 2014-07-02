@@ -291,6 +291,11 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[18]['name']        = __("Global search");
       $sopt[18]['datatype']    = 'bool';
       
+      $sopt[19]['table']       = 'glpi_plugin_genericobject_typefamilies';
+      $sopt[19]['field']       = 'name';
+      $sopt[19]['name']        = _n('Family of type of objects', 'Families object types', 1);
+      $sopt[19]['datatype']    = 'dropdown';
+
       return $sopt;
    }
    
