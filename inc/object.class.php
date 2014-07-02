@@ -206,6 +206,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          if ($this->canUseTickets()) {
             $this->addStandardTab('Ticket', $ong, $options);
+            $this->addStandardTab('Item_Problem', $ong, $options);
          }
 
          if ($this->canUseNotepad() && Session::haveRight("notes", "r")) {
