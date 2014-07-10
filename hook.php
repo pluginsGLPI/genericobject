@@ -91,8 +91,12 @@ function plugin_genericobject_install() {
 
    $migration = new Migration('2.4.0');
 
-   foreach (array('PluginGenericobjectField', 'PluginGenericobjectType',
-                  'PluginGenericobjectProfile', 'PluginGenericobjectTypeFamily') as $itemtype) {
+   foreach ( array(
+      'PluginGenericobjectField',
+      'PluginGenericobjectType',
+      'PluginGenericobjectProfile',
+      'PluginGenericobjectTypeFamily'
+   ) as $itemtype ) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
