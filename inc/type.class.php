@@ -45,6 +45,13 @@ class PluginGenericobjectType extends CommonDBTM {
    const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
    const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
 
+   const CAN_OPEN_TICKET   = 1024;
+
+   function getRights($interface = 'central') {
+      $values = parent::getRights();
+      return $values;
+   }
+
    var $dohistory = true;
 
    function __construct($itemtype = false) {
@@ -69,14 +76,33 @@ class PluginGenericobjectType extends CommonDBTM {
       return $singleton[$itemtype];
    }
 
+   static function canPurge() {
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         __CLASS__
+      );
+      return Session::haveRight($right_name,PURGE);
+   }
+
    static function canCreate() {
-      return Session::haveRight("config", "w");
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         __CLASS__
+      );
+      return Session::haveRight($right_name,CREATE);
    }
 
    static function canView() {
-      return Session::haveRight("config", "r");
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         __CLASS__
+      );
+      return Session::haveRight($right_name,READ);
    }
 
+   static function canUpdate() {
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         __CLASS__
+      );
+      return Session::haveRight($right_name,UPDATE);
+   }
    function getFromDBByType($itemtype) {
       global $DB;
       $query  = "SELECT * FROM `" . getTableForItemType(__CLASS__) . "` " .
@@ -101,10 +127,11 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!$withtemplate) {
          switch ($item->getType()) {
             case __CLASS__ :
-               $tabs = array (1  => __("Main"),
-                               3 => _n("Field", "Fields", 2),
-                               5 => __("Preview"),
-                               6 => _n("Profile", "Profiles", 2));
+               $tabs = array (
+                  1  => __("Main"),
+                  3 => _n("Field", "Fields", 2),
+                  5 => __("Preview")
+               );
                if ($item->canUseDirectConnections()) {
                   $tabs[7] = __("Associated element");
                }
@@ -299,21 +326,35 @@ class PluginGenericobjectType extends CommonDBTM {
       return $sopt;
    }
 
+   static function getMenuName() {
+      return __('Objects Management', 'genericobject');
+   }
+//   static function getAdditionalMenuOptions() {
+//      return array(
+//         'type' => array(
+//            'title' => static::getMenuName(),
+//            'links' => array(
+//               'add' => Toolbox::getItemTypeFormURL('PluginGenericobjectType',false),
+//               'search' => Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false)
+//            )
+//         )
+//      );
+//   }
+
    //------------------------------------- End Framework hooks -----------------------------
 
    //------------------------------------- Forms -------------------------------------------
    function showForm($ID, $options = array()) {
 
       if ($ID > 0) {
-         $this->check($ID, 'r');
+         $this->check($ID, READ);
       } else {
          // Create item
-         $this->check(-1, 'w');
+         $this->check(-1, CREATE);
          $this->getEmpty();
       }
 
-      $this->showTabs($options);
-      $this->addDivForTabs();
+      $this->initForm($ID);
 
       $item = new self();
       //I know this is REALLY ugly...
@@ -326,17 +367,36 @@ class PluginGenericobjectType extends CommonDBTM {
 
    function showBehaviorForm($ID, $options=array()) {
       if ($ID > 0) {
-         $this->check($ID, 'r');
+         $this->check($ID, READ);
       } else {
          // Create item
-         $this->check(-1, 'w');
+         $this->check($ID, CREATE);
          $use_cache = false;
          $this->getEmpty();
       }
 
       $this->fields['id'] = $ID;
 
-      $canedit = $this->can($ID, 'w');
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         __CLASS__
+      );
+
+      $canedit = Session::haveRight($right_name, UPDATE);
+//      $options['canedit'] = $canedit;
+
+      Toolbox::logDebug(
+         array(
+            $this,
+            $right_name,
+            array(
+               "can_edit",
+               var_export($canedit, true),
+               var_export($this->canEdit($ID), true),
+               var_export($this->can($ID,UPDATE), true),
+               $options
+            )
+         )
+      );
 
       self::includeLocales($this->fields["name"]);
       self::includeConstants($this->fields["name"]);
@@ -394,7 +454,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "</tr>";
 
       if (!$this->isNewID($ID)) {
-         $canedit = $this->can($ID, 'w');
+         $canedit = $this->can($ID, CREATE);
          echo "<tr class='tab_bg_1'><th colspan='4'>";
          echo __("Behaviour", "genericobject");
          echo "</th></tr>";
@@ -1287,9 +1347,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $mytypes = array();
          foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
             //If class is not present on the filesystem, do not list itemtype
-            if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
-               $mytypes[$data['itemtype']] = $data;
-            }
+            $mytypes[$data['itemtype']] = $data;
          }
          return $mytypes;
       } else {
@@ -1549,7 +1607,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $types = self::getTypes();
       $view  = false;
       foreach ($types as $ID => $value) {
-         if (plugin_genericobject_haveRight($value['itemtype'], 'r')) {
+         if (Session::haveRight($value['itemtype'], READ)) {
             $view = true;
             break;
          }

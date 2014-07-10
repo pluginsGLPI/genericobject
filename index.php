@@ -36,7 +36,7 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
    $types = PluginGenericobjectType::getTypesByFamily();
    foreach ($types as $family => $typeData) {
       foreach($typeData as $ID => $value) {
-         if (!plugin_genericobject_haveRight($value['itemtype'], 'r')) {
+         if (!Session::haveRight($value['itemtype'], READ)) {
             unset($types[$family][$ID]);
          }
       }

@@ -69,35 +69,34 @@ function plugin_init_genericobject() {
                                                                'changeProfile');
 
       // Display a menu entry ?
-      $PLUGIN_HOOKS['menu_entry']['genericobject'] = true;
+      $PLUGIN_HOOKS['menu_toadd']['genericobject'] = array(
+         'plugins' => 'PluginGenericobjectType'
+      );
 
       //Do not display icon if not using the genericobject plugin
-      if (isset($_GET['id']) &&  $_GET['id'] != ''
-         && strpos($_SERVER['REQUEST_URI'],
-                     Toolbox::getItemTypeFormURL("PluginGenericobjectType")) !== false) {
-         $url  = '/plugins/genericobject/index.php';
-         $type = new PluginGenericobjectType();
-         $type->getFromDB($_GET['id']);
-         if ($type->fields['is_active']) {
-            $url.= '?itemtypes_id='.$_GET['id'];
-            $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
-                      __("Go to objects list", "genericobject").
-                        "\" alt=\"".__("Go to objects list", "genericobject")."\">";
-            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image]
-               = $url;
-         }
-      }
+//      if (isset($_GET['id']) &&  $_GET['id'] != ''
+//         && strpos($_SERVER['REQUEST_URI'],
+//                     Toolbox::getItemTypeFormURL("PluginGenericobjectType")) !== false) {
+//         $url  = '/plugins/genericobject/index.php';
+//         $type = new PluginGenericobjectType();
+//         $type->getFromDB($_GET['id']);
+//         if ($type->fields['is_active']) {
+//            $url.= '?itemtypes_id='.$_GET['id'];
+//            $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
+//                      __("Go to objects list", "genericobject").
+//                        "\" alt=\"".__("Go to objects list", "genericobject")."\">";
+//            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image]
+//               = $url;
+//         }
+//      }
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']
          = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
       $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
          = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
 
       // Config page
-      if (Session::haveRight('config', 'w')) {
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['config']         = 'front/type.php';
+      if (Session::haveRight('config', READ)) {
          $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['add']['type']    = 'front/type.form.php';
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['search']['type'] = 'front/type.php';
       }
 
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject']   = true;
@@ -105,10 +104,16 @@ function plugin_init_genericobject() {
 
       $PLUGIN_HOOKS['post_init']['genericobject']        = 'plugin_post_init_genericobject';
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
+
    }
 }
 
 function plugin_post_init_genericobject() {
+   Plugin::registerClass(
+      'PluginGenericobjectProfile',
+      array('addtabon' => array('Profile'))
+   );
+
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
       $itemtype = $objecttype['itemtype'];
       $itemtype::registerType();

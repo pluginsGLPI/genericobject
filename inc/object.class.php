@@ -634,11 +634,14 @@ class PluginGenericobjectObject extends CommonDBTM {
     * @param type the object type
     */
    static function showPrevisualisationForm(PluginGenericobjectType $type) {
+      Toolbox::logDebug(print_r($type->fields,true));
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
 
-
-      if (plugin_genericobject_haveRight($itemtype, 'r')) {
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         $itemtype
+      );
+      if (Session::haveRight($right_name, READ)) {
          $item->showForm(-1, array(), true);
       } else {
          echo "<br><strong>" . __("You must configure rights to enable the preview",

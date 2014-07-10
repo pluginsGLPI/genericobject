@@ -27,8 +27,8 @@
 
 include ("../../../inc/includes.php");
 
-if (!isset ($_REQUEST["id"])) {
-   $_REQUEST["id"] = '';
+if (!isset ($_GET["id"])) {
+   $_GET["id"] = '';
 }
 $type        = new PluginGenericobjectType();
 $extraparams = array ();
@@ -70,8 +70,8 @@ if (isset ($_GET["action"])) {
    Html::back();
 }
 
-Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins", "genericobject",
-             "type");
-$type->showForm($_REQUEST["id"]);
+Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
+    "PluginGenericobjectType");
+$type->display($_GET);
 
 Html::footer();
