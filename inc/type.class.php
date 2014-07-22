@@ -1205,7 +1205,7 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function removeDataInjectionModels($itemtype) {
       $plugin = new Plugin();
       //Delete if exists datainjection models
-      if ($plugin->isInstalled("datainjection")) {
+      if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
          $model = new PluginDatainjectionModel();
          foreach ($model->find("`itemtype`='$itemtype'") as $data) {
             $model->delete($data);
