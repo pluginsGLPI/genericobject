@@ -32,7 +32,7 @@ if (!defined('GLPI_ROOT')) {
 class PluginGenericobjectTypeFamily extends CommonDropdown {
 
    static function getTypeName($nb=0) {
-      return _n('Family of type of objects', 'Families object types', $nb);
+      return __('Family of type of objects', 'genericobject');
    }
 
    static function install(Migration $migration) {

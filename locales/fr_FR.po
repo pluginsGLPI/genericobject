@@ -23,10 +23,6 @@ msgid ""
 "writable by the web server."
 msgstr "Erreur : les dossiers '/inc', '/front' et '/locales' du plugin doivent être en écriture pour le serveur web."
 
-#: index.php:60
-msgid "Empty family"
-msgstr "Famille vide"
-
 #: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
 #: inc/object_item.class.php:110 inc/type.class.php:239
 msgid "Objects management"
@@ -133,10 +129,10 @@ msgstr "Plugin de désinstallation des matériels"
 msgid "Regenerate files"
 msgstr "Regénérer les fichiers"
 
+#: index.php:60
+msgid "Empty family"
+msgstr "Famille vide"
+
 #: inc/typefamily.class.php:35
 msgid "Family of type of objects"
 msgstr "Famille"
-
-#: inc/typefamily.class.php:35
-msgid "Families object types"
-msgstr "Familles"
