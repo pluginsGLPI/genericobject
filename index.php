@@ -41,11 +41,16 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
          }
       }
    }
-   if (count($types) == 1) {
-      $type = array_pop($types);
-      Html::redirect(Toolbox::getItemTypeSearchURL($type['itemtype']));
-   } else {
 
+   if(is_null(key($types))) {
+      $key = 0;
+   } else {
+      $key = key($types);
+   }
+
+   if (count($types) == 1 && count($types[$key]) == 1) {
+      Html::redirect(Toolbox::getItemTypeSearchURL(key($types[$key])));
+   } else {
 
       Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
                    "genericobject");
