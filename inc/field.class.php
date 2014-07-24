@@ -293,15 +293,21 @@ class PluginGenericobjectField extends CommonDBTM {
          //Reload list of fields for this itemtype in the singleton
 
          $recursive = $entity_assign = $tree = false;
-         $table     = getTableNameForForeignKeyField($field);
+
+         $table = getTableNameForForeignKeyField($field);
+
          if ($table != '' && !TableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
-            $name                       = str_replace("glpi_plugin_genericobject_","", $table);
-            $name                       = getSingular($name);
+            $name = str_replace("glpi_plugin_genericobject_","", $table);
+            $name = getSingular($name);
+
             $options['linked_itemtype'] = $itemtype;
-            PluginGenericobjectType::addNewDropdown($name, 'PluginGenericobject'.ucfirst($name),
-                                                    $options);
+
+            PluginGenericobjectType::addNewDropdown(
+               $name, 'PluginGenericobject'.ucfirst($name), $options
+            );
          }
+
          PluginGenericobjectSingletonObjectField::getInstance($itemtype, true);
       }
    }
@@ -399,3 +405,4 @@ class PluginGenericobjectField extends CommonDBTM {
    }
 
 }
+
