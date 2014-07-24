@@ -958,13 +958,16 @@ class PluginGenericobjectType extends CommonDBTM {
       foreach ($options as $key => $value) {
          $params[$key] = $value;
       }
-      self::addFileFromTemplate(array('CLASSNAME'       => self::getClassByName($name),
-                                       'EXTENDS'         => ($params['tree']
-                                                               ?"CommonTreeDropdown":"CommonDropdown"),
-                                       'FIELDNAME'       => $params['realname'],
-                                       'LINKED_ITEMTYPE' => $params['linked_itemtype']),
-                                self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH,
-                                $name.".class");
+      self::addFileFromTemplate(
+         array(
+            'CLASSNAME'       => self::getClassByName($name),
+            'EXTENDS'         =>
+               'PluginGenericobject' . ($params['tree']?'CommonTree':'Common') . 'Dropdown',
+            'FIELDNAME'       => $params['realname'],
+            'LINKED_ITEMTYPE' => $params['linked_itemtype']
+         ),
+         self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH,
+         $name.".class");
    }
 
 
