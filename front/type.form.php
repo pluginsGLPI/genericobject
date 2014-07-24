@@ -70,7 +70,7 @@ if (isset ($_GET["action"])) {
    Html::back();
 }
 
-Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
+Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "config",
     "PluginGenericobjectType");
 $type->display($_GET);
 
