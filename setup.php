@@ -28,18 +28,47 @@
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR",GLPI_ROOT . "/plugins/genericobject");
 }
+
+if (!defined("GENERICOBJECT_DOC_DIR") ) {
+   define("GENERICOBJECT_DOC_DIR", GLPI_PLUGIN_DOC_DIR . "/genericobject");
+   if(!file_exists(GENERICOBJECT_DOC_DIR)) {
+      mkdir(GENERICOBJECT_DOC_DIR);
+   }
+}
 if (!defined("GENERICOBJECT_FRONT_PATH")) {
-   define("GENERICOBJECT_FRONT_PATH", GENERICOBJECT_DIR."/front");
+   define("GENERICOBJECT_FRONT_PATH", GENERICOBJECT_DOC_DIR."/front");
+   if(!file_exists(GENERICOBJECT_FRONT_PATH)) {
+      mkdir(GENERICOBJECT_FRONT_PATH);
+   }
 }
 if (!defined("GENERICOBJECT_AJAX_PATH")) {
-   define("GENERICOBJECT_AJAX_PATH", GENERICOBJECT_DIR . "/ajax");
+   define("GENERICOBJECT_AJAX_PATH", GENERICOBJECT_DOC_DIR . "/ajax");
+   if(!file_exists(GENERICOBJECT_AJAX_PATH)) {
+      mkdir(GENERICOBJECT_AJAX_PATH);
+   }
 }
+
 if (!defined("GENERICOBJECT_CLASS_PATH")) {
-   define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DIR . "/inc");
+   define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DOC_DIR . "/inc");
+   if(!file_exists(GENERICOBJECT_CLASS_PATH)) {
+      mkdir(GENERICOBJECT_CLASS_PATH);
+   }
 }
 if (!defined("GENERICOBJECT_LOCALES_PATH")) {
-   define("GENERICOBJECT_LOCALES_PATH", GENERICOBJECT_DIR . "/locales");
+   define("GENERICOBJECT_LOCALES_PATH", GENERICOBJECT_DOC_DIR . "/locales");
+   if(!file_exists(GENERICOBJECT_LOCALES_PATH)) {
+      mkdir(GENERICOBJECT_LOCALES_PATH);
+   }
 }
+
+// Autoload class generated in files/_plugins/genericobject/inc/
+include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
+
+$options = array(
+   GENERICOBJECT_CLASS_PATH
+);
+$go_autoloader = new PluginGenericobjectAutoloader($options);
+$go_autoloader->register();
 
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
@@ -127,7 +156,9 @@ function plugin_post_init_genericobject() {
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
       $itemtype = $objecttype['itemtype'];
-      $itemtype::registerType();
+      if (class_exists($itemtype)) {
+         $itemtype::registerType();
+      }
    }
 }
 
