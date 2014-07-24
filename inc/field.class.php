@@ -151,8 +151,8 @@ class PluginGenericobjectField extends CommonDBTM {
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
          $message = "";
+         $field = self::getFieldGlobalName($field, $itemtype, $values, false);
          if(!in_array($field, $used)) {
-            $field = self::getFieldGlobalName($field, $itemtype, $values, false);
             if (!isset($dropdown_types[$field])) {
                //Global management :
                //meaning that a dropdown can be useful in all types (for example type, model, etc.)

@@ -316,7 +316,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $sopt[19]['table']       = 'glpi_plugin_genericobject_typefamilies';
       $sopt[19]['field']       = 'name';
-      $sopt[19]['name']        = _n('Family of type of objects', 'Families object types', 1);
+      $sopt[19]['name']        = __('Family of type of objects', 'genericobject');
       $sopt[19]['datatype']    = 'dropdown';
 
       return $sopt;
@@ -423,7 +423,7 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__("Family of type of objects")."</td>";
+      echo "<td>".__("Family of type of objects",'genericobject')."</td>";
       echo "<td>";
          PluginGenericobjectTypeFamily::dropdown(
                         array('value' => $this->fields["plugin_genericobject_typefamilies_id"]));
@@ -1084,8 +1084,11 @@ class PluginGenericobjectType extends CommonDBTM {
       foreach ($DB->list_fields($table) as $field => $options) {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
             $table = getTableNameForForeignKeyField($field);
-            self::deleteFilesAndClassesForOneItemtype(getSingular($results[1]));
-            $DB->query("DROP TABLE IF EXISTS `$table`");
+
+            if($table != getTableForItemType("PluginGenericobjectTypeFamily")) {
+               self::deleteFilesAndClassesForOneItemtype(getSingular($results[1]));
+               $DB->query("DROP TABLE IF EXISTS `$table`");
+            }
          }
       }
 
@@ -1246,7 +1249,7 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function removeDataInjectionModels($itemtype) {
       $plugin = new Plugin();
       //Delete if exists datainjection models
-      if ($plugin->isInstalled("datainjection")) {
+      if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
          $model = new PluginDatainjectionModel();
          foreach ($model->find("`itemtype`='$itemtype'") as $data) {
             $model->delete($data);
