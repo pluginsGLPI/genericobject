@@ -204,21 +204,43 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $menu;
    }
 
+   static function checkItemtypeRight($class = null, $right) {
+      if (!is_null($class) and class_exists($class) ) {
+         $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+            $class
+         );
+
+         return Session::haveRight($right_name,$right);
+      }
+   }
+
    static function canCreate() {
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
       if(preg_match("/Injection$/i",$class)) {
          $class = str_replace("Injection", "", $class);
       }
-      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
-         $class
-      );
-      Toolbox::logDebug('Object::canCreate',$right_name, $class);
-      return Session::haveRight($right_name,CREATE);
+      return static::checkItemtypeRight($class, CREATE);
    }
 
    static function canView() {
-      return plugin_genericobject_haveRight(get_called_class(), 'r');
+      $class = get_called_class();
+      return static::checkItemtypeRight($class, READ);
+   }
+
+   static function canUpdate() {
+      $class = get_called_class();
+      return static::checkItemtypeRight($class, UPDATE);
+   }
+
+   static function canDelete() {
+      $class = get_called_class();
+      return static::checkItemtypeRight($class, DELETE);
+   }
+
+   static function canPurge() {
+      $class = get_called_class();
+      return static::checkItemtypeRight($class, PURGE);
    }
 
    function defineTabs($options=array()) {
@@ -364,15 +386,15 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->getEmpty();
       } else {
          if ($id > 0) {
-            $this->check($id, 'r');
+            $this->check($id, READ);
          } else {
             // Create item
-            $this->check(-1, 'w');
+            $this->check(-1, CREATE);
             $this->getEmpty();
          }
 
          $this->showTabs($options);
-         $canedit = $this->can($id, 'w');
+         $canedit = $this->can($id, UPDATE);
       }
 
       if (isset($options['withtemplate']) && $options['withtemplate'] == 2) {
