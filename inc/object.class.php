@@ -162,10 +162,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          //If entity dropdown, check rights to view & create
          if ($itemtype::canView()) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$itemtype]['links']['search']
-                                                       = Toolbox::getItemTypeSearchURL($itemtype, false);
+               = Toolbox::getItemTypeSearchURL($itemtype, false);
             if ($itemtype::canCreate()) {
                $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
-                                                            = Toolbox::getItemTypeFormURL($class, false);
+                  = Toolbox::getItemTypeFormURL($class, false);
             }
          }
       }
