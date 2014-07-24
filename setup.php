@@ -73,7 +73,8 @@ $go_autoloader->register();
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS;
+          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
+
 
    $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
 
@@ -136,13 +137,13 @@ function plugin_init_genericobject() {
 
       // Config page
       if (Session::haveRight('config', READ)) {
-         $PLUGIN_HOOKS['config_page']['genericobject']                     = 'front/type.php';
+         $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
       }
 
-      $PLUGIN_HOOKS['assign_to_ticket']['genericobject']   = true;
+      $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
-      $PLUGIN_HOOKS['post_init']['genericobject']        = 'plugin_post_init_genericobject';
+      $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
 
    }
