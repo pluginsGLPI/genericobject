@@ -1029,7 +1029,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function checkClassAndFilesForItemType() {
       global $DB;
 
-      foreach ($DB->request("glpi_plugin_genericobject_types") as $type) {
+      foreach (self::getTypes(true) as $type) {
          self::checkClassAndFilesForOneItemType($type['itemtype'], $type['name'], true);
       }
    }
