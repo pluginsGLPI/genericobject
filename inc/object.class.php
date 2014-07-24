@@ -44,10 +44,11 @@ class PluginGenericobjectObject extends CommonDBTM {
       //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
       if(isset($LANG['genericobject'][$class][0])) {
-         return $LANG['genericobject'][$class][0];
+         $type_name = $LANG['genericobject'][$class][0];
       } else {
-         return $item->objecttype->fields['name'];
+         $type_name = $item->objecttype->fields['name'];
       }
+      return ucwords($type_name);
    }
 
 
