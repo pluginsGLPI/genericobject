@@ -54,10 +54,18 @@ if (!defined("GENERICOBJECT_CLASS_PATH")) {
       mkdir(GENERICOBJECT_CLASS_PATH);
    }
 }
+
 if (!defined("GENERICOBJECT_LOCALES_PATH")) {
    define("GENERICOBJECT_LOCALES_PATH", GENERICOBJECT_DOC_DIR . "/locales");
    if(!file_exists(GENERICOBJECT_LOCALES_PATH)) {
       mkdir(GENERICOBJECT_LOCALES_PATH);
+   }
+}
+
+if (!defined("GENERICOBJECT_FIELDS_PATH")) {
+   define("GENERICOBJECT_FIELDS_PATH", GENERICOBJECT_DOC_DIR . "/fields");
+   if(!file_exists(GENERICOBJECT_FIELDS_PATH)) {
+      mkdir(GENERICOBJECT_FIELDS_PATH);
    }
 }
 
@@ -217,11 +225,11 @@ function plugin_genericobject_includeCommonFields($force = false) {
    }
 
    //Include user constants, that must be accessible for all itemtypes
-   if (file_exists(GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php")) {
+   if (file_exists(GENERICOBJECT_FIELDS_PATH . "/field.constant.php")) {
       if (!$force) {
-         include_once (GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php");
+         include_once ( GENERICOBJECT_FIELDS_PATH . "/field.constant.php");
       } else {
-         include (GLPI_ROOT . "/plugins/genericobject/fields/myconstant.php");
+         include ( GENERICOBJECT_FIELDS_PATH . "/field.constant.php");
       }
    }
 }

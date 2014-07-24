@@ -1397,7 +1397,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    static function includeConstants($name, $force = false) {
-      $file = GLPI_ROOT . "/plugins/genericobject/fields/constants/$name.constant.php";
+      $file = GENERICOBJECT_FIELDS_PATH . "/fields/constants/$name.constant.php";
       if (file_exists($file)) {
          if (!$force) {
             include_once($file);

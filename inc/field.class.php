@@ -45,8 +45,10 @@ class PluginGenericobjectField extends CommonDBTM {
       //Reset fields definition only to keep the itemtype ones
       $GO_FIELDS = array();
       plugin_genericobject_includeCommonFields(true);
-      $file = GLPI_ROOT."/plugins/genericobject/fields/constants/".
-               $object_type->fields['name'].".constant.php";
+      $file = GENERICOBJECT_FIELDS_PATH.
+         "/fields/constants/".
+         $object_type->fields['name'].".constant.php";
+
       if (file_exists($file)) {
          include $file;
       }
