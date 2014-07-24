@@ -210,7 +210,11 @@ class PluginGenericobjectObject extends CommonDBTM {
       if(preg_match("/Injection$/i",$class)) {
          $class = str_replace("Injection", "", $class);
       }
-      return plugin_genericobject_haveRight($class, 'w');
+      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
+         $class
+      );
+      Toolbox::logDebug('Object::canCreate',$right_name, $class);
+      return Session::haveRight($right_name,CREATE);
    }
 
    static function canView() {
