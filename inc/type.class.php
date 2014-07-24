@@ -160,10 +160,6 @@ class PluginGenericobjectType extends CommonDBTM {
             case 6:
                PluginGenericobjectProfile::showForItemtype($item);
                break;
-               /*
-            case 7:
-               $item->showLinkedTypesForm();
-               break;*/
          }
       }
       return true;
@@ -382,21 +378,6 @@ class PluginGenericobjectType extends CommonDBTM {
       );
 
       $canedit = Session::haveRight($right_name, UPDATE);
-//      $options['canedit'] = $canedit;
-
-      Toolbox::logDebug(
-         array(
-            $this,
-            $right_name,
-            array(
-               "can_edit",
-               var_export($canedit, true),
-               var_export($this->canEdit($ID), true),
-               var_export($this->can($ID,UPDATE), true),
-               $options
-            )
-         )
-      );
 
       self::includeLocales($this->fields["name"]);
       self::includeConstants($this->fields["name"]);
