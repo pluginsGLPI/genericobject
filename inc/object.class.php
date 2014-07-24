@@ -170,6 +170,38 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   static function getMenuIcon() {
+      global $CFG_GLPI;
+
+      return "<img class='genericobject_menu_icon' src='".$CFG_GLPI['root_doc']."/pics/lock.png' />";
+   }
+   static function getMenuContent() {
+      $menu = array();
+      $types = PluginGenericobjectType::getTypes();
+      unset($_SESSION['glpimenu']);
+      foreach($types as $type) {
+         if ( class_exists($type['itemtype']) ) {
+            Toolbox::logDebug($type['itemtype'], get_class(new self()));
+            $menu[strtolower($type['itemtype'])]= array(
+               'title' => (
+                  "<span class='genericobject_menu_wrapper'>"
+                  . self::getMenuIcon()
+                  . "<span class='genericobject_menu_text'>"
+                  .     $type['itemtype']::getMenuName()
+                  . "</span>"
+                  . "</span>"
+               ),
+               'page' => self::getSearchUrl(false).'?itemtype='.$type['itemtype'],
+               'links' => array(
+                  'add' => self::getFormUrl(false).'?itemtype='.$type['itemtype']
+               )
+
+            );
+         }
+      }
+      $menu['is_multi_entries']= true;
+      return $menu;
+   }
 
    static function canCreate() {
       $class    = get_called_class();

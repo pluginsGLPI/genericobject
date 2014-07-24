@@ -68,10 +68,21 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile',
                                                                'changeProfile');
 
+      // add css styles
+      $PLUGIN_HOOKS['add_css']['genericobject'] = array(
+         "css/styles.css"
+      );
+
       // Display a menu entry ?
       $PLUGIN_HOOKS['menu_toadd']['genericobject'] = array(
-         'plugins' => 'PluginGenericobjectType'
+         'config' => 'PluginGenericobjectType',
+         'assets' => 'PluginGenericobjectObject'
       );
+
+      // Ensure GLPI does correctly load menu entries for each activated objects
+      // TODO: it could be better to check existence of those entries before unsetting the glpimenu
+      // session in order to trigger rebuild.
+      unset($_SESSION['glpimenu']);
 
       //Do not display icon if not using the genericobject plugin
 //      if (isset($_GET['id']) &&  $_GET['id'] != ''
