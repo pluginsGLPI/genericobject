@@ -24,20 +24,20 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
+ 
+include ("../../../inc/includes.php");
 
-/**
- * This class is automatically managed by genericobject plugin. Do not edit it !
- */
-class %%CLASSNAME%% extends PluginGenericobjectObject {
+if (isset($_GET['itemtype'])) {
+   $itemtype = $_GET['itemtype'];
+   $types = PluginGenericobjectType::getTypes();
+//   $type = new PluginGenericobjectType();
+//   $type->getFromDBByType($_GET['itemtype']);
+//   Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
 
-   static function getFormURL($full=true) {
-      return Toolbox::getItemTypeFormURL( get_parent_class() , $full) .
-      "?itemtype=".get_called_class();
-   }
-   static function getSearchURL($full=true) {
-      return Toolbox::getItemTypeSearchURL( get_parent_class() , $full) .
-      "?itemtype=".get_called_class();
+   Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+                $_GET['itemtype']);
+   Search::Show($_GET['itemtype']);
 
-   }
 }
 
+Html::footer();
