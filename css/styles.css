@@ -23,3 +23,21 @@
    margin: 0;
    display: inline-block;
 }
+
+
+/*
+ * Fields Form
+ */
+
+.genericobject_fields.add_new {
+   width: 80%;
+}
+
+.genericobject_fields.add_new td.label {
+   width: 20%;
+}
+
+.genericobject_fields.add_new td.dropdown {
+   width: 100%;
+}
+

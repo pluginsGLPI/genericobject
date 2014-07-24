@@ -102,10 +102,10 @@ class PluginGenericobjectField extends CommonDBTM {
       Html::openArrowMassives('fieldslist', true);
       Html::closeArrowMassives(array('delete' => __("Delete permanently")));
 
-      echo "<table class='tab_cadre'>";
+      echo "<table class='tab_cadre genericobject_fields add_new'>";
       echo "<tr class='tab_bg_1'>";
-      echo "<td>" . __("Add new field", "genericobject") . "</td>";
-      echo "<td align='left'>";
+      echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
+      echo "<td align='left' class='dropdown'>";
       self::dropdownFields("new_field", $itemtype, $used_fields);
       echo "</td>";
       echo "<td>";
