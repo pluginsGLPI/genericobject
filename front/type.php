@@ -24,10 +24,8 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
-include ("../../../inc/includes.php");
 
-Session::checkRight("config",READ);
+include ("../../../inc/includes.php");
 
 if (isset($_GET['itemtype'])) {
    $type = new PluginGenericobjectType();
