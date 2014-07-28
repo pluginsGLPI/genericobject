@@ -96,8 +96,7 @@ if (!is_null($itemtype)) {
    Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
              "assets", $itemtype);
 
-   $item->title();
-   $item->showForm($id, array('withtemplate' => $_GET["withtemplate"]));
+   $item->display($_GET, array( 'withtemplate' => $_GET["withtemplate"]));
 
    Html::footer();
 } else {

@@ -246,6 +246,8 @@ class PluginGenericobjectObject extends CommonDBTM {
    function defineTabs($options=array()) {
       $ong = array ();
 
+      $this->addDefaultFormTab($ong);
+
       if (!$this->isNewItem()) {
 
          if ($this->canUseNetworkPorts()) {
@@ -292,11 +294,11 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseInfocoms() {
-      return ($this->objecttype->canUseInfocoms() && Session::haveRight("infocom", "r"));
+      return ($this->objecttype->canUseInfocoms() && Session::haveRight("infocom", READ));
    }
 
    function canUseContracts() {
-      return ($this->objecttype->canUseContracts() && Session::haveRight("contract", "r"));
+      return ($this->objecttype->canUseContracts() && Session::haveRight("contract", READ));
    }
 
 
@@ -310,12 +312,12 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseUnicity() {
-      return ($this->objecttype->canUseUnicity() && Session::haveRight("config", "r"));
+      return ($this->objecttype->canUseUnicity() && Session::haveRight("config", READ));
    }
 
 
    function canUseDocuments() {
-      return ($this->objecttype->canUseDocuments() && Session::haveRight("document", "r"));
+      return ($this->objecttype->canUseDocuments() && Session::haveRight("document", READ));
    }
 
 
@@ -330,9 +332,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function canBeReserved() {
-      return ($this->objecttype->canBeReserved()
-         && (Session::haveRight("reservation_central", "r")
-            || Session::haveRight("reservation_helpdesk", '1')));
+      return (
+         $this->objecttype->canBeReserved()
+         and Session::haveRight("reservation", READ)
+      );
    }
 
 
@@ -393,7 +396,6 @@ class PluginGenericobjectObject extends CommonDBTM {
             $this->getEmpty();
          }
 
-         $this->showTabs($options);
          $canedit = $this->can($id, UPDATE);
       }
 
@@ -409,6 +411,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
       $this->fields['id'] = $id;
+      $this->initForm($id,$options);
       $this->showFormHeader($options);
 
       if ($previsualisation) {
