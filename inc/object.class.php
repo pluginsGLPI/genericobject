@@ -624,6 +624,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          $item = new $type();
          $item->deleteByCriteria($parameters);
       }
+
+      $ip = new Item_Problem();
+      $ip->cleanDBonItemDelete(get_called_class(), $this->getID());
+
    }
    
 
