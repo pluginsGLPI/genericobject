@@ -42,15 +42,19 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       }
    }
 
-   if(is_null(key($types))) {
-      $key = 0;
-   } else {
-      $key = key($types);
+   //There's only one family
+   if (count($types) == 1) {
+       
+       //There's only one itemtype ? If yes, then automatically
+       //redirect to the search engine
+       if(key($types) == NULL) {
+         $mytypes = $types;
+         $tmp = array_pop($mytypes);
+         if (count($tmp) == 1) { 
+            Html::redirect(Toolbox::getItemTypeSearchURL(key($tmp)));
+         }
+      }
    }
-
-   if (count($types) == 1 && count($types[$key]) == 1) {
-      Html::redirect(Toolbox::getItemTypeSearchURL(key($types[$key])));
-   } else {
 
       Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
                    "genericobject");
@@ -81,5 +85,4 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       }
 
       Html::footer();
-   }
 }
