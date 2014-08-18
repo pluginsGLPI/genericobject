@@ -1339,13 +1339,15 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    static function includeLocales($name) {
-      global $CFG_GLPI;
+      global $CFG_GLPI,$LANG;
    
       $prefix = GENERICOBJECT_LOCALES_PATH . "/$name/$name";
+        //Dirty hack because the plugin doesn't support gettext...
+      $language= str_replace('.mo', '', $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
       if (isset ($_SESSION["glpilanguage"])
-             && file_exists($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1])) {
-         include_once ($prefix . "." . $CFG_GLPI["languages"][$_SESSION["glpilanguage"]][1]);
-   
+             && file_exists("$prefix.$language.php")) {
+         include_once ("$prefix.$language.php");
+
       } else {
          if (file_exists($prefix . ".en_GB.php")) {
             include_once ($prefix . ".en_GB.php");
