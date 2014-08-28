@@ -69,21 +69,23 @@ $GO_FIELDS['url']['datatype']   = 'weblink';
 $GO_FIELDS['types_id']['name']          = __("Type");
 $GO_FIELDS['types_id']['linkfield']     = 'type';
 $GO_FIELDS['types_id']['input_type']    = 'dropdown';
-$GO_FIELDS['types_id']['dropdown_type'] = 'global'; //Means that
+// The 'isolated' dropdown type will create a isolated table for each type that will be assigned
+// with this field.
+$GO_FIELDS['types_id']['dropdown_type'] = 'isolated';
 
 $GO_FIELDS['models_id']['name']          = __("Model");
 $GO_FIELDS['models_id']['input_type']    = 'dropdown';
-$GO_FIELDS['models_id']['dropdown_type'] = 'global';
+$GO_FIELDS['models_id']['dropdown_type'] = 'isolated';
 
 $GO_FIELDS['categories_id']['name']          = __("Category");
 $GO_FIELDS['categories_id']['input_type']    = 'dropdown';
-$GO_FIELDS['categories_id']['dropdown_type'] = 'global';
+$GO_FIELDS['categories_id']['dropdown_type'] = 'isolated';
 
 $GO_FIELDS['entities_id']['name']          = __("Entity");
 $GO_FIELDS['entities_id']['input_type']    = 'dropdown';
 $GO_FIELDS['entities_id']['massiveaction'] = false;
 
-$GO_FIELDS['template_name']['name']          = __("Template name"); 
+$GO_FIELDS['template_name']['name']          = __("Template name");
 $GO_FIELDS['template_name']['input_type']    = 'text';
 $GO_FIELDS['template_name']['massiveaction'] = false;
 

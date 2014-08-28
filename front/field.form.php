@@ -46,6 +46,11 @@ if (isset ($_POST["delete"])) {
       $itemtype = $type->fields['itemtype'];
       PluginGenericobjectType::registerOneType($itemtype);
 
+      Toolbox::logDebug(array(
+         'itemtype' => $itemtype,
+         'getTableForItemType'=>getTableForItemType($itemtype),
+         'new_field' => $_POST['new_field']
+      ));
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
       Session::addMessageAfterRedirect(__("Field added successfully", "genericobject"));
    }

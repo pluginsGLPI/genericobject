@@ -463,7 +463,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function displayField($canedit, $name, $value, $template, $description = array()) {
       global $GO_BLACKLIST_FIELDS;
 
-      $searchoption  = PluginGenericobjectField::getOptionsWithGlobal($name, get_called_class());
+      $searchoption  = PluginGenericobjectField::getFieldOptions($name, get_called_class());
 
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
@@ -726,9 +726,15 @@ class PluginGenericobjectObject extends CommonDBTM {
       $index   = 3;
       $options = array();
       $table   = getTableForItemType(get_called_class());
-      foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class()) as $field => $values) {
-         $searchoption = PluginGenericobjectField::getOptionsWithGlobal($field,
-                                                                        $this->objecttype->fields['itemtype']);
+
+      foreach (
+         PluginGenericobjectSingletonObjectField::getInstance(get_called_class())
+         as $field => $values
+      ) {
+         $searchoption = PluginGenericobjectField::getFieldOptions(
+            $field,
+            $this->objecttype->fields['itemtype']
+         );
 
          //Some fields have fixed index values...
          $currentindex = $index;

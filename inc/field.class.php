@@ -45,14 +45,10 @@ class PluginGenericobjectField extends CommonDBTM {
       //Reset fields definition only to keep the itemtype ones
       $GO_FIELDS = array();
       plugin_genericobject_includeCommonFields(true);
-      $file = GENERICOBJECT_FIELDS_PATH.
-         "/fields/constants/".
-         $object_type->fields['name'].".constant.php";
 
-      if (file_exists($file)) {
-         include $file;
-      }
-      PluginGenericobjectType::includeConstants($itemtype, true);
+      //ToolBox::logDebug(PluginGenericobjectSingletonObjectField::$_dbfields);
+
+      PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
 
       foreach ($GO_BLACKLIST_FIELDS as $autofield) {
          if (!in_array($autofield, $used_fields)) {
@@ -86,16 +82,8 @@ class PluginGenericobjectField extends CommonDBTM {
          if (!in_array($field, $GO_READONLY_FIELDS)) {
             $index++;
          }
-         //If it's a plugin dropdowns, get it's real name
-         //(it may not be the one from the DB, in case it's a global field)
          $table = getTableNameForForeignKeyField($field);
-         /*if ($table != '' && isPluginItemType(getItemTypeForTable($table))) {
-            $classname = getItemTypeForTable($table);
-            $class     = new $classname();
-            $used_fields[$class->getFieldName()] = $class->getFieldName();
-         } else {*/
-            $used_fields[$field] = $field;
-         //}
+         $used_fields[$field] = $field;
          $global_index++;
       }
       echo "</table>";
@@ -118,19 +106,66 @@ class PluginGenericobjectField extends CommonDBTM {
 
    /**
     * Get the name of the field, as defined in a constant file
-    * The name may be the same, or not depending if it's a global dropdown or not
+    * The name may be the same, or not depending if it's an isolated dropdown or not
     */
-   static function getFieldGlobalName($field, $itemtype, $options, $remove_prefix = false) {
-      if (isset($options['dropdown_type'])
-            && $options['dropdown_type'] == 'global') {
+   static function getFieldName($field, $itemtype, $options, $remove_prefix = false) {
+      $field_orig = $field;
+      $field_table = null;
+      $input_type = isset($options['input_type'])
+         ? $options['input_type']
+         : null;
+      switch($input_type) {
 
-         $fk   = getForeignKeyFieldForTable(getTableForItemType($itemtype));
-         if (!$remove_prefix) {
-            $field = preg_replace("/s_id$/",$field, $fk);
-         } else {
-            $fk    = preg_replace("/s_id$/","", $fk);
-            $field = preg_replace("/".$fk."/","", $field);
-         }
+         case 'dropdown':
+            $dropdown_type = isset($options['dropdown_type'])
+               ? $options['dropdown_type']
+               : null;
+            $fk = getForeignKeyFieldForTable(getTableForItemType($itemtype));
+
+            if ( $dropdown_type == 'isolated' ) {
+               if (!$remove_prefix) {
+                  $field = preg_replace("/s_id$/",$field, $fk);
+               } else {
+                  $fk    = preg_replace("/s_id$/","", $fk);
+                  $field = preg_replace("/".$fk."/","", $field);
+               }
+            }
+            Toolbox::logDebug(array(
+               "field_orig" => $field_orig,
+               "field" => $field,
+               "fk" => $fk,
+               "options" => $options
+            ));
+            $field_table = getTableNameForForeignKeyField($field);
+            Toolbox::logDebug(
+               $field, "\n",
+               substr($field_table, strlen('glpi_')), "\n",
+               strlen($field)-strlen('_id'),
+               '"'.substr($field, 0, strlen($field)-strlen('_id')).'"'
+            );
+            //Prepend plugin's table prefix if this dropdown is not already handled by GLPI natively
+            if (
+               substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
+               and (
+                  substr($field_table, strlen('glpi_'))
+                  === substr($field,  0, strlen($field) -strlen('_id'))
+               )
+               and !TableExists($field_table)
+            ) {
+               if (!$remove_prefix) { $field = 'plugin_genericobject_' . $field;}
+               Toolbox::logDebug($field);
+            } else {
+               Toolbox::logDebug($field, "is already handled by GLPI");
+            }
+
+
+            Toolbox::logDebug("Get Table for dropdown", $field,":", $field_table);
+
+            break;
+
+         default:
+            Toolbox::logDebug($field, "Type:", $input_type);
+
       }
       return $field;
    }
@@ -151,7 +186,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
          $message = "";
-         $field = self::getFieldGlobalName($field, $itemtype, $values, false);
+         $field = self::getFieldName($field, $itemtype, $values, false);
          if(!in_array($field, $used)) {
             if (!isset($dropdown_types[$field])) {
                //Global management :
@@ -187,23 +222,34 @@ class PluginGenericobjectField extends CommonDBTM {
 
    /**
     *
-    * Get field definition for a field
+    * Get field's options defined in constant files.
+    * If this field has not been defined, it means that this field has been defined globally and
+    * must be dynamically created.
     *
     * @param $field the current field
     * @param $itemtype the itemtype
     * @return an array which contains the full field definition
     */
-   static function getOptionsWithGlobal($field, $itemtype) {
+   static function getFieldOptions($field, $itemtype) {
       global $GO_FIELDS;
 
-      if (!isset($GO_FIELDS[$field])) {
-         $tmpfield = self::getFieldGlobalName($field, $itemtype,
-                                           array('dropdown_type' => 'global'), true);
+      $cleaned_field = preg_replace("/^plugin_genericobject_/",'', $field);
+      if (!isset($GO_FIELDS[$cleaned_field])) {
+         // This field has been dynamically defined because it's an isolated dropdown
+         Toolbox::logDebug("'$cleaned_field' not found in GO_FIELDS !!!!");
+         $tmpfield = self::getFieldName(
+            $field, $itemtype,
+            array(
+               'dropdown_type' => 'isolated',
+               'input_type' => 'dropdown'
+            ),
+            true
+         );
          $options             = $GO_FIELDS[$tmpfield];
          $options['realname'] = $tmpfield;
       } else {
-         $options             = $GO_FIELDS[$field];
-         $options['realname'] = $field;
+         $options             = $GO_FIELDS[$cleaned_field];
+         $options['realname'] = $cleaned_field;
       }
       return $options;
    }
@@ -213,7 +259,7 @@ class PluginGenericobjectField extends CommonDBTM {
 
       $readonly  = in_array($field, $GO_READONLY_FIELDS);
       $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
-      $options  = self::getOptionsWithGlobal($field, $itemtype);
+      $options  = self::getFieldOptions($field, $itemtype);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
       $sel ="";
@@ -223,7 +269,7 @@ class PluginGenericobjectField extends CommonDBTM {
          echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
       }
       echo "</td>";
-      echo "<td>" . $options['name'] . "</td>";
+      echo "<td>" . __($options['name'], 'genericobject') . "</td>";
       echo "<td>" . $field . "</td>";
 
       echo "<td width='10'>";
@@ -255,8 +301,10 @@ class PluginGenericobjectField extends CommonDBTM {
       global $DB;
 
       $itemtype = getItemTypeForTable($table);
+      Toolbox::logDebug("Will add field '".$field."' to table '".$table."'");
       if (!FieldExists($table, $field, false)) {
-         $options  = self::getOptionsWithGlobal($field, $itemtype);
+         $options  = self::getFieldOptions($field, $itemtype);
+         Toolbox::logDebug($options);
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {
             case 'dropdown_yesno' :

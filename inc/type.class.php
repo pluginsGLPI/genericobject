@@ -952,7 +952,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    public static function addDropdownClassFile($name, $field, $options) {
-      $params['tree']            = false;
+      $params['is_tree']            = false;
       $params['realname']        = false;
       $params['linked_itemtype'] = false;
       foreach ($options as $key => $value) {
@@ -962,7 +962,7 @@ class PluginGenericobjectType extends CommonDBTM {
          array(
             'CLASSNAME'       => self::getClassByName($name),
             'EXTENDS'         =>
-               'PluginGenericobject' . ($params['tree']?'CommonTree':'Common') . 'Dropdown',
+               'PluginGenericobject' . ($params['is_tree']?'CommonTree':'Common') . 'Dropdown',
             'FIELDNAME'       => $params['realname'],
             'LINKED_ITEMTYPE' => $params['linked_itemtype']
          ),
@@ -1403,7 +1403,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    static function includeConstants($name, $force = false) {
-      $file = GENERICOBJECT_FIELDS_PATH . "/fields/constants/$name.constant.php";
+      //Toolbox::logDebug("includeConstants",$name);
+      $file = GENERICOBJECT_FIELDS_PATH . "/$name.constant.php";
       if (file_exists($file)) {
          if (!$force) {
             include_once($file);
@@ -1426,6 +1427,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $source_table = getTableForItemType($itemtype);
          foreach (PluginGenericobjectSingletonObjectField::getInstance($itemtype) as $field => $value) {
             $table = getTableNameForForeignKeyField($field);
+            //Toolbox::logDebug($field, $value, $table, $source_table, getSingular($source_table));
             //If it's a drodpdown
             if ($table && preg_match("/".getSingular($source_table)."/",$table)) {
                $associated_tables[] = $table;
