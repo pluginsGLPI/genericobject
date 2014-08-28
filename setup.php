@@ -158,6 +158,8 @@ function plugin_init_genericobject() {
 }
 
 function plugin_post_init_genericobject() {
+   global $GO_FIELDS;
+   //Toolbox::logDebug($GO_FIELDS);
    Plugin::registerClass(
       'PluginGenericobjectProfile',
       array('addtabon' => array('Profile'))
