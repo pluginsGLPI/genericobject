@@ -234,20 +234,10 @@ function plugin_genericobject_includeCommonFields($force = false) {
    }
 }
 
-function plugin_genericobject_haveRight($module,$right) {
-   $matches=array(
-         ""  => array("","r","w"), // ne doit pas arriver normalement
-         "r" => array("r","w"),
-         "w" => array("w"),
-         "1" => array("1"),
-         "0" => array("0","1"), // ne doit pas arriver non plus
-            );
-   if (
-      isset($_SESSION["glpi_plugin_genericobject_profile"][$module])
-      && in_array($_SESSION["glpi_plugin_genericobject_profile"][$module],$matches[$right])
-   ) {
-      return true;
-   }
+function plugin_genericobject_haveRight($class,$right) {
+   
+   $right_name = PluginGenericobjectProfile::getProfileNameForItemtype($class);
+   return Session::haveRight($right_name, $right);
 
-   return false;
 }
+
