@@ -44,7 +44,7 @@ class PluginGenericobjectAutoloader implements SplAutoloader
       //Toolbox::logDebug($classname);
 
       $matches = $this->processClassname($classname);
-      Toolbox::logDebug($matches);
+      //Toolbox::logDebug($matches);
 
       if($matches !== false) {
          $plugin_name = strtolower($matches[1]);
