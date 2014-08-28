@@ -92,7 +92,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                        "unicity_types"          => $item->canUseUnicity());
       Plugin::registerClass($class, $options);
 
-      if (plugin_genericobject_haveRight($class, "r")) {
+      if (plugin_genericobject_haveRight($class, READ)) {
          //Change url for adding a new object, depending on template management activation
          if ($item->canUseTemplate()) {
             //Template management is active
