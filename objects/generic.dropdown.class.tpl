@@ -29,4 +29,5 @@
  * This class is automatically managed by genericobject plugin. Do not modify it !
  */
 class %%CLASSNAME%% extends %%EXTENDS%% {
+   public $linked_itemtype = "%%LINKED_ITEMTYPE%%";
 }

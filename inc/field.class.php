@@ -230,11 +230,11 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param $itemtype the itemtype
     * @return an array which contains the full field definition
     */
-   static function getFieldOptions($field, $itemtype) {
+   static function getFieldOptions($field, $itemtype="") {
       global $GO_FIELDS;
 
       $cleaned_field = preg_replace("/^plugin_genericobject_/",'', $field);
-      if (!isset($GO_FIELDS[$cleaned_field])) {
+      if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
          // This field has been dynamically defined because it's an isolated dropdown
          Toolbox::logDebug("'$cleaned_field' not found in GO_FIELDS !!!!");
          $tmpfield = self::getFieldName(
