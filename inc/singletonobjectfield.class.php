@@ -37,7 +37,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginGenericobjectSingletonObjectField {
    /// Items list
-   private static $_dbfields = array();
+   static $_dbfields = array();
 
    /**
     * Singleton to store DB fields definition
