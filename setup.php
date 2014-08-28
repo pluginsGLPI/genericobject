@@ -71,6 +71,7 @@ if (!defined("GENERICOBJECT_FIELDS_PATH")) {
 
 // Autoload class generated in files/_plugins/genericobject/inc/
 include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
+include_once( GENERICOBJECT_DIR . "/inc/functions.php");
 
 $options = array(
    GENERICOBJECT_CLASS_PATH

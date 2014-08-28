@@ -29,22 +29,8 @@ class PluginGenericobjectCommonDropdown extends CommonDropdown {
 
    //Get itemtype name
    static function getTypeName($nb=0) {
-      global $GO_FIELDS;
-      $class    = get_called_class();
-      $fk = getForeignKeyFieldForTable(getTableForItemType($class));
-
-      $label = '';
-      foreach ($GO_FIELDS as $field => $values) {
-         if ($field == $fk) {
-            $label = $values['name'];
-            break;
-         }
-      }
-      if($label != '') {
-         return $label;
-      } else {
-         return $class;
-      }
+      $class=get_called_class(); 
+      return dropdown_getTypeName($class,$nb);
    }
 
    static function getFormURL($full=true) {
