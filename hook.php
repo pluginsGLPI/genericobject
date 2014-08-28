@@ -40,15 +40,36 @@ function plugin_genericobject_getDropdown() {
    $dropdowns = array();
 
    $plugin = new Plugin();
-   if ($plugin->isActivated("genericobject")) {
-      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
-                                   "`is_active`='1'") as $itemtype) {
-         foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table) {
+   if ( $plugin->isActivated("genericobject") ) {
+      //Toolbox::logDebug(
+      //   getAllDatasFromTable(
+      //      getTableForItemType('PluginGenericobjectType'),"`is_active`='1'"
+      //   )
+      //);
+      foreach (
+         getAllDatasFromTable(
+            getTableForItemType('PluginGenericobjectType'),"`is_active`='1'"
+         ) as $itemtype
+      ) {
+         //Toolbox::logDebug( array(
+         //   $itemtype,
+         //   PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype'])
+         //));
+         foreach (
+            PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table
+         ) {
             $dropdown_itemtype             = getItemTypeForTable($table);
-            $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
+            //Toolbox::logDebug(
+            //   "Hook::getDropdown",$itemtype['itemtype'], $table, $dropdown_itemtype,
+            //   $dropdown_itemtype::getTypeName()
+            //);
+            if (class_exists( $dropdown_itemtype)) {
+               $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
+            }
          }
       }
    }
+   //Toolbox::logDebug($dropdowns);
    return $dropdowns;
 }
 
