@@ -130,19 +130,19 @@ class PluginGenericobjectField extends CommonDBTM {
                   $field = preg_replace("/".$fk."/","", $field);
                }
             }
-            Toolbox::logDebug(array(
-               "field_orig" => $field_orig,
-               "field" => $field,
-               "fk" => $fk,
-               "options" => $options
-            ));
+            //Toolbox::logDebug(array(
+            //   "field_orig" => $field_orig,
+            //   "field" => $field,
+            //   "fk" => $fk,
+            //   "options" => $options
+            //));
             $field_table = getTableNameForForeignKeyField($field);
-            Toolbox::logDebug(
-               $field, "\n",
-               substr($field_table, strlen('glpi_')), "\n",
-               strlen($field)-strlen('_id'),
-               '"'.substr($field, 0, strlen($field)-strlen('_id')).'"'
-            );
+            //Toolbox::logDebug(
+            //   $field, "\n",
+            //   substr($field_table, strlen('glpi_')), "\n",
+            //   strlen($field)-strlen('_id'),
+            //   '"'.substr($field, 0, strlen($field)-strlen('_id')).'"'
+            //);
             //Prepend plugin's table prefix if this dropdown is not already handled by GLPI natively
             if (
                substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
@@ -153,18 +153,18 @@ class PluginGenericobjectField extends CommonDBTM {
                and !TableExists($field_table)
             ) {
                if (!$remove_prefix) { $field = 'plugin_genericobject_' . $field;}
-               Toolbox::logDebug($field);
+               //Toolbox::logDebug($field);
             } else {
-               Toolbox::logDebug($field, "is already handled by GLPI");
+               //Toolbox::logDebug($field, "is already handled by GLPI");
             }
 
 
-            Toolbox::logDebug("Get Table for dropdown", $field,":", $field_table);
+            //Toolbox::logDebug("Get Table for dropdown", $field,":", $field_table);
 
             break;
 
-         default:
-            Toolbox::logDebug($field, "Type:", $input_type);
+         //default:
+         //   Toolbox::logDebug($field, "Type:", $input_type);
 
       }
       return $field;
