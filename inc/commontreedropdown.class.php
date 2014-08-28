@@ -48,12 +48,12 @@ class PluginGenericobjectCommonTreeDropdown extends CommonTreeDropdown {
    }
 
    static function getFormURL($full=true) {
-      Toolbox::logDebug("PluginGenericobjectCommonTreeDropdown::getFormURL", get_parent_class(get_called_class()));
+      //Toolbox::logDebug("PluginGenericobjectCommonTreeDropdown::getFormURL", get_parent_class(get_called_class()));
       return Toolbox::getItemTypeFormURL(  get_parent_class(get_called_class()), $full) .
          "?itemtype=".get_called_class();
    }
    static function getSearchURL($full=true) {
-      Toolbox::logDebug("PluginGenericobjectCommonTreeDropdown::getSearchURL", get_parent_class(get_called_class()));
+      //Toolbox::logDebug("PluginGenericobjectCommonTreeDropdown::getSearchURL", get_parent_class(get_called_class()));
       return Toolbox::getItemTypeSearchURL( get_parent_class(get_called_class()) , $full) .
          "?itemtype=".get_called_class();
 
