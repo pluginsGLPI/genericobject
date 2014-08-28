@@ -1433,8 +1433,15 @@ class PluginGenericobjectType extends CommonDBTM {
          foreach (PluginGenericobjectSingletonObjectField::getInstance($itemtype) as $field => $value) {
             $table = getTableNameForForeignKeyField($field);
             //Toolbox::logDebug($field, $value, $table, $source_table, getSingular($source_table));
-            //If it's a drodpdown
-            if ($table && preg_match("/".getSingular($source_table)."/",$table)) {
+            $options = PluginGenericobjectField::getFieldOptions($field, $itemtype);
+            if (
+               isset($options['input_type'])
+               and $options['input_type'] === 'dropdown'
+               and preg_match('/^glpi_plugin_genericobject/', $table)
+            ) {
+               //Toolbox::logDebug(
+               //   $field, "\n",PluginGenericobjectField::getFieldOptions($field, $itemtype)
+               //);
                $associated_tables[] = $table;
             }
          }
