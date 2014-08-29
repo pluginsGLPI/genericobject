@@ -42,44 +42,47 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
       }
    }
 
-   if(is_null(key($types))) {
-      $key = 0;
-   } else {
-      $key = key($types);
-   }
+   //There's only one family
+   if (count($types) == 1) {
 
-   if (count($types) == 1 && count($types[$key]) == 1) {
-      Html::redirect(Toolbox::getItemTypeSearchURL(key($types[$key])));
-   } else {
-
-      Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
-                   "genericobject");
-
-      foreach($types as $family => $typeData) {
-
-         $PluginGenericobjectTypefamily = new PluginGenericobjectTypefamily();
-         $PluginGenericobjectTypefamily->getFromDB($family);
-
-         echo "<table class='tab_cadre_fixe'>";
-         if($family == 0) {
-            echo "<tr class='tab_bg_2'><th>".__("Empty family","genericobject")."</th></tr>";
-         } else {
-            echo "<tr class='tab_bg_2'><th>".$PluginGenericobjectTypefamily->getField("name")."</th></tr>";
+       //There's only one itemtype ? If yes, then automatically
+       //redirect to the search engine
+       if(key($types) == NULL) {
+         $mytypes = $types;
+         $tmp = array_pop($mytypes);
+         if (count($tmp) == 1) {
+            Html::redirect(Toolbox::getItemTypeSearchURL(key($tmp)));
          }
-         if (!count($types)) {
-            echo "<tr class='tab_bg_1'><td align='center'>".__("No item to display")."</td></tr>";
-         } else {
-            foreach($typeData as $ID => $value) {
-               echo "<tr class='tab_bg_1'><td align='center'>";
-               echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
-               $itemtype = $value['itemtype'];
-               echo $itemtype::getTypeName();
-               echo "</a></td></tr>";
-            }
-         }
-         echo "</table>";
       }
-
-      Html::footer();
    }
+
+   Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
+      "genericobject");
+
+   foreach($types as $family => $typeData) {
+
+      $PluginGenericobjectTypefamily = new PluginGenericobjectTypefamily();
+      $PluginGenericobjectTypefamily->getFromDB($family);
+
+      echo "<table class='tab_cadre_fixe'>";
+      if($family == 0) {
+         echo "<tr class='tab_bg_2'><th>".__("Empty family","genericobject")."</th></tr>";
+      } else {
+         echo "<tr class='tab_bg_2'><th>".$PluginGenericobjectTypefamily->getField("name")."</th></tr>";
+      }
+      if (!count($types)) {
+         echo "<tr class='tab_bg_1'><td align='center'>".__("No item to display")."</td></tr>";
+      } else {
+         foreach($typeData as $ID => $value) {
+            echo "<tr class='tab_bg_1'><td align='center'>";
+            echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
+            $itemtype = $value['itemtype'];
+            echo $itemtype::getTypeName();
+            echo "</a></td></tr>";
+         }
+      }
+      echo "</table>";
+   }
+
+   Html::footer();
 }
