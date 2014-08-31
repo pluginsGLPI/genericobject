@@ -199,8 +199,11 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function post_addItem() {
-      self::addNewObject($this->input["name"], $this->input["itemtype"],
-                         array('add_table' => 1, 'create_default_profile' =>1));
+      self::addNewObject(
+         $this->input["name"],
+         $this->input["itemtype"],
+         array('add_table' => 1, 'create_default_profile' =>1)
+      );
       return true;
    }
 
