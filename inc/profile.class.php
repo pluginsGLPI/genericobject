@@ -308,7 +308,7 @@ class PluginGenericobjectProfile extends Profile {
 
       // Check for already defined rights
       foreach($right_names as $right_name) {
-         if ( !in_array($right_name, $installed_rights) ) {
+         if ( !isset($installed_rights[$right_name]) ) {
             $missing_rights[] = $right_name;
          }
       }
@@ -326,8 +326,9 @@ class PluginGenericobjectProfile extends Profile {
     * @return nothing
     */
    public static function deleteTypeFromProfile($itemtype) {
-      $profile = new self();
-      $profile->deleteByCriteria(array("itemtype" => $itemtype));
+      $rights = array();
+      $rights[] = self::getProfileNameForItemtype($itemtype);
+      ProfileRight::deleteProfileRights($rights);
    }
 
    public static function changeProfile() {
