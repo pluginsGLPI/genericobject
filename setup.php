@@ -72,6 +72,9 @@ if (!defined("GENERICOBJECT_FIELDS_PATH")) {
 // Autoload class generated in files/_plugins/genericobject/inc/
 include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/functions.php");
+if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php") ){
+   include_once(GENERICOBJECT_DIR . "/log_filter.settings.php");
+}
 
 $options = array(
    GENERICOBJECT_CLASS_PATH
