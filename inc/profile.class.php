@@ -24,6 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
+
 class PluginGenericobjectProfile extends Profile {
 
    /* if profile deleted */
@@ -259,6 +260,7 @@ class PluginGenericobjectProfile extends Profile {
     */
    public static function createAccess($profiles_id, $first=false) {
       $profile = new self();
+      _log($profile);
    }
 
    public static function getGeneralRights() {
@@ -308,11 +310,12 @@ class PluginGenericobjectProfile extends Profile {
 
       // Check for already defined rights
       foreach($right_names as $right_name) {
+         _log($right_name, isset($installed_rights[$right_name]));
          if ( !isset($installed_rights[$right_name]) ) {
             $missing_rights[] = $right_name;
          }
       }
-
+      _log(array($right_names, $missing_rights));
       //Install missing rights in profile and update the object
       if ( count($missing_rights) > 0) {
          ProfileRight::addProfileRights($missing_rights);

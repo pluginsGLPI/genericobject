@@ -222,6 +222,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function pre_deleteItem() {
+      _log("pre_deleteItem ", $this);
       if ($this->getFromDB($this->fields["id"])) {
          $name     = $this->fields['name'];
          $itemtype = $this->fields['itemtype'];
@@ -1091,6 +1092,12 @@ class PluginGenericobjectType extends CommonDBTM {
    static function deleteItemTypeFilesAndClasses($name, $table, $itemtype) {
       global $DB;
 
+      _log("Delete Type",array(
+         "table"=>$table,
+         "name"=>$name,
+         "itemtype" => $itemtype,
+
+      ));
       //Delete files related to dropdowns
       foreach ($DB->list_fields($table) as $field => $options) {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
@@ -1202,6 +1209,7 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function deleteTable($itemtype) {
       global $DB;
+      _log($itemtype);
       $preferences = new DisplayPreference();
       $preferences->deleteByCriteria(array("itemtype" => $itemtype));
       $DB->query("DROP TABLE IF EXISTS `".getTableForItemType($itemtype)."`");
