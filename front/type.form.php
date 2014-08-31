@@ -58,7 +58,7 @@ if (isset ($_GET["action"])) {
    Html::back();
 
 //Delete an itemtype
-} elseif (isset ($_POST["delete"])) {
+} elseif (isset ($_POST["purge"])) {
    $type->delete($_POST);
    $type->redirectToList();
 
