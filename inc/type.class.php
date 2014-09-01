@@ -718,7 +718,18 @@ class PluginGenericobjectType extends CommonDBTM {
       if (isset($this->input['use_deleted']) && $this->input['use_deleted']) {
          PluginGenericobjectField::addNewField($table, 'is_deleted', 'id');
       } else {
-         PluginGenericobjectField::deleteField($table, 'is_deleted');
+         if (!$this->canBeReserved()) {
+            PluginGenericobjectField::deleteField($table, 'is_deleted');
+         } else {
+            _log(FieldExists($table, 'is_deleted'));
+            if (FieldExists($table, 'is_deleted')) {
+               Session::addMessageAfterRedirect(
+                  __("Dustbin can't be removed since Reservations are used on this type."),
+                  false,
+                  WARNING
+               );
+            }
+         }
       }
 
       //Reservation needs is_deleted field !
