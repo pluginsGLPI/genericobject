@@ -399,10 +399,9 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       echo "</td>";
-
-      echo "<td rowspan='4' class='middle right'>".__("Comments")."&nbsp;: </td>";
-      echo "<td class='center middle' rowspan='4'><textarea cols='45' rows='4'
-             name='comment' >".$this->fields["comment"]."</textarea></td></tr>";
+      echo "<td class='middle right'>".__('Icon')."</td>";
+      echo "<td class='icon_preview'>".PluginGenericobjectObject::getMenuIcon($this->fields['itemtype'])."</td>";
+      echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>" . __("Label") . "</td>";
@@ -412,6 +411,9 @@ class PluginGenericobjectType extends CommonDBTM {
          echo $itemtype::getTypeName();
       }
       echo "</td>";
+      echo "<td rowspan='3' class='middle right'>".__("Comments")."&nbsp;: </td>";
+      echo "<td class='center middle' rowspan='3'><textarea cols='45' rows='4'
+             name='comment' >".$this->fields["comment"]."</textarea></td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";

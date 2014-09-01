@@ -17,6 +17,10 @@
    vertical-align: middle;
    display: inline-block;
 }
+.icon_preview .genericobject_menu_icon {
+   height: initial;
+   width: initial;
+}
 
 .genericobject_menu_text {
    padding-left: 5px;
