@@ -173,7 +173,9 @@ function plugin_post_init_genericobject() {
    //Toolbox::logDebug($GO_FIELDS);
    Plugin::registerClass(
       'PluginGenericobjectProfile',
-      array('addtabon' => array('Profile'))
+      array('addtabon' => array(
+         'Profile', 'PluginGenericobjectType'
+      ))
    );
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
@@ -181,6 +183,7 @@ function plugin_post_init_genericobject() {
       if (class_exists($itemtype)) {
          $itemtype::registerType();
       }
+
    }
 }
 

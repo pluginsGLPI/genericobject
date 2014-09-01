@@ -33,14 +33,28 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      if ($item->fields['interface'] == 'central') {
-         return self::createTabEntry(__('Generic Object'));
+
+      switch($item->getType()) {
+         case 'Profile':
+            return self::createTabEntry(__('Object Management', 'genericobject'));
+            break;
+         case 'PluginGenericobjectType':
+            return self::createTabEntry(__('Rights'));
+            break;
       }
    }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      $profile = new self();
-      $profile->showForm($item->getID());
+      switch($item->getType()) {
+         case 'Profile':
+            $profile = new self();
+            $profile->showForm($item->getID());
+            break;
+         case 'PluginGenericobjectType':
+            _log($item);
+            self::showForItemtype($item);
+            break;
+      }
       return TRUE;
    }
 
@@ -50,9 +64,10 @@ class PluginGenericobjectProfile extends Profile {
       if (!Session::haveRight("profile", READ)) {
          return false;
       }
+      self::installRights();
       $canedit = Session::haveRight("profile", UPDATE);
 
-      echo "<form action='" . Toolbox::getItemTypeSearchURL(__CLASS__) . "' method='post'>";
+      echo "<form action='" . self::getFormUrl() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
       $itemtype = $type->fields['itemtype'];
       echo "<tr><th colspan='2' align='center'><strong>";
@@ -60,37 +75,26 @@ class PluginGenericobjectProfile extends Profile {
       echo $itemtype::getTypeName();
       echo "</strong></th></tr>";
 
-      foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
-         echo "<tr><th colspan='2' align='center'><strong>";
-         echo __("Profile")." ".$profile['name']."</strong></th></tr>";
-
-         $pgf_find = self::getProfileforItemtype($profile['id'], $itemtype);
-
-         if (!count($pgf_find) > 0) {
-            self::createAccess($profile['id']);
-            $pgf_find = self::getProfileforItemtype($profile['id'], $itemtype);
-         }
-
-         $PluginGenericobjectProfile = new self();
-         $PluginGenericobjectProfile->getFromDB($pgf_find['id']);
-
-         $prefix = "profiles[".$pgf_find['id']."]";
-         if ($profile['interface'] == 'central') {
-            echo "<tr class='tab_bg_2'>";
-            echo "<td>" . __("Access object", "genericobject") . ":</td><td>";
-            Profile::dropdownNoneReadWrite($prefix."[right]",
-                              $PluginGenericobjectProfile->fields['right'], 1, 1, 1);
-            echo "</td></tr>";
-         }
-         if ($type->canUseTickets()) {
-            echo "<tr class='tab_bg_2'>";
-            echo "<td>" . __("Associate tickets to this object", "genericobject") . ":</td><td>";
-            Dropdown::showYesNo($prefix."[open_ticket]",
-                              $PluginGenericobjectProfile->fields['open_ticket']);
-            echo "</td></tr>";
-         }
-
+      echo "<tr><td class='genericobject_type_profiles'>";
+      $rights = array();
+      foreach (getAllDatasFromTable(getTableForItemtype("Profile")) as $profile) {
+         $prof = new Profile();
+         $prof->getFromDB($profile['id']);
+         $right = self::getProfileforItemtype($profile['id'], $itemtype);
+         $label = $profile['name'];
+         $rights = array(
+            array(
+               'label' => $label,
+               'itemtype' => $itemtype,
+               'field' =>  self::getProfileNameForItemtype($itemtype),
+               'html_field' => "_" . $profile['id'] . '_'. self::getProfileNameForItemtype($itemtype),
+            )
+         );
+         $prof->displayRightsChoiceMatrix(
+            $rights
+         );
       }
+      echo "</td></tr>";
 
       if ($canedit) {
          echo "<tr class='tab_bg_1'>";
@@ -99,6 +103,8 @@ class PluginGenericobjectProfile extends Profile {
             _sx('button', 'Post') . "\" class='submit'>";
          echo "</td></tr>";
       }
+
+
       echo "</table>";
       Html::closeForm();
    }
@@ -167,13 +173,11 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    static function getProfileforItemtype($profiles_id, $itemtype) {
-      $results = getAllDatasFromTable(getTableForItemType(__CLASS__),
-                                      "`itemtype`='$itemtype' AND `profiles_id`='$profiles_id'");
-      if (!empty($results)) {
-         return array_pop($results);
-      } else {
-         return array();
-      }
+      $rights = ProfileRight::getProfileRights($profiles_id);
+      $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
+
+      _log($rights[$itemtype_rightname]);
+      return isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : 0;
    }
 
    function getProfilesFromDB($id, $config = true) {

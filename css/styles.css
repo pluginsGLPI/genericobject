@@ -54,3 +54,11 @@
    width: 100%;
 }
 
+/*
+ * Type's Profile tab : specific alignment
+ */
+
+.genericobject_type_profiles tr > td {
+   width : 10%;
+}
+
