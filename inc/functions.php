@@ -49,6 +49,7 @@ function _log() {
       and in_array($caller['class'], $LOG_FILTER)
    ) {
       $msg = _format_trace($trace, func_get_args());
+      $msg .= "\n";
       call_user_func_array("Toolbox::logInFile", array('generic-object', $msg, true));
    }
 }
@@ -56,14 +57,18 @@ function _log() {
 function _format_trace($bt, $args) {
    static $tps = 0;
    $msg = "";
-   $msg = '  From ';
+   $msg = "From \n";
    if (count($bt) > 0) {
-      if (isset($bt[0]['class'])) {
-         $msg .= $bt[0]['class'].'::';
+      foreach(array_reverse($bt) as $idx => $trace) {
+         $msg .= sprintf("  [%d] ", $idx);
+         if (isset($trace['class'])) {
+            $msg .= $trace['class'].'::';
+         }
+         $msg .= $trace['function'].'() in ';
+         $msg .= $trace['file'] . ' line ' . $trace['line'];
+         $msg .= "\n";
       }
-      $msg .= $bt[0]['function'].'() in ';
    }
-   $msg .= $bt[0]['file'] . ' line ' . $bt[0]['line'];
 
    if ($tps && function_exists('memory_get_usage')) {
       $msg .= ' ('.number_format(microtime(true)-$tps,3).'", '.
@@ -72,7 +77,7 @@ function _format_trace($bt, $args) {
    $msg .= "\n  ";
    foreach ($args as $arg) {
       if (is_array($arg) || is_object($arg)) {
-         $msg .= str_replace("\n", "\n  ",print_r($arg, true));
+         $msg .= " ".str_replace("\n", "\n  ",print_r($arg, true));
       } else if (is_null($arg)) {
          $msg .= 'NULL ';
       } else if (is_bool($arg)) {
@@ -81,5 +86,6 @@ function _format_trace($bt, $args) {
          $msg .= $arg . ' ';
       }
    }
+   $msg .= "\n";
    return $msg;
 }
