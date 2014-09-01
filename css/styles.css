@@ -17,9 +17,18 @@
    vertical-align: middle;
    display: inline-block;
 }
-.icon_preview .genericobject_menu_icon {
+.icon_preview {
+   height: 32px;
+   width: 32px;
+}
+
+.icon_preview > .genericobject_menu_icon {
+   display: block;
+   margin: 0 auto;
    height: initial;
    width: initial;
+   max-height: 32px;
+   max-width: 32px;
 }
 
 .genericobject_menu_text {
