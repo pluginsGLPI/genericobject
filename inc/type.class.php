@@ -641,9 +641,10 @@ class PluginGenericobjectType extends CommonDBTM {
       if ($params['add_injection_file']) {
          self::addDatainjectionFile($name);
       }
+      PluginGenericobjectProfile::installRights();
       if ($params['create_default_profile']) {
          //Create rights for this new object
-         PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], true);
+         PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], $itemtype,true);
          //Reload profiles
          PluginGenericobjectProfile::changeProfile();
       }

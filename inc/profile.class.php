@@ -235,7 +235,7 @@ class PluginGenericobjectProfile extends Profile {
     */
    public static function createFirstAccess() {
       if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"])) {
-         self::createAccess($_SESSION["glpiactiveprofile"]["id"],true);
+         self::createAccess($_SESSION["glpiactiveprofile"]["id"],"PluginGenericobjectType",true);
       }
    }
 
@@ -246,11 +246,19 @@ class PluginGenericobjectProfile extends Profile {
     * @return true if exists, no if not
     */
    public static function profileExists($profiles_id, $itemtype = false) {
-      $condition = "`profiles_id`='$profiles_id'";
+      $profile = new Profile();
+      $profile->getFromDB($profiles_id);
+      $rights = ProfileRight::getProfileRights($profiles_id);
+      $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
       if($itemtype) {
-         $condition.= "AND `itemtype`='$itemtype'";
+         _log(
+            "get rights on itemtype ".$itemtype." for profile ".$profile->fields['name'], ':',
+            isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : "NONE"
+         );
+         return (isset($rights[self::getProfileNameForItemtype($itemtype)]));
       }
-      return (countElementsInTable(getTableForItemType(__CLASS__),$condition) >0?true:false);
+      return true;
+      ///return (countElementsInTable(getTableForItemType(__CLASS__),$condition) >0?true:false);
    }
 
    /**
@@ -258,9 +266,12 @@ class PluginGenericobjectProfile extends Profile {
     * @param profileID the profile ID
     * @return nothing
     */
-   public static function createAccess($profiles_id, $first=false) {
-      $profile = new self();
-      _log($profile);
+   public static function createAccess($profiles_id, $itemtype, $first=false) {
+      $profile_right = new ProfileRight();
+      $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
+      $profile_right->updateProfileRights($profiles_id, array(
+         $itemtype_rightname => ALLSTANDARDRIGHT
+      ));
    }
 
    public static function getGeneralRights() {
