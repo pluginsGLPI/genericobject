@@ -300,6 +300,7 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function addNewField($table, $field, $after=false) {
       global $DB;
 
+      _log("add", $field, "from", $table);
       $itemtype = getItemTypeForTable($table);
       Toolbox::logDebug("Will add field '".$field."' to table '".$table."'");
       if (!FieldExists($table, $field, false)) {
@@ -369,24 +370,25 @@ class PluginGenericobjectField extends CommonDBTM {
     * @return nothing
     */
    static function deleteField($table, $field) {
-     global $DB;
-     //If field exists, drop it !
-     if (FieldExists($table, $field)) {
-        $DB->query("ALTER TABLE `$table` DROP `$field`");
-     }
+      global $DB;
+      //If field exists, drop it !
+      if (FieldExists($table, $field)) {
+         _log("delete", $field, "from", $table);
+         $DB->query("ALTER TABLE `$table` DROP `$field`");
+      }
 
-     $table = getTableNameForForeignKeyField($field);
-     //If dropdown is managed by the plugin
-     if ($table != '' && preg_match('/plugin_genericobject_(.*)/', $table, $results)) {
-        //Delete dropdown table
-        $query = "DROP TABLE `$table`";
-        $DB->query($query);
-        //Delete dropdown files & class
-        $name = getSingular($results[1]);
-        PluginGenericobjectType::deleteClassFile($name);
-        PluginGenericobjectType::deleteFormFile($name);
-        PluginGenericobjectType::deletesearchFile($name);
-     }
+      $table = getTableNameForForeignKeyField($field);
+      //If dropdown is managed by the plugin
+      if ($table != '' && preg_match('/plugin_genericobject_(.*)/', $table, $results)) {
+         //Delete dropdown table
+         $query = "DROP TABLE `$table`";
+         $DB->query($query);
+         //Delete dropdown files & class
+         $name = getSingular($results[1]);
+         PluginGenericobjectType::deleteClassFile($name);
+         PluginGenericobjectType::deleteFormFile($name);
+         PluginGenericobjectType::deletesearchFile($name);
+      }
    }
 
    /**
