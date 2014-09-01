@@ -36,21 +36,30 @@ $LOG_FILTER = array();
 function _log() {
    global $LOG_FILTER;
    $trace = debug_backtrace();
-   $callee = array_shift($trace);
-   if (count($trace)>0) {
-      $caller = $trace[0];
+   if (count($trace)>1) {
+      $filename = preg_replace("|^".GLPI_ROOT."/plugins/genericobject/|", "", $trace[0]['file']);
+      //call_user_func_array("Toolbox::logInFile", array('generic-object', $filename . "\n", true));
+      $caller = $trace[1];
    } else {
       $caller = null;
    }
-
-   if (
-      !is_null($caller)
-      and isset($caller['class'])
-      and in_array($caller['class'], $LOG_FILTER)
-   ) {
+   if ( !is_null($caller)) {
       $msg = _format_trace($trace, func_get_args());
       $msg .= "\n";
-      call_user_func_array("Toolbox::logInFile", array('generic-object', $msg, true));
+      $show_log = false;
+      if (
+            isset($caller['class']) and
+            in_array($caller['class'], $LOG_FILTER)
+      ) {
+         $callee = array_shift($trace);
+         $show_log = true;
+      }
+      if ( in_array($filename, $LOG_FILTER) ) {
+         $show_log = true;
+      }
+      if ($show_log) {
+         call_user_func_array("Toolbox::logInFile", array('generic-object', $msg, true));
+      }
    }
 }
 
@@ -64,8 +73,10 @@ function _format_trace($bt, $args) {
          if (isset($trace['class'])) {
             $msg .= $trace['class'].'::';
          }
-         $msg .= $trace['function'].'() in ';
-         $msg .= $trace['file'] . ' line ' . $trace['line'];
+         $msg .= $trace['function'].'()';
+         if (isset($trace['file'])) {
+            $msg .= ' called in '. $trace['file'] . ', line ' . $trace['line'];
+         }
          $msg .= "\n";
       }
    }
