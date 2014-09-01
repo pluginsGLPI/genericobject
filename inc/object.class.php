@@ -173,11 +173,39 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
-   static function getMenuIcon() {
+   static function getMenuIcon($itemtype) {
       global $CFG_GLPI;
-
-      return "<img class='genericobject_menu_icon' src='".$CFG_GLPI['root_doc']."/pics/lock.png' />";
+      $default_icon = "/plugins/genericobject/pics/default-icon.png";
+      _log("get called class", get_called_class());
+      _log("itemtype", $itemtype);
+      $itemtype_table = getTableForItemType($itemtype);
+      $itemtype_shortname = preg_replace("/^glpi_plugin_genericobject_/", "", $itemtype_table);
+      _log("itemtype short name", $itemtype_shortname);
+      _log("itemtype short name (singular)", getSingular($itemtype_shortname));
+      $itemtype_icons = glob(
+         GENERICOBJECT_PICS_PATH . '/' . getSingular($itemtype_shortname) . ".*"
+      );
+      _log("itemtype_icons\n", $itemtype_icons);
+      $finfo = new finfo(FILEINFO_MIME);
+      $icon_found = null;
+      foreach($itemtype_icons as $icon) {
+         if ( preg_match("|^image/|", $finfo->file($icon)) ) {
+            $icon_found = preg_replace("|^".GLPI_ROOT."|", "", $icon);
+         }
+      }
+      _log("itemtype icon found", $icon_found);
+      if ( !is_null($icon_found)) {
+         $icon_path = $CFG_GLPI['root_doc'] . "/" . $icon_found;
+      } else {
+         $icon_path = $CFG_GLPI['root_doc'] . "/" . $default_icon;
+      }
+      return "".
+         "<img ".
+         "  class='genericobject_menu_icon' ".
+         "src='".$icon_path."'".
+         "/>";
    }
+
    static function getMenuContent() {
       $menu = array();
       $types = PluginGenericobjectType::getTypes();
@@ -188,7 +216,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $menu[strtolower($type['itemtype'])]= array(
                'title' => (
                   "<span class='genericobject_menu_wrapper'>"
-                  . self::getMenuIcon()
+                  . self::getMenuIcon($type['itemtype'])
                   . "<span class='genericobject_menu_text'>"
                   .     $type['itemtype']::getMenuName()
                   . "</span>"

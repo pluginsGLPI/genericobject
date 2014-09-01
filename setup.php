@@ -69,6 +69,13 @@ if (!defined("GENERICOBJECT_FIELDS_PATH")) {
    }
 }
 
+if (!defined("GENERICOBJECT_PICS_PATH")) {
+   define("GENERICOBJECT_PICS_PATH", GENERICOBJECT_DOC_DIR . "/pics");
+   if(!file_exists(GENERICOBJECT_PICS_PATH)) {
+      mkdir(GENERICOBJECT_PICS_PATH);
+   }
+}
+
 // Autoload class generated in files/_plugins/genericobject/inc/
 include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/functions.php");
