@@ -41,28 +41,13 @@ function plugin_genericobject_getDropdown() {
 
    $plugin = new Plugin();
    if ( $plugin->isActivated("genericobject") ) {
-      //Toolbox::logDebug(
-      //   getAllDatasFromTable(
-      //      getTableForItemType('PluginGenericobjectType'),"`is_active`='1'"
-      //   )
-      //);
-      foreach (
-         getAllDatasFromTable(
-            getTableForItemType('PluginGenericobjectType'),"`is_active`='1'"
-         ) as $itemtype
-      ) {
-         //Toolbox::logDebug( array(
-         //   $itemtype,
-         //   PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype'])
-         //));
+      foreach (PluginGenericobjectType::getTypes(true) as $idx => $type) {
+         _log($idx, var_export($type, true));
+         $itemtype = $type['itemtype'];
          foreach (
-            PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table
+            PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table
          ) {
-            $dropdown_itemtype             = getItemTypeForTable($table);
-            //Toolbox::logDebug(
-            //   "Hook::getDropdown",$itemtype['itemtype'], $table, $dropdown_itemtype,
-            //   $dropdown_itemtype::getTypeName()
-            //);
+            $dropdown_itemtype = getItemTypeForTable($table);
             if (class_exists( $dropdown_itemtype)) {
                $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
             }
