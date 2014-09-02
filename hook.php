@@ -28,7 +28,7 @@
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
       $itemtype = $value['itemtype'];
-      if ($value['use_tickets'] && plugin_genericobject_haveRight($itemtype.'_open_ticket',"1")) {
+      if ($value['use_tickets']) {
          $types[$itemtype] = $itemtype::getTypeName();
       }
    }
