@@ -34,6 +34,7 @@ if (isset($_GET['itemtype'])) {
 //   $type->getFromDBByType($_GET['itemtype']);
 //   Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
 
+   Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($itemtype), READ);
    Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "assets",
                 $_GET['itemtype']);
    Search::Show($_GET['itemtype']);

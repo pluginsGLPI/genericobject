@@ -211,8 +211,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       $types = PluginGenericobjectType::getTypes();
       unset($_SESSION['glpimenu']);
       foreach($types as $type) {
-         if ( class_exists($type['itemtype']) ) {
-            //Toolbox::logDebug($type['itemtype'], get_class(new self()));
+         $itemtype = $type['itemtype'];
+         $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
+         if (
+            class_exists($type['itemtype'])
+            and Session::haveRight($itemtype_rightname, READ)
+         ) {
             $menu[strtolower($type['itemtype'])]= array(
                'title' => (
                   "<span class='genericobject_menu_wrapper'>"
