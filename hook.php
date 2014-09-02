@@ -97,19 +97,25 @@ function plugin_genericobject_install() {
 
    $migration = new Migration('2.4.0');
 
-   foreach ( array(
-      'PluginGenericobjectField',
-      'PluginGenericobjectType',
-      'PluginGenericobjectProfile',
-      'PluginGenericobjectTypeFamily'
-   ) as $itemtype ) {
+   foreach (
+      array(
+         'PluginGenericobjectField',
+         'PluginGenericobjectCommonDropdown',
+         'PluginGenericobjectCommonTreeDropdown',
+         'PluginGenericobjectProfile',
+         'PluginGenericobjectType',
+         'PluginGenericobjectTypeFamily'
+      ) as $itemtype
+   ) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            $itemtype::install($migration);
+            if ( method_exists($itemtype, 'install') ) {
+               $itemtype::install($migration);
+            }
          }
       }
    }
@@ -130,6 +136,7 @@ function plugin_genericobject_install() {
 function plugin_genericobject_uninstall() {
    global $DB;
 
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
    //For each type
