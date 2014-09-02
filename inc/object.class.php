@@ -123,12 +123,6 @@ class PluginGenericobjectObject extends CommonDBTM {
                = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
          }
 
-         //Item can be linked to tickets
-         if ($item->canUseTickets()) {
-            if (!in_array($class, $_SESSION['glpiactiveprofile']['helpdesk_item_type'])) {
-               $_SESSION['glpiactiveprofile']['helpdesk_item_type'][] = $class;
-            }
-         }
          if ($item->canUsePluginUninstall()) {
             if (!in_array($class, $UNINSTALL_TYPES)) {
                array_push($UNINSTALL_TYPES, $class);
