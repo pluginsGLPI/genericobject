@@ -26,18 +26,26 @@
  ---------------------------------------------------------------------- */
 
 include ("../../../inc/includes.php");
-Session::checkRight("profile","r");
+Session::checkRight("profile",UPDATE);
 
-
-$prof = new PluginGenericobjectProfile();
+_log($_POST);
+$prof = new Profile();
 
 /* save profile */
-if (isset($_POST['update_all_rights']) && isset($_POST['profiles'])) {
-   foreach ($_POST['profiles'] as $id => $values) {
-      _log($id , '=', $values);
-      //$values['id'] = $id;
-      //$prof->update($values);
+if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
+   $profiles = array();
+   foreach($_POST as $key => $val) {
+      if (preg_match("/^profile_/", $key) ){
+         $id = preg_replace("/^profile_/", "", $key);
+         $profiles[$id] = array(
+            "id" => $id,
+            "_".PluginGenericobjectProfile::getProfileNameForItemtype($_POST['itemtype']) => $val
+            );
+      }
    }
-   //PluginGenericobjectProfile::changeProfile();
+   _log($profiles);
+   foreach( $profiles as $profile_id => $input) {
+      $prof->update($input);
+   }
 }
 Html::redirect($_SERVER['HTTP_REFERER']);

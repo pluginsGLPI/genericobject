@@ -87,7 +87,7 @@ class PluginGenericobjectProfile extends Profile {
                'label' => $label,
                'itemtype' => $itemtype,
                'field' =>  self::getProfileNameForItemtype($itemtype),
-               'html_field' => "_" . $profile['id'] . '_'. self::getProfileNameForItemtype($itemtype),
+               'html_field' => "profile_" . $profile['id'],
             )
          );
          $prof->displayRightsChoiceMatrix(
@@ -95,6 +95,7 @@ class PluginGenericobjectProfile extends Profile {
          );
       }
       echo "</td></tr>";
+      echo "<input type='hidden' name='itemtype' value='".$itemtype."'>";
 
       if ($canedit) {
          echo "<tr class='tab_bg_1'>";
