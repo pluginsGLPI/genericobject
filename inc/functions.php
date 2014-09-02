@@ -11,7 +11,6 @@ function dropdown_getTypeName($class,$nb=0) {
       $fk = getForeignKeyFieldForTable(getTableForItemType($class));
       $instance = new $class();
       $options = PluginGenericobjectField::getFieldOptions($fk, $instance->linked_itemtype);
-      Toolbox::logDebug($fk, "\n", $options);
       $dropdown_type = isset($options['dropdown_type'])
          ? $options['dropdown_type']
          : null;
