@@ -239,7 +239,7 @@ class PluginGenericobjectProfile extends Profile {
     * @return nothing
     */
    public static function createFirstAccess() {
-      if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"])) {
+      if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"], 'PluginGenericobjectType')) {
          self::createAccess($_SESSION["glpiactiveprofile"]["id"],"PluginGenericobjectType",true);
       }
    }
