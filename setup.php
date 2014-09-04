@@ -95,6 +95,7 @@ function plugin_init_genericobject() {
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
 
 
+   PluginGenericobjectProfile::reloadProfileRights();
    $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
 
    $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
@@ -112,10 +113,6 @@ function plugin_init_genericobject() {
 
       plugin_genericobject_includeCommonFields();
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
-
-      /* load changeprofile function */
-      $PLUGIN_HOOKS['change_profile']['genericobject'] = array('PluginGenericobjectProfile',
-                                                               'changeProfile');
 
       // add css styles
       $PLUGIN_HOOKS['add_css']['genericobject'] = array(

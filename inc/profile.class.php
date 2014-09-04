@@ -335,6 +335,7 @@ class PluginGenericobjectProfile extends Profile {
       //Install missing rights in profile and update the object
       if ( count($missing_rights) > 0) {
          ProfileRight::addProfileRights($missing_rights);
+         self::reloadProfileRights();
       }
 
    }
@@ -350,16 +351,9 @@ class PluginGenericobjectProfile extends Profile {
       ProfileRight::deleteProfileRights($rights);
    }
 
-   public static function changeProfile() {
-      $profile = new self();
-      if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'])) {
-         foreach ($profile->fields as $key => $value) {
-            if (preg_match("/^PluginGenericobject/",$key)) {
-               $_SESSION["glpi_plugin_genericobject_profile"][$key] = $value;
-            }
-         }
-      } else {
-         unset($_SESSION["glpi_plugin_genericobject_profile"]);
+   public static function reloadProfileRights() {
+      if (isset($_SESSION['glpiactiveprofile']['id'])) {
+         Session::changeProfile($_SESSION['glpiactiveprofile']['id']);
       }
    }
 
