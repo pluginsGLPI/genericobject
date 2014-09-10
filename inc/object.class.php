@@ -909,7 +909,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
          }
-         $index++;
+         $index = $currentindex + 1;
       }
       asort($options);
       return $options;
