@@ -57,4 +57,4 @@ class PluginGenericobjectSingletonObjectField {
       return self::$_dbfields[$itemtype];
    }
 }
-?>
+

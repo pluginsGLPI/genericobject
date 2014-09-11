@@ -42,4 +42,3 @@ class %%CLASSNAME%% extends PluginGenericobjectObject_Item {
    static public $checkItem_2_Rights  = self::HAVE_VIEW_RIGHT_ON_ITEM;
 }
 
-?>
