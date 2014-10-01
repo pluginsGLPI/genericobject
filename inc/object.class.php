@@ -209,26 +209,34 @@ class PluginGenericobjectObject extends CommonDBTM {
       unset($_SESSION['glpimenu']);
       foreach($types as $type) {
          $itemtype = $type['itemtype'];
+         $item = new $itemtype();
          $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
          if (
-            class_exists($type['itemtype'])
+            class_exists($itemtype)
             and Session::haveRight($itemtype_rightname, READ)
          ) {
-            $menu[strtolower($type['itemtype'])]= array(
+
+            $links = array();
+            if ($item->canUseTemplate()) {
+               $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
+               $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=1";
+            } else {
+               $links['add'] = self::getFormUrl(false).'?itemtype='.$itemtype;
+            }
+            $menu[strtolower($itemtype)]= array(
                'title' => (
                   "<span class='genericobject_menu_wrapper'>"
                   . self::getMenuIcon($type['itemtype'])
                   . "<span class='genericobject_menu_text'>"
                   .     $type['itemtype']::getMenuName()
                   . "</span>"
-                  . "</span>"
+                  .
+                  "</span>"
                ),
-               'page' => self::getSearchUrl(false).'?itemtype='.$type['itemtype'],
-               'links' => array(
-                  'add' => self::getFormUrl(false).'?itemtype='.$type['itemtype']
-               )
-
+               'page' => self::getSearchUrl(false).'?itemtype='.$itemtype,
+               'links' => $links
             );
+            _log("Menu Content for ", $itemtype, "\n", $menu[strtolower($itemtype)]);
          }
       }
       $menu['is_multi_entries']= true;
