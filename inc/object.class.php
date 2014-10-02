@@ -203,6 +203,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          "/>";
    }
 
+   /**
+    * Generate items to display in GLPI menus
+    *
+    */
    static function getMenuContent() {
       $menu = array();
       $types = PluginGenericobjectType::getTypes();
