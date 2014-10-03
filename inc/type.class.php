@@ -326,20 +326,15 @@ class PluginGenericobjectType extends CommonDBTM {
       return $sopt;
    }
 
+   /**
+    * Define name of type to display in menu
+    *
+    * @return type name
+    */
    static function getMenuName() {
-      return __('Objects Management', 'genericobject');
+      return PluginGenericobjectObject::getMenuIcon(self::getTypeName())." ".
+              __('Objects Management', 'genericobject');
    }
-//   static function getAdditionalMenuOptions() {
-//      return array(
-//         'type' => array(
-//            'title' => static::getMenuName(),
-//            'links' => array(
-//               'add' => Toolbox::getItemTypeFormURL('PluginGenericobjectType',false),
-//               'search' => Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false)
-//            )
-//         )
-//      );
-//   }
 
    //------------------------------------- End Framework hooks -----------------------------
 
@@ -1334,13 +1329,15 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return the filtered value
     */
    static function filterInput($value) {
+      $value = strtolower($value);
       //Itemtype must always be singular, otherwise it breaks when using GLPI's framework
       $value = getSingular($value);
 
       $search  = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
       $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
-      $value   = str_replace(array(' ', '_', '-', '+', '|', '[', ']', '\'','"', '@', '&', '~', '#', '='),
-                             '', strtolower($value));
+      $value = str_replace($search, $replace, $value);
+      $value = preg_replace("/[^a-zA-Z0-9]/", '', $value);
+
       return  str_replace($search, $replace, $value);
    }
 
@@ -1362,7 +1359,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if (TableExists($table)) {
          $mytypes = array();
-         foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
+         foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:""), 'false', 'name') as $data) {
             //If class is not present on the filesystem, do not list itemtype
             $mytypes[$data['itemtype']] = $data;
          }
