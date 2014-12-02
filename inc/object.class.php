@@ -192,9 +192,9 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       _log("itemtype icon found", $icon_found);
       if ( !is_null($icon_found)) {
-         $icon_path = $CFG_GLPI['root_doc'] . "/" . $icon_found;
+         $icon_path = $CFG_GLPI['root_doc'] . $icon_found;
       } else {
-         $icon_path = $CFG_GLPI['root_doc'] . "/" . $default_icon;
+         $icon_path = $CFG_GLPI['root_doc'] . $default_icon;
       }
       return "".
          "<img ".
