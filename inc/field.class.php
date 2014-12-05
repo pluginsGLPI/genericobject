@@ -186,6 +186,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $dropdown_types = array();
       foreach ($GO_FIELDS as $field => $values) {
          $message = "";
+         $field_options = array();
          $field = self::getFieldName($field, $itemtype, $values, false);
          if(!in_array($field, $used)) {
             if (!isset($dropdown_types[$field])) {
@@ -193,24 +194,28 @@ class PluginGenericobjectField extends CommonDBTM {
                //meaning that a dropdown can be useful in all types (for example type, model, etc.)
                if (isset($values['input_type']) && $values['input_type'] == 'dropdown') {
                   if (isset($values['entities_id'])) {
-                    $message = " ".__("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
+                    $field_options[] = __("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
                      if ($values['entities_id']) {
                         if (isset($values['is_recursive'])) {
-                           $message.= " ".__("Child entities")." : ".Dropdown::getYesNo($values['is_recursive']);
+                           $field_options[] = __("Child entities")." : ".Dropdown::getYesNo($values['is_recursive']);
                         }
                      }
                   } else {
-                    $message = " ".__("Entity")." : ".Dropdown::getYesNo(0);
+                    $field_options[] = __("Entity")." : ".Dropdown::getYesNo(0);
                   }
                   if (isset($values['is_tree'])) {
-                     $message.= " ".__("tree structure")." : ".Dropdown::getYesNo($values['is_tree']);
+                     $field_options[] = __("tree structure")." : ".Dropdown::getYesNo($values['is_tree']);
                   } else {
-                     $message.= " ".__("tree structure")." : ".Dropdown::getYesNo(0);
+                     $field_options[] = __("tree structure")." : ".Dropdown::getYesNo(0);
                   }
-
+                  if (isset($values['isolated']) and $values['isolated']) {
+                     $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo($values['isolated']);
+                  } else {
+                     $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo(0);
+                  }
                }
-               if ($message != '') {
-                  $message = "(".trim($message).")";
+               if (count($field_options > 0)) {
+                  $message = "(".trim( implode(",",$field_options)).")";
                }
             }
             $dropdown_types[$field] = $values['name']." ".$message;
