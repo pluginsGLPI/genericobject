@@ -140,6 +140,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($item->canUseGlobalSearch()) {
             if (!in_array($class, $CFG_GLPI['state_types'])) {
                array_push($CFG_GLPI['state_types'], $class);
+               array_push($CFG_GLPI['globalsearch_types'], $class);
             }
          }
          
