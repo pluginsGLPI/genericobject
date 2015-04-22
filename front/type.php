@@ -27,7 +27,9 @@
 
 include ("../../../inc/includes.php");
 
-if (isset($_GET['itemtype'])) {
+if (isset($_GET['itemtype'])
+        && !isset($_GET['search'])
+        && !isset($_GET['sort'])) {
    $type = new PluginGenericobjectType();
    $type->getFromDBByType($_GET['itemtype']);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());

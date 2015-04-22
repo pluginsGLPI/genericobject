@@ -80,5 +80,3 @@ class PluginGenericobjectAutoloader implements SplAutoloader
    }
 }
 
-?>
-

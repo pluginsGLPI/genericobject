@@ -29,7 +29,11 @@ function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
       $itemtype = $value['itemtype'];
       if ($value['use_tickets']) {
-         $types[$itemtype] = $itemtype::getTypeName();
+         if (class_exists($itemtype)) {
+            $types[$itemtype] = $itemtype::getTypeName();
+         } else {
+            $types[$itemtype] = $itemtype;
+         }
       }
    }
    return $types;

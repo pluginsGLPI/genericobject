@@ -190,7 +190,7 @@ function plugin_post_init_genericobject() {
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
                  'version'        => '2.4.0',
-                 'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a>",
+                 'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & <a href='http://www.siprossii.com/'>siprossii</a>",
                  'homepage'       => 'https://forge.indepnet.net/projects/genericobject',
                  'license'        => 'GPLv2+',
                  'minGlpiVersion' => '0.84');
@@ -250,7 +250,7 @@ function plugin_genericobject_includeCommonFields($force = false) {
 }
 
 function plugin_genericobject_haveRight($class,$right) {
-   
+
    $right_name = PluginGenericobjectProfile::getProfileNameForItemtype($class);
    return Session::haveRight($right_name, $right);
 
