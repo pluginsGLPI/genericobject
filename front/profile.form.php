@@ -25,39 +25,27 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
-}
+include ("../../../inc/includes.php");
+Session::checkRight("profile",UPDATE);
 
-class PluginGenericobjectTypeFamily extends CommonDropdown {
+_log($_POST);
+$prof = new Profile();
 
-   static function getTypeName($nb=0) {
-      return __('Family of type of objects', 'genericobject');
-   }
-
-   static function install(Migration $migration) {
-      global $DB;
-
-      $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
-         $query = "CREATE TABLE `$table` (
-                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                           `name` varchar(255) collate utf8_unicode_ci default NULL,
-                           `comment` text NULL,
-                           PRIMARY KEY ( `id` )
-                           ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die($DB->error());
+/* save profile */
+if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
+   $profiles = array();
+   foreach($_POST as $key => $val) {
+      if (preg_match("/^profile_/", $key) ){
+         $id = preg_replace("/^profile_/", "", $key);
+         $profiles[$id] = array(
+            "id" => $id,
+            "_".PluginGenericobjectProfile::getProfileNameForItemtype($_POST['itemtype']) => $val
+            );
       }
    }
-
-   static function uninstall() {
-      global $DB;
-
-      $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
-         $query = "DROP TABLE IF EXISTS `$table`";
-         $DB->query($query) or die($DB->error());
-      }
+   _log($profiles);
+   foreach( $profiles as $profile_id => $input) {
+      $prof->update($input);
    }
 }
-
+Html::redirect($_SERVER['HTTP_REFERER']);

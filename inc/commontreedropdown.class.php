@@ -17,47 +17,32 @@
  --------------------------------------------------------------------------
  @package   genericobject
  @author    the genericobject plugin team
- @copyright Copyright (c) 2010-2011 Order plugin team
+ @copyright Copyright (c) 2010-2014 Generic Object plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
  @link      https://forge.indepnet.net/projects/genericobject
  @link      http://www.glpi-project.org/
- @since     2009
+ @since     2014
  ---------------------------------------------------------------------- */
 
-if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
-}
+class PluginGenericobjectCommonTreeDropdown extends CommonTreeDropdown {
 
-class PluginGenericobjectTypeFamily extends CommonDropdown {
-
+   //Get itemtype name
    static function getTypeName($nb=0) {
-      return __('Family of type of objects', 'genericobject');
+      $class=get_called_class();
+      return dropdown_getTypeName($class,$nb);
    }
 
-   static function install(Migration $migration) {
-      global $DB;
-
-      $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
-         $query = "CREATE TABLE `$table` (
-                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                           `name` varchar(255) collate utf8_unicode_ci default NULL,
-                           `comment` text NULL,
-                           PRIMARY KEY ( `id` )
-                           ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die($DB->error());
-      }
+   static function getFormURL($full=true) {
+      _log("PluginGenericobjectCommonTreeDropdown::getFormURL", get_parent_class(get_called_class()));
+      return Toolbox::getItemTypeFormURL(  get_parent_class(get_called_class()), $full) .
+         "?itemtype=".get_called_class();
    }
+   static function getSearchURL($full=true) {
+      _log("PluginGenericobjectCommonTreeDropdown::getSearchURL", get_parent_class(get_called_class()));
+      return Toolbox::getItemTypeSearchURL( get_parent_class(get_called_class()) , $full) .
+         "?itemtype=".get_called_class();
 
-   static function uninstall() {
-      global $DB;
-
-      $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
-         $query = "DROP TABLE IF EXISTS `$table`";
-         $DB->query($query) or die($DB->error());
-      }
    }
 }
 

@@ -24,40 +24,21 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
+ 
+include ("../../../inc/includes.php");
 
-if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
+if (isset($_GET['itemtype'])) {
+   $itemtype = $_GET['itemtype'];
+   $types = PluginGenericobjectType::getTypes();
+//   $type = new PluginGenericobjectType();
+//   $type->getFromDBByType($_GET['itemtype']);
+//   Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
+
+   Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($itemtype), READ);
+   Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+                $_GET['itemtype']);
+   Search::Show($_GET['itemtype']);
+
 }
 
-class PluginGenericobjectTypeFamily extends CommonDropdown {
-
-   static function getTypeName($nb=0) {
-      return __('Family of type of objects', 'genericobject');
-   }
-
-   static function install(Migration $migration) {
-      global $DB;
-
-      $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
-         $query = "CREATE TABLE `$table` (
-                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                           `name` varchar(255) collate utf8_unicode_ci default NULL,
-                           `comment` text NULL,
-                           PRIMARY KEY ( `id` )
-                           ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die($DB->error());
-      }
-   }
-
-   static function uninstall() {
-      global $DB;
-
-      $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
-         $query = "DROP TABLE IF EXISTS `$table`";
-         $DB->query($query) or die($DB->error());
-      }
-   }
-}
-
+Html::footer();

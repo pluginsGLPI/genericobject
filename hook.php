@@ -28,8 +28,12 @@
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
       $itemtype = $value['itemtype'];
-      if ($value['use_tickets'] && plugin_genericobject_haveRight($itemtype.'_open_ticket',"1")) {
-         $types[$itemtype] = $itemtype::getTypeName();
+      if ($value['use_tickets']) {
+         if (class_exists($itemtype)) {
+            $types[$itemtype] = $itemtype::getTypeName();
+         } else {
+            $types[$itemtype] = $itemtype;
+         }
       }
    }
    return $types;
@@ -40,15 +44,21 @@ function plugin_genericobject_getDropdown() {
    $dropdowns = array();
 
    $plugin = new Plugin();
-   if ($plugin->isActivated("genericobject")) {
-      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
-                                   "`is_active`='1'") as $itemtype) {
-         foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype['itemtype']) as $table) {
-            $dropdown_itemtype             = getItemTypeForTable($table);
-            $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
+   if ( $plugin->isActivated("genericobject") ) {
+      foreach (PluginGenericobjectType::getTypes(true) as $idx => $type) {
+         _log($idx, var_export($type, true));
+         $itemtype = $type['itemtype'];
+         foreach (
+            PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table
+         ) {
+            $dropdown_itemtype = getItemTypeForTable($table);
+            if (class_exists( $dropdown_itemtype)) {
+               $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
+            }
          }
       }
    }
+   //Toolbox::logDebug($dropdowns);
    return $dropdowns;
 }
 
@@ -83,23 +93,33 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
 
 function plugin_genericobject_install() {
    global $DB;
-   
+
    //check directories rights
    if (!check_directories()) {
       return false;
    }
 
-   $migration = new Migration('2.1.0');
-   
-   foreach (array('PluginGenericobjectField', 'PluginGenericobjectType', 
-                  'PluginGenericobjectProfile', 'PluginGenericobjectTypeFamily') as $itemtype) {
+   $migration = new Migration('2.4.0');
+
+   foreach (
+      array(
+         'PluginGenericobjectField',
+         'PluginGenericobjectCommonDropdown',
+         'PluginGenericobjectCommonTreeDropdown',
+         'PluginGenericobjectProfile',
+         'PluginGenericobjectType',
+         'PluginGenericobjectTypeFamily'
+      ) as $itemtype
+   ) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            $itemtype::install($migration);
+            if ( method_exists($itemtype, 'install') ) {
+               $itemtype::install($migration);
+            }
          }
       }
    }
@@ -113,13 +133,14 @@ function plugin_genericobject_install() {
    plugin_init_genericobject();
 
    //Init profiles
-   PluginGenericobjectProfile::changeProfile();
+   PluginGenericobjectProfile::reloadProfileRights();
    return true;
 }
 
 function plugin_genericobject_uninstall() {
    global $DB;
-   
+
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
    //For each type
