@@ -189,11 +189,11 @@ function plugin_post_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
-                 'version'        => '2.4.0',
+                 'version'        => '0.85-2.4.0',
                  'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & <a href='http://www.siprossii.com/'>siprossii</a>",
                  'homepage'       => 'https://forge.indepnet.net/projects/genericobject',
                  'license'        => 'GPLv2+',
-                 'minGlpiVersion' => '0.84');
+                 'minGlpiVersion' => '0.85');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
