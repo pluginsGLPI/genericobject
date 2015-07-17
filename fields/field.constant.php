@@ -111,7 +111,7 @@ $GO_FIELDS['is_helpdesk_visible']['input_type'] = 'bool';
 $GO_FIELDS['locations_id']['name']       = __("Item location");
 $GO_FIELDS['locations_id']['input_type'] = 'dropdown';
 
-$GO_FIELDS['states_id']['name']       = __("Statut");
+$GO_FIELDS['states_id']['name']       = __("Status");
 $GO_FIELDS['states_id']['input_type'] = 'dropdown';
 
 $GO_FIELDS['users_id']['name']       = __("User");
