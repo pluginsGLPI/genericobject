@@ -588,11 +588,11 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
 
             case "date":
-                  Html::showDateFormItem($name, $value, false, true);
+                  Html::showDateFormItem($name, $value, true, true);
                   break;
 
             case "datetime":
-                  Html::showDateTimeFormItem($name, $value, false, true);
+                  Html::showDateTimeFormItem($name, $value, true, true);
                   break;
 
             default:
