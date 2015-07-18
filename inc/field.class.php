@@ -376,9 +376,12 @@ class PluginGenericobjectField extends CommonDBTM {
     */
    static function deleteField($table, $field) {
       global $DB;
+
+      //Remove field from displaypreferences
+      self::deleteDisplayPreferences($table, $field);
+
       //If field exists, drop it !
       if (FieldExists($table, $field)) {
-         _log("delete", $field, "from", $table);
          $DB->query("ALTER TABLE `$table` DROP `$field`");
       }
 
@@ -393,6 +396,21 @@ class PluginGenericobjectField extends CommonDBTM {
          PluginGenericobjectType::deleteClassFile($name);
          PluginGenericobjectType::deleteFormFile($name);
          PluginGenericobjectType::deletesearchFile($name);
+      }
+   }
+
+   static function deleteDisplayPreferences($table, $field) {
+
+      $pref      = new DisplayPreference();
+      $itemtype  = getItemTypeForTable($table);
+      $searchopt = Search::getCleanedOptions($itemtype);
+      foreach ($searchopt as $num => $option) {
+         if ( (isset($option['field'])  && ($option['field'] == $field)) 
+            || (isset($option['field']) && $option['linkfield'] == $field)) {
+            $criteria = array('itemtype' => $itemtype, 'num' => $num);
+            $pref->deleteByCriteria($criteria);
+            break;  
+         }
       }
    }
 
