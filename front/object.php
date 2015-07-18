@@ -28,14 +28,10 @@
 include ("../../../inc/includes.php");
 
 if (isset($_GET['itemtype'])) {
-   $itemtype = $_GET['itemtype'];
-   $types = PluginGenericobjectType::getTypes();
-//   $type = new PluginGenericobjectType();
-//   $type->getFromDBByType($_GET['itemtype']);
-//   Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
-
-   Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($itemtype), READ);
-   Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+ 
+   Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($_GET['itemtype']), READ);
+   Html::header(__("Type of objects", "genericobject"), 
+   	            $_SERVER['PHP_SELF'], "assets",
                 $_GET['itemtype']);
    Search::Show($_GET['itemtype']);
 

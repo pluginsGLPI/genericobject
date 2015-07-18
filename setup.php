@@ -132,30 +132,13 @@ function plugin_init_genericobject() {
       // session in order to trigger rebuild.
       unset($_SESSION['glpimenu']);
 
-      //Do not display icon if not using the genericobject plugin
-//      if (isset($_GET['id']) &&  $_GET['id'] != ''
-//         && strpos($_SERVER['REQUEST_URI'],
-//                     Toolbox::getItemTypeFormURL("PluginGenericobjectType")) !== false) {
-//         $url  = '/plugins/genericobject/index.php';
-//         $type = new PluginGenericobjectType();
-//         $type->getFromDB($_GET['id']);
-//         if ($type->fields['is_active']) {
-//            $url.= '?itemtypes_id='.$_GET['id'];
-//            $image = "<img src='".$CFG_GLPI["root_doc"]."/pics/stats_item.png' title=\"".
-//                      __("Go to objects list", "genericobject").
-//                        "\" alt=\"".__("Go to objects list", "genericobject")."\">";
-//            $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links'][$image]
-//               = $url;
-//         }
-//      }
-      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']
-         = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
-      $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
-         = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
-
       // Config page
       if (Session::haveRight('config', READ)) {
          $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']
+            = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
+         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
+            = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
       }
 
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
@@ -189,17 +172,17 @@ function plugin_post_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
-                 'version'        => '2.4.0',
+                 'version'        => '2.5.0',
                  'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & <a href='http://www.siprossii.com/'>siprossii</a>",
-                 'homepage'       => 'https://forge.indepnet.net/projects/genericobject',
+                 'homepage'       => 'https://github.com/teclib/genericobject',
                  'license'        => 'GPLv2+',
-                 'minGlpiVersion' => '0.84');
+                 'minGlpiVersion' => '0.85.3');
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85','lt') || version_compare(GLPI_VERSION,'0.86','ge')) {
-      echo "This plugin requires GLPI 0.85";
+   if (version_compare(GLPI_VERSION,'0.85.3','lt') || version_compare(GLPI_VERSION,'0.91','ge')) {
+      echo "This plugin requires GLPI 0.85.3 or higher";
       return false;
    }
    if (version_compare(PHP_VERSION, '5.3.0', 'lt')) {

@@ -80,7 +80,7 @@ if (!is_null($itemtype)) {
       $item->update($_POST);
       Html::back();
    } elseif (isset ($_POST["restore"])) {
-      $item->check($id, UPDATE);
+      $item->check($id, PURGE);
       $item->restore($_POST);
       Html::back();
    } elseif (isset($_POST["purge"])) {
@@ -88,7 +88,7 @@ if (!is_null($itemtype)) {
       $item->delete($_POST, 1);
       $item->redirectToList();
    } elseif (isset($_POST["delete"])) {
-      $item->check($id, PURGE);
+      $item->check($id, DELETE);
       $item->delete($_POST);
       $item->redirectToList();
    }

@@ -323,6 +323,11 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[19]['name']        = __('Family of type of objects', 'genericobject');
       $sopt[19]['datatype']    = 'dropdown';
 
+      $sopt[20]['table']       = $this->getTable();
+      $sopt[20]['field']       = 'use_projects';
+      $sopt[20]['name']        = _n('Project', 'Projects', 2);
+      $sopt[20]['datatype']    = 'bool';
+
       return $sopt;
    }
 
@@ -332,8 +337,7 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return type name
     */
    static function getMenuName() {
-      return PluginGenericobjectObject::getMenuIcon(self::getTypeName())." ".
-              __('Objects Management', 'genericobject');
+      return __('Objects management', 'genericobject');
    }
 
    //------------------------------------- End Framework hooks -----------------------------
@@ -453,7 +457,7 @@ class PluginGenericobjectType extends CommonDBTM {
                        "use_loans"                => _n("Reservation", "Reservations", 2),
                        "use_unicity"              => __("Fields unicity"),
                        "use_global_search"        => __("Global search"),
-   //                     "use_direct_connections"  => __("Link to other objects", "genericobject"),
+                       "use_projects"             => _n("Project", "Projects", 2),
                        "use_network_ports"        => __("Network connections", "genericobject"),
                        "use_plugin_datainjection" => __("injection file plugin", "genericobject"),
    //                    "use_plugin_pdf"           => __("PDF plugin", "genericobject"),
@@ -1568,6 +1572,9 @@ class PluginGenericobjectType extends CommonDBTM {
       return $this->fields['use_direct_connections'];
    }
 
+   function canUseProjects() {
+      return $this->fields['use_projects'];
+   }
 
    function canUsePluginDataInjection() {
       $plugin = new Plugin();
@@ -1680,6 +1687,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_plugin_uninstall` tinyint(1) NOT NULL default '0',
                            `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
                            `use_menu_entry` tinyint(1) NOT NULL default '0',
+                           `use_projects` tinyint(1) NOT NULL default '0',
                            `linked_itemtypes` text NULL,
                            `plugin_genericobject_typefamilies_id` INT( 11 ) NOT NULL DEFAULT 0,
                            PRIMARY KEY ( `id` )
@@ -1693,6 +1701,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_contracts", "bool");
       $migration->addField($table, "use_menu_entry", "bool");
       $migration->addField($table, "use_global_search", "bool");
+      $migration->addField($table, "use_projects", "bool");
       $migration->addField($table, "comment", "text");
       $migration->addField($table, "date_mod", "datetime");
       $migration->addField($table, "linked_itemtypes", "text");

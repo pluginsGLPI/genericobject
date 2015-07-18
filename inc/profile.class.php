@@ -36,10 +36,10 @@ class PluginGenericobjectProfile extends Profile {
 
       switch($item->getType()) {
          case 'Profile':
-            return self::createTabEntry(__('Object Management', 'genericobject'));
+            return self::createTabEntry(__('Objects management', 'genericobject'));
             break;
          case 'PluginGenericobjectType':
-            return self::createTabEntry(__('Rights'));
+            return self::createTabEntry(_n('Profile', 'Profiles', 2));
             break;
       }
    }
@@ -174,10 +174,8 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    static function getProfileforItemtype($profiles_id, $itemtype) {
-      $rights = ProfileRight::getProfileRights($profiles_id);
+      $rights             = ProfileRight::getProfileRights($profiles_id);
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
-
-      _log($rights[$itemtype_rightname]);
       return isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : 0;
    }
 
@@ -293,12 +291,13 @@ class PluginGenericobjectProfile extends Profile {
       $rights = array();
 
       $types = PluginGenericobjectType::getTypes(true);
+      Toolbox::logDebug($types);
       if ( count( $types) > 0 ) {
          foreach ($types as $_ => $type) {
             $itemtype   = $type['itemtype'];
-            $field = self::getProfileNameForItemtype($itemtype);
+            $field      = self::getProfileNameForItemtype($itemtype);
             $objecttype = new PluginGenericobjectType($itemtype);
-            $rights[] = array(
+            $rights[]   = array(
                'itemtype' => $itemtype,
                'label'    => $itemtype::getTypeName(),
                'field'    => self::getProfileNameForItemtype($itemtype)

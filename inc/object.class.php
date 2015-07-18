@@ -111,7 +111,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['search']
                                                     = Toolbox::getItemTypeSearchURL($class, false);
 
-         if (plugin_genericobject_haveRight($class, "w")) {
+         if (plugin_genericobject_haveRight($class, UPDATE)) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['add']
                                                       = $add_url;
 
@@ -154,6 +154,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                $items_class::registerType();
             //}
          }
+
+         if ($item->canUseProjects()) {
+            if (!in_array($class, $CFG_GLPI['project_asset_types'])) {
+               array_push($CFG_GLPI['project_asset_types'], $class);
+            }
+         }
       }
 
       foreach(PluginGenericobjectType::getDropdownForItemtype($class) as $table) {
@@ -176,12 +182,8 @@ class PluginGenericobjectObject extends CommonDBTM {
    static function getMenuIcon($itemtype) {
       global $CFG_GLPI;
       $default_icon = "/plugins/genericobject/pics/default-icon.png";
-      _log("get called class", get_called_class());
-      _log("itemtype", $itemtype);
       $itemtype_table = getTableForItemType($itemtype);
       $itemtype_shortname = preg_replace("/^glpi_plugin_genericobject_/", "", $itemtype_table);
-      _log("itemtype short name", $itemtype_shortname);
-      _log("itemtype short name (singular)", getSingular($itemtype_shortname));
       $itemtype_icons = glob(
          GENERICOBJECT_PICS_PATH . '/' . getSingular($itemtype_shortname) . ".*"
       );
@@ -193,7 +195,6 @@ class PluginGenericobjectObject extends CommonDBTM {
             $icon_found = preg_replace("|^".GLPI_ROOT."|", "", $icon);
          }
       }
-      _log("itemtype icon found", $icon_found);
       if ( !is_null($icon_found)) {
          $icon_path = $CFG_GLPI['root_doc'] . $icon_found;
       } else {
@@ -218,17 +219,19 @@ class PluginGenericobjectObject extends CommonDBTM {
          $itemtype = $type['itemtype'];
          $item = new $itemtype();
          $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
-         if (
-            class_exists($itemtype)
-            and Session::haveRight($itemtype_rightname, READ)
-         ) {
+         if (class_exists($itemtype)
+            && Session::haveRight($itemtype_rightname, READ)) {
 
             $links = array();
             if ($item->canUseTemplate()) {
                $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
-               $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=1";
+               if (Session::haveRight($itemtype_rightname, CREATE)) {
+                  $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=1";
+               }
             } else {
-               $links['add'] = self::getFormUrl(false).'?itemtype='.$itemtype;
+               if (Session::haveRight($itemtype_rightname, CREATE)) {
+                  $links['add'] = self::getFormUrl(false).'?itemtype='.$itemtype;
+               }
             }
             $menu[strtolower($itemtype)]= array(
                'title' => (
@@ -315,7 +318,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($this->canUseTickets()) {
             $this->addStandardTab('Ticket', $ong, $options);
             $this->addStandardTab('Item_Problem', $ong, $options);
-         }
+            $this->addStandardTab('Change_Item', $ong, $options);
+          }
 
          if ($this->canUseNotepad() && Session::haveRight("notes", "r")) {
             $this->addStandardTab('Note',$ong, $options);
@@ -412,6 +416,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function canUseDirectConnections() {
       return ($this->objecttype->canUseDirectConnections());
+   }
+
+   function canUseProjects() {
+      return ($this->objecttype->canUseProjects());
    }
 
 
@@ -660,82 +668,45 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function post_addItem() {
       global $DB;
-      // Manage add from template
-      if (isset ($this->input["_oldID"])) {
+
+            // Manage add from template
+      if (isset($this->input["_oldID"])) {
+         // ADD Devices
+         Item_devices::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
+
          // ADD Infocoms
-         $ic = new Infocom();
-         if ($this->canUseInfocoms()
-            && $ic->getFromDBforDevice($this->type, $this->input["_oldID"])) {
-            $ic->fields["items_id"] = $this->fields['id'];
-            unset ($ic->fields["id"]);
-            if (isset ($ic->fields["immo_number"])) {
-               $ic->fields["immo_number"] = autoName($ic->fields["immo_number"], "immo_number", 1,
-                                                     'Infocom', $this->input['entities_id']);
-            }
-            if (empty ($ic->fields['use_date'])) {
-               unset ($ic->fields['use_date']);
-            }
-            if (empty ($ic->fields['buy_date'])) {
-               unset ($ic->fields['buy_date']);
-            }
-            $ic->addToDB();
-         }
+         Infocom::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
 
-         foreach (array('Document_Item' => 'documents_id',
-                        'Contract_Item' => 'contracts_id') as $type => $fk) {
-            $item = new $type();
-            foreach ($item->find("items_id='" . $this->input["_oldID"] . "'
-                                 AND itemtype='" . $this->type . "'") as $tmpid => $data) {
-               $tmp             = array();
-               $tmp['items_id'] = $this->input["_oldID"];
-               $tmp['itemtype'] = $type;
-               $tmp[$fk]        = $data[$fk];
-               $item->add($tmp);
-            }
-         }
+         // ADD Contract
+         Contract_Item::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
 
-         if ($this->canUseNetworkPorts()) {
-            // ADD Ports
-            $query  = "SELECT `id`
-                       FROM `glpi_networkports`
-                       WHERE `items_id` = '".$this->input["_oldID"]."'
-                          AND `itemtype` = '".get_called_class()."';";
-            $result = $DB->query($query);
-            if ($DB->numrows($result) > 0) {
-               while ($data = $DB->fetch_array($result)) {
-                  $np  = new NetworkPort();
-                  $npv = new NetworkPort_Vlan();
-                  $np->getFromDB($data["id"]);
-                  unset($np->fields["id"]);
-                  unset($np->fields["ip"]);
-                  unset($np->fields["mac"]);
-                  unset($np->fields["netpoints_id"]);
-                  $np->fields["items_id"] = $this->fields['id'];
-                  $portid = $np->addToDB();
-                  foreach ($DB->request('glpi_networkports_vlans',
-                                        array('networkports_id' => $data["id"])
-                          ) as $vlan) {
-                     $npv->assignVlan($portid, $vlan['vlans_id']);
-                  }
-               }
-            }
-         }
+         // ADD Documents
+         Document_Item::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
 
+         // ADD Ports
+         NetworkPort::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
+
+         // Add connected devices
+         Computer_Item::cloneComputer($this->input["_oldID"], $this->fields['id']);
       }
    }
 
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      $types      = array('Ticket', 'NetworkPort', 'Computer_Item',
+      $types      = array('NetworkPort', 'Computer_Item', 'Reservation_Item', 
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();
          $item->deleteByCriteria($parameters);
       }
 
-      $ip = new Item_Problem();
-      $ip->cleanDBonItemDelete(get_called_class(), $this->getID());
+      foreach (array('NetworkPort', 'Computer_Item', 'ReservationItem', 
+                     'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item', 
+                     'Item_Problem', 'Change_Item', 'Item_Project', ) as $itemtype) {
+         $ip = new $itemtype();
+         $ip->cleanDBonItemDelete(get_called_class(), $this->getID());
+      }
 
    }
 
@@ -753,7 +724,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
          $itemtype
       );
-      if (Session::haveRight($right_name, READ)) {
+
+      if (Session::haveRight($right_name, READ) && Session::haveRight($right_name, CREATE)) {
          $item->showForm(-1, array(), true);
       } else {
          echo "<br><strong>" . __("You must configure rights to enable the preview",
@@ -802,7 +774,14 @@ class PluginGenericobjectObject extends CommonDBTM {
          $item = new $this->objecttype->fields['itemtype'];
 
          //Table definition
-         $tmp  = getTableNameForForeignKeyField($field);
+         //We test if it ends with s_id, in order to be sure that this pattern
+         //was found in a field that doesn't represent a foreign key
+         //for exemple a field called : is_identification
+         if (preg_match("/s_id$/", $field)) {
+            $tmp  = getTableNameForForeignKeyField($field);            
+         } else {
+            $tmp = '';
+         }
 
          if ($with_linkfield) {
             $options[$currentindex]['linkfield'] = $field;
