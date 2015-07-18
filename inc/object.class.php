@@ -694,7 +694,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      $types      = array('NetworkPort', 'Computer_Item', 'Reservation_Item', 
+      $types      = array('NetworkPort', 'Computer_Item', 
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();

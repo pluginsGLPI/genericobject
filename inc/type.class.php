@@ -475,24 +475,29 @@ class PluginGenericobjectType extends CommonDBTM {
 
             switch ($right) {
                case 'use_deleted':
-                  Dropdown::showYesno('use_deleted', $this->canBeDeleted());
+                  Html::showCheckbox(array('name' => $right, 
+                                              'checked' => $this->canBeDeleted()));
                   break;
 
                case 'use_recursivity':
-                  Dropdown::showYesno('use_recursivity', $this->canBeRecursive());
+                  Html::showCheckbox(array('name' => $right, 'value' => $this->canBeRecursive(), 
+                                              'checked' => $this->canBeRecursive()));
                   break;
 
                case 'use_notes':
-                  Dropdown::showYesno('use_notes', $this->canUseNotepad());
+                  Html::showCheckbox(array('name' => $right, 
+                                           'checked' => $this->canUseNotepad()));
                   break;
 
                case 'use_template':
-                  Dropdown::showYesno('use_template', $this->canUseTemplate());
+                  Html::showCheckbox(array('name' => $right, 
+                                           'checked' => $this->canUseTemplate()));
                   break;
 
                case 'use_plugin_datainjection' :
                   if ($plugin->isActivated('datainjection')) {
-                     Dropdown::showYesNo($right, $this->fields[$right]);
+                     Html::showCheckbox(array('name' => $right, 
+                                              'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
                      echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
@@ -500,7 +505,8 @@ class PluginGenericobjectType extends CommonDBTM {
                   break;
                case 'use_plugin_pdf' :
                   if ($plugin->isActivated('pdf')) {
-                     Dropdown::showYesNo($right, $this->fields[$right]);
+                     Html::showCheckbox(array('name' => $right, 
+                                              'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
                      echo "<input type='hidden' name='use_plugin_pdf' value='0'>\n";
@@ -508,7 +514,8 @@ class PluginGenericobjectType extends CommonDBTM {
                   break;
                case 'use_plugin_order' :
                   if ($plugin->isActivated('order')) {
-                     Dropdown::showYesNo($right, $this->fields[$right]);
+                     Html::showCheckbox(array('name' => $right, 
+                                              'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
                      echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
@@ -517,7 +524,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
                case 'use_plugin_uninstall' :
                   if ($plugin->isActivated('uninstall')) {
-                     Dropdown::showYesNo($right, $this->fields[$right]);
+                     Html::showCheckbox(array('name' => $right, 
+                                              'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
                      echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
@@ -525,7 +533,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
                   break;
                default :
-                     Dropdown::showYesNo($right, $this->fields[$right]);
+                     Html::showCheckbox(array('name' => $right,  
+                                              'checked' => $this->fields[$right]));
                   break;
             }
             echo "</td>";
