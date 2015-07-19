@@ -80,16 +80,17 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       $options = array("document_types"         => $item->canUseDocuments(),
                        "helpdesk_visible_types" => $item->canUseTickets(),
-                       "linkgroup_types"        => $item->canUseTickets()
-                                                    && isset ($fields["groups_id"]),
-                       "linkuser_types"         => $item->canUseTickets()
-                                                   && isset ($fields["users_id"]),
+                       "linkgroup_types"        => isset ($fields["groups_id"]),
+                       "linkuser_types"         => isset ($fields["users_id"]),
+                       "linkgroup_tech_types"   => isset ($fields["groups_id_tech"]),
+                       "linkuser_tech_types"    => isset ($fields["users_id_tech"]),
                        "ticket_types"           => $item->canUseTickets(),
                        "infocom_types"          => $item->canUseInfocoms(),
                        "networkport_types"      => $item->canUseNetworkPorts(),
                        "reservation_types"      => $item->canBeReserved(),
                        "contract_types"         => $item->canUseContracts(),
-                       "unicity_types"          => $item->canUseUnicity());
+                       "unicity_types"          => $item->canUseUnicity(),
+                       "location_types"         => isset($fields['locations_id']));
       Plugin::registerClass($class, $options);
 
       if (plugin_genericobject_haveRight($class, READ)) {
@@ -223,6 +224,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             && Session::haveRight($itemtype_rightname, READ)) {
 
             $links = array();
+            $links['search'] = self::getSearchUrl(false).'?itemtype='.$itemtype;
             if ($item->canUseTemplate()) {
                $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
                if (Session::haveRight($itemtype_rightname, CREATE)) {
@@ -243,10 +245,9 @@ class PluginGenericobjectObject extends CommonDBTM {
                   .
                   "</span>"
                ),
-               'page' => self::getSearchUrl(false).'?itemtype='.$itemtype,
+               'page'  => self::getSearchUrl(false).'?itemtype='.$itemtype,
                'links' => $links
             );
-            _log("Menu Content for ", $itemtype, "\n", $menu[strtolower($itemtype)]);
          }
       }
       $menu['is_multi_entries']= true;
@@ -694,7 +695,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      $types      = array('NetworkPort', 'Computer_Item', 
+      $types      = array('Computer_Item', 
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();
@@ -707,10 +708,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $ip = new $itemtype();
          $ip->cleanDBonItemDelete(get_called_class(), $this->getID());
       }
-
    }
-
-
 
    /**
     * Display object preview form

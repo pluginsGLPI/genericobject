@@ -214,7 +214,7 @@ class PluginGenericobjectField extends CommonDBTM {
                      $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo(0);
                   }
                }
-               if (count($field_options > 0)) {
+               if (!empty($field_options)) {
                   $message = "(".trim( implode(",",$field_options)).")";
                }
             }

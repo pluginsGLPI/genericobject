@@ -261,7 +261,6 @@ class PluginGenericobjectProfile extends Profile {
          return (isset($rights[self::getProfileNameForItemtype($itemtype)]));
       }
       return true;
-      ///return (countElementsInTable(getTableForItemType(__CLASS__),$condition) >0?true:false);
    }
 
    /**
@@ -291,7 +290,6 @@ class PluginGenericobjectProfile extends Profile {
       $rights = array();
 
       $types = PluginGenericobjectType::getTypes(true);
-      Toolbox::logDebug($types);
       if ( count( $types) > 0 ) {
          foreach ($types as $_ => $type) {
             $itemtype   = $type['itemtype'];
@@ -358,25 +356,73 @@ class PluginGenericobjectProfile extends Profile {
 
    static function install(Migration $migration) {
       global $DB;
-      $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
-         $query = "CREATE TABLE `$table` (
-                           `id` int(11) NOT NULL auto_increment,
-                           `profiles_id` int(11) NOT NULL  DEFAULT '0',
-                           `itemtype` VARCHAR( 255 ) default NULL,
-                           `right` char(1) default NULL,
-                           `open_ticket` char(1) NOT NULL DEFAULT 0,
-                           PRIMARY KEY  (`id`),
-                           KEY `name` (`profiles_id`)
-                           ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die($DB->error());
+
+      $profileRight = new ProfileRight();
+      $profile      = new Profile();
+
+      //Update needed
+      if (TableExists('glpi_plugin_genericobject_profiles')) {
+         foreach (getAllDatasFromTable('glpi_plugin_genericobject_profiles') as $right) {
+            if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
+               $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
+               if (!countElementsInTable('glpi_profilerights', 
+                                         "`profiles_id`='".$right['profiles_id']."' 
+                                           AND `name`='$newrightname'")) {
+                  switch ($right['right']) {
+                     case NULL:
+                     case '':
+                        $rightvalue = 0;
+                        break;
+                     case 'r':
+                        $rightvalue = READ;
+                        break;
+                     case 'w':
+                        $rightvalue = ALLSTANDARDRIGHT;
+                        break;
+                  }
+
+                  $profileRight->add(array('profiles_id' => $right['profiles_id'], 
+                                           'name' => $newrightname, 
+                                           'rights' => $rightvalue));
+
+                  if (!countElementsInTable('glpi_profilerights', 
+                                            "`profiles_id`='".$right['profiles_id']."' 
+                                              AND `name`='plugin_genericobject_types'")) {
+                     $profileRight->add(array('profiles_id' => $right['profiles_id'], 
+                                              'name' => 'plugin_genericobject_types', 
+                                              'rights' => 23));
+                  }
+               }
+
+               if ($right['open_ticket']) {
+                  $profile->getFromDB($right['profiles_id']);
+                  $helpdesk_item_types = json_decode($profile->fields['helpdesk_item_type'], true);
+                  if (is_array($helpdesk_item_types)) {
+                     if (!in_array($right['itemtype'], $helpdesk_item_types)) {
+                        $helpdesk_item_types[] = $right['itemtype'];
+                     }
+                  } else {
+                     $helpdesk_item_types = array($right['itemtype']);
+                  }
+
+                  $tmp['id'] = $profile->getID();
+                  $tmp['helpdesk_item_type'] = json_encode($helpdesk_item_types);
+                  $profile->update($tmp);
+               }
+            }
+         }
+         //$migration->dropTable('glpi_plugin_genericobject_profiles');
       }
-      self::createFirstAccess();
+      if (!countElementsInTable('glpi_profilerights', 
+                                "`name` LIKE '%genericobject%'")) {
+         self::createFirstAccess();
+      }
    }
 
    static function uninstall() {
       global $DB;
-      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
+      $query = "DELETE FROM `glpi_profilerights` 
+                WHERE `name` LIKE '%plugin_genericobject%'";
       $DB->query($query) or die($DB->error());
    }
 }
