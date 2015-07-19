@@ -827,6 +827,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if ($this->canBeReserved()) {
          PluginGenericobjectField::addNewField($table, 'is_deleted', 'id');
          PluginGenericobjectField::addNewField($table, 'locations_id');
+         PluginGenericobjectField::addNewField($table, 'users_id');
       }
 
       //Helpdesk post-only
