@@ -73,8 +73,13 @@ if (!is_null($itemtype)) {
 
    if (isset ($_POST["add"])) {
       $item->check($id, CREATE);
-      $item->add($_POST);
-      Html::back();
+      $newID = $item->add($_POST);
+
+      if ($_SESSION['glpibackcreated']) {
+         Html::redirect($itemtype::getFormURL()."&id=".$newID);
+      } else {
+         Html::back();
+      }
    } elseif (isset ($_POST["update"])) {
       $item->check($id, UPDATE);
       $item->update($_POST);
