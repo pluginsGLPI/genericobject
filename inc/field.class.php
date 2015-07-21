@@ -50,6 +50,8 @@ class PluginGenericobjectField extends CommonDBTM {
 
       PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
 
+      self::addReadOnlyFields($object_type);
+
       foreach ($GO_BLACKLIST_FIELDS as $autofield) {
          if (!in_array($autofield, $used_fields)) {
             $used_fields[$autofield] = $autofield;
@@ -104,6 +106,31 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</div>";
    }
 
+   /**
+   * Method to set fields as read only, when the depend on some features 
+   * that are enabled
+   * @since 0.85+2.4.0
+   */
+   static function addReadOnlyFields(PluginGenericobjectType $type) {
+      global $GO_READONLY_FIELDS;
+
+      if ($type->canBeReserved()) {
+        $GO_READONLY_FIELDS[] = 'users_id';
+        $GO_READONLY_FIELDS[] = 'locations_id';
+      }
+
+      if ($type->canUseGlobalSearch()) {
+        $GO_READONLY_FIELDS[] = 'serial';
+        $GO_READONLY_FIELDS[] = 'otherserial';
+        $GO_READONLY_FIELDS[] = 'locations_id';
+        $GO_READONLY_FIELDS[] = 'states_id';
+        $GO_READONLY_FIELDS[] = 'users_id';
+        $GO_READONLY_FIELDS[] = 'groups_id';
+        $GO_READONLY_FIELDS[] = 'manufacturers_id';
+        $GO_READONLY_FIELDS[] = 'users_id_tech';
+      }
+
+   }
    /**
     * Get the name of the field, as defined in a constant file
     * The name may be the same, or not depending if it's an isolated dropdown or not
@@ -270,7 +297,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $sel ="";
 
       echo "<td width='10'>";
-      if (!$blacklist) {
+      if (!$blacklist && !$readonly) {
          echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
       }
       echo "</td>";
