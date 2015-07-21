@@ -85,7 +85,7 @@ if (!is_null($itemtype)) {
       $item->update($_POST);
       Html::back();
    } elseif (isset ($_POST["restore"])) {
-      $item->check($id, PURGE);
+      $item->check($id, DELETE);
       $item->restore($_POST);
       Html::back();
    } elseif (isset($_POST["purge"])) {
