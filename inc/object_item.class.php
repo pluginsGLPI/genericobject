@@ -24,18 +24,18 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 class PluginGenericobjectObject_Item extends CommonDBChild {
 
    public $dohistory = true;
-   
+
    // From CommonDBRelation
    static public $itemtype_1 = "PluginGenericobjectObject";
    static public $items_id_1 = 'plugin_genericobject_objects_id';
-   
+
    static public $itemtype_2 = 'itemtype';
    static public $items_id_2 = 'items_id';
-    
+
    //Get itemtype name
    static function getTypeName($nb=0) {
       global $LANG;
@@ -53,13 +53,13 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          return $item->objecttype->fields['name'];
       }
    }
-   
+
    static function canView() {
-      return plugin_genericobject_haveRight($this->$itemtype_1, 'r');
+      return Session::haveRight($this->$itemtype_1, READ);
    }
-   
+
    static function canCreate() {
-      return plugin_genericobject_haveRight($this->$itemtype_1, 'w');
+      return Session::haveRight($this->$itemtype_1, CREATE);
    }
 
    /**
@@ -69,9 +69,9 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
     * @param CommonDBTM $item
     */
    static function showItemsForSource(CommonDBTM $item) {
-      
+
    }
-   
+
    /**
     *
     * Enter description here ...
@@ -79,9 +79,9 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
     * @param CommonDBTM $item
     */
    static function showItemsForTarget(CommonDBTM $item) {
-      
+
    }
-   
+
    /**
     *
     * Enter description here ...
@@ -91,18 +91,18 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       Plugin::registerClass(get_called_class(),
                             array('addtabon' => self::getLinkedItemTypes()));
    }
-   
+
    static function getLinkedItemTypes() {
       $source_itemtype = self::getItemType1();
       $source_item = new $source_itemtype;
       return $source_item->getLinkedItemTypesAsArray();
    }
-   
+
    static function getItemType1() {
       $classname   = get_called_class();
       return $classname::$itemtype_1;
    }
-   
+
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes();
@@ -112,7 +112,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       }
       return '';
    }
-   
+
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
       $itemtypes = self::getLinkedItemTypes();
       if (get_class($item) == self::getItemType1()) {
@@ -122,5 +122,5 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       }
       return true;
    }
-    
+
 }

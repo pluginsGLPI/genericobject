@@ -29,4 +29,15 @@
  * This class is automatically managed by genericobject plugin. Do not edit it !
  */
 class %%CLASSNAME%% extends PluginGenericobjectObject {
+
+   static function getFormURL($full=true) {
+      return Toolbox::getItemTypeFormURL( get_parent_class() , $full) .
+      "?itemtype=".get_called_class();
+   }
+   static function getSearchURL($full=true) {
+      return Toolbox::getItemTypeSearchURL( get_parent_class() , $full) .
+      "?itemtype=".get_called_class();
+
+   }
 }
+

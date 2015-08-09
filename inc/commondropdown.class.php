@@ -17,29 +17,33 @@
  --------------------------------------------------------------------------
  @package   genericobject
  @author    the genericobject plugin team
- @copyright Copyright (c) 2010-2011 Order plugin team
+ @copyright Copyright (c) 2010-2014 Generic Object plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
  @link      https://forge.indepnet.net/projects/genericobject
  @link      http://www.glpi-project.org/
- @since     2009
+ @since     2014
  ---------------------------------------------------------------------- */
- 
-include ("../../../inc/includes.php");
-Session::checkRight("profile","r");
 
+class PluginGenericobjectCommonDropdown extends CommonDropdown {
 
-$prof = new PluginGenericobjectProfile();
-
-/* save profile */
-if (isset ($_POST['update_user_profile'])) {
-   $prof->saveProfileToDB($_POST);
-   PluginGenericobjectProfile::changeProfile();
-} elseif (isset($_POST['update_all_rights']) && isset($_POST['profiles'])) {
-   foreach ($_POST['profiles'] as $id => $values) {
-      $values['id'] = $id;
-      $prof->update($values);
+   //Get itemtype name
+   static function getTypeName($nb=0) {
+      $class=get_called_class(); 
+      return dropdown_getTypeName($class,$nb);
    }
-   PluginGenericobjectProfile::changeProfile();
+
+   static function getFormURL($full=true) {
+      //Toolbox::logDebug("PluginGenericobjectDropdown::getFormURL", get_parent_class(get_called_class()));
+      return Toolbox::getItemTypeFormURL(  get_parent_class(get_called_class()), $full) .
+         "?itemtype=".get_called_class();
+   }
+   static function getSearchURL($full=true) {
+      //Toolbox::logDebug("PluginGenericobjectDropdown::getSearchURL", get_parent_class(get_called_class()));
+      return Toolbox::getItemTypeSearchURL( get_parent_class(get_called_class()) , $full) .
+         "?itemtype=".get_called_class();
+
+   }
+
 }
-Html::redirect($_SERVER['HTTP_REFERER']);
+

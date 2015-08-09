@@ -26,42 +26,86 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-if (!isset($_REQUEST['id'])) {
-   $id = -1;
+
+include ("../../../inc/includes.php");
+
+$itemtype = null;
+
+if (isset($_REQUEST['itemtype'])) {
+
+   $types = array_keys(PluginGenericobjectType::getTypes());
+
+   $requested_type = $_REQUEST['itemtype'];
+   $error = array();
+
+   if (!in_array($requested_type, $types) ){
+      $error[] = __('The requested type has not been defined yet!');
+      if (!PluginGenericobjectType::canCreate()) {
+         $error[] = __('Please ask your administrator to create this type of object');
+      };
+   } else if (!class_exists($requested_type)) {
+      $error[]= __('The generated files for the requested type of object are missing!');
+      $error[]= __('You might need to regenerate the files under '.GENERICOBJECT_DOC_DIR.'.');
+   }
+
+   if(count($error) > 0) {
+      Html::header(__('Type not found!'));
+      Html::displayErrorAndDie(implode('<br/>', $error));
+
+   } else {
+      $itemtype = $requested_type;
+   }
+}
+
+if (!is_null($itemtype)) {
+
+   if (!isset($_REQUEST['id'])) {
+      $id = -1;
+   } else {
+      $id = $_REQUEST['id'];
+   }
+
+   if (!isset($_GET["withtemplate"])) {
+      $_GET["withtemplate"] = "";
+   }
+
+   $item = new $itemtype();
+
+   if (isset ($_POST["add"])) {
+      $item->check($id, CREATE);
+      $newID = $item->add($_POST);
+
+      if ($_SESSION['glpibackcreated']) {
+         Html::redirect($itemtype::getFormURL()."&id=".$newID);
+      } else {
+         Html::back();
+      }
+   } elseif (isset ($_POST["update"])) {
+      $item->check($id, UPDATE);
+      $item->update($_POST);
+      Html::back();
+   } elseif (isset ($_POST["restore"])) {
+      $item->check($id, DELETE);
+      $item->restore($_POST);
+      Html::back();
+   } elseif (isset($_POST["purge"])) {
+      $item->check($id, PURGE);
+      $item->delete($_POST, 1);
+      $item->redirectToList();
+   } elseif (isset($_POST["delete"])) {
+      $item->check($id, DELETE);
+      $item->delete($_POST);
+      $item->redirectToList();
+   }
+//$itemtype = get_class($item);
+   Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
+             "assets", $itemtype);
+
+   $item->display($_GET, array( 'withtemplate' => $_GET["withtemplate"]));
+
+   Html::footer();
 } else {
-   $id = $_REQUEST['id'];
+   Html::header(__('Access Denied!'));
+   Html::DisplayErrorAndDie(__("You can't access to this page directly!"));
 }
 
-if (!isset($_GET["withtemplate"])) {
-   $_GET["withtemplate"] = "";
-}
-
-if (isset ($_POST["add"])) {
-   $item->check($id, 'w');
-   $item->add($_POST);
-   Html::back();
-} elseif (isset ($_POST["update"])) {
-   $item->check($id, 'w');
-   $item->update($_POST);
-   Html::back();
-} elseif (isset ($_POST["restore"])) {
-   $item->check($id, 'w');
-   $item->restore($_POST);
-   Html::back();
-} elseif (isset($_POST["purge"])) {
-   $item->check($id, 'w');
-   $item->delete($_POST, 1);
-   $item->redirectToList();
-} elseif (isset($_POST["delete"])) {
-   $item->check($id, 'w');
-   $item->delete($_POST);
-   $item->redirectToList();
-}
-$itemtype = get_class($item);
-Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
-             "plugins", "genericobject", $itemtype);
-
-$item->title();
-$item->showForm($id, array('withtemplate' => $_GET["withtemplate"]));
-
-Html::footer();

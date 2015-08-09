@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg4320"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="carsilhoutte.svg">
+  <defs
+     id="defs4322" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.2"
+     inkscape:cx="15.388371"
+     inkscape:cy="2.9950797"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1360"
+     inkscape:window-height="734"
+     inkscape:window-x="0"
+     inkscape:window-y="1038"
+     inkscape:window-maximized="1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(403.90655,-375.63331)">
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       d="m -389.59111,383.64474 c -0.0353,4.6e-4 -0.07,9e-4 -0.10306,0.002 -1.05842,0.0333 -3.08695,-0.0663 -3.93957,0.29983 0,0 -2.0868,1.29744 -2.8217,1.82996 -0.73511,0.53251 -2.23445,0.53264 -3.96913,0.73227 -1.73446,0.19964 -2.40295,0.79354 -2.40295,0.79354 -0.4877,0.65132 -0.74798,1.10854 -0.83101,2.00222 -0.0461,0.23119 0.82666,0.58948 0.82309,1.29805 l 1.35211,0 c 0,0 0.17271,-2.34545 2.05411,-2.31214 1.88161,0.0333 1.97411,2.31214 1.97411,2.31214 l 10.29073,0 c 0,0 0.263,-2.27098 1.96907,-2.33737 1.70402,-0.0666 2.02744,2.33737 2.02744,2.33737 0,0 1.52879,-0.035 2.02889,0 0.52024,0.0207 0.39764,-0.75019 0.94057,-0.93264 0.19436,-1.66005 -0.27403,-1.48194 -0.62201,-2.98675 -0.79438,-0.29957 -0.96432,-0.25963 -1.43354,-0.42596 -0.34369,-0.12113 -2.45146,-1.58333 -3.29524,-1.97771 -0.8154,-0.3816 -2.94719,-0.64895 -4.04191,-0.63497 z m 4.48085,4.84915 a 1.5647065,1.5647065 0 0 0 -1.60942,1.56544 1.5647282,1.5647282 0 0 0 3.12946,0 1.5647065,1.5647065 0 0 0 -1.52004,-1.56544 z m -14.29734,7.1e-4 a 1.5647065,1.5647065 0 0 0 -1.60941,1.56473 1.5647282,1.5647282 0 0 0 3.12945,0 1.5647065,1.5647065 0 0 0 -1.52004,-1.56473 z"
+       id="path3070-9-2"
+       inkscape:connector-curvature="0" />
+  </g>
+  <metadata
+     id="metadata4429">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Simple side of car silhouette</dc:title>
+        <dc:date>2014-01-11T08:53:56</dc:date>
+        <dc:description>car outline in black and white</dc:description>
+        <dc:source>https://openclipart.org/detail/190006/simple-side-of-car-silhouette-by-z-190006</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Z</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>car</rdf:li>
+            <rdf:li>side</rdf:li>
+            <rdf:li>silhouette</rdf:li>
+            <rdf:li>simple</rdf:li>
+            <rdf:li>vehicle</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

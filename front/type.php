@@ -24,18 +24,18 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 include ("../../../inc/includes.php");
 
-Session::checkRight("config","w");
-
-if (isset($_GET['itemtype'])) {
+if (isset($_GET['itemtype'])
+        && !isset($_GET['search'])
+        && !isset($_GET['sort'])) {
    $type = new PluginGenericobjectType();
    $type->getFromDBByType($_GET['itemtype']);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
 } else {
-   Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "plugins", 
-                "genericobject", "type");
+   Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "config",
+                "PluginGenericobjectType");
    Search::Show('PluginGenericobjectType');
    Html::footer();
 }

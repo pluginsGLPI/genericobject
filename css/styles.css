@@ -1,0 +1,64 @@
+/*
+ * Menu entry wrapper
+ */
+.genericobject_menu_wrapper {
+   display: block;
+   position: relative;
+   margin: 0;
+   padding: 0;
+}
+
+/*
+ * Icon positionning
+ */
+.genericobject_menu_icon {
+   height: 16px;
+   width: 16px;
+   vertical-align: middle;
+   display: inline-block;
+}
+.icon_preview {
+   height: 32px;
+   width: 32px;
+}
+
+.icon_preview > .genericobject_menu_icon {
+   display: block;
+   margin: 0 auto;
+   height: initial;
+   width: initial;
+   max-height: 32px;
+   max-width: 32px;
+}
+
+.genericobject_menu_text {
+   padding-left: 5px;
+   margin: 0;
+   display: inline-block;
+}
+
+
+/*
+ * Fields Form
+ */
+
+.genericobject_fields.add_new {
+   width: 80%;
+}
+
+.genericobject_fields.add_new td.label {
+   width: 20%;
+}
+
+.genericobject_fields.add_new td.dropdown {
+   width: 100%;
+}
+
+/*
+ * Type's Profile tab : specific alignment
+ */
+
+.genericobject_type_profiles tr > td {
+   width : 10%;
+}
+

@@ -17,28 +17,25 @@
  --------------------------------------------------------------------------
  @package   genericobject
  @author    the genericobject plugin team
- @copyright Copyright (c) 2010-2011 Order plugin team
+ @copyright Copyright (c) 2010-2014 Generic Object plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
  @link      https://forge.indepnet.net/projects/genericobject
  @link      http://www.glpi-project.org/
- @since     2009
+ @since     2014
  ---------------------------------------------------------------------- */
 
-if (!defined('GLPI_ROOT')){
-   die("Sorry. You can't access directly to this file");
+include ("../../../inc/includes.php");
+
+if ( isset($_REQUEST['itemtype']) ) {
+   $itemtype = $_REQUEST['itemtype'];
+   if (class_exists($itemtype)) {
+      $dropdown = new $itemtype();
+      include (GLPI_ROOT . "/front/dropdown.common.form.php");
+   } else {
+      Html::displayErrorAndDie(__('The requested dropdown does not exists', 'genericobject'));
+   }
+} else {
+
+   Html::displayErrorAndDie(__('Not Found!'));
 }
-
-class %%CLASSNAME%% extends PluginGenericobjectObject_Item {
-
-   public $dohistory = true;
-
-   // From CommonDBRelation
-   static public $itemtype_1 = '%%SOURCEOBJECT%%';
-   static public $items_id_1 = '%%FOREIGNKEY%%';
-
-   static public $itemtype_2 = 'itemtype';
-   static public $items_id_2 = 'items_id';
-   static public $checkItem_2_Rights  = self::HAVE_VIEW_RIGHT_ON_ITEM;
-}
-

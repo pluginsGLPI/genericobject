@@ -24,7 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 include ("../../../inc/includes.php");
 if (isset ($_POST["delete"])) {
    $type = new PluginGenericobjectType();
@@ -33,7 +33,7 @@ if (isset ($_POST["delete"])) {
    PluginGenericobjectType::registerOneType($itemtype);
 
    foreach ($_POST["fields"] as $field => $value) {
-      if ($type->can($_POST["id"], "w")
+      if ($type->can($_POST["id"], PURGE)
          && $value == 1
             && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
          PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
@@ -42,10 +42,9 @@ if (isset ($_POST["delete"])) {
    }
 } elseif (isset ($_POST["add_field"])) {
    $type     = new PluginGenericobjectType();
-   if ($_POST["new_field"] && $type->can($_POST["id"], "w")) {
+   if ($_POST["new_field"] && $type->can($_POST["id"], UPDATE)) {
       $itemtype = $type->fields['itemtype'];
       PluginGenericobjectType::registerOneType($itemtype);
-
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
       Session::addMessageAfterRedirect(__("Field added successfully", "genericobject"));
    }
@@ -55,3 +54,4 @@ if (isset ($_POST["delete"])) {
 }
 
 Html::back();
+

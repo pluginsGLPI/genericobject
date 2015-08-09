@@ -24,22 +24,50 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
-class PluginGenericobjectProfile extends CommonDBTM {
+
+class PluginGenericobjectProfile extends Profile {
 
    /* if profile deleted */
    function cleanProfiles($id) {
       $this->deleteByCriteria(array('id' => $id));
    }
 
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+
+      switch($item->getType()) {
+         case 'Profile':
+            return self::createTabEntry(__('Objects management', 'genericobject'));
+            break;
+         case 'PluginGenericobjectType':
+            return self::createTabEntry(_n('Profile', 'Profiles', 2));
+            break;
+      }
+   }
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+      switch($item->getType()) {
+         case 'Profile':
+            $profile = new self();
+            $profile->showForm($item->getID());
+            break;
+         case 'PluginGenericobjectType':
+            _log($item);
+            self::showForItemtype($item);
+            break;
+      }
+      return TRUE;
+   }
+
    static function showForItemtype($type) {
       global $DB;
 
-      if (!Session::haveRight("profile", "r")) {
+      if (!Session::haveRight("profile", READ)) {
          return false;
       }
-      $canedit = Session::haveRight("profile", "w");
-   
-      echo "<form action='" . Toolbox::getItemTypeSearchURL(__CLASS__) . "' method='post'>";
+      self::installRights();
+      $canedit = Session::haveRight("profile", UPDATE);
+
+      echo "<form action='" . self::getFormUrl() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
       $itemtype = $type->fields['itemtype'];
       echo "<tr><th colspan='2' align='center'><strong>";
@@ -47,37 +75,27 @@ class PluginGenericobjectProfile extends CommonDBTM {
       echo $itemtype::getTypeName();
       echo "</strong></th></tr>";
 
-      foreach (getAllDatasFromTable('glpi_profiles') as $profile) {
-         echo "<tr><th colspan='2' align='center'><strong>";
-         echo __("Profile")." ".$profile['name']."</strong></th></tr>";
-
-         $pgf_find = self::getProfileforItemtype($profile['id'], $itemtype);
-
-         if (!count($pgf_find) > 0) {
-            self::createAccess($profile['id']);
-            $pgf_find = self::getProfileforItemtype($profile['id'], $itemtype);
-         }
-
-         $PluginGenericobjectProfile = new self();
-         $PluginGenericobjectProfile->getFromDB($pgf_find['id']);
-
-         $prefix = "profiles[".$pgf_find['id']."]";
-         if ($profile['interface'] == 'central') {
-            echo "<tr class='tab_bg_2'>";
-            echo "<td>" . __("Access object", "genericobject") . ":</td><td>";
-            Profile::dropdownNoneReadWrite($prefix."[right]",
-                              $PluginGenericobjectProfile->fields['right'], 1, 1, 1);
-            echo "</td></tr>";
-         }
-         if ($type->canUseTickets()) {
-            echo "<tr class='tab_bg_2'>";
-            echo "<td>" . __("Associate tickets to this object", "genericobject") . ":</td><td>";
-            Dropdown::showYesNo($prefix."[open_ticket]",
-                              $PluginGenericobjectProfile->fields['open_ticket']);
-            echo "</td></tr>";
-         }
-         
+      echo "<tr><td class='genericobject_type_profiles'>";
+      $rights = array();
+      foreach (getAllDatasFromTable(getTableForItemtype("Profile")) as $profile) {
+         $prof = new Profile();
+         $prof->getFromDB($profile['id']);
+         $right = self::getProfileforItemtype($profile['id'], $itemtype);
+         $label = $profile['name'];
+         $rights = array(
+            array(
+               'label' => $label,
+               'itemtype' => $itemtype,
+               'field' =>  self::getProfileNameForItemtype($itemtype),
+               'html_field' => "profile_" . $profile['id'],
+            )
+         );
+         $prof->displayRightsChoiceMatrix(
+            $rights
+         );
       }
+      echo "</td></tr>";
+      echo "<input type='hidden' name='itemtype' value='".$itemtype."'>";
 
       if ($canedit) {
          echo "<tr class='tab_bg_1'>";
@@ -86,87 +104,81 @@ class PluginGenericobjectProfile extends CommonDBTM {
             _sx('button', 'Post') . "\" class='submit'>";
          echo "</td></tr>";
       }
+
+
       echo "</table>";
       Html::closeForm();
    }
-   
+
+   static function getProfileNameForItemtype($itemtype) {
+      return preg_replace("/^glpi_/","",getTableForItemType($itemtype));
+   }
+
+
    /* profiles modification */
-   function showForm($id) {
-      if (!Session::haveRight("profile", "r")) {
+   function showForm($profiles_id, $options = array()) {
+      if (!Session::haveRight("profile", READ)) {
          return false;
       }
-      $canedit = Session::haveRight("profile", "w");
-      if ($id) {
-         $this->getProfilesFromDB($id);
-      }
+      $canedit = Session::haveRight("profile", UPDATE);
+      //if ($id) {
+      //   $this->getProfilesFromDB($id);
+      //}
 
-      $general_profile = new Profile();
-      $general_profile->getFromDB($id);
-      
-      echo "<form action='" . $this->getSearchURL() . "' method='post'>";
+      //Ensure rights are defined in database
+      self::installRights();
+
+      $profile = new Profile();
+      $profile->getFromDB($profiles_id);
+
+
+      echo "<form action='" . Profile::getFormUrl() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
+      $general_rights = self::getGeneralRights();
 
-      $types = PluginGenericobjectType::getTypes(true);
-      
-      if (!empty ($types)) {
+      $profile->displayRightsChoiceMatrix(
+         $general_rights,
+         array(
+            'canedit'       => $canedit,
+            'default_class' => 'tab_bg_2',
+            'title'         => __('General', 'genericobject')
+         )
+      );
 
-         echo "<tr><th colspan='2' align='center'><strong>";
-         echo __("Rights assignment")."</strong></th></tr>";
-         
-         foreach ($types as $tmp => $type) {
-            $itemtype   = $type['itemtype'];
-            $objecttype = new PluginGenericobjectType($itemtype);
-            $profile    = self::getProfileforItemtype($id, $itemtype);
-            echo "<tr><th align='center' colspan='2' class='tab_bg_2'>".
-               $itemtype::getTypeName()."</th></tr>";
-            if ($general_profile->fields['interface'] == 'central') {
-               echo "<tr class='tab_bg_2'>";
-               $right = $type['itemtype'];
-               echo "<td>" . __("Access object", "genericobject") . ":</td><td>";
-               Profile::dropdownNoneReadWrite($right,  $profile['right'], 1, 1, 1);
-               echo "</td></tr>";
-            }
-            if ($objecttype->canUseTickets()) {
-               echo "<tr class='tab_bg_2'>";
-               echo "<td>" . __("Associate tickets to this object", "genericobject") . ":</td><td>";
-               $right_openticket = $type['itemtype']."_open_ticket";
-               Dropdown::showYesNo($right_openticket,  $profile['open_ticket']);
-               echo "</td></tr>";
-            }
+      $types_rights = self::getTypesRights();
 
-         }
-         if ($canedit) {
-            echo "<tr class='tab_bg_1'>";
-            echo "<td align='center' colspan='2'>";
-            echo "<input type='hidden' name='profiles_id' value='".$id."'>";
-            echo "<input type='hidden' name='id' value=$id>";
-            echo "<input type='submit' name='update_user_profile' value=\"" .
-               _sx('button', 'Post') . "\" class='submit'>";
-            echo "</td></tr>";
-         
-         }
+      $title = __('Objects', 'genericobject');
+      if (count($types_rights) == 0) {
+         $title .= __(" (No types defined yet)", "genericobject");
+       }
 
-      } else {
-         echo "<tr><td class='center'><strong>";
-         echo __("No type defined", "genericobject")."</strong></td></tr>";
+      $profile->displayRightsChoiceMatrix(
+         $types_rights,
+         array(
+            'canedit'       => $canedit,
+            'default_class' => 'tab_bg_2',
+            'title'         => $title
+         )
+      );
+      $profile->showLegend();
+      if ($canedit) {
+         echo "<div class='center'>";
+         echo Html::hidden('id', array('value' => $profiles_id));
+         echo Html::submit(_sx('button', 'Save'), array('name' => 'update'));
+         echo "</div>\n";
+         Html::closeForm();
       }
-
-      echo "</table>";
-      Html::closeForm();
+      echo "</div>";
 
    }
 
    static function getProfileforItemtype($profiles_id, $itemtype) {
-      $results = getAllDatasFromTable(getTableForItemType(__CLASS__),
-                                      "`itemtype`='$itemtype' AND `profiles_id`='$profiles_id'");
-      if (!empty($results)) {
-         return array_pop($results);
-      } else {
-         return array();
-      }
+      $rights             = ProfileRight::getProfileRights($profiles_id);
+      $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
+      return isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : 0;
    }
-   
+
    function getProfilesFromDB($id, $config = true) {
       global $DB;
       $prof_datas = array ();
@@ -180,10 +192,10 @@ class PluginGenericobjectProfile extends CommonDBTM {
       }
 
       if (empty($prof_datas) && !$config) return false;
-      
+
       $prof_datas['profiles_id']   = $id;
       $this->fields       = $prof_datas;
-      
+
       return true;
    }
 
@@ -210,26 +222,26 @@ class PluginGenericobjectProfile extends CommonDBTM {
                $query.=", `open_ticket`='".$params[$profile['itemtype'].'_open_ticket']."' ";
             }
 
-      
+
             $query.="WHERE `profiles_id`='".$params['profiles_id']."' " .
                     "AND `itemtype`='".$profile['itemtype']."'";
             $DB->query($query);
          }
       }
    }
-   
-   
+
+
    /**
     * Create rights for the current profile
     * @param profileID the profile ID
     * @return nothing
     */
    public static function createFirstAccess() {
-      if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"])) {
-         self::createAccess($_SESSION["glpiactiveprofile"]["id"],true);
+      if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"], 'PluginGenericobjectType')) {
+         self::createAccess($_SESSION["glpiactiveprofile"]["id"],"PluginGenericobjectType",true);
       }
    }
-   
+
    /**
     * Check if rights for a profile still exists
     * @param profiles_id the profile ID
@@ -237,31 +249,93 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @return true if exists, no if not
     */
    public static function profileExists($profiles_id, $itemtype = false) {
-      $condition = "`profiles_id`='$profiles_id'";
+      $profile = new Profile();
+      $profile->getFromDB($profiles_id);
+      $rights = ProfileRight::getProfileRights($profiles_id);
+      $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
       if($itemtype) {
-         $condition.= "AND `itemtype`='$itemtype'";
+         _log(
+            "get rights on itemtype ".$itemtype." for profile ".$profile->fields['name'], ':',
+            isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : "NONE"
+         );
+         return (isset($rights[self::getProfileNameForItemtype($itemtype)]));
       }
-      return (countElementsInTable(getTableForItemType(__CLASS__),$condition) >0?true:false);
+      return true;
    }
-   
+
    /**
     * Create rights for the profile if it doesn't exists
     * @param profileID the profile ID
     * @return nothing
     */
-   public static function createAccess($profiles_id, $first=false) {
-      $profile = new self();
-      foreach ( PluginGenericobjectType::getTypes(true) as $tmp => $value) {
-         if (!self::profileExists($profiles_id, $value["itemtype"])) {
-            $input["itemtype"]    = $value["itemtype"];
-            $input["right"]       = ($first?'w':'');
-            $input["open_ticket"] = ($first?1:0);
-            $input["profiles_id"] = $profiles_id;
-            $profile->add($input);
-         }
-      }
+   public static function createAccess($profiles_id, $itemtype, $first=false) {
+      $profile_right = new ProfileRight();
+      $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
+      $profile_right->updateProfileRights($profiles_id, array(
+         $itemtype_rightname => ALLSTANDARDRIGHT
+      ));
    }
 
+   public static function getGeneralRights() {
+      $rights = array();
+      $rights[] = array(
+         'itemtype' => 'PluginGenericobjectType',
+         'label'    => PluginGenericobjectType::getTypeName(),
+         'field'    => self::getProfileNameForItemtype('PluginGenericobjectType'),
+      );
+      return $rights;
+   }
+
+   public static function getTypesRights() {
+      $rights = array();
+
+      $types = PluginGenericobjectType::getTypes(true);
+      if ( count( $types) > 0 ) {
+         foreach ($types as $_ => $type) {
+            $itemtype   = $type['itemtype'];
+            $field      = self::getProfileNameForItemtype($itemtype);
+            $objecttype = new PluginGenericobjectType($itemtype);
+            $rights[]   = array(
+               'itemtype' => $itemtype,
+               'label'    => $itemtype::getTypeName(),
+               'field'    => self::getProfileNameForItemtype($itemtype)
+            );
+         }
+      }
+
+      return $rights;
+   }
+
+   public static function installRights($first=false) {
+      $missing_rights = array();
+      $installed_rights = ProfileRight::getAllPossibleRights();
+      $right_names = array();
+
+      // Add common plugin's rights
+      $right_names[] = self::getProfileNameForItemtype('PluginGenericobjectType');
+
+      // Add types' rights
+      $types = PluginGenericobjectType::getTypes(true);
+      foreach($types as $_ => $type) {
+         $itemtype = $type['itemtype'];
+         $right_names[] = self::getProfileNameForItemtype($itemtype);
+      }
+
+      // Check for already defined rights
+      foreach($right_names as $right_name) {
+         _log($right_name, isset($installed_rights[$right_name]));
+         if ( !isset($installed_rights[$right_name]) ) {
+            $missing_rights[] = $right_name;
+         }
+      }
+      _log(array($right_names, $missing_rights));
+      //Install missing rights in profile and update the object
+      if ( count($missing_rights) > 0) {
+         ProfileRight::addProfileRights($missing_rights);
+         self::reloadProfileRights();
+      }
+
+   }
 
    /**
     * Delete type from the rights
@@ -269,44 +343,86 @@ class PluginGenericobjectProfile extends CommonDBTM {
     * @return nothing
     */
    public static function deleteTypeFromProfile($itemtype) {
-      $profile = new self();
-      $profile->deleteByCriteria(array("itemtype" => $itemtype));
+      $rights = array();
+      $rights[] = self::getProfileNameForItemtype($itemtype);
+      ProfileRight::deleteProfileRights($rights);
    }
-   
-   public static function changeProfile() {
-      $profile = new self();
-      if($profile->getProfilesFromDB($_SESSION['glpiactiveprofile']['id'])) {
-         foreach ($profile->fields as $key => $value) {
-            if (preg_match("/^PluginGenericobject/",$key)) {
-               $_SESSION["glpi_plugin_genericobject_profile"][$key] = $value;
-            }
-         }
-      } else {
-         unset($_SESSION["glpi_plugin_genericobject_profile"]);
+
+   public static function reloadProfileRights() {
+      if (isset($_SESSION['glpiactiveprofile']['id'])) {
+         Session::changeProfile($_SESSION['glpiactiveprofile']['id']);
       }
    }
 
    static function install(Migration $migration) {
       global $DB;
-      $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
-         $query = "CREATE TABLE `$table` (
-                           `id` int(11) NOT NULL auto_increment,
-                           `profiles_id` int(11) NOT NULL  DEFAULT '0',
-                           `itemtype` VARCHAR( 255 ) default NULL,
-                           `right` char(1) default NULL,
-                           `open_ticket` char(1) NOT NULL DEFAULT 0,
-                           PRIMARY KEY  (`id`),
-                           KEY `name` (`profiles_id`)
-                           ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-         $DB->query($query) or die($DB->error());
+
+      $profileRight = new ProfileRight();
+      $profile      = new Profile();
+
+      //Update needed
+      if (TableExists('glpi_plugin_genericobject_profiles')) {
+         foreach (getAllDatasFromTable('glpi_plugin_genericobject_profiles') as $right) {
+            if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
+               $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
+               if (!countElementsInTable('glpi_profilerights', 
+                                         "`profiles_id`='".$right['profiles_id']."' 
+                                           AND `name`='$newrightname'")) {
+                  switch ($right['right']) {
+                     case NULL:
+                     case '':
+                        $rightvalue = 0;
+                        break;
+                     case 'r':
+                        $rightvalue = READ;
+                        break;
+                     case 'w':
+                        $rightvalue = ALLSTANDARDRIGHT;
+                        break;
+                  }
+
+                  $profileRight->add(array('profiles_id' => $right['profiles_id'], 
+                                           'name' => $newrightname, 
+                                           'rights' => $rightvalue));
+
+                  if (!countElementsInTable('glpi_profilerights', 
+                                            "`profiles_id`='".$right['profiles_id']."' 
+                                              AND `name`='plugin_genericobject_types'")) {
+                     $profileRight->add(array('profiles_id' => $right['profiles_id'], 
+                                              'name' => 'plugin_genericobject_types', 
+                                              'rights' => 23));
+                  }
+               }
+
+               if ($right['open_ticket']) {
+                  $profile->getFromDB($right['profiles_id']);
+                  $helpdesk_item_types = json_decode($profile->fields['helpdesk_item_type'], true);
+                  if (is_array($helpdesk_item_types)) {
+                     if (!in_array($right['itemtype'], $helpdesk_item_types)) {
+                        $helpdesk_item_types[] = $right['itemtype'];
+                     }
+                  } else {
+                     $helpdesk_item_types = array($right['itemtype']);
+                  }
+
+                  $tmp['id'] = $profile->getID();
+                  $tmp['helpdesk_item_type'] = json_encode($helpdesk_item_types);
+                  $profile->update($tmp);
+               }
+            }
+         }
+         //$migration->dropTable('glpi_plugin_genericobject_profiles');
       }
-      self::createFirstAccess();
+      if (!countElementsInTable('glpi_profilerights', 
+                                "`name` LIKE '%genericobject%'")) {
+         self::createFirstAccess();
+      }
    }
-   
+
    static function uninstall() {
       global $DB;
-      $query = "DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`";
+      $query = "DELETE FROM `glpi_profilerights` 
+                WHERE `name` LIKE '%plugin_genericobject%'";
       $DB->query($query) or die($DB->error());
    }
 }
