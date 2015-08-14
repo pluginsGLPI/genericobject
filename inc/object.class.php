@@ -776,7 +776,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          //We test if it ends with s_id, in order to be sure that this pattern
          //was found in a field that doesn't represent a foreign key
          //for exemple a field called : is_identification
-         if (preg_match("/s_id$/", $field)) {
+         if (preg_match("/(s_id$|s_id_)/", $field)) {
             $tmp  = getTableNameForForeignKeyField($field);            
          } else {
             $tmp = '';
