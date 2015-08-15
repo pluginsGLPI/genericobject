@@ -136,3 +136,7 @@ msgstr "Famille vide"
 #: inc/typefamily.class.php:35
 msgid "Family of type of objects"
 msgstr "Famille"
+
+msgid "geninventorynumber plugin"
+msgstr "Plugin génération des numéros d'inventaire"
+

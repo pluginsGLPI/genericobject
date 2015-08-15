@@ -480,7 +480,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
          $plugins = array("use_plugin_datainjection" => __("injection file plugin", "genericobject"),
    //                    "use_plugin_pdf"           => __("PDF plugin", "genericobject"),
-                       "use_plugin_geninventorynumber"  => __("Geninventorynumber plugin", "genericobject"),
+                       "use_plugin_geninventorynumber"  => __("geninventorynumber plugin", "genericobject"),
                        "use_plugin_order"         => __("order plugin", "genericobject"),
                        "use_plugin_uninstall"     => __("item's uninstallation plugin", "genericobject"));
          $plugin = new Plugin();
@@ -513,56 +513,6 @@ class PluginGenericobjectType extends CommonDBTM {
                                            'checked' => $this->canUseTemplate()));
                   break;
 
-               case 'use_plugin_datainjection' :
-                  if ($plugin->isActivated('datainjection')) {
-                     Html::showCheckbox(array('name' => $right, 
-                                              'checked' => $this->fields[$right]));
-                  } else {
-                     echo Dropdown::EMPTY_VALUE;
-                     echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
-                  }
-                  break;
-               case 'use_plugin_pdf' :
-                  if ($plugin->isActivated('pdf')) {
-                     Html::showCheckbox(array('name' => $right, 
-                                              'checked' => $this->fields[$right]));
-                  } else {
-                     echo Dropdown::EMPTY_VALUE;
-                     echo "<input type='hidden' name='use_plugin_pdf' value='0'>\n";
-                  }
-                  break;
-               case 'use_plugin_order' :
-                  if ($plugin->isActivated('order')) {
-                     Html::showCheckbox(array('name' => $right, 
-                                              'checked' => $this->fields[$right]));
-                  } else {
-                     echo Dropdown::EMPTY_VALUE;
-                     echo "<input type='hidden' name='use_plugin_order' value='0'>\n";
-                  }
-                  break;
-
-               case 'use_plugin_uninstall' :
-                  if ($plugin->isActivated('uninstall')) {
-                     Html::showCheckbox(array('name' => $right, 
-                                              'checked' => $this->fields[$right]));
-                  } else {
-                     echo Dropdown::EMPTY_VALUE;
-                     echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
-                  }
-
-                  break;
-
-              case 'use_plugin_geninventorynumber' :
-                  if ($plugin->isActivated('geninventorynumber')) {
-                     Html::showCheckbox(array('name' => $right,
-                                              'checked' => $this->fields[$right]));
-                  } else {
-                     echo Dropdown::EMPTY_VALUE;
-                     echo "<input type='hidden' name='use_plugin_geninventorynumber' value='0'>\n";
-                  }
-
-                  break;
-
                default :
                      Html::showCheckbox(array('name' => $right,  
                                               'checked' => $this->fields[$right]));
@@ -591,7 +541,7 @@ class PluginGenericobjectType extends CommonDBTM {
             echo "<td>" . _sx('button','Use') . " " . $label . "</td>";
             echo "<td>";
             switch ($right) {
-                              case 'use_plugin_datainjection' :
+               case 'use_plugin_datainjection' :
                   if ($plugin->isActivated('datainjection')) {
                      Html::showCheckbox(array('name' => $right, 
                                               'checked' => $this->fields[$right]));
@@ -600,6 +550,7 @@ class PluginGenericobjectType extends CommonDBTM {
                      echo "<input type='hidden' name='use_plugin_datainjection' value='0'>\n";
                   }
                   break;
+
                case 'use_plugin_pdf' :
                   if ($plugin->isActivated('pdf')) {
                      Html::showCheckbox(array('name' => $right, 
@@ -609,6 +560,7 @@ class PluginGenericobjectType extends CommonDBTM {
                      echo "<input type='hidden' name='use_plugin_pdf' value='0'>\n";
                   }
                   break;
+
                case 'use_plugin_order' :
                   if ($plugin->isActivated('order')) {
                      Html::showCheckbox(array('name' => $right, 
@@ -627,6 +579,17 @@ class PluginGenericobjectType extends CommonDBTM {
                      echo Dropdown::EMPTY_VALUE;
                      echo "<input type='hidden' name='use_plugin_uninstall' value='0'>\n";
                   }
+                  break;
+
+               case 'use_plugin_geninventorynumber' :
+                  if ($plugin->isActivated('geninventorynumber')) {
+                     Html::showCheckbox(array('name' => $right,
+                                              'checked' => $this->fields[$right]));
+                  } else {
+                     echo Dropdown::EMPTY_VALUE;
+                     echo "<input type='hidden' name='use_plugin_geninventorynumber' value='0'>\n";
+                  }
+                  break;
             }
             echo "</td>";
             if ($odd == 1) {

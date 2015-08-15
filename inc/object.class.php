@@ -165,8 +165,11 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          if ($item->canUsePluginGeninventorynumber()) {
             if (!in_array($class, $GENINVENTORYNUMBER_TYPES)) {
+               PluginGeninventorynumberConfigField::registerNewItemType($class);
                array_push($GENINVENTORYNUMBER_TYPES, $class);
             }
+         } else {
+            PluginGeninventorynumberConfigField::unregisterNewItemType($class);
          }
       }
 
