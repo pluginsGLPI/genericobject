@@ -94,11 +94,6 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
 function plugin_genericobject_install() {
    global $DB;
 
-   //check directories rights
-   if (!check_directories()) {
-      return false;
-   }
-
    $migration = new Migration('2.4.0');
 
    foreach (
@@ -161,17 +156,6 @@ function plugin_genericobject_uninstall() {
             include_once ("$dir$item.class.php");
             $itemtype::uninstall();
          }
-      }
-   }
-   return true;
-}
-
-function check_directories() {
-   foreach (array(GENERICOBJECT_CLASS_PATH, GENERICOBJECT_FRONT_PATH,
-                  GENERICOBJECT_LOCALES_PATH) as $path) {
-      if (!is_dir($path) || !is_writable($path)) {
-         Session::addMessageAfterRedirect(__("Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server.", "genericobject"));
-         return false;
       }
    }
    return true;

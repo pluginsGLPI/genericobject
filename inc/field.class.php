@@ -235,11 +235,11 @@ class PluginGenericobjectField extends CommonDBTM {
                   } else {
                      $field_options[] = __("tree structure")." : ".Dropdown::getYesNo(0);
                   }
-                  if (isset($values['isolated']) and $values['isolated']) {
-                     $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo($values['isolated']);
-                  } else {
-                     $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo(0);
-                  }
+                  //if (isset($values['isolated']) and $values['isolated']) {
+                  //   $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo($values['isolated']);
+                  //} else {
+                  //   $field_options[] = __("Isolated") . " : ". Dropdown::getYesNo(0);
+                  //}
                }
                if (!empty($field_options)) {
                   $message = "(".trim( implode(",",$field_options)).")";

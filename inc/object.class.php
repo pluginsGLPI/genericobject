@@ -69,7 +69,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    static function registerType() {
       global $DB, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI,
-              $GO_LINKED_TYPES;
+              $GO_LINKED_TYPES, $GENINVENTORYNUMBER_TYPES;
 
       $class  = get_called_class();
       $item   = new $class();
@@ -160,6 +160,12 @@ class PluginGenericobjectObject extends CommonDBTM {
          if ($item->canUseProjects()) {
             if (!in_array($class, $CFG_GLPI['project_asset_types'])) {
                array_push($CFG_GLPI['project_asset_types'], $class);
+            }
+         }
+
+         if ($item->canUsePluginGeninventorynumber()) {
+            if (!in_array($class, $GENINVENTORYNUMBER_TYPES)) {
+               array_push($GENINVENTORYNUMBER_TYPES, $class);
             }
          }
       }
@@ -410,6 +416,9 @@ class PluginGenericobjectObject extends CommonDBTM {
       return ($this->objecttype->canUsePluginOrder());
    }
 
+   function canUsePluginGeninventorynumber() {
+      return ($this->objecttype->canUsePluginGeninventorynumber());
+   }
 
    function canUseNetworkPorts() {
       return ($this->objecttype->canUseNetworkPorts());

@@ -95,7 +95,7 @@ function plugin_init_genericobject() {
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
 
 
-   include_once(GLPI_ROOT.'/plugins/genericobject/inc/profile.class.php');
+   //include_once(GLPI_ROOT.'/plugins/genericobject/inc/profile.class.php');
 
    PluginGenericobjectProfile::reloadProfileRights();
    $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
@@ -133,13 +133,13 @@ function plugin_init_genericobject() {
       unset($_SESSION['glpimenu']);
 
       // Config page
-      if (Session::haveRight('config', READ)) {
+      /*if (Session::haveRight('config', READ)) {
          $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']
             = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
          $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
             = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
-      }
+      }*/
 
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
