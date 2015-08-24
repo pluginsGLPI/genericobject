@@ -1008,15 +1008,15 @@ class PluginGenericobjectObject extends CommonDBTM {
                   if ($dropdown instanceof CommonTreeDropdown) {
                      $tmp['completename'] = $dropdown->fields['completename'];
                      $where               = "`completename`='".
-                                             addslashes_deep($tmp['completename'])."'";
+                                             Toolbox::addslashes_deep($tmp['completename'])."'";
                   } else {
                      $tmp['name'] = $dropdown->fields['name'];
-                     $where       = "`name`='".addslashes_deep($tmp['name'])."'";
+                     $where       = "`name`='".Toolbox::addslashes_deep($tmp['name'])."'";
                   }
                   $tmp['entities_id'] = $new_entity;
                   $where             .= " AND `entities_id`='".$tmp['entities_id']."'";
                   //There's a dropdown value in the target entity
-                  if ($found = $this->find($where)) {
+                  if ($found = $dropdown->find($where)) {
                      $myfound = array_pop($found);
                      if ($myfound['id'] != $this->fields[$field]) {
                         $toupdate[$field] = $myfound['id'];
@@ -1039,4 +1039,67 @@ class PluginGenericobjectObject extends CommonDBTM {
       return true;
    }
 
+  /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::showMassiveActionsSubForm()
+   **/
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+      global $GENINVENTORYNUMBER_TYPES;
+
+      // KK TODO: check if MassiveAction itemtypes are concerned 
+      //if (in_array ($options['itemtype'], $GENINVENTORYNUMBER_TYPES)) {
+      switch ($ma->action) {
+         case "plugin_genericobject_transfer" :
+               Dropdown::show('Entity', array('name' => 'new_entity'));
+               echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" .
+                  _sx('button','Post') . "\" >";
+            break;
+         default :
+            break;
+      }
+ //  }
+      return true; 
+   }
+
+   function plugin_genericobject_MassiveActionsProcess($data) {
+      global $DB;
+
+      switch ($data['action']) {
+         case 'plugin_genericobject_transfer':
+            $item = new $data['itemtype']();
+            foreach ($data["item"] as $key => $val) {
+               if ($val == 1) {
+                  $item->getFromDB($key);
+                  $item->transfer($_POST['new_entity']);
+               }
+            }
+            break;
+      }
+   }
+
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item,
+                                                       array $ids) {
+      $results = array('ok'       => 0,
+                       'ko'       => 0,
+                       'noright'  => 0,
+                       'messages' => array());
+
+      switch ($ma->action) {
+         case "plugin_genericobject_transfer" :
+            foreach ($ma->items as $itemtype => $val) {
+                foreach ($val as $key => $item_id) {
+                   $item = new $itemtype;
+                      $item->getFromDB($item_id);
+                      $item->transfer($_POST['new_entity']);
+                      $results['ok']++;
+                }
+             }
+             break;
+
+          default :
+             break;
+      }
+      $ma->results=$results;
+   }
 }
