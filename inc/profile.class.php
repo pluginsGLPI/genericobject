@@ -269,18 +269,27 @@ class PluginGenericobjectProfile extends Profile {
     * @return nothing
     */
    public static function createAccess($profiles_id, $itemtype, $first=false) {
-      $profile_right = new ProfileRight();
+
+      $rights             = getAllDatasFromTable('glpi_profiles');
+      $profile_right      = new ProfileRight();
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
-      $profile_right->updateProfileRights($profiles_id, array(
-         $itemtype_rightname => ALLSTANDARDRIGHT
-      ));
+      
+      foreach ($rights as $right) {
+         if ($right['id'] == $profiles_id) {
+            $r = ALLSTANDARDRIGHT;   
+         } else {
+            $r = 0;
+         }
+         $profile_right->updateProfileRights($right['id'], 
+                                             array($itemtype_rightname => $r));
+      }
    }
 
    public static function getGeneralRights() {
       $rights = array();
       $rights[] = array(
          'itemtype' => 'PluginGenericobjectType',
-         'label'    => PluginGenericobjectType::getTypeName(),
+         'label'    => __("Type of objects", "genericobject"),
          'field'    => self::getProfileNameForItemtype('PluginGenericobjectType'),
       );
       return $rights;
@@ -288,6 +297,8 @@ class PluginGenericobjectProfile extends Profile {
 
    public static function getTypesRights() {
       $rights = array();
+
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
       $types = PluginGenericobjectType::getTypes(true);
       if ( count( $types) > 0 ) {
@@ -328,7 +339,7 @@ class PluginGenericobjectProfile extends Profile {
             $missing_rights[] = $right_name;
          }
       }
-      _log(array($right_names, $missing_rights));
+
       //Install missing rights in profile and update the object
       if ( count($missing_rights) > 0) {
          ProfileRight::addProfileRights($missing_rights);
@@ -349,8 +360,19 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    public static function reloadProfileRights() {
-      if (isset($_SESSION['glpiactiveprofile']['id'])) {
-         Session::changeProfile($_SESSION['glpiactiveprofile']['id']);
+      $general_rights = self::getGeneralRights();
+      $type_rights    = self::getTypesRights();
+      $db_rights      = ProfileRight::getProfileRights($_SESSION['glpiactiveprofile']['id']);
+      $rights         = array_merge($general_rights, $type_rights);
+
+      foreach ($rights as $right) {
+         $str_right = $right['field'];
+         if (preg_match("/plugin_genericobject_/", $str_right)) {
+            unset($_SESSION['glpiactiveprofile'][$str_right]);            
+            if (!empty($db_rights) && isset($db_rights[$str_right])) {
+               $_SESSION['glpiactiveprofile'][$str_right] = $db_rights[$str_right]; 
+            }
+         }
       }
    }
 

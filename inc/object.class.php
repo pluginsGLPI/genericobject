@@ -165,11 +165,13 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          if ($item->canUsePluginGeninventorynumber()) {
             if (!in_array($class, $GENINVENTORYNUMBER_TYPES)) {
-               PluginGeninventorynumberConfigField::registerNewItemType($class);
+               //include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
+               //PluginGeninventorynumberConfigField::registerNewItemType($class);
                array_push($GENINVENTORYNUMBER_TYPES, $class);
             }
          } else {
-            PluginGeninventorynumberConfigField::unregisterNewItemType($class);
+            //include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
+            //PluginGeninventorynumberConfigField::unregisterNewItemType($class);
          }
       }
 
@@ -198,7 +200,6 @@ class PluginGenericobjectObject extends CommonDBTM {
       $itemtype_icons = glob(
          GENERICOBJECT_PICS_PATH . '/' . getSingular($itemtype_shortname) . ".*"
       );
-      _log("itemtype_icons\n", $itemtype_icons);
       $finfo = new finfo(FILEINFO_MIME);
       $icon_found = null;
       foreach($itemtype_icons as $icon) {
@@ -227,6 +228,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       $types = PluginGenericobjectType::getTypes();
       unset($_SESSION['glpimenu']);
       foreach($types as $type) {
+
+         if ($type['plugin_genericobject_typefamilies_id'] > 0) {
+            continue;
+         }
          $itemtype = $type['itemtype'];
          $item = new $itemtype();
          $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
@@ -248,7 +253,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $menu[strtolower($itemtype)]= array(
                'title' => (
                   "<span class='genericobject_menu_wrapper'>"
-                  . self::getMenuIcon($type['itemtype'])
+//                  . self::getMenuIcon($type['itemtype'])
                   . "<span class='genericobject_menu_text'>"
                   .     $type['itemtype']::getMenuName()
                   . "</span>"
@@ -260,6 +265,21 @@ class PluginGenericobjectObject extends CommonDBTM {
             );
          }
       }
+
+      foreach (PluginGenericobjectTypeFamily::getFamilies() as $id => $family) {
+         $menu['PluginGenericobjectTypeFamily_'.$id]= array(
+            'title' => (
+               "<span class='genericobject_menu_wrapper'>"
+               . "<span class='genericobject_menu_text'>"
+               .     $family
+               . "</span>"
+               .
+               "</span>"
+            ),
+            'page'  => '/plugins/genericobject/front/familylist.php?id='.$id
+         );
+      }
+
       $menu['is_multi_entries']= true;
       return $menu;
    }

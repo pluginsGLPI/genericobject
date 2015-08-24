@@ -59,5 +59,31 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
          $DB->query($query) or die($DB->error());
       }
    }
-}
 
+   static function getFamilies() {
+      global $DB;
+
+      $query     = "SELECT f.id as id, f.name as name, t.itemtype as itemtype 
+                    FROM glpi_plugin_genericobject_typefamilies as f 
+                    LEFT JOIN glpi_plugin_genericobject_types AS t 
+                       ON (f.id = t.plugin_genericobject_typefamilies_id) 
+                    WHERE t.id IN (SELECT DISTINCT `id`  
+                                   FROM glpi_plugin_genericobject_types 
+                                   WHERE is_active=1)";
+      $families = array();
+      foreach($DB->request($query) as $fam) {
+         $itemtype = $fam['itemtype'];
+         if ($itemtype::canCreate()) {
+           $families[$fam['id']] = $fam['name'];         
+         }
+      }
+      return $families;
+   }
+
+
+   static function getItemtypesByFamily($families_id) {
+      return getAllDatasFromTable('glpi_plugin_genericobject_types', 
+                                  "glpi_plugin_genericobject_typefamilies_id='$families_id' 
+                                     AND is_active='1'");
+   }
+}

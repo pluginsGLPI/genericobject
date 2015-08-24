@@ -94,6 +94,9 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
 function plugin_genericobject_install() {
    global $DB;
 
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
+
    $migration = new Migration('2.4.0');
 
    foreach (

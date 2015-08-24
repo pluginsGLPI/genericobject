@@ -213,6 +213,14 @@ class PluginGenericobjectType extends CommonDBTM {
          self::registerOneType($this->fields['itemtype']);
       }
 
+      if (isset($input['use_plugin_geninventorynumber'])) {
+         switch ($input['use_plugin_geninventorynumber']) {
+            case 0:
+		
+	       break;
+            case 1:
+         }
+      }
       return $input;
    }
 
@@ -222,7 +230,6 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function pre_deleteItem() {
-      _log("pre_deleteItem ", $this);
       if ($this->getFromDB($this->fields["id"])) {
          $name     = $this->fields['name'];
          $itemtype = $this->fields['itemtype'];
