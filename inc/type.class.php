@@ -1434,6 +1434,23 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
 
+   static function getFamilyNameByItemtype($itemtype) {
+      $types = getAllDatasFromTable("glpi_plugin_genericobject_types",
+                                    "`itemtype`='$itemtype' AND `is_active`='1'");
+      if (empty($types)) {
+         return false;
+      } else {
+        $type = array_pop($types);
+        if ($type['plugin_genericobject_typefamilies_id'] > 0) {
+            $family = new PluginGenericobjectTypeFamily();
+            $family->getFromDB($type['plugin_genericobject_typefamilies_id']);
+           return $family->getName();
+        } else {
+           return false;
+        }
+      }
+   }
+
    /**
     * Get all types of active&published objects
     */
@@ -1514,7 +1531,6 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    static function includeConstants($name, $force = false) {
-      //Toolbox::logDebug("includeConstants",$name);
       $file = GENERICOBJECT_FIELDS_PATH . "/$name.constant.php";
       if (file_exists($file)) {
          if (!$force) {
@@ -1538,16 +1554,12 @@ class PluginGenericobjectType extends CommonDBTM {
          $source_table = getTableForItemType($itemtype);
          foreach (PluginGenericobjectSingletonObjectField::getInstance($itemtype) as $field => $value) {
             $table = getTableNameForForeignKeyField($field);
-            //Toolbox::logDebug($field, $value, $table, $source_table, getSingular($source_table));
             $options = PluginGenericobjectField::getFieldOptions($field, $itemtype);
             if (
                isset($options['input_type'])
                and $options['input_type'] === 'dropdown'
                and preg_match('/^glpi_plugin_genericobject/', $table)
             ) {
-               //Toolbox::logDebug(
-               //   $field, "\n",PluginGenericobjectField::getFieldOptions($field, $itemtype)
-               //);
                $associated_tables[] = $table;
             }
          }

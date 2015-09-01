@@ -41,16 +41,12 @@ class PluginGenericobjectAutoloader implements SplAutoloader
 
    public function autoload($classname)
    {
-      //Toolbox::logDebug($classname);
-
       $matches = $this->processClassname($classname);
-      //Toolbox::logDebug($matches);
 
       if($matches !== false) {
          $plugin_name = strtolower($matches[1]);
          $class_name = strtolower($matches[2]);
 
-         //Toolbox::logDebug($plugin_name);
          if ( $plugin_name !== "genericobject" ) {
             return false;
          }
@@ -61,11 +57,8 @@ class PluginGenericobjectAutoloader implements SplAutoloader
             "php"
          ));
 
-         //Toolbox::logDebug($filename);
-
          foreach ($this->paths as $path) {
             $test = $path . DIRECTORY_SEPARATOR . $filename;
-            //Toolbox::logDebug($test);
             if (file_exists($test)) {
                return include($test);
             }

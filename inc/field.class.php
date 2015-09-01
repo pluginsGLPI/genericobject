@@ -46,8 +46,6 @@ class PluginGenericobjectField extends CommonDBTM {
       $GO_FIELDS = array();
       plugin_genericobject_includeCommonFields(true);
 
-      //ToolBox::logDebug(PluginGenericobjectSingletonObjectField::$_dbfields);
-
       PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
 
       self::addReadOnlyFields($object_type);
@@ -157,19 +155,8 @@ class PluginGenericobjectField extends CommonDBTM {
                   $field = preg_replace("/".$fk."/","", $field);
                }
             }
-            //Toolbox::logDebug(array(
-            //   "field_orig" => $field_orig,
-            //   "field" => $field,
-            //   "fk" => $fk,
-            //   "options" => $options
-            //));
             $field_table = getTableNameForForeignKeyField($field);
-            //Toolbox::logDebug(
-            //   $field, "\n",
-            //   substr($field_table, strlen('glpi_')), "\n",
-            //   strlen($field)-strlen('_id'),
-            //   '"'.substr($field, 0, strlen($field)-strlen('_id')).'"'
-            //);
+
             //Prepend plugin's table prefix if this dropdown is not already handled by GLPI natively
             if (
                substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
@@ -180,18 +167,8 @@ class PluginGenericobjectField extends CommonDBTM {
                and !TableExists($field_table)
             ) {
                if (!$remove_prefix) { $field = 'plugin_genericobject_' . $field;}
-               //Toolbox::logDebug($field);
-            } else {
-               //Toolbox::logDebug($field, "is already handled by GLPI");
             }
-
-
-            //Toolbox::logDebug("Get Table for dropdown", $field,":", $field_table);
-
             break;
-
-         //default:
-         //   Toolbox::logDebug($field, "Type:", $input_type);
 
       }
       return $field;
@@ -268,7 +245,6 @@ class PluginGenericobjectField extends CommonDBTM {
       $cleaned_field = preg_replace("/^plugin_genericobject_/",'', $field);
       if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
          // This field has been dynamically defined because it's an isolated dropdown
-         //Toolbox::logDebug("'$cleaned_field' not found in GO_FIELDS !!!!");
          $tmpfield = self::getFieldName(
             $field, $itemtype,
             array(
@@ -334,10 +310,8 @@ class PluginGenericobjectField extends CommonDBTM {
 
       _log("add", $field, "from", $table);
       $itemtype = getItemTypeForTable($table);
-      //Toolbox::logDebug("Will add field '".$field."' to table '".$table."'");
       if (!FieldExists($table, $field, false)) {
          $options  = self::getFieldOptions($field, $itemtype);
-         //Toolbox::logDebug($options);
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {
             case 'dropdown_yesno' :

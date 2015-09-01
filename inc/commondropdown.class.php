@@ -34,12 +34,10 @@ class PluginGenericobjectCommonDropdown extends CommonDropdown {
    }
 
    static function getFormURL($full=true) {
-      //Toolbox::logDebug("PluginGenericobjectDropdown::getFormURL", get_parent_class(get_called_class()));
       return Toolbox::getItemTypeFormURL(  get_parent_class(get_called_class()), $full) .
          "?itemtype=".get_called_class();
    }
    static function getSearchURL($full=true) {
-      //Toolbox::logDebug("PluginGenericobjectDropdown::getSearchURL", get_parent_class(get_called_class()));
       return Toolbox::getItemTypeSearchURL( get_parent_class(get_called_class()) , $full) .
          "?itemtype=".get_called_class();
 

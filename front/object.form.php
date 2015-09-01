@@ -97,7 +97,6 @@ if (!is_null($itemtype)) {
       $item->delete($_POST);
       $item->redirectToList();
    }
-//$itemtype = get_class($item);
    Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
              "assets", $itemtype);
 

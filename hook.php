@@ -58,7 +58,6 @@ function plugin_genericobject_getDropdown() {
          }
       }
    }
-   //Toolbox::logDebug($dropdowns);
    return $dropdowns;
 }
 

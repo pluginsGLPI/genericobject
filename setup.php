@@ -95,9 +95,7 @@ function plugin_init_genericobject() {
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
 
 
-   include_once(GLPI_ROOT.'/plugins/genericobject/inc/profile.class.php');
 
-   PluginGenericobjectProfile::reloadProfileRights();
    $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
 
    $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
@@ -111,7 +109,11 @@ function plugin_init_genericobject() {
    $GENERICOBJECT_PDF_TYPES                         = array ();
    $plugin                                          = new Plugin();
 
-   if ($plugin->isInstalled("genericobject") && $plugin->isActivated("genericobject")) {
+   if ($plugin->isInstalled("genericobject") 
+      && $plugin->isActivated("genericobject") 
+         && isset($_SESSION['glpiactiveprofile'])) {
+      include_once(GLPI_ROOT.'/plugins/genericobject/inc/profile.class.php');
+      PluginGenericobjectProfile::reloadProfileRights();
 
       plugin_genericobject_includeCommonFields();
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
@@ -127,19 +129,10 @@ function plugin_init_genericobject() {
          'assets' => 'PluginGenericobjectObject'
       );
 
-      // Ensure GLPI does correctly load menu entries for each activated objects
-      // TODO: it could be better to check existence of those entries before unsetting the glpimenu
-      // session in order to trigger rebuild.
-      unset($_SESSION['glpimenu']);
-
       // Config page
-      /*if (Session::haveRight('config', READ)) {
+      if (Session::haveRight('config', READ)) {
          $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['add']
-            = Toolbox::getItemTypeFormURL('PluginGenericobjectType', false);
-         $PLUGIN_HOOKS['submenu_entry']['genericobject']['options']['type']['links']['search']
-            = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false);
-      }*/
+      }
 
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
@@ -152,7 +145,6 @@ function plugin_init_genericobject() {
 
 function plugin_post_init_genericobject() {
    global $GO_FIELDS;
-   //Toolbox::logDebug($GO_FIELDS);
    Plugin::registerClass(
       'PluginGenericobjectProfile',
       array('addtabon' => array(

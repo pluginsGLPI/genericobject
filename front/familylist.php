@@ -24,16 +24,34 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
-include ("../../../inc/includes.php");
 
-if (isset($_GET['itemtype'])) {
-   Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($_GET['itemtype']), READ);
-   $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
-   Html::header(__("Type of objects", "genericobject"), 
-   	            $_SERVER['PHP_SELF'], "assets", ($menu!==false?$menu:strtolower($_GET['itemtype'])), strtolower($_GET['itemtype']));
-   Search::Show($_GET['itemtype']);
+include ('../../../inc/includes.php');
 
+$family = new PluginGenericobjectTypeFamily();
+
+if (!isset($_GET['id']) || !$family->getFromDB($_GET['id'])) {
+	Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+	                "genericobject");
+
+	echo "<table class='tab_cadre_fixe'>";
+    echo "<tr class='tab_bg_2'><th>".__("Empty family","genericobject")."</th></tr>";
+	echo "</table>";
+} else {
+	$family->getFromDB($_GET['id']);
+	Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+	                $family->getName());
+
+	echo "<table class='tab_cadre_fixe'>";
+	$types = PluginGenericobjectTypeFamily::getItemtypesByFamily($_GET['id']);
+    echo "<tr class='tab_bg_2'><th>".$family->getField("name")."</th></tr>";
+	foreach ($types as $type) {
+		$itemtype = $type['itemtype'];
+        echo "<tr class='tab_bg_1'><td align='center'>";
+        echo "<a href='".$itemtype::getSearchURL()."'>";
+        echo $itemtype::getTypeName();
+        echo "</a></td></tr>";
+    }
+	echo "</table>";
 }
 
 Html::footer();

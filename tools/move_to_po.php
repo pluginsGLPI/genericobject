@@ -254,9 +254,6 @@ function search_in_dict($string, $context) {
                return $left.$LANG[$mod][$key].$right;
             }
          } else {
-            //toolbox::logdebug($val);
-            //toolbox::logdebug($key);
-            //toolbox::logdebug($mod);
             foreach ($val as $k => $v) {
                if (!isset($LANG[$mod][$key][$k])) {
                   continue;

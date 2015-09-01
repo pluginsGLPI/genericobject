@@ -20,7 +20,7 @@
  @copyright Copyright (c) 2010-2011 Order plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/genericobject
+ @link      https://forge.indepnet.n$/projects/genericobject
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
@@ -217,71 +217,6 @@ class PluginGenericobjectObject extends CommonDBTM {
          "  class='genericobject_menu_icon' ".
          "src='".$icon_path."'".
          "/>";
-   }
-
-   /**
-    * Generate items to display in GLPI menus
-    *
-    */
-   static function getMenuContent() {
-      $menu = array();
-      $types = PluginGenericobjectType::getTypes();
-      unset($_SESSION['glpimenu']);
-      foreach($types as $type) {
-
-         if ($type['plugin_genericobject_typefamilies_id'] > 0) {
-            continue;
-         }
-         $itemtype = $type['itemtype'];
-         $item = new $itemtype();
-         $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
-         if (class_exists($itemtype)
-            && Session::haveRight($itemtype_rightname, READ)) {
-
-            $links = array();
-            $links['search'] = self::getSearchUrl(false).'?itemtype='.$itemtype;
-            if ($item->canUseTemplate()) {
-               $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
-               if (Session::haveRight($itemtype_rightname, CREATE)) {
-                  $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=1";
-               }
-            } else {
-               if (Session::haveRight($itemtype_rightname, CREATE)) {
-                  $links['add'] = self::getFormUrl(false).'?itemtype='.$itemtype;
-               }
-            }
-            $menu[strtolower($itemtype)]= array(
-               'title' => (
-                  "<span class='genericobject_menu_wrapper'>"
-//                  . self::getMenuIcon($type['itemtype'])
-                  . "<span class='genericobject_menu_text'>"
-                  .     $type['itemtype']::getMenuName()
-                  . "</span>"
-                  .
-                  "</span>"
-               ),
-               'page'  => self::getSearchUrl(false).'?itemtype='.$itemtype,
-               'links' => $links
-            );
-         }
-      }
-
-      foreach (PluginGenericobjectTypeFamily::getFamilies() as $id => $family) {
-         $menu['PluginGenericobjectTypeFamily_'.$id]= array(
-            'title' => (
-               "<span class='genericobject_menu_wrapper'>"
-               . "<span class='genericobject_menu_text'>"
-               .     $family
-               . "</span>"
-               .
-               "</span>"
-            ),
-            'page'  => '/plugins/genericobject/front/familylist.php?id='.$id
-         );
-      }
-
-      $menu['is_multi_entries']= true;
-      return $menu;
    }
 
    static function checkItemtypeRight($class = null, $right) {
@@ -748,7 +683,6 @@ class PluginGenericobjectObject extends CommonDBTM {
     * @param type the object type
     */
    static function showPrevisualisationForm(PluginGenericobjectType $type) {
-      //Toolbox::logDebug(print_r($type->fields,true));
       $itemtype = $type->fields['itemtype'];
       $item     = new $itemtype();
 
@@ -1102,4 +1036,60 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       $ma->results=$results;
    }
+
+   static function getMenuContent() {
+      $types = PluginGenericobjectType::getTypes();
+      foreach($types as $type) {
+
+         $itemtype = $type['itemtype'];
+         $item     = new $itemtype();
+         
+         $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
+         if (class_exists($itemtype)
+            && Session::haveRight($itemtype_rightname, READ)) {
+
+            $links           = array();
+            $links['search'] = $itemtype::getSearchUrl(false);
+            
+            if ($item->canUseTemplate()) {
+               $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
+               if (Session::haveRight($itemtype_rightname, CREATE)) {
+                  $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=1";
+               }
+            } else {
+               if (Session::haveRight($itemtype_rightname, CREATE)) {
+                  $links['add'] = $itemtype::getFormUrl(false);
+               }
+            }
+
+            // $menu[strtolower($itemtype)] = array('title' => $type['itemtype']::getMenuName(), 
+            //                                      'page'  => $itemtype::getSearchUrl(false));
+
+            if ($type['plugin_genericobject_typefamilies_id'] > 0 
+               && (!isset($_GET['itemtype']) 
+                  || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {
+               $family = new PluginGenericobjectTypeFamily();
+               $family->getFromDB($type['plugin_genericobject_typefamilies_id']);
+               $menu[strtolower($family->getName())]['title'] = $family->getName();
+               $menu[strtolower($family->getName())]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family->getID();
+               $menu[strtolower($family->getName())]['options'][strtolower($itemtype)] = 
+                     array('title' => $type['itemtype']::getMenuName(), 
+                           'page'  => $itemtype::getSearchUrl(false), 
+                           'links' => $links);
+            } else {
+               $menu[strtolower($itemtype)]= array(
+                  'title' => $type['itemtype']::getMenuName(),
+                  'page'  => $itemtype::getSearchUrl(false),
+                  'links' => $links
+               );
+
+            }
+
+         }
+      }
+
+      $menu['is_multi_entries']= true;
+      return $menu;
+   }
+ 
 }
