@@ -472,7 +472,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $use = array ("use_recursivity"          => __("Child entities"),
                        "use_tickets"              => __("Assistance"),
                        "use_deleted"              => __("Item in the dustbin"),
-                       "use_notes"                => _n('Note', 'Notes', 2),
+                       "use_notepad"              => _n('Note', 'Notes', 2),
                        "use_history"              => __("Historical"),
                        "use_template"             => __("Templates"),
                        "use_infocoms"             => __("Financial and administratives information"),
@@ -1624,7 +1624,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUseNotepad() {
-      return FieldExists(getTableForItemType($this->fields['itemtype']), 'notepad');
+      return $this->fields['use_notepad'] != 0;
    }
 
 
