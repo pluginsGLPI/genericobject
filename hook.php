@@ -130,7 +130,7 @@ function plugin_genericobject_install() {
    plugin_init_genericobject();
 
    //Init profiles
-   PluginGenericobjectProfile::reloadProfileRights();
+   PluginGenericobjectProfile::changeProfile();
    return true;
 }
 

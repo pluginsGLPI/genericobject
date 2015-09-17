@@ -720,7 +720,7 @@ class PluginGenericobjectType extends CommonDBTM {
          //Create rights for this new object
          PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], $itemtype,true);
          //Reload profiles
-         PluginGenericobjectProfile::reloadProfileRights();
+         PluginGenericobjectProfile::changeProfile();
       }
    }
 

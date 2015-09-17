@@ -343,7 +343,7 @@ class PluginGenericobjectProfile extends Profile {
       //Install missing rights in profile and update the object
       if ( count($missing_rights) > 0) {
          ProfileRight::addProfileRights($missing_rights);
-         self::reloadProfileRights();
+         self::changeProfile();
       }
 
    }
