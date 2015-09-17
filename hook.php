@@ -120,6 +120,8 @@ function plugin_genericobject_install() {
          }
       }
    }
+   
+   
 
    if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
       @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true)
@@ -148,8 +150,14 @@ function plugin_genericobject_uninstall() {
       }
    }
 
-   foreach (array('PluginGenericobjectType', 'PluginGenericobjectProfile',
-                  'PluginGenericobjectField', 'PluginGenericobjectTypeFamily') as $itemtype) {
+   foreach (
+      array(
+               'PluginGenericobjectType', 
+               'PluginGenericobjectProfile',
+               'PluginGenericobjectField', 
+               'PluginGenericobjectTypeFamily'
+      ) as $itemtype
+   ) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
