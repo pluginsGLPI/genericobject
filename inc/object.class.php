@@ -28,7 +28,7 @@
 class PluginGenericobjectObject extends CommonDBTM {
 
    protected $objecttype;
-
+   
    //Internal field counter
    private $cpt = 0;
 
@@ -59,6 +59,14 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->objecttype = PluginGenericobjectType::getInstance($class);
       }
       $this->dohistory = $this->canUseHistory();
+      
+      if (preg_match("/PluginGenericobject(.*)/", $class, $results)) {
+               self::$rightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
+      }
+      
+      if ($this->canUseNotepad()) {
+         $this->usenotepadrights = true;
+      }
    }
 
    static function install() {
@@ -287,8 +295,8 @@ class PluginGenericobjectObject extends CommonDBTM {
             $this->addStandardTab('Change_Item', $ong, $options);
           }
 
-         if ($this->canUseNotepad() && Session::haveRight("notes", "r")) {
-            $this->addStandardTab('Note',$ong, $options);
+         if ($this->canUseNotepad() /*&& Session::haveRight("notes", "r") */) {
+            $this->addStandardTab('Notepad', $ong, $options);
          }
 
          if ($this->canBeReserved()) {
