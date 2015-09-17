@@ -263,6 +263,8 @@ class PluginGenericobjectType extends CommonDBTM {
          self::deleteItemtypeReferencesInGLPI($itemtype);
 
          self::deleteItemTypeFilesAndClasses($name, $this->getTable(), $itemtype);
+         
+         self::deleteNotepad($itemtype);
 
          if (preg_match("/PluginGenericobject(.*)/", $itemtype, $results)) {
                   $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
@@ -1389,6 +1391,17 @@ class PluginGenericobjectType extends CommonDBTM {
    public static function deleteUnicity($itemtype) {
       $unicity = new FieldUnicity();
       $unicity->deleteByCriteria(array('itemtype' => $itemtype));
+   }
+
+
+   /**
+    * Delete all notes associated with a itemtype
+    * @param the itemtype
+    * @return nothing
+    */
+   public static function deleteNotepad($itemtype) {
+      $notepad = new Notepad();
+      $notepad->deleteByCriteria(array('itemtype' => $itemtype));
    }
 
 
