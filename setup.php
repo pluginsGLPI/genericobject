@@ -112,9 +112,13 @@ function plugin_init_genericobject() {
    if ($plugin->isInstalled("genericobject") 
       && $plugin->isActivated("genericobject") 
          && isset($_SESSION['glpiactiveprofile'])) {
-      include_once(GLPI_ROOT.'/plugins/genericobject/inc/profile.class.php');
-      PluginGenericobjectProfile::reloadProfileRights();
-
+//       include_once(GLPI_ROOT.'/plugins/genericobject/inc/profile.class.php');
+//       PluginGenericobjectProfile::reloadProfileRights();
+      $PLUGIN_HOOKS['change_profile']['genericobject'] = array(
+            'PluginGenericobjectProfile',
+            'changeProfile'
+      );
+            
       plugin_genericobject_includeCommonFields();
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 

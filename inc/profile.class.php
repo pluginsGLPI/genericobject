@@ -31,7 +31,7 @@ class PluginGenericobjectProfile extends Profile {
    function cleanProfiles($id) {
       $this->deleteByCriteria(array('id' => $id));
    }
-
+   
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
       switch($item->getType()) {
@@ -359,7 +359,7 @@ class PluginGenericobjectProfile extends Profile {
       ProfileRight::deleteProfileRights($rights);
    }
 
-   public static function reloadProfileRights() {
+   public static function changeProfile() {
       $general_rights = self::getGeneralRights();
       $type_rights    = self::getTypesRights();
       $db_rights      = ProfileRight::getProfileRights($_SESSION['glpiactiveprofile']['id']);
