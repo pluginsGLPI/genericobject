@@ -1792,13 +1792,43 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_menu_entry", "bool");
       $migration->addField($table, "use_global_search", "bool");
       $migration->addField($table, "use_projects", "bool");
+      $migration->addField($table, "use_notepad", "bool");
       $migration->addField($table, "comment", "text");
       $migration->addField($table, "date_mod", "datetime");
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->migrationOneTable($table);
 
-
+      // Migrate notepad data
+      $allGenericObjectTypes = PluginGenericobjectType::getTypes(true);
+       
+      $notepad = new Notepad();
+      foreach ($allGenericObjectTypes as $genericObjectType => $genericObjectData) {
+         $genericObjectTypeInstance = new $genericObjectType();
+         if (FieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
+            $query = "INSERT INTO `" . $notepad->getTable() . "`
+                  (`items_id`,
+                  `itemtype`,
+                  `date`,
+                  `date_mod`,
+                  `content`
+               )
+               SELECT
+                  `id` as `items_id`,
+                  '" . $genericObjectType . "' as `itemtype`,
+                  now() as `date`,
+                  now() as `date_mod`,
+                  `notepad` as `content`
+               FROM `" . $genericObjectTypeInstance->getTable() . "`
+               WHERE notepad IS NOT NULL
+               AND notepad <> ''";
+            $DB->query($query) or die($DB->error());
+         }
+         $query = "UPDATE`" . $notepad->getTable() . "`";
+         $migration->dropField($genericObjectTypeInstance->getTable(), "notepad");
+         $migration->migrationOneTable($genericObjectTypeInstance->getTable());
+      }
+      
       //Displayprefs
       $prefs = array(10 => 6, 9 => 5, 8 => 4, 7 => 3, 6 => 2, 2 => 1, 4 => 1, 11 => 7,  12 => 8,
                      14 => 10, 15 => 11);

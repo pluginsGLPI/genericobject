@@ -168,7 +168,7 @@ function plugin_post_init_genericobject() {
 // Get the name and the version of the plugin - Needed
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
-                 'version'        => '0.85-1.0',
+                 'version'        => '0.85-1.1',
                  'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & <a href='http://www.siprossii.com/'>siprossii</a>",
                  'homepage'       => 'https://github.com/teclib/genericobject',
                  'license'        => 'GPLv2+',
