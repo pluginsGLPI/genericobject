@@ -460,7 +460,11 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       foreach (PluginGenericobjectSingletonObjectField::getInstance($this->objecttype->fields['itemtype'])
                as $field => $description) {
-         $this->displayField($canedit, $field, $this->fields[$field], $template, $description);
+         if ($field == "is_helpdesk_visible" && $id <= 0) {
+            $this->displayField($canedit, $field, 1, $template, $description);
+         } else {
+            $this->displayField($canedit, $field, $this->fields[$field], $template, $description);
+         }
       }
       $this->closeColumn();
 
