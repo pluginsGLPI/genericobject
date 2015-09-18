@@ -276,7 +276,7 @@ class PluginGenericobjectProfile extends Profile {
       
       foreach ($rights as $right) {
          if ($right['id'] == $profiles_id) {
-            $r = ALLSTANDARDRIGHT;   
+            $r = ALLSTANDARDRIGHT | READNOTE | UPDATENOTE;   
          } else {
             $r = 0;
          }
