@@ -530,7 +530,13 @@ class PluginGenericobjectObject extends CommonDBTM {
                   if(isset($searchoption['condition'])) {
                      $parameters['condition'] = $searchoption['condition'];
                   }
-                  Dropdown::show($itemtype, $parameters);
+                  if ($dropdown instanceof User) {
+                     $parameters['entity'] = $this->fields["entities_id"];
+                     $parameters['right'] = 'all';
+                     User::dropdown($parameters);
+                  } else {
+                     Dropdown::show($itemtype, $parameters);
+                  }
                } else {
                   $min = $max = $step = 0;
                   if (isset($searchoption['min'])) {
