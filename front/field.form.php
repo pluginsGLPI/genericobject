@@ -27,17 +27,19 @@
 
 include ("../../../inc/includes.php");
 if (isset ($_POST["delete"])) {
-   $type = new PluginGenericobjectType();
-   $type->getFromDB($_POST["id"]);
-   $itemtype = $type->fields['itemtype'];
-   PluginGenericobjectType::registerOneType($itemtype);
-
-   foreach ($_POST["fields"] as $field => $value) {
-      if ($type->can($_POST["id"], PURGE)
-         && $value == 1
-            && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
-         PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
-         Session::addMessageAfterRedirect(__("Field(s) deleted successfully", "genericobject"), true, INFO);
+   if (isset($_POST["fields"]) && count($_POST["fields"] > 0 )) {
+      $type = new PluginGenericobjectType();
+      $type->getFromDB($_POST["id"]);
+      $itemtype = $type->fields['itemtype'];
+      PluginGenericobjectType::registerOneType($itemtype);
+   
+      foreach ($_POST["fields"] as $field => $value) {
+         if ($type->can($_POST["id"], PURGE)
+            && $value == 1
+               && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
+            PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
+            Session::addMessageAfterRedirect(__("Field(s) deleted successfully", "genericobject"), true, INFO);
+         }
       }
    }
 } elseif (isset ($_POST["add_field"])) {
