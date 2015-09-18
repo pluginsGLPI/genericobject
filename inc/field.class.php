@@ -57,7 +57,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
 
       echo "<div class='center'>";
-      echo "<form name='fieldslist' method='POST' action='$url'>";
+      echo "<form id='fieldslist' method='POST' action='$url'>";
       echo "<table class='tab_cadre_fixe' >";
       echo "<input type='hidden' name='id' value='$id'>";
       echo "<tr class='tab_bg_1'><th colspan='7'>";
