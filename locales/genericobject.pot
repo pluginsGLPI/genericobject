@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-06 14:50+0200\n"
+"POT-Creation-Date: 2015-09-18 15:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,114 +17,123 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: hook.php:152
-msgid ""
-"Error: directories '/inc', '/front' and '/locales' of plugin must be "
-"writable by the web server."
-msgstr ""
-
-#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
-#: inc/object_item.class.php:110 inc/type.class.php:239
+#: index.php:59 setup.php:170 front/familylist.php:33 front/familylist.php:41
+#: front/type.form.php:73 inc/object_item.class.php:110
+#: inc/profile.class.php:39 inc/type.class.php:295 inc/type.class.php:366
 msgid "Objects management"
 msgstr ""
 
-#: setup.php:82 setup.php:83
-msgid "Go to objects list"
+#: index.php:69 front/familylist.php:37
+msgid "Empty family"
+msgstr ""
+
+#: front/commondropdown.form.php:36 front/commondropdown.php:11
+#: front/commontreedropdown.form.php:36
+msgid "The requested dropdown does not exists"
 msgstr ""
 
 #: front/field.form.php:40
 msgid "Field(s) deleted successfully"
 msgstr ""
 
-#: front/field.form.php:50
+#: front/field.form.php:49
 msgid "Field added successfully"
 msgstr ""
 
-#: front/type.php:37 inc/type.class.php:61
+#: front/object.php:33 front/type.php:37 inc/profile.class.php:292
+#: inc/type.class.php:68
 msgid "Type of objects"
 msgstr ""
 
-#: inc/field.class.php:66
+#: inc/field.class.php:64
 msgid "Fields associated with the object"
 msgstr ""
 
-#: inc/field.class.php:72
+#: inc/field.class.php:70
 msgid "Label"
 msgstr ""
 
-#: inc/field.class.php:73
+#: inc/field.class.php:71
 msgid "Name in DB"
 msgstr ""
 
-#: inc/field.class.php:105
+#: inc/field.class.php:95
 msgid "Add new field"
 msgstr ""
 
-#: inc/object.class.php:346
+#: inc/object.class.php:453
 msgid "Object preview"
 msgstr ""
 
-#: inc/object.class.php:633
+#: inc/object.class.php:718
 msgid "You must configure rights to enable the preview"
 msgstr ""
 
-#: inc/profile.class.php:62 inc/profile.class.php:121
-msgid "Access object"
+#: inc/profile.class.php:145
+msgid "General"
 msgstr ""
 
-#: inc/profile.class.php:69 inc/profile.class.php:127
-msgid "Associate tickets to this object"
+#: inc/profile.class.php:151
+msgid "Objects"
 msgstr ""
 
-#: inc/profile.class.php:147
-msgid "No type defined"
+#: inc/profile.class.php:153
+msgid " (No types defined yet)"
 msgstr ""
 
-#: inc/type.class.php:150
+#: inc/type.class.php:173
 msgid "Type name is missing"
 msgstr ""
 
-#: inc/type.class.php:156
+#: inc/type.class.php:179
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
 msgstr ""
 
-#: inc/type.class.php:163
+#: inc/type.class.php:186
 msgid "Type must start with a letter"
 msgstr ""
 
-#: inc/type.class.php:170
+#: inc/type.class.php:193
 msgid "A type already exists with the same name"
 msgstr ""
 
-#: inc/type.class.php:339
+#: inc/type.class.php:349 inc/type.class.php:457 inc/typefamily.class.php:35
+msgid "Family of type of objects"
+msgstr ""
+
+#: inc/type.class.php:417
 msgid "Internal identifier"
 msgstr ""
 
-#: inc/type.class.php:383
+#: inc/type.class.php:471
 msgid "Behaviour"
 msgstr ""
 
-#: inc/type.class.php:398 inc/type.class.php:513
-msgid "Link to other objects"
-msgstr ""
-
-#: inc/type.class.php:399
+#: inc/type.class.php:489
 msgid "Network connections"
 msgstr ""
 
-#: inc/type.class.php:400
+#: inc/type.class.php:492
 msgid "injection file plugin"
 msgstr ""
 
-#: inc/type.class.php:402
+#: inc/type.class.php:494
+msgid "geninventorynumber plugin"
+msgstr ""
+
+#: inc/type.class.php:495
 msgid "order plugin"
 msgstr ""
 
-#: inc/type.class.php:403
+#: inc/type.class.php:496
 msgid "item's uninstallation plugin"
 msgstr ""
 
-#: inc/type.class.php:500
+#: inc/type.class.php:637
 msgid "Regenerate files"
+msgstr ""
+
+#: inc/type.class.php:650
+msgid "Link to other objects"
 msgstr ""

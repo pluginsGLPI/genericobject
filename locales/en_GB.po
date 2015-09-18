@@ -68,6 +68,15 @@ msgstr "Object preview"
 msgid "You must configure rights to enable the preview"
 msgstr "You must configure rights to enable the preview"
 
+
+#: inc/profile.class.php:145
+msgid "General"
+msgstr "General"
+
+#: inc/profile.class.php:151
+msgid "Objects"
+msgstr "Objects"
+
 #: inc/profile.class.php:62 inc/profile.class.php:121
 msgid "Access object"
 msgstr "Access object"
