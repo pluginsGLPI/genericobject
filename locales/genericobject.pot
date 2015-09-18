@@ -86,8 +86,7 @@ msgid "Type name is missing"
 msgstr ""
 
 #: inc/type.class.php:179
-msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgid "Types 'field', 'object' and 'type' are reserved. Please choose another one"
 msgstr ""
 
 #: inc/type.class.php:186
