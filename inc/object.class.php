@@ -724,6 +724,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                                  'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90);
       $index   = 3;
       $options = array();
+      $options['common']             = __('Characteristics');
+
       $table   = getTableForItemType(get_called_class());
 
       foreach (
