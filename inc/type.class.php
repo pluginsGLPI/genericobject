@@ -481,7 +481,9 @@ class PluginGenericobjectType extends CommonDBTM {
                        "use_contracts"            => _n("Contract", "Contracts", 2),
                        "use_documents"            => _n("Document", "Documents", 2),
                        "use_loans"                => _n("Reservation", "Reservations", 2),
-                       "use_unicity"              => __("Fields unicity"),
+                       // Disable unicity feature; see #16 
+                       // Related code : search for #16 
+                       // "use_unicity"              => __("Fields unicity"),
                        "use_global_search"        => __("Global search"),
                        "use_projects"             => _n("Project", "Projects", 2),
                        "use_network_ports"        => __("Network connections", "genericobject"),

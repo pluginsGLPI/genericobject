@@ -336,6 +336,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function canUseUnicity() {
+      // Disable unicity feature (for GLPI 0.85 onward) : see issue #16
+      // Related code : search for #16
+      // FIXME : The bug may be in GLPI itself 
+      return false;
       return ($this->objecttype->canUseUnicity() && Session::haveRight("config", READ));
    }
 
@@ -763,7 +767,11 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
 
          if ($with_linkfield) {
-            $options[$currentindex]['linkfield'] = $field;
+            if (preg_match("/(s_id$|s_id_)/", $field)) {
+               $options[$currentindex]['linkfield'] = $field;
+            } else {
+               $options[$currentindex]['linkfield'] = $field;
+            }
          }
 
          if ($tmp != '') {
