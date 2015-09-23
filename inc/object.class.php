@@ -65,7 +65,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       
       if ($this->canUseNotepad()) {
+         // For GLPI 0.85.x
          $this->usenotepadrights = true;
+         // For GLPI 0.90.x
+         $this->usenotepad = true;
       }
    }
 
