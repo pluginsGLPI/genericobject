@@ -298,7 +298,7 @@ class PluginGenericobjectProfile extends Profile {
    public static function getTypesRights() {
       $rights = array();
 
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
+      include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
       $types = PluginGenericobjectType::getTypes(true);
       if ( count( $types) > 0 ) {
