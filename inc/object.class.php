@@ -1099,11 +1099,12 @@ class PluginGenericobjectObject extends CommonDBTM {
             if ($type['plugin_genericobject_typefamilies_id'] > 0 
                && (!isset($_GET['itemtype']) 
                   || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {
-               $family = new PluginGenericobjectTypeFamily();
-               $family->getFromDB($type['plugin_genericobject_typefamilies_id']);
-               $menu[strtolower($family->getName())]['title'] = $family->getName();
-               $menu[strtolower($family->getName())]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family->getID();
-               $menu[strtolower($family->getName())]['options'][strtolower($itemtype)] = 
+               $family_id = $type['plugin_genericobject_typefamilies_id'];
+               $name      = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id, 0, false);
+               $str_name  = strtolower($name);
+               $menu[$str_name]['title'] = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id);
+               $menu[$str_name]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family_id;
+               $menu[$str_name]['options'][strtolower($itemtype)] = 
                      array('title' => $type['itemtype']::getMenuName(), 
                            'page'  => $itemtype::getSearchUrl(false), 
                            'links' => $links);
