@@ -368,7 +368,7 @@ class PluginGenericobjectProfile extends Profile {
       foreach ($rights as $right) {
          $str_right = $right['field'];
          if (preg_match("/plugin_genericobject_/", $str_right)) {
-            unset($_SESSION['glpiactiveprofile'][$str_right]);            
+            unset($_SESSION['glpiactiveprofile'][$str_right]);
             if (!empty($db_rights) && isset($db_rights[$str_right])) {
                $_SESSION['glpiactiveprofile'][$str_right] = $db_rights[$str_right]; 
             }
