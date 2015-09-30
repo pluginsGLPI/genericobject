@@ -43,7 +43,7 @@ if (!isset($_GET['id']) || !$family->getFromDB($_GET['id'])) {
 
 	echo "<table class='tab_cadre_fixe'>";
 	$types = PluginGenericobjectTypeFamily::getItemtypesByFamily($_GET['id']);
-    echo "<tr class='tab_bg_2'><th>".$family->getField("name")."</th></tr>";
+    echo "<tr class='tab_bg_2'><th>".Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $_GET['id'])."</th></tr>";
 	foreach ($types as $type) {
 		$itemtype = $type['itemtype'];
         echo "<tr class='tab_bg_1'><td align='center'>";
