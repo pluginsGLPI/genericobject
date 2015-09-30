@@ -364,7 +364,9 @@ class PluginGenericobjectField extends CommonDBTM {
                $name, 'PluginGenericobject'.ucfirst($name), $options
             );
          }
-
+         // Invalidate menu data in current session
+         unset($_SESSION['glpimenu']);
+         
          PluginGenericobjectSingletonObjectField::getInstance($itemtype, true);
       }
    }
