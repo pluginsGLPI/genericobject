@@ -23,6 +23,11 @@
    </authors>
    <versions>
     <version>
+          <num>0.85-1.0</num>
+          <compatibility>0.85</compatibility>
+          <compatibility>0.90</compatibility>
+      </version>
+    <version>
           <num>2.3.2</num>
           <compatibility>0.84</compatibility>
       </version>
