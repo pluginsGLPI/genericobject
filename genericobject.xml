@@ -6,12 +6,12 @@
    <logo>https://raw.githubusercontent.com/TECLIB/genericobject/master/genericobject.png</logo>
    <description>
       <short>
-         <fr><![CDATA[Ajout de nouveaux types d'objets d'inventaire]]></fr>
-         <en><![CDATA[Add new inventory objects]]></en>
+         <fr><![CDATA[Faites l'inventaire de nouveaux types d'objets]]></fr>
+         <en><![CDATA[Do the inventory of new, non-native object types]]></en>
       </short>
       <long>
-         <fr><![CDATA[Ce plugin vous permet d'ajouter de nouveaux types d'objets d'inventaire sans avoir à programmer.Il gère :<br /> - La création du type<br /> - Les champs disponibles<br /> - L'intégration dans GLPI (Helpdesk, réservation, gabarits, etc.)<br /> - L'intégration avec le plugin d'injection des données]]></fr>
-         <en><![CDATA[This plugin allows you to add new inventory types without programmation. It manages :<br > - Type creation<br /> - Available fields<br /> - Framework integration (Helpdesk, loans, templates, etc.)<br /> - Integration with the file injection plugin]]></en>
+	 <fr><![CDATA[Ce plugin vous permet de faire l'inventaire de nouveaux types d'objets génériques, sans avoir à programmer. Generic Objects vous permet de créer ces nouveaux types, les champs disponibles pour ces types. Il est intégré à GLPi dans ses fonctionnalités mère (Helpdesk, réservation, gabarits, etc.). Generic Objects est compatible avec le plugin File Injection permettant l'injection des données.]]></fr>
+         <en><![CDATA[This plugin allows you to do the inventory of new item types without having to code, it allows you to create those new item types, it allows type creation, manages available fields. Has full integration with the software (Helpdesk, loans, templates, etc.) It has support and connectivity for and with the File Injection plugin]]></en>
       </long>
    </description>
    <homepage>https://github.com/TECLIB/genericobject</homepage>
