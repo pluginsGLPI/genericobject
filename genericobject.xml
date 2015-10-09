@@ -15,8 +15,8 @@
       </long>
    </description>
    <homepage>https://github.com/TECLIB/genericobject</homepage>
-   <download>https://github.com/TECLIB/releases</download>
-   <issues>https://github.com/genericobject/issues</issues>
+   <download>https://github.com/TECLIB/genericobject/releases</download>
+   <issues>https://github.com/TECLIB/genericobject/issues</issues>
    <readme>https://raw.githubusercontent.com/TECLIB/genericobject/master/README.md</readme>
    <authors>
       <author>Walid Nouh</author>
