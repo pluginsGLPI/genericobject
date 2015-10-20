@@ -245,6 +245,10 @@ class PluginGenericobjectType extends CommonDBTM {
 
          //Delete loans associated with this type
          self::deleteUnicity($itemtype);
+         
+         //Delete reservations
+         self::deleteReservations($itemtype);
+         self::deleteReservationItems($itemtype);
 
          //Remove datainjection specific file
          self::deleteInjectionFile($name);
@@ -275,12 +279,14 @@ class PluginGenericobjectType extends CommonDBTM {
          $profiles = getAllDatasFromTable('glpi_profiles');
          foreach ($profiles as $profile) {
             $helpdesk_item_types = json_decode($profile['helpdesk_item_type'], true);
-            $index               = array_search($itemtype, $helpdesk_item_types);
-            if ($index) {
-               unset($helpdesk_item_types[$index]);
-               $tmp['id']                 = $profile['id'];
-               $tmp['helpdesk_item_type'] = json_encode($helpdesk_item_types);
-               $prof->update($tmp);
+            if ($helpdesk_item_types !== null) {
+               $index               = array_search($itemtype, $helpdesk_item_types);
+               if ($index) {
+                  unset($helpdesk_item_types[$index]);
+                  $tmp['id']                 = $profile['id'];
+                  $tmp['helpdesk_item_type'] = json_encode($helpdesk_item_types);
+                  $prof->update($tmp);
+               }
             }
          }
 
@@ -1418,7 +1424,33 @@ class PluginGenericobjectType extends CommonDBTM {
          $networkport->delete($port);
        }
    }
-
+   
+   /**
+    * Delete reservations for an itemtype
+    * @param $itemtype
+    * @return nothing
+    */
+   static function deleteReservations($itemtype) {
+      global $DB;
+      
+      $reservation = new Reservation();
+      $query = "DELETE FROM 
+            `glpi_reservations` 
+         WHERE `reservationitems_id` in (
+            SELECT `id` from `glpi_reservationitems` WHERE `itemtype`='$itemtype'
+         )";
+      $DB->query($query);
+   }
+   
+   /** 
+    * Delete reservations for an itemtype
+    * @param $itemtype
+    * @return nothing
+    */
+   static function deleteReservationItems($itemtype) {
+      $reservationItem = new ReservationItem();
+      $reservationItem->deleteByCriteria(array('itemtype' => $itemtype), true);
+    }
 
    /**
     * Filter values inserted by users : remove accented chars
