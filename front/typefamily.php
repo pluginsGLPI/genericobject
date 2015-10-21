@@ -25,7 +25,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-include ('../inc/includes.php');
+include ("../../../inc/includes.php");
 
 $dropdown = new PluginGenericobjectTypeFamily();
 include (GLPI_ROOT . "/front/dropdown.common.php");
