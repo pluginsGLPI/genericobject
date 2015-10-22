@@ -246,7 +246,7 @@ class PluginGenericobjectType extends CommonDBTM {
          //Delete loans associated with this type
          self::deleteUnicity($itemtype);
          
-         //Delete reservations
+         //Delete reservations with this tyoe
          self::deleteReservations($itemtype);
          self::deleteReservationItems($itemtype);
 
@@ -1246,7 +1246,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function deleteItemtypeReferencesInGLPI($itemtype) {
       //Delete references to PluginGenericobjectType in the following tables
-      $itemtypes = array ("DisplayPreference", "Document_Item", "Bookmark", "Log");
+      $itemtypes = array ("Contract_Item", "DisplayPreference", "Document_Item", "Bookmark", "Log");
       foreach ($itemtypes as $type) {
          $item     = new $type();
          $item->deleteByCriteria(array('itemtype' => $itemtype));
