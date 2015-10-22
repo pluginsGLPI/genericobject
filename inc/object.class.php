@@ -365,7 +365,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function canBeReserved() {
       return (
          $this->objecttype->canBeReserved()
-         and Session::haveRight("reservation", READ)
+         and Session::haveRight(ReservationItem::$rightname, ReservationItem::RESERVEANITEM)
       );
    }
 
