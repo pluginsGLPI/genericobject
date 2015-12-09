@@ -499,7 +499,9 @@ class PluginGenericobjectType extends CommonDBTM {
    //                    "use_plugin_pdf"           => __("PDF plugin", "genericobject"),
                        "use_plugin_geninventorynumber"  => __("geninventorynumber plugin", "genericobject"),
                        "use_plugin_order"         => __("order plugin", "genericobject"),
-                       "use_plugin_uninstall"     => __("item's uninstallation plugin", "genericobject"));
+                       "use_plugin_uninstall"     => __("item's uninstallation plugin", "genericobject"),
+                       "use_plugin_simcard"      => __("simcard plugin", "genericobject"),
+         );
          $plugin = new Plugin();
          $odd=0;
          foreach ($use as $right => $label) {
@@ -598,7 +600,16 @@ class PluginGenericobjectType extends CommonDBTM {
                   }
                   break;
 
-               case 'use_plugin_geninventorynumber' :
+               case 'use_plugin_simcard' :
+                  if ($plugin->isActivated('simcard')) {
+                     Html::showCheckbox(array('name' => $right, 
+                                              'checked' => $this->fields[$right]));
+                  } else {
+                     echo Dropdown::EMPTY_VALUE;
+                     echo "<input type='hidden' name='use_plugin_simcard' value='0'>\n";
+                  }
+                  break;
+                  case 'use_plugin_geninventorynumber' :
                   if ($plugin->isActivated('geninventorynumber')) {
                      Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
@@ -1749,7 +1760,14 @@ class PluginGenericobjectType extends CommonDBTM {
      return $this->fields['use_plugin_uninstall'];
    }
 
-
+   function canUsePluginSimcard() {
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("simcard") || !$plugin->isActivated("simcard")) {
+         return false;
+      }
+      return $this->fields['use_plugin_simcard'];
+   }
+    
    function canUsePluginGeninventoryNumber() {
       $plugin = new Plugin();
       if (!$plugin->isInstalled("geninventorynumber")
@@ -1845,6 +1863,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "date_mod", "datetime");
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
+      $migration->addField($table, "use_simcard", "bool");
       $migration->migrationOneTable($table);
 
       // Migrate notepad data
