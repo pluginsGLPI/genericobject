@@ -430,8 +430,8 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       echo "</td>";
-      echo "<td class='middle right'>".__('Icon')."</td>";
-      echo "<td class='icon_preview'>".PluginGenericobjectObject::getMenuIcon($this->fields['itemtype'])."</td>";
+      echo "<td></td>";
+      echo "<td></td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
