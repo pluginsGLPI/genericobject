@@ -257,6 +257,9 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectProfile::deleteTypeFromProfile($itemtype);
 
          self::deleteTicketAssignation($itemtype);
+         
+         //Remove associations to simcards with this type
+         self::deleteSimcardAssignation($itemtype);
 
          //Remove existing datainjection models
          self::removeDataInjectionModels($itemtype);
@@ -1371,6 +1374,25 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
 
+   /**
+    * Delete all simcards for an itemtype
+    * @param the itemtype
+    * @return nothing
+    */
+   public static function deleteSimcardAssignation($itemtype) {
+      global $DB;
+      
+      $plugin = new Plugin();
+      if ($plugin->isActivated('simcard') && $plugin->isActivated('simcard')) {
+         $types = array('PluginSimcardSimcard_Item');
+         foreach ($types as $type) {
+            $item = new $type();
+            $item->deleteByCriteria(array(
+                  'itemtype' => $itemtype
+            ));
+         }
+      }
+   }
 
    /**
     * Remove datainjection models for an itemtype
