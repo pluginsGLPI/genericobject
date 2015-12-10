@@ -140,6 +140,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                array_push($UNINSTALL_TYPES, $class);
             }
          }
+         if ($item->canUsePluginSimcard()) {
+            $plugin = new Plugin();
+            if ($plugin->isActivated('simcard') && $plugin->isActivated('simcard')) {
+               PluginSimcardSimcard_Item::registerItemtype($class);
+            }
+         }
          if ($item->canUsePluginOrder()) {
             if (!in_array($class, $ORDER_TYPES)) {
                array_push($ORDER_TYPES, $class);
@@ -409,6 +415,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function canUsePluginUninstall() {
       return ($this->objecttype->canUsePluginUninstall());
+   }
+
+   function canUsePluginSimcard() {
+      return ($this->objecttype->canUsePluginSimcard());
    }
 
    function getLinkedItemTypesAsArray() {
