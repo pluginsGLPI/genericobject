@@ -846,7 +846,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       //Notes
-      if (isset($this->input['use_notes']) && $this->input['use_notes']) {
+      if (isset($this->input['use_notepad']) && $this->input['use_notepad']) {
          PluginGenericobjectField::addNewField($table, 'notepad', 'id');
       } else {
          PluginGenericobjectField::deleteField($table, 'notepad');
