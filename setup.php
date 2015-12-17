@@ -177,12 +177,8 @@ function plugin_version_genericobject() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85.3','lt') || version_compare(GLPI_VERSION,'0.91','ge')) {
+   if (version_compare(GLPI_VERSION,'0.85.3','lt')) {
       echo "This plugin requires GLPI 0.85.3 or higher";
-      return false;
-   }
-   if (version_compare(PHP_VERSION, '5.3.0', 'lt')) {
-      echo "PHP 5.3.0 or higher is required";
       return false;
    }
    return true;
