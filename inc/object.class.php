@@ -425,6 +425,10 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $this->objecttype->getLinkedItemTypesAsArray();
    }
 
+   function canUsePluginPositions() {
+      return ($this->objecttype->canUsePluginPositions());
+   }
+
    function title() {
    }
 
