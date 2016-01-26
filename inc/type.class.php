@@ -1905,6 +1905,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->addField($table, "use_plugin_simcard", "bool");
+      $migration->addField($table, "use_plugin_positions", "bool");
       $migration->migrationOneTable($table);
 
       // Migrate notepad data
