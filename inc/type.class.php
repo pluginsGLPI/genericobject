@@ -1882,6 +1882,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_plugin_order` tinyint(1) NOT NULL default '0',
                            `use_plugin_uninstall` tinyint(1) NOT NULL default '0',
                            `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
+                           `use_plugin_positions` tinyint(1) NOT NULL default '0',
                            `use_menu_entry` tinyint(1) NOT NULL default '0',
                            `use_projects` tinyint(1) NOT NULL default '0',
                            `linked_itemtypes` text NULL,
