@@ -97,8 +97,9 @@ if (!is_null($itemtype)) {
       $item->delete($_POST);
       $item->redirectToList();
    }
+   $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
    Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
-             "assets", $itemtype);
+             "assets", ($menu!==false?$menu:$itemtype), strtolower($itemtype));
 
    $item->display($_GET, array( 'withtemplate' => $_GET["withtemplate"]));
 
