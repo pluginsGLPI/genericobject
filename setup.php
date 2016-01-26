@@ -160,6 +160,8 @@ function plugin_post_init_genericobject() {
       $itemtype = $objecttype['itemtype'];
       if (class_exists($itemtype)) {
          $itemtype::registerType();
+         if (class_exists('PluginPositionsPosition') && !empty($objecttype['use_plugin_positions']))
+           PluginPositionsPosition::registerType($itemtype);
       }
 
    }
