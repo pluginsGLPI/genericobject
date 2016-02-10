@@ -916,6 +916,9 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $options[$currentindex]['displaytype'] = 'date';
                   $options[$currentindex]['checktype']   = 'date';
                }
+               if ($field == 'date_mod') {
+                  $options[$currentindex]['massiveaction'] = false;
+               }
                break;
          }
          $index = $currentindex + 1;
