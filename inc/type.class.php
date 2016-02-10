@@ -1764,8 +1764,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUseNotepad() {
-      return FieldExists(getTableForItemType($this->fields['itemtype']), 'use_notepad')
-             && $this->fields['use_notepad'] != 0;
+      return $this->fields['use_notepad'] != 0;
    }
 
 
