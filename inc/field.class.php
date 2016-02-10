@@ -75,31 +75,48 @@ class PluginGenericobjectField extends CommonDBTM {
 
       $total        = count($fields_in_db);
       $global_index = $index = 1;
+      $haveCheckbox = false;
 
       foreach ($fields_in_db as $field => $value) {
+         $readonly  = in_array($field, $GO_READONLY_FIELDS);
+         $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
+
          self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index==$total));
+
          //All backlisted fields cannot be moved, and are listed first
-         if (!in_array($field, $GO_READONLY_FIELDS)) {
+         if (!$readonly) {
             $index++;
          }
-         $table = getTableNameForForeignKeyField($field);
+
+         if (!$blacklist && !$readonly) {
+            $haveCheckbox = true;
+         }
+
+         //$table = getTableNameForForeignKeyField($field);
          $used_fields[$field] = $field;
          $global_index++;
       }
       echo "</table>";
-      Html::openArrowMassives('fieldslist', true);
-      Html::closeArrowMassives(array('delete' => __("Delete permanently")));
+      if ($haveCheckbox) {
+         Html::openArrowMassives('fieldslist', true);
+         Html::closeArrowMassives(array('delete' => __("Delete permanently")));
+      }
 
-      echo "<table class='tab_cadre genericobject_fields add_new'>";
-      echo "<tr class='tab_bg_1'>";
-      echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
-      echo "<td align='left' class='dropdown'>";
-      self::dropdownFields("new_field", $itemtype, $used_fields);
-      echo "</td>";
-      echo "<td>";
-      echo "<input type='submit' name='add_field' value=\"" . _sx('button','Add') . "\" class='submit'>";
-      echo "</tr>";
-      echo "</table>";
+      $dropdownFields = self::dropdownFields("new_field", $itemtype, $used_fields);
+
+      if ($dropdownFields) {
+         echo "<table class='tab_cadre genericobject_fields add_new'>";
+         echo "<tr class='tab_bg_1'>";
+         echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
+         echo "<td align='left' class='dropdown'>";
+         echo $dropdownFields;
+         echo "</td>";
+         echo "<td>";
+         echo "<input type='submit' name='add_field' value=\"" . _sx('button','Add') . "\" class='submit'>";
+         echo "</tr>";
+         echo "</table>";
+      }
+
       Html::closeForm();
       echo "</div>";
    }
@@ -219,14 +236,20 @@ class PluginGenericobjectField extends CommonDBTM {
                   //}
                }
                if (!empty($field_options)) {
-                  $message = "(".trim( implode(",",$field_options)).")";
+                  $message = "(".trim( implode(", ",$field_options)).")";
                }
             }
             $dropdown_types[$field] = $values['name']." ".$message;
          }
       }
+
+      // Don't show dropdown empty
+      if (empty($dropdown_types)) {
+         return '';
+      }
+
       ksort($dropdown_types);
-      return Dropdown::showFromArray($name, $dropdown_types);
+      return Dropdown::showFromArray($name, $dropdown_types, array('display' => false));
    }
 
    /**
@@ -297,6 +320,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "</td>";
 
       echo "</tr>";
+
    }
 
    /**
