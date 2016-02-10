@@ -32,6 +32,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    //Internal field counter
    private $cpt = 0;
 
+   function accesObjectType() {
+      return $this->objecttype;
+   }
+
    //Get itemtype name
    static function getTypeName($nb=0) {
       global $LANG;
@@ -169,9 +173,9 @@ class PluginGenericobjectObject extends CommonDBTM {
                array_push($GO_LINKED_TYPES, $class);
             }
             $items_class = $class."_Item";
-            //if (class_exists($items_class)) {
+            if (class_exists($items_class)) {
                $items_class::registerType();
-            //}
+            }
          }
 
          if ($item->canUseProjects()) {
@@ -312,10 +316,15 @@ class PluginGenericobjectObject extends CommonDBTM {
             $this->addStandardTab('Reservation', $ong, $options);
          }
 
+         if ($this->canUseDirectConnections()) {
+            $this->addStandardTab($this->getType()."_Item", $ong, $options);
+         }
+
          if ($this->canUseHistory()) {
-            $this->addStandardTab('Log',$ong, $options);
+            $this->addStandardTab('Log', $ong, $options);
          }
       }
+
       return $ong;
    }
 
@@ -430,7 +439,6 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function showForm($id, $options=array(), $previsualisation = false) {
-      global $DB;
 
       if ($previsualisation) {
          $canedit = true;
@@ -485,7 +493,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       $this->closeColumn();
 
-      if (!$this->isNewID($id)) {
+      if (!$this->isNewID($id) || $previsualisation) {
          echo "<tr class='tab_bg_1'>";
          echo "<td colspan='2' class='center'>".$date;
          if (!$template && !empty($this->fields['template_name'])) {
@@ -495,13 +503,12 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "</td></tr>";
       }
 
-      if (!$previsualisation) {
-         $this->showFormButtons($options);
-         echo "<div id='tabcontent'></div>";
-         echo "<script type='text/javascript'>loadDefaultTab();</script>";
-      } else {
+      if ($previsualisation) {
          echo "</table></div>";
          Html::closeForm();
+      } else {
+         $this->showFormButtons($options);
+         echo "<div id='tabcontent'></div>";
       }
    }
 
@@ -697,6 +704,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function cleanDBonPurge() {
+      //TODO : Add code here to delete inter-link genericobject ? cf. post_purgeItem() on Object_Item
+
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
       $types      = array('Computer_Item', 
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
@@ -911,6 +920,18 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          $index = $currentindex + 1;
       }
+
+      if ($this->canUseDirectConnections()) {
+         $options[23100]['table']          = $this->getTable()."_items";
+         $options[23100]['field']          = 'id';
+         $options[23100]['datatype']       = 'specific';
+         $options[23100]['forcegroupby']   = true;
+         $options[23100]['name']           = _n('Linked object', 'Linked objects', Session::getPluralNumber(), 'genericobject');
+         $options[23100]['joinparams']     = array('jointype' => 'child');
+         // Trick for disable search on this field
+         $options[23100]['searchtype']     = 'false';
+      }
+
       asort($options);
       return $options;
    }

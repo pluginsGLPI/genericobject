@@ -3,28 +3,27 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-06 14:50+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2016-02-10 15:44+0100\n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: hook.php:152
-msgid ""
-"Error: directories '/inc', '/front' and '/locales' of plugin must be "
-"writable by the web server."
+msgid "Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server."
 msgstr "Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server."
 
-#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
-#: inc/object_item.class.php:110 inc/type.class.php:239
+#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73 inc/object_item.class.php:110
+#: inc/type.class.php:239
 msgid "Objects management"
 msgstr "Objects management"
 
@@ -68,7 +67,6 @@ msgstr "Object preview"
 msgid "You must configure rights to enable the preview"
 msgstr "You must configure rights to enable the preview"
 
-
 #: inc/profile.class.php:145
 msgid "General"
 msgstr "General"
@@ -94,8 +92,7 @@ msgid "Type name is missing"
 msgstr "Type name is missing"
 
 #: inc/type.class.php:156
-msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgid "Types 'field', 'object' and 'type' are reserved. Please choose another one"
 msgstr "Types 'field', 'object' and 'type' are reserved. Please choose another one"
 
 #: inc/type.class.php:163
@@ -149,3 +146,7 @@ msgstr "Family of type of objects"
 msgid "geninventorynumber plugin"
 msgstr "inventory number generation plugin"
 
+msgid "Linked object"
+msgid_plural "Linked objects"
+msgstr[0] "Linked object"
+msgstr[1] "Linked objects"

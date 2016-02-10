@@ -92,9 +92,9 @@ $go_autoloader->register();
 // Init the hooks of the plugins -Needed
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
+          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS; //$LOADED_PLUGINS
 
-
+   $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
 
    $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
 
@@ -102,13 +102,11 @@ function plugin_init_genericobject() {
                                  "is_recursive", "is_template", "notepad", "template_name", "date_mod", "name",
                                  "is_helpdesk_visible", "comment");
 
-   $GO_LINKED_TYPES     = array ('Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
-                                  'Printer', 'NetworkEquipment');
+   $GO_LINKED_TYPES     = array();
 
-   $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
-   $GENERICOBJECT_PDF_TYPES                         = array ();
-   $plugin                                          = new Plugin();
+   $GENERICOBJECT_PDF_TYPES = array();
 
+   $plugin = new Plugin();
    if ($plugin->isInstalled("genericobject") 
       && $plugin->isActivated("genericobject") 
          && isset($_SESSION['glpiactiveprofile'])) {
@@ -149,12 +147,9 @@ function plugin_init_genericobject() {
 
 function plugin_post_init_genericobject() {
    global $GO_FIELDS;
-   Plugin::registerClass(
-      'PluginGenericobjectProfile',
-      array('addtabon' => array(
-         'Profile', 'PluginGenericobjectType'
-      ))
-   );
+
+   Plugin::registerClass('PluginGenericobjectProfile', array('addtabon' => array(
+         'Profile', 'PluginGenericobjectType')));
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
       $itemtype = $objecttype['itemtype'];

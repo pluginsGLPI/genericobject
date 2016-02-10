@@ -30,7 +30,7 @@ class PluginGenericobjectAutoloader implements SplAutoloader
    public function processClassname($classname)
    {
 
-      //Note : '*' for Support 'A' genericobject (for example)
+      // this use '*' for Support 'A' genericobject (for example)
       preg_match("/Plugin([A-Z][a-z0-9]+)([A-Z]\w*)/",$classname,$matches);
 
       if (count($matches) < 3) {

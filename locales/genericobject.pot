@@ -140,3 +140,8 @@ msgstr ""
 #: inc/type.class.php:650
 msgid "Link to other objects"
 msgstr ""
+
+msgid "Linked object"
+msgid_plural "Linked objects"
+msgstr[0] ""
+msgstr[1] ""
