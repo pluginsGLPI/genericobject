@@ -42,7 +42,7 @@ function plugin_genericobject_AssignToTicket($types) {
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown() {
 
-   $dropdowns = array();
+   $dropdowns = array('PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2));
 
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
