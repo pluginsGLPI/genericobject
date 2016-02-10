@@ -41,16 +41,15 @@ function plugin_genericobject_AssignToTicket($types) {
 
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown() {
+
    $dropdowns = array();
 
    $plugin = new Plugin();
-   if ( $plugin->isActivated("genericobject") ) {
+   if ($plugin->isActivated("genericobject")) {
       foreach (PluginGenericobjectType::getTypes(true) as $idx => $type) {
-         _log($idx, var_export($type, true));
+         //_log($idx, var_export($type, true));
          $itemtype = $type['itemtype'];
-         foreach (
-            PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table
-         ) {
+         foreach (PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
             $dropdown_itemtype = getItemTypeForTable($table);
             if (class_exists( $dropdown_itemtype)) {
                $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
@@ -166,6 +165,13 @@ function plugin_genericobject_uninstall() {
          }
       }
    }
+
+   // Delete all models of datainjection about genericobject
+   $table_datainjection_model = 'glpi_plugin_datainjection_models';
+   if (TableExists($table_datainjection_model)) {
+      $DB->query("DELETE FROM $table_datainjection_model WHERE itemtype LIKE 'PluginGenericobject%'");
+   }
+
    return true;
 }
 
