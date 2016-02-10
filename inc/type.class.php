@@ -1072,11 +1072,11 @@ class PluginGenericobjectType extends CommonDBTM {
 
    public static function deleteLocales($name, $itemtype) {
 
-      if (file_exists(GLPI_ROOT . '/plugins/genericobject/locales/'.$name)) {
-         foreach (glob(GLPI_ROOT . '/plugins/genericobject/locales/'.$name.'/*.php') as $file) {
+      if (file_exists(GENERICOBJECT_LOCALES_PATH.'/'.$name)) {
+         foreach (glob(GENERICOBJECT_LOCALES_PATH.'/'.$name.'/*.php') as $file) {
             @unlink($file);
          }
-         @rmdir(GLPI_ROOT . '/plugins/genericobject/locales/'.$name);
+         @rmdir(GENERICOBJECT_LOCALES_PATH.'/'.$name);
       }
    }
 
