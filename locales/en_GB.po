@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-06 14:50+0200\n"
-"PO-Revision-Date: 2016-02-10 15:44+0100\n"
+"PO-Revision-Date: 2016-02-11 12:06+0100\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,8 +22,8 @@ msgstr ""
 msgid "Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server."
 msgstr "Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server."
 
-#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73 inc/object_item.class.php:110
-#: inc/type.class.php:239
+#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
+#: inc/object_item.class.php:110 inc/type.class.php:239
 msgid "Objects management"
 msgstr "Objects management"
 
@@ -150,3 +150,6 @@ msgid "Linked object"
 msgid_plural "Linked objects"
 msgstr[0] "Linked object"
 msgstr[1] "Linked objects"
+
+msgid "Warning : Dustbin can't be removed since Reservations are used on this type."
+msgstr "Warning : Dustbin can't be removed since Reservations are used on this type."

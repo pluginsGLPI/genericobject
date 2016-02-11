@@ -918,7 +918,7 @@ class PluginGenericobjectType extends CommonDBTM {
          } else {
             if (FieldExists($table, 'is_deleted')) {
                Session::addMessageAfterRedirect(
-                  __("Dustbin can't be removed since Reservations are used on this type."),
+                  __("Dustbin can't be removed since Reservations are used on this type.", 'genericobject'),
                   false,
                   WARNING
                );
