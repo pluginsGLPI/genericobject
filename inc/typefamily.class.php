@@ -36,6 +36,13 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
       return __('Family of type of objects', 'genericobject');
    }
 
+   function pre_deleteItem() {
+      global $DB;
+
+      $DB->query("UPDATE `glpi_plugin_genericobject_types` SET `plugin_genericobject_typefamilies_id` = 0 
+                  WHERE `plugin_genericobject_typefamilies_id` = ".$this->fields["id"]);
+   }
+
    static function install(Migration $migration) {
       global $DB;
 

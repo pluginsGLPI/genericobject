@@ -1134,20 +1134,17 @@ class PluginGenericobjectObject extends CommonDBTM {
                && (!isset($_GET['itemtype']) 
                   || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {
                $family_id = $type['plugin_genericobject_typefamilies_id'];
+
+               // Name without translation
                $name      = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id, 0, false);
                $str_name  = strtolower($name);
 
-               $title = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id);
-
-               // Show only the family who existed
-               if ($title != '&nbsp;') {
-                  $menu[$str_name]['title'] = $title;
-                  $menu[$str_name]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family_id;
-                  $menu[$str_name]['options'][strtolower($itemtype)] = 
-                        array('title' => $type['itemtype']::getMenuName(), 
-                              'page'  => $itemtype::getSearchUrl(false), 
-                              'links' => $links);
-               }
+               $menu[$str_name]['title'] = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id);
+               $menu[$str_name]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family_id;
+               $menu[$str_name]['options'][strtolower($itemtype)] = 
+                     array('title' => $type['itemtype']::getMenuName(), 
+                           'page'  => $itemtype::getSearchUrl(false), 
+                           'links' => $links);
             } else {
                $menu[strtolower($itemtype)]= array(
                   'title' => $type['itemtype']::getMenuName(),
