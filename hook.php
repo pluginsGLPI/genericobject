@@ -171,6 +171,9 @@ function plugin_genericobject_uninstall() {
       $DB->query("DELETE FROM $table_datainjection_model WHERE itemtype LIKE 'PluginGenericobject%'");
    }
 
+   // Invalidate menu data in current session
+   unset($_SESSION['glpimenu']);
+
    return true;
 }
 
