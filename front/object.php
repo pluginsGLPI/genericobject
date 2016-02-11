@@ -30,6 +30,25 @@ include ("../../../inc/includes.php");
 Session::checkLoginUser();
 
 if (isset($_GET['itemtype'])) {
+
+	$types = array_keys(PluginGenericobjectType::getTypes());
+
+   $requested_type = $_REQUEST['itemtype'];
+   $error = array();
+
+   if (!in_array($requested_type, $types) ){
+      $error[] = __('The requested type has not been defined yet!');
+   } elseif (!class_exists($requested_type)) {
+      $error[]= __('The generated files for the requested type of object are missing!');
+      $error[]= __('You might need to regenerate the files under '.GENERICOBJECT_DOC_DIR.'.');
+   }
+
+   if(count($error) > 0) {
+      Html::header(__('Type not found!'));
+      Html::displayErrorAndDie(implode('<br/>', $error));
+
+   }
+
    Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($_GET['itemtype']), READ);
    $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
 
