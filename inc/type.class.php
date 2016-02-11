@@ -402,7 +402,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[21]['datatype']    = 'bool';
 
       // Plugins
-      $sopt['plugins']      = _n("Plugin", "Plugins", 2);
+      $sopt['use_plugins']      = _sx('button','Use')." "._n("Plugin", "Plugins", 2);
 
       $plugin = new Plugin();
 
