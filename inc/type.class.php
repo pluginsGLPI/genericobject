@@ -391,6 +391,41 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[21]['name']        = _sx('button','Use')." ".__("Link to other objects", "genericobject");
       $sopt[21]['datatype']    = 'bool';
 
+      // Plugins
+      $sopt['plugins']      = _n("Plugin", "Plugins", 2);
+
+      $plugin = new Plugin();
+
+      $sopt[23]['table']         = $this->getTable();
+      $sopt[23]['field']         = 'use_plugin_datainjection';
+      $sopt[23]['name']          = _sx('button','Use')." ".__("injection file plugin", "genericobject");
+      $sopt[23]['datatype']      = 'bool';
+      $sopt[23]['massiveaction'] = ! $plugin->isActivated('datainjection') ? false : true;
+
+      $sopt[24]['table']         = $this->getTable();
+      $sopt[24]['field']         = 'use_plugin_geninventorynumber';
+      $sopt[24]['name']          = _sx('button','Use')." ".__("geninventorynumber plugin", "genericobject");
+      $sopt[24]['datatype']      = 'bool';
+      $sopt[24]['massiveaction'] = ! $plugin->isActivated('geninventorynumber') ? false : true;
+
+      $sopt[25]['table']         = $this->getTable();
+      $sopt[25]['field']         = 'use_plugin_order';
+      $sopt[25]['name']          = _sx('button','Use')." ".__("order plugin", "genericobject");
+      $sopt[25]['datatype']      = 'bool';
+      $sopt[25]['massiveaction'] = ! $plugin->isActivated('order') ? false : true;
+
+      $sopt[26]['table']         = $this->getTable();
+      $sopt[26]['field']         = 'use_plugin_uninstall';
+      $sopt[26]['name']          = _sx('button','Use')." ".__("item's uninstallation plugin", "genericobject");
+      $sopt[26]['datatype']      = 'bool';
+      $sopt[26]['massiveaction'] = ! $plugin->isActivated('uninstall') ? false : true;
+
+      $sopt[27]['table']         = $this->getTable();
+      $sopt[27]['field']         = 'use_plugin_simcard';
+      $sopt[27]['name']          = _sx('button','Use')." ".__("simcard plugin", "genericobject");
+      $sopt[27]['datatype']      = 'bool';
+      $sopt[27]['massiveaction'] = ! $plugin->isActivated('simcard') ? false : true;
+
       return $sopt;
    }
 
