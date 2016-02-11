@@ -215,6 +215,10 @@ class PluginGenericobjectType extends CommonDBTM {
          $this->input["itemtype"],
          array('add_table' => 1, 'create_default_profile' =>1, 'overwrite_locales' => true)
       );
+
+      // Invalidate menu data in current session
+      unset($_SESSION['glpimenu']);
+
       return true;
    }
 
@@ -223,6 +227,9 @@ class PluginGenericobjectType extends CommonDBTM {
       if (isset ($input["is_active"]) && $input["is_active"]) {
          self::registerOneType($this->fields['itemtype']);
       }
+
+      // Invalidate menu data in current session
+      unset($_SESSION['glpimenu']);
 
       if (isset($input['use_plugin_geninventorynumber'])) {
          switch ($input['use_plugin_geninventorynumber']) {
@@ -303,6 +310,9 @@ class PluginGenericobjectType extends CommonDBTM {
                }
             }
          }
+
+         // Invalidate menu data in current session
+         unset($_SESSION['glpimenu']);
 
          return true;
       } else {
