@@ -86,6 +86,22 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
    return $uninstal_types;
 }
 
+function plugin_pre_item_change_dropdowntranslation($object) {
+
+   if (isset($object->input['itemtype'])) {
+      $itemtype = $object->input['itemtype'];
+   } else { //on delete
+      $itemtype = $object->fields['itemtype'];
+   }
+
+   switch ($itemtype) {
+      case 'PluginGenericobjectTypeFamily':
+         // Invalidate menu data in current session
+         unset($_SESSION['glpimenu']);
+         break;
+   }
+}
+
 //----------------------- INSTALL / UNINSTALL FUNCTION -------------------------------//
 
 function plugin_genericobject_install() {
