@@ -28,7 +28,6 @@
 include ("../../../inc/includes.php");
 Session::checkRight("profile",UPDATE);
 
-_log($_POST);
 $prof = new Profile();
 
 /* save profile */
@@ -43,7 +42,7 @@ if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
             );
       }
    }
-   _log($profiles);
+
    foreach( $profiles as $profile_id => $input) {
       $prof->update($input);
    }

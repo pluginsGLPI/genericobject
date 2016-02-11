@@ -27,6 +27,8 @@
 
 include ('../../../inc/includes.php');
 
+Session::checkLoginUser();
+
 $family = new PluginGenericobjectTypeFamily();
 
 if (!isset($_GET['id']) || !$family->getFromDB($_GET['id'])) {

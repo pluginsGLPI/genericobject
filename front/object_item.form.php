@@ -2,6 +2,8 @@
 
 include('../../../inc/includes.php');
 
+Session::checkLoginUser();
+
 if (! isset($_POST['objectToAdd']) || empty($_POST['objectToAdd'])) {
 	Session::addMessageAfterRedirect(__('Error'), true, ERROR, true);
    Html::back();

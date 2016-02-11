@@ -332,7 +332,6 @@ class PluginGenericobjectField extends CommonDBTM {
    public static function addNewField($table, $field, $after=false) {
       global $DB;
 
-      _log("add", $field, "from", $table);
       $itemtype = getItemTypeForTable($table);
       if (!FieldExists($table, $field, false)) {
          $options  = self::getFieldOptions($field, $itemtype);

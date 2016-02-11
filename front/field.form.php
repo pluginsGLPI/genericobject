@@ -26,6 +26,9 @@
  ---------------------------------------------------------------------- */
 
 include ("../../../inc/includes.php");
+
+Session::checkLoginUser();
+
 if (isset ($_POST["delete"])) {
    if (isset($_POST["fields"]) && count($_POST["fields"] > 0 )) {
       $type = new PluginGenericobjectType();

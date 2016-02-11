@@ -51,7 +51,6 @@ class PluginGenericobjectProfile extends Profile {
             $profile->showForm($item->getID());
             break;
          case 'PluginGenericobjectType':
-            _log($item);
             self::showForItemtype($item);
             break;
       }
@@ -254,10 +253,6 @@ class PluginGenericobjectProfile extends Profile {
       $rights = ProfileRight::getProfileRights($profiles_id);
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
       if($itemtype) {
-         _log(
-            "get rights on itemtype ".$itemtype." for profile ".$profile->fields['name'], ':',
-            isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : "NONE"
-         );
          return (isset($rights[self::getProfileNameForItemtype($itemtype)]));
       }
       return true;
@@ -334,7 +329,6 @@ class PluginGenericobjectProfile extends Profile {
 
       // Check for already defined rights
       foreach($right_names as $right_name) {
-         _log($right_name, isset($installed_rights[$right_name]));
          if ( !isset($installed_rights[$right_name]) ) {
             $missing_rights[] = $right_name;
          }

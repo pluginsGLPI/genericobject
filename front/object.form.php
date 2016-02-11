@@ -26,8 +26,9 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-
 include ("../../../inc/includes.php");
+
+Session::checkLoginUser();
 
 $itemtype = null;
 
