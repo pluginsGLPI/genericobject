@@ -143,9 +143,9 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
 
       // when DropdownTranslation is add, update or deleted
-      $PLUGIN_HOOKS['pre_item_add']['tag']['DropdownTranslation']    = 'plugin_pre_item_change_dropdowntranslation';
-      $PLUGIN_HOOKS['pre_item_update']['tag']['DropdownTranslation'] = 'plugin_pre_item_change_dropdowntranslation';
-      $PLUGIN_HOOKS['pre_item_purge']['tag']['DropdownTranslation']  = 'plugin_pre_item_change_dropdowntranslation';
+      $PLUGIN_HOOKS['pre_item_add']['genericobject']['DropdownTranslation']    = 'plugin_pre_item_change_dropdowntranslation';
+      $PLUGIN_HOOKS['pre_item_update']['genericobject']['DropdownTranslation'] = 'plugin_pre_item_change_dropdowntranslation';
+      $PLUGIN_HOOKS['pre_item_purge']['genericobject']['DropdownTranslation']  = 'plugin_pre_item_change_dropdowntranslation';
 
    }
 }
