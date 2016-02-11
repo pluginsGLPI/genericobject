@@ -52,6 +52,7 @@ class PluginGenericobjectType extends CommonDBTM {
       return $values;
    }
 
+   // history is show in tab 'Log'
    var $dohistory = true;
 
    function __construct($itemtype = false) {
@@ -120,6 +121,8 @@ class PluginGenericobjectType extends CommonDBTM {
    function defineTabs($options=array()) {
       $tabs = array();
       $this->addStandardTab(__CLASS__, $tabs, $options);
+      $this->addStandardTab('PluginGenericobjectProfile', $tabs, $options);
+      $this->addStandardTab('Log', $tabs, $options);
       return $tabs;
    }
 

@@ -149,7 +149,7 @@ function plugin_post_init_genericobject() {
    global $GO_FIELDS;
 
    Plugin::registerClass('PluginGenericobjectProfile', array('addtabon' => array(
-         'Profile', 'PluginGenericobjectType')));
+         'Profile')));
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
       $itemtype = $objecttype['itemtype'];
