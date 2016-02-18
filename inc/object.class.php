@@ -931,14 +931,63 @@ class PluginGenericobjectObject extends CommonDBTM {
          $options[23100]['forcegroupby']   = true;
          $options[23100]['name']           = _n('Linked object', 'Linked objects', Session::getPluralNumber(), 'genericobject');
          $options[23100]['joinparams']     = array('jointype' => 'child');
-         // Trick for disable search on this field
-         $options[23100]['searchtype']     = 'false';
+         $options[23100]['searchtype']     = array('equals');
       }
 
       asort($options);
       return $options;
    }
 
+
+   function getValueToSelect($field_id_or_search_options, $name = '', $values = '', $options = array()) {
+      global $CFG_GLPI;
+
+      $itemtype_item = getTableForItemType($this->getType().'_Item');
+
+      switch ($field_id_or_search_options['table'].'.'.$field_id_or_search_options['field']) {
+         case $itemtype_item.".id":
+            continue;
+         default :
+            return parent::getValueToSelect($field_id_or_search_options, $name, $values, $options);
+      }
+    
+      $elements = array('' => Dropdown::EMPTY_VALUE);
+      foreach ($this->getLinkedItemTypesAsArray() as $itemL) {
+         $object = new $itemL();
+         $elements[$itemL] = $object->getTypeName();
+      }
+
+      $rand = Dropdown::showFromArray($name, $elements, array('value' => $values));
+
+      $params = array('criteria' => '__VALUE__',
+                    'idMainobject' => $this->getID(), //-1
+                    'mainobject' => get_called_class(),
+                    'name' => str_replace('value', "items_id", $name));
+
+      echo "<span id='show_".$rand."'>&nbsp;</span>";
+
+      $name_with_filter = str_replace(array("[", "]"), "_", $name);
+
+      Ajax::updateItemOnSelectEvent("dropdown_$name_with_filter$rand", "show_".$rand,
+                                    $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
+                                    $params);
+
+
+      $matches = array();
+      preg_match("/criteria\[([0-9]+)\]\[value\]/",$name,$matches);
+
+      if (isset($matches[1])) {
+         $num = (int) $matches[1];
+         if (isset($_REQUEST['criteria'][$num]['items_id'])) {
+            $params['value'] = stripslashes($_REQUEST['criteria'][$num]['items_id']);
+         }
+      }
+
+      Ajax::updateItem("show_$rand", $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
+            $params, "dropdown_$name_with_filter$rand");
+
+      return "&nbsp;";
+   }
 
 
    //Datainjection specific methods
@@ -976,6 +1025,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function transfer($new_entity) {
       global $DB;
+
       if ($this->fields['id'] > 0 && $this->fields['entities_id'] != $new_entity) {
          //Update entity for this object
          $tmp['id']          = $this->fields['id'];
@@ -1054,6 +1104,10 @@ class PluginGenericobjectObject extends CommonDBTM {
                echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" .
                   _sx('button','Post') . "\" >";
             break;
+
+         case "plugin_genericobject_associate" :
+               PluginGenericobjectObject_Item::showItemsInMassiveActions($ma);
+
          default :
             break;
       }
@@ -1061,6 +1115,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       return true; 
    }
 
+   /*
    function plugin_genericobject_MassiveActionsProcess($data) {
       global $DB;
 
@@ -1076,31 +1131,107 @@ class PluginGenericobjectObject extends CommonDBTM {
             break;
       }
    }
+   */
 
-   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item,
-                                                       array $ids) {
+   function associate() {
+
+      $idMainObject     = $this->getID(); //$_POST['items_id'];
+      $nameMainObject   = $this->getType(); //$_POST['mainobject'];
+      $nameObjectToAdd  = $_POST['objectToAdd'];
+      //$IdToAdd        = $_POST['items_id'];
+
+      if (! class_exists($nameObjectToAdd)) {
+         return false;
+      }
+      $objectToAdd   = new $nameObjectToAdd();
+      $coluimn1 = str_replace('glpi_','',$objectToAdd->table.'_id');
+
+      if (! isset($_POST[$coluimn1]) || empty($_POST[$coluimn1])) {
+         Session::addMessageAfterRedirect(__('Error'), true, ERROR, true);
+      } else {
+
+         $IdToAdd  = $_POST[$coluimn1];
+
+         $mainObject = new $nameMainObject;
+         $mainObject->getFromDB(1); //useless ?
+         $coluimn = str_replace('glpi_','',$mainObject->table.'_id');
+
+         $nameMainObject   = $nameMainObject.'_item';
+         $nameObjectToAdd  = $nameObjectToAdd.'_item';
+
+         $mainObjectItem      = new $nameMainObject();
+         $mainObjectToAddItem = new $nameObjectToAdd();
+
+         //id de l'objet rajouté
+         $objectToAdd->getFromDB($IdToAdd);
+         $idObjectToAdd = $objectToAdd->fields['id'];
+
+         $res = $mainObjectItem->getFromDBByQuery("WHERE `items_id` = ".$idObjectToAdd." AND `".$coluimn."` = ".$idMainObject." AND `itemtype` = '". $_POST['objectToAdd']."'");
+
+         if ($res) {
+            Session::addMessageAfterRedirect(__('This Object is already link','genericobject'),
+                                          true, ERROR, true);
+         } else {
+            $values = array();
+            $values['items_id'] = $idObjectToAdd;
+            $values[$coluimn] = $idMainObject;
+            $values['itemtype'] = $_POST['objectToAdd'];
+
+            $mainObjectItem->fields = $values;
+            $mainObjectItem->addToDB();
+
+            $values = array();
+            $values['items_id'] = $idMainObject;
+            $values[$coluimn1] = $idObjectToAdd;
+            $values['itemtype'] = $mainObject->getType();
+
+            $mainObjectToAddItem->fields = $values;
+            $mainObjectToAddItem->addToDB($values);
+
+            return true;
+         }
+      }
+
+   }
+
+   /**
+    * Execute massive action for 
+    *
+    * @since version 0.85
+    *
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+   **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids) {
       $results = array('ok'       => 0,
                        'ko'       => 0,
                        'noright'  => 0,
                        'messages' => array());
 
-      switch ($ma->action) {
-         case "plugin_genericobject_transfer" :
-            foreach ($ma->items as $itemtype => $val) {
-                foreach ($val as $key => $item_id) {
-                   $item = new $itemtype;
-                      $item->getFromDB($item_id);
-                      $item->transfer($_POST['new_entity']);
-                      $results['ok']++;
-                }
-             }
-             break;
+      switch ($ma->getAction()) {
+         case 'plugin_genericobject_associate':
+            foreach ($ids as $id) {
+               if ($item->getFromDB($id) && $item->associate()) {
+                  $results['ok']++;
+               } else {
+                  $results['ko']++;
+               }
+            }
+            break;
 
-          default :
-             break;
+         case "plugin_genericobject_transfer" :
+            foreach ($ids as $id) {
+               if ($item->getFromDB($id) && $item->transfer($_POST['new_entity'])) {
+                  $results['ok']++;
+               } else {
+                  $results['ko']++;
+               }
+            }
+            break;
       }
-      $ma->results=$results;
+
+      $ma->results = $results;
    }
+
 
    static function getMenuContent() {
       $types = PluginGenericobjectType::getTypes();

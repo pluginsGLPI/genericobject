@@ -223,6 +223,52 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function prepareInputForUpdate($input) {
+
+      if (isset($input['itemtypes'])) {
+
+         $linked_itemtypes = $this->getLinkedItemTypesAsArray();
+
+         $obj = new self();
+
+         $add_itemtypes = array_diff($input['itemtypes'], $linked_itemtypes);
+         foreach ($add_itemtypes as $add_itemtype) {
+            // Add itemtype link in JSON
+
+            if ($obj->getFromDBByQuery("WHERE itemtype = '$add_itemtype'")) {
+
+               $tmp = $obj->getLinkedItemTypesAsArray();
+
+               // Add
+               if (! in_array($this->fields['itemtype'], $tmp)) {
+                  $tmp[] = $this->fields['itemtype'];
+                  $obj->update(array('id' => $obj->getID(),
+                                    'linked_itemtypes' => json_encode($tmp)));
+               }
+            }
+         }
+
+         $delete_itemtypes = array_diff($linked_itemtypes, $input['itemtypes']);
+         foreach ($delete_itemtypes as $delete_itemtype) {
+            // Delete itemtype link in JSON
+
+            if ($obj->getFromDBByQuery("WHERE itemtype = '$delete_itemtype'")) {
+
+               $tmp = $obj->getLinkedItemTypesAsArray();
+
+               // Delete
+               if (in_array($this->fields['itemtype'], $tmp)) {
+
+                  $tmp = (array_diff($tmp, array($this->fields['itemtype'])));
+
+                  $obj->update(array('id' => $obj->getID(),
+                                    'linked_itemtypes' => json_encode($tmp)));
+               }
+            }
+
+         }
+
+      }
+
       //If itemtype is active : register it !
       if (isset ($input["is_active"]) && $input["is_active"]) {
          self::registerOneType($this->fields['itemtype']);
@@ -787,10 +833,11 @@ class PluginGenericobjectType extends CommonDBTM {
          $elements[$itemtype] = $itemtype::getTypeName();
       }
 
-      echo "<input type='hidden' name='itemtypes[]' value=''>";
+      echo "<input type='hidden' name='itemtypes' value=''>";
 
       Dropdown::showFromArray('itemtypes', $elements, array('multiple' => true,
-                                                            'values' => $values));
+                                                            'values' => $values,
+                                                            'width' => '100%'));
       echo "</td></tr>";
 
       echo "<input type='hidden' name='id' value='".$this->getID()."'>";

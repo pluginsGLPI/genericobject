@@ -82,14 +82,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
 
       $itemtype = $this->fields['itemtype'];
       $obj = new $itemtype();
+      $column  = str_replace('glpi_','',$obj->table.'_id');
 
-      $column = str_replace('glpi_','',$obj->table.'_id');
+      $query = "DELETE FROM ".$obj_item->getTable(). " WHERE itemtype = '".static::$itemtype_1."' AND $column = '".$this->fields['items_id']."' AND items_id = '".$this->fields[static::$items_id_1]."'";
 
-      $obj_item->deleteByCriteria(array(
-                        'items_id' => $this->fields['plugin_genericobject_categories_id'],
-                        $column => $this->fields['items_id'],
-                        'itemtype' => get_class($this))
-      );
+      $DB->query($query);
 
       parent::post_purgeItem();
    }
@@ -110,6 +107,10 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
             $objectItem->getFromDB($values['id']);
 
             $namelinkedObject = $objectItem->fields['itemtype'];
+
+            if (! class_exists($namelinkedObject)) {
+               return '';
+            }
             $oobjectLinked = new $namelinkedObject();
             $oobjectLinked->getFromDB($objectItem->fields['items_id']);
 
@@ -117,25 +118,6 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       }
    }
 
-
-   public static function getDropdownItemLinked($object, $itemType, $id) {
-
-      $obj = new $itemType();
-      $nameMainObjectItem = $itemType."_Item";
-      $mainObjectItem = new $nameMainObjectItem();
-
-      $column = str_replace('glpi_','',$obj->table."_id");
-
-      $listeId = array();
-      foreach ($mainObjectItem->find() as $record) {
-
-         if ($record[$column] == $id) {
-            $listeId[] = $record['items_id'];
-         }
-      }
-
-      $object->dropdown(array('used' => $listeId));
-   }
 
    static function getItemListForObject($itemtype, $obj_item, $idItemType) {
 
@@ -145,9 +127,9 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
 
       $column = str_replace('glpi_','',$mainObject->table.'_id');
 
-      $resultat = $objectItem->find("`itemtype` = '".$obj_item."' and `".$column."` = $idItemType");
+      $result = $objectItem->find("`itemtype` = '".$obj_item."' AND `".$column."` = $idItemType");
 
-      foreach ($resultat as $item) {
+      foreach ($result as $item) {
 
          $obj = new $item['itemtype']();
          $obj->getFromDB($item['items_id']);
@@ -166,6 +148,48 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          echo "</tr>";
       }
    }
+
+   static function showItemsInMassiveActions($ma) {
+      global $CFG_GLPI;
+
+      echo __("Select an object to link", 'genericobject')."&nbsp";
+
+      $elements = array('' => Dropdown::EMPTY_VALUE);
+
+      $tmp = array();
+      foreach ($ma->items as $itemtype => $id) {
+         $item = new $itemtype();
+         $tmp[] = $item->getLinkedItemTypesAsArray();
+      }
+      
+      $intersect = $tmp[0];
+      for ($i = 1; $i < count($tmp); $i++){
+         $intersect = array_intersect($intersect, $tmp[$i]);
+      }
+
+      foreach ($intersect as $itemtype) {
+         $type = new PluginGenericobjectType();
+         $type->getFromDBByType($itemtype);
+
+         if ($type->fields['is_active']) {
+            $object = new $itemtype();
+            $elements[$itemtype] = $object->getTypeName();
+         }
+      }
+
+      $rand = Dropdown::showFromArray('objectToAdd', $elements);
+
+      $params = array('objectToAdd' => '__VALUE__');
+
+      Ajax::updateItemOnSelectEvent("dropdown_objectToAdd$rand", "show_".$rand,
+                                    $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
+                                    $params);
+
+      echo "<span id='show_".$rand."'>&nbsp;</span>";
+
+      echo '<br /><br />' . Html::submit(_x('button', "Install"), array('name' => 'massiveaction'));
+   }
+
 
    /**
     * 
@@ -198,8 +222,13 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
 
          $elements = array('' => Dropdown::EMPTY_VALUE);
          foreach ($item->getLinkedItemTypesAsArray() as $itemL) {
-            $object = new $itemL();
-            $elements[$itemL] = $object->getTypeName();
+            $type = new PluginGenericobjectType();
+            $type->getFromDBByType($itemL);
+         
+            if ($type->fields['is_active']) {
+               $object = new $itemL();
+               $elements[$itemL] = $object->getTypeName();
+            }
          }
 
          $rand = Dropdown::showFromArray('objectToAdd', $elements);

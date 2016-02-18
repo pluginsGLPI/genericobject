@@ -53,10 +53,12 @@ if (isset ($_GET["action"])) {
 
 //Update an existing itemtype
 } elseif (isset ($_POST["update"])) {
-   if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
 
-      // Remove [""] if no values ([""] => [])
-      $_POST['itemtypes'] = array_filter($_POST['itemtypes']);
+   if (isset($_POST['itemtypes'])) {
+
+      if (empty($_POST['itemtypes'])) {
+         $_POST['itemtypes'] = array();
+      }
 
       $_POST['linked_itemtypes'] = json_encode($_POST['itemtypes']);
    }

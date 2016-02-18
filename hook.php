@@ -25,6 +25,44 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
+function plugin_genericobject_addWhere($link, $nott, $itemtype, $ID, $val, $searchtype) {
+
+   if ($ID == 23100 && $searchtype == 'equals') {
+
+      $where = " `glpi_plugin_genericobject_koalas_items`.`itemtype` = '$val'";
+
+      //$key_itemtype_link = getForeignKeyFieldForItemType($val);
+
+      if (isset($_REQUEST['criteria'])) {
+         if (! isset($_REQUEST['genericobject_criteria_tmp'])) {
+            $_REQUEST['genericobject_criteria_tmp'] = $_REQUEST['criteria'];
+         }
+
+         foreach ($_REQUEST['genericobject_criteria_tmp'] as &$criteria) {
+            if (isset($criteria['items_id'])) {
+               if (!empty($criteria['items_id'])) {
+                  $where .= " AND `glpi_plugin_genericobject_koalas_items`.`items_id` = '".$criteria['items_id']."'";
+               }
+
+               unset($criteria['items_id']);
+
+               //Only "first"
+               break;
+            }
+         } 
+      }
+
+      if ($nott) {
+         return $link . " NOT ($where)";
+      }
+
+      return $link." ($where)";
+   }
+
+   return "";
+}
+
+
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
       $itemtype = $value['itemtype'];
@@ -204,16 +242,30 @@ function plugin_datainjection_populate_genericobject() {
 }
 
 function plugin_genericobject_MassiveActions($type) {
+
    $types = PluginGenericobjectType::getTypes();
    if (isset($types[$type])) {
+      //TODO : add translation, change string
+      $obj = new $type();
+      if ($obj->canUseDirectConnections()) {
+         $actions = array('plugin_genericobject_associate' => __("Add link", "genericobject"));
+      } else {
+         $actions = array();
+      }
+
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
-         return array('PluginGenericobjectObject'.
-        MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer"));
-      } else {
-         return array();
+         $actions['plugin_genericobject_transfer'] = __("Transfer");
       }
-   } else {
-      return array();
+
+      $massiveactions = array();
+      foreach ($actions as $key => $str) {
+         $massiveactions['PluginGenericobjectObject'.
+                           MassiveAction::CLASS_ACTION_SEPARATOR.$key] = $str;
+      }
+
+      return $massiveactions;
    }
+
+   return array();
 }
