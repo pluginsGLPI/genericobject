@@ -1023,10 +1023,13 @@ class PluginGenericobjectType extends CommonDBTM {
          self::addDatainjectionFile($this->fields['name']);
       }
 
+      // Not a good idea to delete class (without delete the datainjection model)
+      /*
       if (!$this->canUsePluginDataInjection() &&
          file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::deleteInjectionFile($this->fields['name']);
       }
+      */
    }
 
 
