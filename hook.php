@@ -116,14 +116,6 @@ function plugin_genericobject_getDatabaseRelations() {
    return $dropdowns;
 }
 
-function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
-   foreach (PluginGenericobjectType::getTypes() as $tmp => $type)
-      if ($type["use_plugin_uninstall"]) {
-         $uninstal_types[] = $type["itemtype"];
-      }
-   return $uninstal_types;
-}
-
 function plugin_pre_item_change_dropdowntranslation($object) {
 
    if (isset($object->input['itemtype'])) {
