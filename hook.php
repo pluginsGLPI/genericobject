@@ -237,14 +237,13 @@ function plugin_genericobject_MassiveActions($type) {
 
    $types = PluginGenericobjectType::getTypes();
    if (isset($types[$type])) {
-      //TODO : add translation, change string
+      $actions = array();
+      
       $obj = new $type();
       if ($obj->canUseDirectConnections()) {
-         $actions = array('plugin_genericobject_associate' => __("Add link", "genericobject"));
-      } else {
-         $actions = array();
+         $actions['plugin_genericobject_associate'] = __("Binding a object", 'genericobject'); //_x('button', "Associate")
       }
-
+      
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
          $actions['plugin_genericobject_transfer'] = __("Transfer");

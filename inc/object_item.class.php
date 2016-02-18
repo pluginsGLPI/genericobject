@@ -152,7 +152,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    static function showItemsInMassiveActions($ma) {
       global $CFG_GLPI;
 
-      echo __("Select an object to link", 'genericobject')."&nbsp";
+      echo __("Select an object to bind", 'genericobject')."&nbsp";
 
       $elements = array('' => Dropdown::EMPTY_VALUE);
 
@@ -187,7 +187,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
 
       echo "<span id='show_".$rand."'>&nbsp;</span>";
 
-      echo '<br /><br />' . Html::submit(_x('button', "Install"), array('name' => 'massiveaction'));
+      echo '<br /><br />' . Html::submit(_x('button', "Associate"), array('name' => 'massiveaction'));
    }
 
 
@@ -214,7 +214,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_1'>";
 
-         echo "<td class='center'>".__("Select an object to link", 'genericobject')."&nbsp;&nbsp;";
+         echo "<td class='center'>".__("Select an object to bind", 'genericobject')."&nbsp;&nbsp;";
 
          echo "<input type='hidden' name='items_id' value='$instID'>";
          //echo "<input type='hidden' name='idMainobject' value='".$item->getID()."'>";
@@ -244,7 +244,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          echo "<span id='show_".$rand."'>&nbsp;</span>";
 
          echo "</td><td width='20%'>";
-         echo "<input type='submit' name='add' value=\""._sx('button', 'Install')."\" class='submit'>";
+         echo "<input type='submit' name='add' value=\""._x('button', "Associate")."\" class='submit'>";
          echo "</td>";
 
          echo "</tr>";

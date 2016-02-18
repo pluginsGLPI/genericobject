@@ -148,3 +148,6 @@ msgstr[1] ""
 
 msgid "Warning : Dustbin can't be removed since Reservations are used on this type."
 msgstr ""
+
+msgid "Binding a object"
+msgstr ""
