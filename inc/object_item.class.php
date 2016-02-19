@@ -190,6 +190,12 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       echo '<br /><br />' . Html::submit(_x('button', "Associate"), array('name' => 'massiveaction'));
    }
 
+   function getForbiddenStandardMassiveAction() {
+      // No need 'update' fields
+      $forbidden = array('update');
+      return $forbidden;
+   }
+
 
    /**
     * 
@@ -208,7 +214,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       if ($item->canEdit($instID)) {
          echo "<div class='firstbloc'>";
 
-         echo "<form method='post' action='".Toolbox::getItemTypeFormURL("PluginGenericobjectObject_Item")."'>";
+         echo "<form method='post' action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
 
          echo "<div class='spaced'>";
          echo "<table class='tab_cadre_fixe'>";
