@@ -89,6 +89,8 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
          $query = "DROP TABLE IF EXISTS `$table`";
          $DB->query($query) or die($DB->error());
       }
+
+      $DB->query("DELETE FROM `glpi_dropdowntranslations` WHERE `itemtype` = '".__CLASS__."'");
    }
 
    static function getFamilies() {
