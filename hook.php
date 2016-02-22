@@ -69,9 +69,9 @@ function plugin_genericobject_AssignToTicket($types) {
       if ($value['use_tickets']) {
          if (class_exists($itemtype)) {
             $types[$itemtype] = $itemtype::getTypeName();
-         } else {
-            $types[$itemtype] = $itemtype;
-         }
+         }// else {
+         //   $types[$itemtype] = $itemtype;
+         //}
       }
    }
    return $types;

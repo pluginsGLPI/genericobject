@@ -430,7 +430,7 @@ class PluginGenericobjectProfile extends Profile {
          //$migration->dropTable('glpi_plugin_genericobject_profiles');
       }
       if (!countElementsInTable('glpi_profilerights', 
-                                "`name` LIKE '%genericobject%'")) {
+                                "`name` = 'plugin_genericobject_types'")) {
          self::createFirstAccess();
       }
    }
@@ -438,7 +438,7 @@ class PluginGenericobjectProfile extends Profile {
    static function uninstall() {
       global $DB;
       $query = "DELETE FROM `glpi_profilerights` 
-                WHERE `name` LIKE '%plugin_genericobject%'";
+                WHERE `name` LIKE '%genericobject%'";
       $DB->query($query) or die($DB->error());
    }
 }

@@ -212,6 +212,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   //Note : Dead code (tested in 0.90)
    static function getMenuIcon($itemtype) {
       global $CFG_GLPI;
       $default_icon = "/plugins/genericobject/pics/default-icon.png";
