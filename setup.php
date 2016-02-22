@@ -136,10 +136,11 @@ function plugin_init_genericobject() {
          $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
       }
 
+      Plugin::registerClass('PluginGenericobjectProfile', array('addtabon' => array('Profile')));
+
       $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
-      $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
 
       // when DropdownTranslation is add, update or deleted
@@ -147,21 +148,15 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['pre_item_update']['genericobject']['DropdownTranslation'] = 'plugin_pre_item_change_dropdowntranslation';
       $PLUGIN_HOOKS['pre_item_purge']['genericobject']['DropdownTranslation']  = 'plugin_pre_item_change_dropdowntranslation';
 
+      $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
    }
 }
 
 function plugin_post_init_genericobject() {
-   //global $GO_FIELDS;
-
-   Plugin::registerClass('PluginGenericobjectProfile', array('addtabon' => array(
-         'Profile')));
+   // After $UNINSTALL_TYPES init by function plugin_init_uninstall() of plugin uninstall :
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
-      $itemtype = $objecttype['itemtype'];
-      if (class_exists($itemtype)) {
-         $itemtype::registerType();
-      }
-
+      PluginGenericobjectType::registerOneType($objecttype['itemtype']);
    }
 }
 
