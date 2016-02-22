@@ -45,6 +45,7 @@ class PluginGenericobjectType extends CommonDBTM {
    const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
    const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
 
+   //Note : not used
    const CAN_OPEN_TICKET   = 1024;
 
    function getRights($interface = 'central') {
@@ -2096,10 +2097,16 @@ class PluginGenericobjectType extends CommonDBTM {
       self::deleteItemtypeReferencesInGLPI(__CLASS__);
 
       foreach ($DB->request("glpi_plugin_genericobject_types") as $type) {
+
+         // Delete *all* about this itemtype
+         $type_obj = new self();
+         $type_obj->fields = $type;
+         $type_obj->pre_deleteItem();
+
          //Delete references to PluginGenericobjectType in the following tables
-         self::deleteItemtypeReferencesInGLPI($type['itemtype']);
+         //self::deleteItemtypeReferencesInGLPI($type['itemtype']);
          //Drop files and classes
-         self::deleteItemTypeFilesAndClasses($type['name'], getTableForItemType($type['itemtype']), $type['itemtype']);
+         //self::deleteItemTypeFilesAndClasses($type['name'], getTableForItemType($type['itemtype']), $type['itemtype']);
       }
 
       //Delete table
