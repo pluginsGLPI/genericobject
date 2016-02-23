@@ -422,6 +422,11 @@ class PluginGenericobjectField extends CommonDBTM {
          PluginGenericobjectType::deleteClassFile($name);
          PluginGenericobjectType::deleteFormFile($name);
          PluginGenericobjectType::deletesearchFile($name);
+
+         // Remove translation(s) of dropdown
+         $itemtype = getItemTypeForTable($table);
+         $query = "DELETE FROM `glpi_dropdowntranslations` WHERE `itemtype` LIKE '".$itemtype."'";
+         $DB->query($query);
       }
    }
 

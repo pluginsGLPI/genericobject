@@ -217,7 +217,8 @@ function plugin_genericobject_uninstall() {
       $DB->query("DELETE FROM $table_datainjection_model WHERE itemtype LIKE 'PluginGenericobject%'");
    }
 
-   $itemtypes = array('Notepad', 'DisplayPreference', 'Contract_Item', 'Infocom', 'Fieldblacklist', 'Document_Item', 'Bookmark', 'Log');
+   $itemtypes = array('Notepad', 'DisplayPreference', 'Contract_Item', 'Infocom', 'Fieldblacklist', 
+                     'Document_Item', 'Bookmark', 'Log', 'DropdownTranslation');
    foreach ($itemtypes as $itemtype) {
       $item = new $itemtype();
       $DB->query("DELETE FROM `".$item->getTable()."` WHERE `itemtype` LIKE 'PluginGenericobject%'");

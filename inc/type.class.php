@@ -338,6 +338,8 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function pre_deleteItem() {
+      global $DB;
+
       if ($this->getFromDB($this->fields["id"])) {
          $name     = $this->fields['name'];
          $itemtype = $this->fields['itemtype'];
@@ -400,6 +402,10 @@ class PluginGenericobjectType extends CommonDBTM {
                }
             }
          }
+
+         // Remove translation(s) of dropdowns (ie : PluginGenericobjectTestcorbeillemodel)
+         $query = "DELETE FROM `glpi_dropdowntranslations` WHERE `itemtype` LIKE '".$itemtype."%'";
+         $DB->query($query);
 
          // Invalidate menu data in current session
          unset($_SESSION['glpimenu']);
