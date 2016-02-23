@@ -294,7 +294,46 @@ class PluginGenericobjectType extends CommonDBTM {
 
       // Only on main (behavior & plugins) form
       if (isset($this->input['_main_type_form'])) {
+
          $this->checkNecessaryFieldsUpdate();
+
+         $itemtype = $this->fields['itemtype'];
+
+         //Delete all network ports
+         if (! $this->canUseNetworkPorts()) {
+            //Note : call purge() for all cleanup in database
+            self::deleteNetworking($itemtype);
+         }
+
+         //Delete loans associated with this type
+         if (! $this->canUseUnicity()) {
+            self::deleteUnicity($itemtype);
+         }
+
+         if (! $this->canBeReserved()) {
+            //Delete reservations with this tyoe
+            self::deleteReservations($itemtype);
+            self::deleteReservationItems($itemtype);
+         }
+
+         //Remove associations to simcards with this type
+         if (! $this->canUsePluginSimcard()) {
+            self::deleteSimcardAssignation($itemtype);
+         }
+
+         if (! $this->canUseDirectConnections()) {
+            //TODO
+         }
+
+         if (! $this->canUsePluginDataInjection()) {
+            self::removeDataInjectionModels($itemtype);
+            //self::deleteInjectionFile($this->fields['name']);
+         }
+
+         if (! $this->canUseNotepad()) {
+            self::deleteNotepad($itemtype);
+         }
+
       }
    }
 
