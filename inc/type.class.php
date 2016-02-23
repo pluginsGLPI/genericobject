@@ -293,7 +293,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Check if some fields need to be added, because of GLPI framework
 
       // Only on main (behavior & plugins) form
-      if (isset($this->fields['_main_type_form'])) {
+      if (isset($this->input['_main_type_form'])) {
          $this->checkNecessaryFieldsUpdate();
       }
    }
