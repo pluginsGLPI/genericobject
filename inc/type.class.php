@@ -929,6 +929,9 @@ class PluginGenericobjectType extends CommonDBTM {
       self::addDropdownTable(getTableForItemType($itemtype), $params);
       self::addDropdownFrontFile($name);
       self::addDropdownFrontformFile($name);
+
+      // Invalidate submenu data in current session
+      unset($_SESSION['glpimenu']);
    }
 
    /**
@@ -1820,6 +1823,9 @@ class PluginGenericobjectType extends CommonDBTM {
             self::deleteClassFile($name);
          }
       }
+
+      // Invalidate submenu data in current session for minor cleanup
+      unset($_SESSION['glpimenu']);
    }
    //------------------------------- GETTERS -------------------------//
 
