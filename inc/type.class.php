@@ -127,9 +127,16 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!$withtemplate) {
          switch ($item->getType()) {
             case __CLASS__ :
+               // Number of fields in database
+               $itemtype = $item->fields['itemtype'];
+               $obj = new $itemtype();
+               $obj->getEmpty();
+               $nb_fields = count($obj->fields);
+
                $tabs = array (
                   1  => __("Main"),
                   3 => _n("Field", "Fields", 2),
+                  3 => self::createTabEntry(_n("Field", "Fields", Session::getPluralNumber()), $nb_fields),
                   5 => __("Preview")
                );
                if ($item->canUseDirectConnections()) {
