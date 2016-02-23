@@ -291,7 +291,11 @@ class PluginGenericobjectType extends CommonDBTM {
 
    function post_updateItem($history = 1) {
       //Check if some fields need to be added, because of GLPI framework
-      $this->checkNecessaryFieldsUpdate();
+
+      // Only on main (behavior & plugins) form
+      if (isset($this->fields['_main_type_form'])) {
+         $this->checkNecessaryFieldsUpdate();
+      }
    }
 
    function pre_deleteItem() {
@@ -780,6 +784,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       }
 
+      echo "<input type='hidden' name='_main_type_form' value='1'>";
       $this->showFormButtons($options);
    }
 
@@ -935,8 +940,8 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    function checkNecessaryFieldsUpdate() {
       $itemtype = $this->fields["itemtype"];
-      $item     = new $itemtype();
-      $item->getEmpty();
+      //$item     = new $itemtype();
+      //$item->getEmpty();
       $table    = getTableForItemType($itemtype);
 
       //Global search (inventory > status)
