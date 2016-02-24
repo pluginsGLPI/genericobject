@@ -503,6 +503,11 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[21]['name']        = _sx('button','Use')." ".__("Link to other objects", "genericobject");
       $sopt[21]['datatype']    = 'bool';
 
+      $sopt[22]['table']       = $this->getTable();
+      $sopt[22]['field']       = 'use_network_ports';
+      $sopt[22]['name']        = _sx('button','Use')." ".__("Network connections", "genericobject");
+      $sopt[22]['datatype']    = 'bool';
+
       // Plugins
       $sopt['use_plugins']      = _sx('button','Use')." "._n("Plugin", "Plugins", 2);
 
