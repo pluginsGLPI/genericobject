@@ -44,6 +44,7 @@ class PluginGenericobjectType extends CommonDBTM {
    const LOCALE_TEMPLATE             = "/objects/locale.tpl";
    const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
    const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
+   const OBJECTITEM_INJECTION_TEMPLATE = "/objects/object_iteminjection.class.tpl";
 
    //Note : not used
    const CAN_OPEN_TICKET   = 1024;
@@ -1335,6 +1336,25 @@ class PluginGenericobjectType extends CommonDBTM {
                                        'FOREIGNKEY'   => getForeignKeyFieldForItemType($classname),
                                        'SOURCEOBJECT' => $classname),
             self::OBJECTITEM_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name."_item.class");
+
+      // For datainjection
+      self::addItemInjectionClassFile($name, $classname);
+   }
+
+   /**
+    * Write on the the _Item class file for the new object type
+    * @param name the name of the object type
+    * @param classname the name of the new object
+    * @param itemtype the object device type
+    * @return nothing
+    */
+   public static function addItemInjectionClassFile($name, $classname) {
+      $class = self::getClassByName($name);
+      self::addFileFromTemplate(array('CLASSNAME'    => $class,
+                                       //'FOREIGNKEY'   => getForeignKeyFieldForItemType($classname),
+                                       //'SOURCEOBJECT' => $classname
+                                       ),
+            self::OBJECTITEM_INJECTION_TEMPLATE, GENERICOBJECT_CLASS_PATH, $name."_iteminjection.class");
    }
 
    /**
@@ -1661,7 +1681,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $notepad = new Notepad();
       $notepad->deleteByCriteria(array('itemtype' => $itemtype));
    }
-
 
    /**
     * Delete network ports for an itemtype

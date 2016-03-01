@@ -54,12 +54,15 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       }
    }
 
+   /*
    static function canView() {
-      return Session::haveRight($this->$itemtype_1, READ);
+      return Session::haveRight(self::$itemtype_1, READ);
    }
+   */
 
    static function canCreate() {
-      return Session::haveRight($this->$itemtype_1, CREATE);
+      //Note : can be add a right
+      return true;
    }
 
    static function canPurge() {
@@ -70,6 +73,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    static function canDelete() { //useless
       //Note : can be add a right
       return true;
+   }
+
+   //Note : for datainjection, injection of a bind
+   function post_updateItem($history = 1) {
+      //Don't call parent
    }
 
    function post_purgeItem() {

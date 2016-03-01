@@ -925,6 +925,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
       if ($this->canUseDirectConnections()) {
+         $options['directconnections']     = _n('Linked object', 'Linked objects', Session::getPluralNumber(), 'genericobject');
+
          $options[23100]['table']          = $this->getTable()."_items";
          $options[23100]['field']          = 'id';
          $options[23100]['datatype']       = 'specific';
@@ -934,7 +936,11 @@ class PluginGenericobjectObject extends CommonDBTM {
          $options[23100]['searchtype']     = array('equals');
       }
 
-      asort($options);
+      if ($this->canUseNotepad()) {
+         $options += Notepad::getSearchOptionsToAdd();
+      }
+
+      //asort($options);
       return $options;
    }
 

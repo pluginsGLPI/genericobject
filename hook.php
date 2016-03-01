@@ -232,12 +232,20 @@ function plugin_genericobject_uninstall() {
 
 function plugin_datainjection_populate_genericobject() {
    global $INJECTABLE_TYPES;
+
+   $from = 'genericobject';
+
    $type = new PluginGenericobjectType();
    foreach($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
       if (class_exists($data ['itemtype']."Injection")) {
-         $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = 'genericobject';
+         $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = $from;
+
+         if (class_exists($data ['itemtype']."_ItemInjection")) {
+            $INJECTABLE_TYPES[$data ['itemtype']."_ItemInjection"] = $from;
+         }
       }
    }
+
 }
 
 function plugin_genericobject_MassiveActions($type) {
