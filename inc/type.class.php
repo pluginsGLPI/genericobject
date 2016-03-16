@@ -390,6 +390,8 @@ class PluginGenericobjectType extends CommonDBTM {
          
          self::deleteNotepad($itemtype);
 
+         self::deletePluginFieldsContainers($itemtype);
+
          if (preg_match("/PluginGenericobject(.*)/", $itemtype, $results)) {
                   $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
             ProfileRight::deleteProfileRights(array($newrightname));
@@ -1682,6 +1684,22 @@ class PluginGenericobjectType extends CommonDBTM {
       $notepad->deleteByCriteria(array('itemtype' => $itemtype));
    }
 
+
+   public static function deletePluginFieldsContainers($itemtype) {
+
+      // For fields 0.90-1.2 (or more)
+      $plugin = new Plugin();
+      if ($plugin->isActivated("fields")) {
+         //clear all container(s) about object
+         $containers = new PluginFieldsContainer();
+         //deleteByCriteria()
+         foreach ($containers->find("itemtype = '".$itemtype."'") as $data) {
+            $container = new PluginFieldsContainer();
+            $container->delete($data, 1);
+         }
+      }
+   }
+
    /**
     * Delete network ports for an itemtype
     * @param the itemtype
@@ -2173,8 +2191,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
       //If files are missing, recreate them!
       self::checkClassAndFilesForItemType();
-   }
 
+   }
 
    static function uninstall() {
       global $DB;
