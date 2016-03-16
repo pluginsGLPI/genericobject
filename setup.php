@@ -153,10 +153,17 @@ function plugin_init_genericobject() {
 }
 
 function plugin_post_init_genericobject() {
+   global $PLUGIN_HOOKS;
+
    // After $UNINSTALL_TYPES init by function plugin_init_uninstall() of plugin uninstall :
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
       PluginGenericobjectType::registerOneType($objecttype['itemtype']);
+
+      // For plugin fields 0.90-1.2 (or more)
+      //if ($objecttype['use_plugin_fields']) {
+         $PLUGIN_HOOKS['plugin_fields'][] = $objecttype['itemtype'];
+      //}
    }
 }
 
