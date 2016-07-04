@@ -3,4 +3,4 @@
 The genericobject plugin allows to extends GLPi to manage new types of objects.
 
 
-See [Wiki](https://github.com/TECLIB/genericobject/wiki/) for Usage and customisation
+See [Wiki](https://github.com/pluginsGLPI/genericobject/wiki/) for Usage and customisation
