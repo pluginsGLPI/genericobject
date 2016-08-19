@@ -503,8 +503,6 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if (!$previsualisation) {
          $this->showFormButtons($options);
-         echo "<div id='tabcontent'></div>";
-         echo "<script type='text/javascript'>loadDefaultTab();</script>";
       } else {
          echo "</table></div>";
          Html::closeForm();
