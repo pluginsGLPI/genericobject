@@ -28,7 +28,7 @@
 class PluginGenericobjectObject extends CommonDBTM {
 
    protected $objecttype;
-   
+
    //Internal field counter
    private $cpt = 0;
 
@@ -59,11 +59,15 @@ class PluginGenericobjectObject extends CommonDBTM {
          $this->objecttype = PluginGenericobjectType::getInstance($class);
       }
       $this->dohistory = $this->canUseHistory();
-      
+
       if (preg_match("/PluginGenericobject(.*)/", $class, $results)) {
-               self::$rightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
+         if (preg_match("/^(.*)y$/i", $results[1], $end_results)) {
+            self::$rightname = 'plugin_genericobject_'.strtolower($end_results[1]).'ies';
+         } else {
+            self::$rightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
+         }
       }
-      
+
       if ($this->canUseNotepad()) {
          // For GLPI 0.85.x
          $this->usenotepadrights = true;
@@ -85,6 +89,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       $class  = get_called_class();
       $item   = new $class();
       $fields = PluginGenericobjectSingletonObjectField::getInstance($class);
+      $plugin = new Plugin();
 
       PluginGenericobjectType::includeLocales($item->getObjectTypeName());
       PluginGenericobjectType::includeConstants($item->getObjectTypeName());
@@ -141,7 +146,6 @@ class PluginGenericobjectObject extends CommonDBTM {
             }
          }
          if ($item->canUsePluginSimcard()) {
-            $plugin = new Plugin();
             if ($plugin->isActivated('simcard') && $plugin->isActivated('simcard')) {
                PluginSimcardSimcard_Item::registerItemtype($class);
             }
@@ -182,13 +186,13 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          if ($item->canUsePluginGeninventorynumber()) {
             if (!in_array($class, $GENINVENTORYNUMBER_TYPES)) {
-               //include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
-               //PluginGeninventorynumberConfigField::registerNewItemType($class);
+               include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
+               PluginGeninventorynumberConfigField::registerNewItemType($class);
                array_push($GENINVENTORYNUMBER_TYPES, $class);
             }
-         } else {
-            //include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
-            //PluginGeninventorynumberConfigField::unregisterNewItemType($class);
+         } elseif ($plugin->isActivated('geninventorynumber')) {
+            include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
+            PluginGeninventorynumberConfigField::unregisterNewItemType($class);
          }
       }
 
@@ -347,7 +351,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function canUseUnicity() {
       // Disable unicity feature (for GLPI 0.85 onward) : see issue #16
       // Related code : search for #16
-      // FIXME : The bug may be in GLPI itself 
+      // FIXME : The bug may be in GLPI itself
       return false;
       return ($this->objecttype->canUseUnicity() && Session::haveRight("config", READ));
    }
@@ -432,6 +436,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    function showForm($id, $options=array(), $previsualisation = false) {
       global $DB;
 
+      $display_date = (!method_exists('CommonDBTM', 'showDates'));
       if ($previsualisation) {
          $canedit = true;
          $this->getEmpty();
@@ -459,6 +464,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
       $this->fields['id'] = $id;
+      $options['colspan'] = 4;
       $this->initForm($id,$options);
       $this->showFormHeader($options);
 
@@ -485,7 +491,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
       $this->closeColumn();
 
-      if (!$this->isNewID($id)) {
+      if ($display_date && !$this->isNewID($id)) {
          echo "<tr class='tab_bg_1'>";
          echo "<td colspan='2' class='center'>".$date;
          if (!$template && !empty($this->fields['template_name'])) {
@@ -698,15 +704,15 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function cleanDBonPurge() {
       $parameters = array('items_id' => $this->getID(), 'itemtype' => get_called_class());
-      $types      = array('Computer_Item', 
+      $types      = array('Computer_Item',
                           'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item');
       foreach ($types as $type) {
          $item = new $type();
          $item->deleteByCriteria($parameters);
       }
 
-      foreach (array('NetworkPort', 'Computer_Item', 'ReservationItem', 
-                     'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item', 
+      foreach (array('NetworkPort', 'Computer_Item', 'ReservationItem',
+                     'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item',
                      'Item_Problem', 'Change_Item', 'Item_Project', ) as $itemtype) {
          $ip = new $itemtype();
          $ip->cleanDBonItemDelete(get_called_class(), $this->getID());
@@ -780,7 +786,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          //was found in a field that doesn't represent a foreign key
          //for exemple a field called : is_identification
          if (preg_match("/(s_id$|s_id_)/", $field)) {
-            $tmp  = getTableNameForForeignKeyField($field);            
+            $tmp  = getTableNameForForeignKeyField($field);
          } else {
             $tmp = '';
          }
@@ -1022,7 +1028,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    static function showMassiveActionsSubForm(MassiveAction $ma) {
       global $GENINVENTORYNUMBER_TYPES;
 
-      // KK TODO: check if MassiveAction itemtypes are concerned 
+      // KK TODO: check if MassiveAction itemtypes are concerned
       //if (in_array ($options['itemtype'], $GENINVENTORYNUMBER_TYPES)) {
       switch ($ma->action) {
          case "plugin_genericobject_transfer" :
@@ -1034,7 +1040,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             break;
       }
  //  }
-      return true; 
+      return true;
    }
 
    function plugin_genericobject_MassiveActionsProcess($data) {
@@ -1084,14 +1090,14 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          $itemtype = $type['itemtype'];
          $item     = new $itemtype();
-         
+
          $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
          if (class_exists($itemtype)
             && Session::haveRight($itemtype_rightname, READ)) {
 
             $links           = array();
             $links['search'] = $itemtype::getSearchUrl(false);
-            
+
             if ($item->canUseTemplate()) {
                $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
                if (Session::haveRight($itemtype_rightname, CREATE)) {
@@ -1103,20 +1109,20 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
             }
 
-            // $menu[strtolower($itemtype)] = array('title' => $type['itemtype']::getMenuName(), 
+            // $menu[strtolower($itemtype)] = array('title' => $type['itemtype']::getMenuName(),
             //                                      'page'  => $itemtype::getSearchUrl(false));
 
-            if ($type['plugin_genericobject_typefamilies_id'] > 0 
-               && (!isset($_GET['itemtype']) 
+            if ($type['plugin_genericobject_typefamilies_id'] > 0
+               && (!isset($_GET['itemtype'])
                   || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {
                $family_id = $type['plugin_genericobject_typefamilies_id'];
                $name      = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id, 0, false);
                $str_name  = strtolower($name);
                $menu[$str_name]['title'] = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id);
                $menu[$str_name]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family_id;
-               $menu[$str_name]['options'][strtolower($itemtype)] = 
-                     array('title' => $type['itemtype']::getMenuName(), 
-                           'page'  => $itemtype::getSearchUrl(false), 
+               $menu[$str_name]['options'][strtolower($itemtype)] =
+                     array('title' => $type['itemtype']::getMenuName(),
+                           'page'  => $itemtype::getSearchUrl(false),
                            'links' => $links);
             } else {
                $menu[strtolower($itemtype)]= array(
@@ -1133,5 +1139,5 @@ class PluginGenericobjectObject extends CommonDBTM {
       $menu['is_multi_entries']= true;
       return $menu;
    }
- 
+
 }
