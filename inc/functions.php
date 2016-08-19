@@ -37,7 +37,9 @@ function _log() {
    $trace = debug_backtrace();
 //   call_user_func_array("Toolbox::logInFile", array('generic-object', print_r($trace,true) . "\n", true));
    if (count($trace)>0) {
-      $filename = preg_replace("|^".GLPI_ROOT."/plugins/genericobject/|", "", $trace[0]['file']);
+      $glpi_root = str_replace( "\\", "/", GLPI_ROOT );
+      $trace_file = str_replace( "\\", "/", $trace[0]['file'] );
+      $filename = preg_replace("|^".$glpi_root."/plugins/genericobject/|", "", $trace_file);
 //      call_user_func_array("Toolbox::logInFile", array('generic-object', $filename . "\n", true));
    }
    if (count($trace) > 1) {
