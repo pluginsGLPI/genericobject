@@ -95,8 +95,8 @@ function plugin_genericobject_install() {
    include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
-   $migration = new Migration('2.4.0');
-   
+   $migration = new Migration('0.85+1.1');
+
    foreach (
       array(
          'PluginGenericobjectField',
@@ -119,7 +119,7 @@ function plugin_genericobject_install() {
          }
       }
    }
-   
+
    if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
       @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true)
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
@@ -149,9 +149,9 @@ function plugin_genericobject_uninstall() {
 
    foreach (
       array(
-               'PluginGenericobjectType', 
+               'PluginGenericobjectType',
                'PluginGenericobjectProfile',
-               'PluginGenericobjectField', 
+               'PluginGenericobjectField',
                'PluginGenericobjectTypeFamily'
       ) as $itemtype
    ) {

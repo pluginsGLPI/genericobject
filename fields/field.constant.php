@@ -24,7 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 global $GO_FIELDS;
 
 $GO_FIELDS['id']['name']          = __("ID");
@@ -60,6 +60,9 @@ $GO_FIELDS['expirationdate']['input_type'] = 'date';
 
 $GO_FIELDS['date_mod']['name']       = __("Last update");
 $GO_FIELDS['date_mod']['input_type'] = 'datetime';
+
+$GO_FIELDS['date_creation']['name']       = __('Creation date');
+$GO_FIELDS['date_creation']['input_type'] = 'datetime';
 
 $GO_FIELDS['url']['name']       = __("URL");
 $GO_FIELDS['url']['field']      = 'url';

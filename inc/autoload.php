@@ -72,4 +72,3 @@ class PluginGenericobjectAutoloader implements SplAutoloader
       spl_autoload_register(array($this, 'autoload'));
    }
 }
-

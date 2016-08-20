@@ -464,7 +464,6 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
       $this->fields['id'] = $id;
-      $options['colspan'] = 4;
       $this->initForm($id,$options);
       $this->showFormHeader($options);
 
@@ -512,7 +511,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    static function getFieldsToHide() {
       return array('id', 'is_recursive', 'is_template', 'template_name', 'is_deleted',
-                   'entities_id', 'notepad', 'date_mod');
+                   'entities_id', 'notepad', 'date_mod', 'date_creation');
    }
 
 
@@ -746,9 +745,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    function getObjectSearchOptions($with_linkfield = false) {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
-      $datainjection_blacklisted = array('id', 'date_mod', 'entities_id');
+      $datainjection_blacklisted = array('id', 'date_mod', 'entities_id', 'date_creation');
       $index_exceptions = array('name' => 1, 'id' => 2, 'comment' => 16, 'date_mod' => 19,
-                                 'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90);
+                                 'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90,
+                                 'date_creation' => 121);
       $index   = 3;
       $options = array();
       $options['common']             = __('Characteristics');

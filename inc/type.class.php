@@ -212,15 +212,6 @@ class PluginGenericobjectType extends CommonDBTM {
       if (isset ($input["is_active"]) && $input["is_active"]) {
          self::registerOneType($this->fields['itemtype']);
       }
-
-      if (isset($input['use_plugin_geninventorynumber'])) {
-         switch ($input['use_plugin_geninventorynumber']) {
-            case 0:
-		
-	       break;
-            case 1:
-         }
-      }
       return $input;
    }
 
@@ -245,7 +236,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
          //Delete loans associated with this type
          self::deleteUnicity($itemtype);
-         
+
          //Delete reservations with this tyoe
          self::deleteReservations($itemtype);
          self::deleteReservationItems($itemtype);
@@ -257,7 +248,7 @@ class PluginGenericobjectType extends CommonDBTM {
          PluginGenericobjectProfile::deleteTypeFromProfile($itemtype);
 
          self::deleteTicketAssignation($itemtype);
-         
+
          //Remove associations to simcards with this type
          self::deleteSimcardAssignation($itemtype);
 
@@ -270,8 +261,8 @@ class PluginGenericobjectType extends CommonDBTM {
          self::deleteItemtypeReferencesInGLPI($itemtype);
 
          self::deleteItemTypeFilesAndClasses($name, $this->getTable(), $itemtype);
-         
-         self::deleteNotepad($itemtype);
+
+         //self::deleteNotepad($itemtype);
 
          if (preg_match("/PluginGenericobject(.*)/", $itemtype, $results)) {
                   $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
@@ -362,6 +353,18 @@ class PluginGenericobjectType extends CommonDBTM {
       $sopt[20]['field']       = 'use_projects';
       $sopt[20]['name']        = _n('Project', 'Projects', 2);
       $sopt[20]['datatype']    = 'bool';
+
+      $sopt[21]['table']          = $this->getTable();
+      $sopt[21]['field']          = 'date_mod';
+      $sopt[21]['name']           = __('Last update');
+      $sopt[21]['datatype']       = 'datetime';
+      $sopt[21]['massiveaction']  = false;
+
+      $sopt[121]['table']          = $this->getTable();
+      $sopt[121]['field']          = 'date_creation';
+      $sopt[121]['name']           = __('Creation date');
+      $sopt[121]['datatype']       = 'datetime';
+      $sopt[121]['massiveaction']  = false;
 
       return $sopt;
    }
@@ -490,8 +493,8 @@ class PluginGenericobjectType extends CommonDBTM {
                        "use_contracts"            => _n("Contract", "Contracts", 2),
                        "use_documents"            => _n("Document", "Documents", 2),
                        "use_loans"                => _n("Reservation", "Reservations", 2),
-                       // Disable unicity feature; see #16 
-                       // Related code : search for #16 
+                       // Disable unicity feature; see #16
+                       // Related code : search for #16
                        // "use_unicity"              => __("Fields unicity"),
                        "use_global_search"        => __("Global search"),
                        "use_projects"             => _n("Project", "Projects", 2),
@@ -516,27 +519,27 @@ class PluginGenericobjectType extends CommonDBTM {
 
             switch ($right) {
                case 'use_deleted':
-                  Html::showCheckbox(array('name' => $right, 
+                  Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->canBeDeleted()));
                   break;
 
                case 'use_recursivity':
-                  Html::showCheckbox(array('name' => $right, 'value' => $this->canBeRecursive(), 
+                  Html::showCheckbox(array('name' => $right, 'value' => $this->canBeRecursive(),
                                               'checked' => $this->canBeRecursive()));
                   break;
 
                case 'use_notes':
-                  Html::showCheckbox(array('name' => $right, 
+                  Html::showCheckbox(array('name' => $right,
                                            'checked' => $this->canUseNotepad()));
                   break;
 
                case 'use_template':
-                  Html::showCheckbox(array('name' => $right, 
+                  Html::showCheckbox(array('name' => $right,
                                            'checked' => $this->canUseTemplate()));
                   break;
 
                default :
-                     Html::showCheckbox(array('name' => $right,  
+                     Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
                   break;
             }
@@ -565,7 +568,7 @@ class PluginGenericobjectType extends CommonDBTM {
             switch ($right) {
                case 'use_plugin_datainjection' :
                   if ($plugin->isActivated('datainjection')) {
-                     Html::showCheckbox(array('name' => $right, 
+                     Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
@@ -575,7 +578,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
                case 'use_plugin_pdf' :
                   if ($plugin->isActivated('pdf')) {
-                     Html::showCheckbox(array('name' => $right, 
+                     Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
@@ -585,7 +588,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
                case 'use_plugin_order' :
                   if ($plugin->isActivated('order')) {
-                     Html::showCheckbox(array('name' => $right, 
+                     Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
@@ -595,7 +598,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
                case 'use_plugin_uninstall' :
                   if ($plugin->isActivated('uninstall')) {
-                     Html::showCheckbox(array('name' => $right, 
+                     Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
@@ -605,7 +608,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
                case 'use_plugin_simcard' :
                   if ($plugin->isActivated('simcard')) {
-                     Html::showCheckbox(array('name' => $right, 
+                     Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
                   } else {
                      echo Dropdown::EMPTY_VALUE;
@@ -732,7 +735,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       if ($params['overwrite_locales']) {
          //Add language file
-         self::addLocales($name, $itemtype);         
+         self::addLocales($name, $itemtype);
       }
 
       //Add file needed by datainjectin plugin
@@ -890,8 +893,11 @@ class PluginGenericobjectType extends CommonDBTM {
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
                   `comment` text COLLATE utf8_unicode_ci,
                   `notepad` text COLLATE utf8_unicode_ci,
-                  `date_mod` DATETIME NULL  ,
-                  PRIMARY KEY ( `id` )
+                  `date_mod` DATETIME DEFAULT NULL,
+                  `date_creation` DATETIME DEFAULT NULL,
+                  PRIMARY KEY ( `id` ),
+                  KEY `date_mod` (`date_mod`),
+                  KEY `date_creation` (`date_creation`)
                   ) ENGINE = MYISAM COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
 
@@ -913,10 +919,14 @@ class PluginGenericobjectType extends CommonDBTM {
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."_items` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
+        `date_mod` DATETIME DEFAULT NULL,
+        `date_creation` DATETIME DEFAULT NULL,
         `$fk` int(11) NOT NULL DEFAULT '0',
         `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
         PRIMARY KEY (`id`),
         KEY `$fk` (`$fk`),
+        KEY `date_mod` (`date_mod`),
+        KEY `date_creation` (`date_creation`),
         KEY `item` (`itemtype`,`items_id`)
       ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
@@ -1291,7 +1301,11 @@ class PluginGenericobjectType extends CommonDBTM {
                        `id` int(11) NOT NULL auto_increment,
                        `name` varchar(255) collate utf8_unicode_ci default NULL,
                        `comment` text collate utf8_unicode_ci,
+                       `date_mod` DATETIME DEFAULT NULL,
+                       `date_creation` DATETIME NOT NULL,
                        PRIMARY KEY  (`id`),
+                       KEY `date_mod` (`date_mod`),
+                       KEY `date_creation` (`date_creation`),
                        KEY `name` (`name`)
                      ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query);
@@ -1381,7 +1395,7 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function deleteSimcardAssignation($itemtype) {
       global $DB;
-      
+
       $plugin = new Plugin();
       if ($plugin->isActivated('simcard') && $plugin->isActivated('simcard')) {
          $types = array('PluginSimcardSimcard_Item');
@@ -1457,7 +1471,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $networkport->delete($port);
        }
    }
-   
+
    /**
     * Delete reservations for an itemtype
     * @param $itemtype
@@ -1465,17 +1479,17 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    static function deleteReservations($itemtype) {
       global $DB;
-      
+
       $reservation = new Reservation();
-      $query = "DELETE FROM 
-            `glpi_reservations` 
+      $query = "DELETE FROM
+            `glpi_reservations`
          WHERE `reservationitems_id` in (
             SELECT `id` from `glpi_reservationitems` WHERE `itemtype`='$itemtype'
          )";
       $DB->query($query);
    }
-   
-   /** 
+
+   /**
     * Delete reservations for an itemtype
     * @param $itemtype
     * @return nothing
@@ -1788,7 +1802,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       return $this->fields['use_plugin_simcard'];
    }
-    
+
    function canUsePluginGeninventoryNumber() {
       $plugin = new Plugin();
       if (!$plugin->isInstalled("geninventorynumber")
@@ -1846,7 +1860,8 @@ class PluginGenericobjectType extends CommonDBTM {
                            `is_active` tinyint(1) NOT NULL default '0',
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
                            `comment` text NULL,
-                           `date_mod` datetime NOT NULL default '0000-00-00 00:00:00',
+                           `date_mod` datetime DEFAULT NULL,
+                           `date_creation` datetime DEFAULT NULL,
                            `use_global_search` tinyint(1) NOT NULL default '0',
                            `use_unicity` tinyint(1) NOT NULL default '0',
                            `use_history` tinyint(1) NOT NULL default '0',
@@ -1881,7 +1896,10 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_projects", "bool");
       $migration->addField($table, "use_notepad", "bool");
       $migration->addField($table, "comment", "text");
-      $migration->addField($table, "date_mod", "datetime");
+      if (!$migration->addField($table, "date_mod", "datetime")) {
+         $migration->changeField($table, "date_mod", "date_mod", "datetime");
+      }
+      $migration->addField($table, "date_creation", "datetime");
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->addField($table, "use_plugin_simcard", "bool");
@@ -1889,7 +1907,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       // Migrate notepad data
       $allGenericObjectTypes = PluginGenericobjectType::getTypes(true);
-       
+
       $notepad = new Notepad();
       foreach ($allGenericObjectTypes as $genericObjectType => $genericObjectData) {
          $genericObjectTypeInstance = new $genericObjectType();
@@ -1916,7 +1934,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $migration->dropField($genericObjectTypeInstance->getTable(), "notepad");
          $migration->migrationOneTable($genericObjectTypeInstance->getTable());
       }
-      
+
       //Displayprefs
       $prefs = array(10 => 6, 9 => 5, 8 => 4, 7 => 3, 6 => 2, 2 => 1, 4 => 1, 11 => 7,  12 => 8,
                      14 => 10, 15 => 11);
