@@ -22,6 +22,12 @@
       <author>Walid Nouh</author>
    </authors>
    <versions>
+      <version>
+          <num>0.85-1.1</num>
+          <compatibility>0.85</compatibility>
+          <compatibility>0.90</compatibility>
+          <compatibility>9.1</compatibility>
+      </version>
     <version>
           <num>0.85-1.0</num>
           <compatibility>0.85</compatibility>
