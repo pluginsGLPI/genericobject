@@ -297,6 +297,10 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
    }
+   
+   public function post_deleteItem() {
+      
+   }
 
    function getSearchOptions() {
       $sopt['common'] = __("Objects management", "genericobject");
@@ -1032,11 +1036,12 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    public static function deleteLocales($name, $itemtype) {
-      if (file_exists(GLPI_ROOT . '/plugins/genericobject/locales/'.$name)) {
-         foreach (glob(GLPI_ROOT . '/plugins/genericobject/locales/'.$name.'/*.php') as $file) {
+      $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$name;
+      if (file_exists($locale_dir)) {
+         foreach (glob($locale_dir.'/*.php') as $file) {
             @unlink($file);
          }
-         @rmdir(GLPI_ROOT . '/plugins/genericobject/locales/'.$name);
+         @rmdir($locale_dir);
       }
    }
 
