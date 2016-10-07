@@ -352,7 +352,6 @@ class PluginGenericobjectObject extends CommonDBTM {
       // Disable unicity feature (for GLPI 0.85 onward) : see issue #16
       // Related code : search for #16
       // FIXME : The bug may be in GLPI itself
-      return false;
       return ($this->objecttype->canUseUnicity() && Session::haveRight("config", READ));
    }
 
@@ -737,11 +736,11 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function getSearchOptions() {
-      return $this->getObjectSearchOptions(true);
+      return $this->getObjectSearchOptions();
    }
 
 
-   function getObjectSearchOptions($with_linkfield = false) {
+   function getObjectSearchOptions() {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
       $datainjection_blacklisted = array('id', 'date_mod', 'entities_id', 'date_creation');
@@ -788,12 +787,8 @@ class PluginGenericobjectObject extends CommonDBTM {
             $tmp = '';
          }
 
-         if ($with_linkfield) {
-            if (preg_match("/(s_id$|s_id_)/", $field)) {
-               $options[$currentindex]['linkfield'] = $field;
-            } else {
-               $options[$currentindex]['linkfield'] = $field;
-            }
+         if (preg_match("/(s_id_)/", $field)) {
+            $options[$currentindex]['linkfield'] = $field;
          }
 
          if ($tmp != '') {
@@ -916,7 +911,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          $index = $currentindex + 1;
       }
-      asort($options);
+      ksort($options);
       return $options;
    }
 
