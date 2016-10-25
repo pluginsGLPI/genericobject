@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 12:42+0200\n"
+"POT-Creation-Date: 2016-10-25 13:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: index.php:59 setup.php:168 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/object_item.class.php:110
-#: inc/profile.class.php:39 inc/type.class.php:302 inc/type.class.php:385
+#: inc/profile.class.php:39 inc/type.class.php:306 inc/type.class.php:389
 msgid "Objects management"
 msgstr ""
 
@@ -98,46 +98,46 @@ msgstr ""
 msgid "A type already exists with the same name"
 msgstr ""
 
-#: inc/type.class.php:356 inc/type.class.php:476 inc/typefamily.class.php:36
+#: inc/type.class.php:360 inc/type.class.php:480 inc/typefamily.class.php:36
 msgid "Family of type of objects"
 msgstr ""
 
-#: inc/type.class.php:436
+#: inc/type.class.php:440
 msgid "Internal identifier"
 msgstr ""
 
-#: inc/type.class.php:490
+#: inc/type.class.php:494
 msgid "Behaviour"
 msgstr ""
 
-#: inc/type.class.php:508
+#: inc/type.class.php:512
 msgid "Network connections"
 msgstr ""
 
-#: inc/type.class.php:511
+#: inc/type.class.php:515
 msgid "injection file plugin"
 msgstr ""
 
-#: inc/type.class.php:513
+#: inc/type.class.php:517
 msgid "geninventorynumber plugin"
 msgstr ""
 
-#: inc/type.class.php:514
+#: inc/type.class.php:518
 msgid "order plugin"
 msgstr ""
 
-#: inc/type.class.php:515
+#: inc/type.class.php:519
 msgid "item's uninstallation plugin"
 msgstr ""
 
-#: inc/type.class.php:516
+#: inc/type.class.php:520
 msgid "simcard plugin"
 msgstr ""
 
-#: inc/type.class.php:667
+#: inc/type.class.php:671
 msgid "Regenerate files"
 msgstr ""
 
-#: inc/type.class.php:680
+#: inc/type.class.php:684
 msgid "Link to other objects"
 msgstr ""
