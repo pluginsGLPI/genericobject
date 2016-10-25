@@ -1,143 +1,144 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
+# Salvatore Russo <ilbuzzo@gmail.com>, 2016
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-25 13:26+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2016-09-14 12:42+0200\n"
+"PO-Revision-Date: 2016-10-13 13:45+0000\n"
+"Last-Translator: Salvatore Russo <ilbuzzo@gmail.com>\n"
+"Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: index.php:59 setup.php:168 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/object_item.class.php:110
-#: inc/profile.class.php:39 inc/type.class.php:306 inc/type.class.php:389
+#: inc/profile.class.php:39 inc/type.class.php:302 inc/type.class.php:385
 msgid "Objects management"
-msgstr ""
+msgstr "Gestione degli Oggetti"
 
 #: index.php:69 front/familylist.php:37
 msgid "Empty family"
-msgstr ""
+msgstr "Famiglia vuota"
 
 #: front/commondropdown.form.php:36 front/commondropdown.php:11
 #: front/commontreedropdown.form.php:36
 msgid "The requested dropdown does not exists"
-msgstr ""
+msgstr "Il menù a discesa richiesto non esiste"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
-msgstr ""
+msgstr "Campo(i) rimosso/i con successo"
 
 #: front/field.form.php:51
 msgid "Field added successfully"
-msgstr ""
+msgstr "Campo aggiunto con successo"
 
 #: front/object.php:33 front/type.php:37 inc/profile.class.php:292
 #: inc/type.class.php:68
 msgid "Type of objects"
-msgstr ""
+msgstr "Tipo di oggetti"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
-msgstr ""
+msgstr "Campi associati con l'oggetto"
 
 #: inc/field.class.php:70
 msgid "Label"
-msgstr ""
+msgstr "Etichetta"
 
 #: inc/field.class.php:71
 msgid "Name in DB"
-msgstr ""
+msgstr "Nome nel DataBase"
 
 #: inc/field.class.php:110
 msgid "Add new field"
-msgstr ""
+msgstr "Aggiungi nuovo campo"
 
 #: inc/object.class.php:471
 msgid "Object preview"
-msgstr ""
+msgstr "Anteprima dell'oggetto"
 
 #: inc/object.class.php:734
 msgid "You must configure rights to enable the preview"
-msgstr ""
+msgstr "Bisogna configurare i diritti per abilitare l'anteprima"
 
 #: inc/profile.class.php:145
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 #: inc/profile.class.php:151
 msgid "Objects"
-msgstr ""
+msgstr "Oggetti"
 
 #: inc/profile.class.php:153
 msgid " (No types defined yet)"
-msgstr ""
+msgstr "(Nessun tipo definito)"
 
 #: inc/type.class.php:180
 msgid "Type name is missing"
-msgstr ""
+msgstr "Il nome del tipo non è presente"
 
 #: inc/type.class.php:186
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr ""
+msgstr "I tipi 'field', 'object' e 'type' sono riservati. Sceglierne un altro"
 
 #: inc/type.class.php:193
 msgid "Type must start with a letter"
-msgstr ""
+msgstr "Il nome del tipo deve cominciare con una lettera"
 
 #: inc/type.class.php:200
 msgid "A type already exists with the same name"
-msgstr ""
+msgstr "Un tipo con lo stesso nome esiste già"
 
-#: inc/type.class.php:360 inc/type.class.php:480 inc/typefamily.class.php:36
+#: inc/type.class.php:356 inc/type.class.php:476 inc/typefamily.class.php:36
 msgid "Family of type of objects"
-msgstr ""
+msgstr "Famiglia"
 
-#: inc/type.class.php:440
+#: inc/type.class.php:436
 msgid "Internal identifier"
-msgstr ""
+msgstr "Identificatore interno"
 
-#: inc/type.class.php:494
+#: inc/type.class.php:490
 msgid "Behaviour"
-msgstr ""
+msgstr "Comportamento"
 
-#: inc/type.class.php:512
+#: inc/type.class.php:508
 msgid "Network connections"
-msgstr ""
+msgstr "Connessioni di rete"
+
+#: inc/type.class.php:511
+msgid "injection file plugin"
+msgstr "injection file plugin"
+
+#: inc/type.class.php:513
+msgid "geninventorynumber plugin"
+msgstr "geninventorynumber plugin"
+
+#: inc/type.class.php:514
+msgid "order plugin"
+msgstr "order plugin"
 
 #: inc/type.class.php:515
-msgid "injection file plugin"
-msgstr ""
-
-#: inc/type.class.php:517
-msgid "geninventorynumber plugin"
-msgstr ""
-
-#: inc/type.class.php:518
-msgid "order plugin"
-msgstr ""
-
-#: inc/type.class.php:519
 msgid "item's uninstallation plugin"
-msgstr ""
+msgstr "item's uninstallation plugin"
 
-#: inc/type.class.php:520
+#: inc/type.class.php:516
 msgid "simcard plugin"
-msgstr ""
+msgstr "simcard plugin"
 
-#: inc/type.class.php:671
+#: inc/type.class.php:667
 msgid "Regenerate files"
-msgstr ""
+msgstr "Rigenera file"
 
-#: inc/type.class.php:684
+#: inc/type.class.php:680
 msgid "Link to other objects"
-msgstr ""
+msgstr "Collega ad altri oggetti"

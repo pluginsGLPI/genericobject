@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[glpi-project-plugin-genericobject.genericobjectpot]
+file_filter = locales/<lang>.po
+source_file = locales/genericobject.pot
+source_lang = en
+type = PO
+minimum_perc: 100

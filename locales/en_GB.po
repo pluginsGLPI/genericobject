@@ -1,151 +1,143 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-06 14:50+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2016-09-14 12:42+0200\n"
+"PO-Revision-Date: 2016-09-15 10:01+0000\n"
+"Last-Translator: Walid Nouh\n"
+"Language-Team: English (United Kingdom) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hook.php:152
-msgid ""
-"Error: directories '/inc', '/front' and '/locales' of plugin must be "
-"writable by the web server."
-msgstr "Error: directories '/inc', '/front' and '/locales' of plugin must be writable by the web server."
-
-#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
-#: inc/object_item.class.php:110 inc/type.class.php:239
+#: index.php:59 setup.php:168 front/familylist.php:33 front/familylist.php:41
+#: front/type.form.php:73 inc/object_item.class.php:110
+#: inc/profile.class.php:39 inc/type.class.php:302 inc/type.class.php:385
 msgid "Objects management"
-msgstr "Objects management"
+msgstr ""
 
-#: setup.php:82 setup.php:83
-msgid "Go to objects list"
-msgstr "Go to objects list"
+#: index.php:69 front/familylist.php:37
+msgid "Empty family"
+msgstr ""
 
-#: front/field.form.php:40
+#: front/commondropdown.form.php:36 front/commondropdown.php:11
+#: front/commontreedropdown.form.php:36
+msgid "The requested dropdown does not exists"
+msgstr ""
+
+#: front/field.form.php:41
 msgid "Field(s) deleted successfully"
-msgstr "Field(s) deleted successfully"
+msgstr ""
 
-#: front/field.form.php:50
+#: front/field.form.php:51
 msgid "Field added successfully"
-msgstr "Field added successfully"
+msgstr ""
 
-#: front/type.php:37 inc/type.class.php:61
+#: front/object.php:33 front/type.php:37 inc/profile.class.php:292
+#: inc/type.class.php:68
 msgid "Type of objects"
-msgstr "Type of objects"
+msgstr ""
 
-#: inc/field.class.php:66
+#: inc/field.class.php:64
 msgid "Fields associated with the object"
-msgstr "Fields associated with the object"
+msgstr ""
 
-#: inc/field.class.php:72
+#: inc/field.class.php:70
 msgid "Label"
-msgstr "Label"
+msgstr ""
 
-#: inc/field.class.php:73
+#: inc/field.class.php:71
 msgid "Name in DB"
-msgstr "Name in DB"
+msgstr ""
 
-#: inc/field.class.php:105
+#: inc/field.class.php:110
 msgid "Add new field"
-msgstr "Add new field"
+msgstr ""
 
-#: inc/object.class.php:346
+#: inc/object.class.php:471
 msgid "Object preview"
-msgstr "Object preview"
+msgstr ""
 
-#: inc/object.class.php:633
+#: inc/object.class.php:734
 msgid "You must configure rights to enable the preview"
-msgstr "You must configure rights to enable the preview"
-
+msgstr ""
 
 #: inc/profile.class.php:145
 msgid "General"
-msgstr "General"
+msgstr ""
 
 #: inc/profile.class.php:151
 msgid "Objects"
-msgstr "Objects"
+msgstr ""
 
-#: inc/profile.class.php:62 inc/profile.class.php:121
-msgid "Access object"
-msgstr "Access object"
+#: inc/profile.class.php:153
+msgid " (No types defined yet)"
+msgstr ""
 
-#: inc/profile.class.php:69 inc/profile.class.php:127
-msgid "Associate tickets to this object"
-msgstr "Associate tickets to this object"
-
-#: inc/profile.class.php:147
-msgid "No type defined"
-msgstr "No type defined"
-
-#: inc/type.class.php:150
+#: inc/type.class.php:180
 msgid "Type name is missing"
-msgstr "Type name is missing"
+msgstr ""
 
-#: inc/type.class.php:156
+#: inc/type.class.php:186
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr ""
 
-#: inc/type.class.php:163
+#: inc/type.class.php:193
 msgid "Type must start with a letter"
-msgstr "Type must start with a letter"
+msgstr ""
 
-#: inc/type.class.php:170
+#: inc/type.class.php:200
 msgid "A type already exists with the same name"
-msgstr "A type already exists with the same name"
+msgstr ""
 
-#: inc/type.class.php:339
-msgid "Internal identifier"
-msgstr "Internal identifier"
-
-#: inc/type.class.php:383
-msgid "Behaviour"
-msgstr "Behaviour"
-
-#: inc/type.class.php:398 inc/type.class.php:513
-msgid "Link to other objects"
-msgstr "Link to other objects"
-
-#: inc/type.class.php:399
-msgid "Network connections"
-msgstr "Network connections"
-
-#: inc/type.class.php:400
-msgid "injection file plugin"
-msgstr "injection file plugin"
-
-#: inc/type.class.php:402
-msgid "order plugin"
-msgstr "order plugin"
-
-#: inc/type.class.php:403
-msgid "item's uninstallation plugin"
-msgstr "item's uninstallation plugin"
-
-#: inc/type.class.php:500
-msgid "Regenerate files"
-msgstr "Regenerate files"
-
-#: index.php:60
-msgid "Empty family"
-msgstr "Empty family"
-
-#: inc/typefamily.class.php:35
+#: inc/type.class.php:356 inc/type.class.php:476 inc/typefamily.class.php:36
 msgid "Family of type of objects"
-msgstr "Family of type of objects"
+msgstr ""
 
+#: inc/type.class.php:436
+msgid "Internal identifier"
+msgstr ""
+
+#: inc/type.class.php:490
+msgid "Behaviour"
+msgstr ""
+
+#: inc/type.class.php:508
+msgid "Network connections"
+msgstr ""
+
+#: inc/type.class.php:511
+msgid "injection file plugin"
+msgstr ""
+
+#: inc/type.class.php:513
 msgid "geninventorynumber plugin"
-msgstr "inventory number generation plugin"
+msgstr ""
 
+#: inc/type.class.php:514
+msgid "order plugin"
+msgstr ""
+
+#: inc/type.class.php:515
+msgid "item's uninstallation plugin"
+msgstr ""
+
+#: inc/type.class.php:516
+msgid "simcard plugin"
+msgstr ""
+
+#: inc/type.class.php:667
+msgid "Regenerate files"
+msgstr ""
+
+#: inc/type.class.php:680
+msgid "Link to other objects"
+msgstr ""
