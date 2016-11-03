@@ -1926,6 +1926,15 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $notepad = new Notepad();
       foreach ($allGenericObjectTypes as $genericObjectType => $genericObjectData) {
+         $itemtype = $genericObjectData['itemtype'];
+         if (! class_exists($itemtype, true)) {
+            // TRANS:  %1$s is itemtype name
+            $warning  = sprintf(__('Unable to load the class %1$s.', 'genericobject'), $itemtype);
+            // TRANS:  %1$s is itemtype name
+            $warning .= sprintf(__('You probably have garbage data in your database for this plugin and missing files in %1$s', 'genericobject'), GENERICOBJECT_DOC_DIR);
+            $migration->displayWarning($warning, true);
+            die();
+         }
          $genericObjectTypeInstance = new $genericObjectType();
          if (FieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
             $query = "INSERT INTO `" . $notepad->getTable() . "`
