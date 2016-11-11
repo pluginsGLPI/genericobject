@@ -62,9 +62,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if (preg_match("/PluginGenericobject(.*)/", $class, $results)) {
          if (preg_match("/^(.*)y$/i", $results[1], $end_results)) {
-            self::$rightname = 'plugin_genericobject_'.strtolower($end_results[1]).'ies';
+            static::$rightname = 'plugin_genericobject_'.strtolower($end_results[1]).'ies';
          } else {
-            self::$rightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
+            static::$rightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
          }
       }
 
