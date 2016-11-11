@@ -30,6 +30,8 @@
  */
 class %%CLASSNAME%% extends PluginGenericobjectObject {
 
+   static $rightname = '';
+
    static function getFormURL($full=true) {
       return Toolbox::getItemTypeFormURL( get_parent_class() , $full) .
       "?itemtype=".get_called_class();
