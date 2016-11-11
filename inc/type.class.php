@@ -181,7 +181,13 @@ class PluginGenericobjectType extends CommonDBTM {
          return array();
       }
 
-      //Name must not be empty
+      // Name must be more than 1 char
+      if (isset($input['name']) && strlen($input['name']) < 2) {
+         Session::addMessageAfterRedirect(__("Type name must be longer", "genericobject"), ERROR, true);
+         return array();
+      }
+
+      //Name must not match specific names
       if (in_array($input['name'], array('field', 'object', 'type'))) {
          Session::addMessageAfterRedirect(__("Types 'field', 'object' and 'type' are reserved. Please choose another one",
                                              "genericobject"), ERROR, true);
