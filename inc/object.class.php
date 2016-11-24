@@ -31,6 +31,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    //Internal field counter
    private $cpt = 0;
+   
+   static $rightname = '';
 
    //Get itemtype name
    static function getTypeName($nb=0) {
