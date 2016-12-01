@@ -96,7 +96,7 @@ function plugin_genericobject_install() {
    include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
-   $migration = new Migration('0.85-1.0');
+   $migration = new Migration('2.4.0');
    
    foreach (
       array(
@@ -133,6 +133,7 @@ function plugin_genericobject_install() {
    PluginGenericobjectProfile::changeProfile();
    return true;
 }
+
 
 function plugin_genericobject_uninstall() {
    global $DB;
