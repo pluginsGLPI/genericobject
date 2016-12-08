@@ -80,19 +80,19 @@ if (!is_null($itemtype)) {
       } else {
          Html::back();
       }
-   } elseif (isset ($_POST["update"])) {
+   } else if (isset ($_POST["update"])) {
       $item->check($id, UPDATE);
       $item->update($_POST);
       Html::back();
-   } elseif (isset ($_POST["restore"])) {
+   } else if (isset ($_POST["restore"])) {
       $item->check($id, DELETE);
       $item->restore($_POST);
       Html::back();
-   } elseif (isset($_POST["purge"])) {
+   } else if (isset($_POST["purge"])) {
       $item->check($id, PURGE);
       $item->delete($_POST, 1);
       $item->redirectToList();
-   } elseif (isset($_POST["delete"])) {
+   } else if (isset($_POST["delete"])) {
       $item->check($id, DELETE);
       $item->delete($_POST);
       $item->redirectToList();

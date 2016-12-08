@@ -29,7 +29,7 @@ class PluginGenericobjectCommonDropdown extends CommonDropdown {
 
    //Get itemtype name
    static function getTypeName($nb=0) {
-      $class=get_called_class(); 
+      $class=get_called_class();
       return dropdown_getTypeName($class,$nb);
    }
 

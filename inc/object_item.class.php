@@ -117,7 +117,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       $itemtypes = self::getLinkedItemTypes();
       if (get_class($item) == self::getItemType1()) {
          self::showItemsForSource($item);
-      } elseif (in_array(get_class($item), $itemtypes)) {
+      } else if (in_array(get_class($item), $itemtypes)) {
          self::showItemsForTarget($item);
       }
       return true;

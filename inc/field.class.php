@@ -122,7 +122,7 @@ class PluginGenericobjectField extends CommonDBTM {
    }
 
    /**
-   * Method to set fields as read only, when the depend on some features 
+   * Method to set fields as read only, when the depend on some features
    * that are enabled
    * @since 0.85+2.4.0
    */
@@ -130,19 +130,19 @@ class PluginGenericobjectField extends CommonDBTM {
       global $GO_READONLY_FIELDS;
 
       if ($type->canBeReserved()) {
-        $GO_READONLY_FIELDS[] = 'users_id';
-        $GO_READONLY_FIELDS[] = 'locations_id';
+         $GO_READONLY_FIELDS[] = 'users_id';
+         $GO_READONLY_FIELDS[] = 'locations_id';
       }
 
       if ($type->canUseGlobalSearch()) {
-        $GO_READONLY_FIELDS[] = 'serial';
-        $GO_READONLY_FIELDS[] = 'otherserial';
-        $GO_READONLY_FIELDS[] = 'locations_id';
-        $GO_READONLY_FIELDS[] = 'states_id';
-        $GO_READONLY_FIELDS[] = 'users_id';
-        $GO_READONLY_FIELDS[] = 'groups_id';
-        $GO_READONLY_FIELDS[] = 'manufacturers_id';
-        $GO_READONLY_FIELDS[] = 'users_id_tech';
+         $GO_READONLY_FIELDS[] = 'serial';
+         $GO_READONLY_FIELDS[] = 'otherserial';
+         $GO_READONLY_FIELDS[] = 'locations_id';
+         $GO_READONLY_FIELDS[] = 'states_id';
+         $GO_READONLY_FIELDS[] = 'users_id';
+         $GO_READONLY_FIELDS[] = 'groups_id';
+         $GO_READONLY_FIELDS[] = 'manufacturers_id';
+         $GO_READONLY_FIELDS[] = 'users_id_tech';
       }
 
    }
@@ -215,14 +215,14 @@ class PluginGenericobjectField extends CommonDBTM {
                //meaning that a dropdown can be useful in all types (for example type, model, etc.)
                if (isset($values['input_type']) && $values['input_type'] == 'dropdown') {
                   if (isset($values['entities_id'])) {
-                    $field_options[] = __("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
+                     $field_options[] = __("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
                      if ($values['entities_id']) {
                         if (isset($values['is_recursive'])) {
                            $field_options[] = __("Child entities")." : ".Dropdown::getYesNo($values['is_recursive']);
                         }
                      }
                   } else {
-                    $field_options[] = __("Entity")." : ".Dropdown::getYesNo(0);
+                     $field_options[] = __("Entity")." : ".Dropdown::getYesNo(0);
                   }
                   if (isset($values['is_tree'])) {
                      $field_options[] = __("tree structure")." : ".Dropdown::getYesNo($values['is_tree']);
@@ -390,7 +390,7 @@ class PluginGenericobjectField extends CommonDBTM {
          }
          // Invalidate menu data in current session
          unset($_SESSION['glpimenu']);
-         
+
          PluginGenericobjectSingletonObjectField::getInstance($itemtype, true);
       }
    }
@@ -432,11 +432,11 @@ class PluginGenericobjectField extends CommonDBTM {
       $itemtype  = getItemTypeForTable($table);
       $searchopt = Search::getCleanedOptions($itemtype);
       foreach ($searchopt as $num => $option) {
-         if ( (isset($option['field'])  && ($option['field'] == $field)) 
+         if ( (isset($option['field'])  && ($option['field'] == $field))
             || (isset($option['field']) && $option['linkfield'] == $field)) {
             $criteria = array('itemtype' => $itemtype, 'num' => $num);
             $pref->deleteByCriteria($criteria);
-            break;  
+            break;
          }
       }
    }
