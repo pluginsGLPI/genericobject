@@ -75,7 +75,7 @@ function plugin_genericobject_getDatabaseRelations() {
    $dropdowns = array();
 
    //TODO : purt here relations
-/*
+   /*
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
       foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
@@ -90,10 +90,11 @@ function plugin_genericobject_getDatabaseRelations() {
 }
 
 function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
-   foreach (PluginGenericobjectType::getTypes() as $tmp => $type)
+   foreach (PluginGenericobjectType::getTypes() as $tmp => $type) {
       if ($type["use_plugin_uninstall"]) {
          $uninstal_types[] = $type["itemtype"];
       }
+   }
    return $uninstal_types;
 }
 
@@ -214,7 +215,7 @@ function plugin_genericobject_MassiveActions($type) {
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
          return array('PluginGenericobjectObject'.
-        MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer"));
+         MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer"));
       } else {
          return array();
       }

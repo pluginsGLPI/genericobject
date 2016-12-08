@@ -190,7 +190,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                PluginGeninventorynumberConfigField::registerNewItemType($class);
                array_push($GENINVENTORYNUMBER_TYPES, $class);
             }
-         } elseif ($plugin->isActivated('geninventorynumber')) {
+         } else if ($plugin->isActivated('geninventorynumber')) {
             include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
             PluginGeninventorynumberConfigField::unregisterNewItemType($class);
          }
@@ -306,7 +306,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $this->addStandardTab('Ticket', $ong, $options);
             $this->addStandardTab('Item_Problem', $ong, $options);
             $this->addStandardTab('Change_Item', $ong, $options);
-          }
+         }
 
          if ($this->canUseNotepad()) {
             $this->addStandardTab('Notepad', $ong, $options);
@@ -473,7 +473,6 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo $itemtype::getTypeName();
          echo "</th></tr>";
       }
-
 
       //Reset fields definition only to keep the itemtype ones
       $GO_FIELDS = array();
@@ -768,7 +767,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $currentindex = $index;
          if (isset($index_exceptions[$field])) {
             $currentindex = $index_exceptions[$field];
-         } elseif (in_array($currentindex, $index_exceptions)) {
+         } else if (in_array($currentindex, $index_exceptions)) {
             //If this index is reserved, jump to next
             $currentindex++;
          }
@@ -824,7 +823,6 @@ class PluginGenericobjectObject extends CommonDBTM {
             $options[$currentindex]['massiveaction']
                = $searchoption['massiveaction'];
          }
-
 
          //Datainjection option
          if (!in_array($field, $datainjection_blacklisted)) {
@@ -1021,7 +1019,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       return true;
    }
 
-  /**
+   /**
     * @since version 0.85
     *
     * @see CommonDBTM::showMassiveActionsSubForm()
@@ -1040,7 +1038,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          default :
             break;
       }
- //  }
+      //}
       return true;
    }
 
@@ -1070,17 +1068,17 @@ class PluginGenericobjectObject extends CommonDBTM {
       switch ($ma->action) {
          case "plugin_genericobject_transfer" :
             foreach ($ma->items as $itemtype => $val) {
-                foreach ($val as $key => $item_id) {
-                   $item = new $itemtype;
-                      $item->getFromDB($item_id);
-                      $item->transfer($_POST['new_entity']);
-                      $results['ok']++;
-                }
-             }
-             break;
+               foreach ($val as $key => $item_id) {
+                  $item = new $itemtype;
+                  $item->getFromDB($item_id);
+                  $item->transfer($_POST['new_entity']);
+                  $results['ok']++;
+               }
+            }
+            break;
 
-          default :
-             break;
+         default :
+            break;
       }
       $ma->results=$results;
    }

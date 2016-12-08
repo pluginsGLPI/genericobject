@@ -32,7 +32,7 @@ if (isset ($_POST["delete"])) {
       $type->getFromDB($_POST["id"]);
       $itemtype = $type->fields['itemtype'];
       PluginGenericobjectType::registerOneType($itemtype);
-   
+
       foreach ($_POST["fields"] as $field => $value) {
          if ($type->can($_POST["id"], PURGE)
             && $value == 1
@@ -42,7 +42,7 @@ if (isset ($_POST["delete"])) {
          }
       }
    }
-} elseif (isset ($_POST["add_field"])) {
+} else if (isset ($_POST["add_field"])) {
    $type     = new PluginGenericobjectType();
    if ($_POST["new_field"] && $type->can($_POST["id"], UPDATE)) {
       $itemtype = $type->fields['itemtype'];
@@ -50,7 +50,7 @@ if (isset ($_POST["delete"])) {
       PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
       Session::addMessageAfterRedirect(__("Field added successfully", "genericobject"));
    }
-} elseif (isset($_POST['action'])) {
+} else if (isset($_POST['action'])) {
    //Move field
    PluginGenericobjectField::changeFieldOrder($_POST);
 }

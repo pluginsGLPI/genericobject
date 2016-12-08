@@ -44,10 +44,9 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
 
    //There's only one family
    if (count($types) == 1) {
-
-       //There's only one itemtype ? If yes, then automatically
-       //redirect to the search engine
-       if(key($types) == NULL) {
+      //There's only one itemtype ? If yes, then automatically
+      //redirect to the search engine
+      if(key($types) == NULL) {
          $mytypes = $types;
          $tmp = array_pop($mytypes);
          if (count($tmp) == 1) {

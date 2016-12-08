@@ -161,7 +161,7 @@ class PluginGenericobjectType extends CommonDBTM {
                break;
 
             case 5:
-              PluginGenericobjectObject::showPrevisualisationForm($item);
+               PluginGenericobjectObject::showPrevisualisationForm($item);
                break;
 
             case 6:
@@ -297,9 +297,9 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
    }
-   
+
    public function post_deleteItem() {
-      
+
    }
 
    function getSearchOptions() {
@@ -513,7 +513,7 @@ class PluginGenericobjectType extends CommonDBTM {
                        );
 
          $plugins = array("use_plugin_datainjection" => __("injection file plugin", "genericobject"),
-   //                    "use_plugin_pdf"           => __("PDF plugin", "genericobject"),
+                       //"use_plugin_pdf"           => __("PDF plugin", "genericobject"),
                        "use_plugin_geninventorynumber"  => __("geninventorynumber plugin", "genericobject"),
                        "use_plugin_order"         => __("order plugin", "genericobject"),
                        "use_plugin_uninstall"     => __("item's uninstallation plugin", "genericobject"),
@@ -626,7 +626,7 @@ class PluginGenericobjectType extends CommonDBTM {
                      echo "<input type='hidden' name='use_plugin_simcard' value='0'>\n";
                   }
                   break;
-                  case 'use_plugin_geninventorynumber' :
+               case 'use_plugin_geninventorynumber' :
                   if ($plugin->isActivated('geninventorynumber')) {
                      Html::showCheckbox(array('name' => $right,
                                               'checked' => $this->fields[$right]));
@@ -740,7 +740,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Write object class on the filesystem
       self::addClassFile($name, $itemtype);
 
-     //Write the form on the filesystem
+      //Write the form on the filesystem
       self::addFormFile($name, $itemtype);
       self::addSearchFile($name, $itemtype);
 
@@ -1481,10 +1481,10 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    static function deleteNetworking($itemtype) {
-       $networkport = new NetworkPort();
-       foreach ($networkport->find("`itemtype`='$itemtype'") as $port) {
+      $networkport = new NetworkPort();
+      foreach ($networkport->find("`itemtype`='$itemtype'") as $port) {
          $networkport->delete($port);
-       }
+      }
    }
 
    /**
@@ -1512,7 +1512,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function deleteReservationItems($itemtype) {
       $reservationItem = new ReservationItem();
       $reservationItem->deleteByCriteria(array('itemtype' => $itemtype), true);
-    }
+   }
 
    /**
     * Filter values inserted by users : remove accented chars
@@ -1549,14 +1549,14 @@ class PluginGenericobjectType extends CommonDBTM {
       if (empty($types)) {
          return false;
       } else {
-        $type = array_pop($types);
-        if ($type['plugin_genericobject_typefamilies_id'] > 0) {
+         $type = array_pop($types);
+         if ($type['plugin_genericobject_typefamilies_id'] > 0) {
             $family = new PluginGenericobjectTypeFamily();
             $family->getFromDB($type['plugin_genericobject_typefamilies_id']);
-           return $family->getName();
-        } else {
-           return false;
-        }
+            return $family->getName();
+         } else {
+            return false;
+         }
       }
    }
 
@@ -1628,11 +1628,12 @@ class PluginGenericobjectType extends CommonDBTM {
       } else {
          if (file_exists($prefix . ".en_GB.php")) {
             include_once ($prefix . ".en_GB.php");
-         } else
-           if (file_exists($prefix . ".fr_FR.php")) {
-              include_once ($prefix . ".fr_FR.php");
-           } else {
-            return false;
+         } else {
+            if (file_exists($prefix . ".fr_FR.php")) {
+               include_once ($prefix . ".fr_FR.php");
+            } else {
+               return false;
+            }
          }
       }
       return true;
@@ -1810,7 +1811,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!$plugin->isInstalled("uninstall") || !$plugin->isActivated("uninstall")) {
          return false;
       }
-     return $this->fields['use_plugin_uninstall'];
+      return $this->fields['use_plugin_uninstall'];
    }
 
    function canUsePluginSimcard() {
@@ -1859,7 +1860,7 @@ class PluginGenericobjectType extends CommonDBTM {
    /**
     * Display debug information for current object
     **/
-    function showDebug() {
+   function showDebug() {
        $this->showFilesForm();
       //NotificationEvent::debugEvent($this);
    }
@@ -1986,8 +1987,6 @@ class PluginGenericobjectType extends CommonDBTM {
          //Dropd files and classes
          self::deleteItemTypeFilesAndClasses($type['name'], getTableForItemType($type['itemtype']), $type['itemtype']);
       }
-
-
 
       //Delete table
       $query = "DROP TABLE IF EXISTS `glpi_plugin_genericobject_types`";

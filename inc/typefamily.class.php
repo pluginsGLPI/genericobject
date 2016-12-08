@@ -79,7 +79,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
       foreach($DB->request($query) as $fam) {
          $itemtype = $fam['itemtype'];
          if ($itemtype::canCreate()) {
-           $families[$fam['id']] = $fam['name'];
+            $families[$fam['id']] = $fam['name'];
          }
       }
       return $families;

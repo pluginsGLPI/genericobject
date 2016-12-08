@@ -31,7 +31,7 @@ class PluginGenericobjectProfile extends Profile {
    function cleanProfiles($id) {
       $this->deleteByCriteria(array('id' => $id));
    }
-   
+
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
       switch($item->getType()) {
@@ -105,7 +105,6 @@ class PluginGenericobjectProfile extends Profile {
          echo "</td></tr>";
       }
 
-
       echo "</table>";
       Html::closeForm();
    }
@@ -131,7 +130,6 @@ class PluginGenericobjectProfile extends Profile {
       $profile = new Profile();
       $profile->getFromDB($profiles_id);
 
-
       echo "<form action='" . Profile::getFormUrl() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
@@ -151,7 +149,7 @@ class PluginGenericobjectProfile extends Profile {
       $title = __('Objects', 'genericobject');
       if (count($types_rights) == 0) {
          $title .= __(" (No types defined yet)", "genericobject");
-       }
+      }
 
       $profile->displayRightsChoiceMatrix(
          $types_rights,
@@ -222,7 +220,6 @@ class PluginGenericobjectProfile extends Profile {
                $query.=", `open_ticket`='".$params[$profile['itemtype'].'_open_ticket']."' ";
             }
 
-
             $query.="WHERE `profiles_id`='".$params['profiles_id']."' " .
                     "AND `itemtype`='".$profile['itemtype']."'";
             $DB->query($query);
@@ -273,14 +270,14 @@ class PluginGenericobjectProfile extends Profile {
       $rights             = getAllDatasFromTable('glpi_profiles');
       $profile_right      = new ProfileRight();
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
-      
+
       foreach ($rights as $right) {
          if ($right['id'] == $profiles_id) {
-            $r = ALLSTANDARDRIGHT | READNOTE | UPDATENOTE;   
+            $r = ALLSTANDARDRIGHT | READNOTE | UPDATENOTE;
          } else {
             $r = 0;
          }
-         $profile_right->updateProfileRights($right['id'], 
+         $profile_right->updateProfileRights($right['id'],
                                              array($itemtype_rightname => $r));
       }
    }
@@ -370,7 +367,7 @@ class PluginGenericobjectProfile extends Profile {
          if (preg_match("/plugin_genericobject_/", $str_right)) {
             unset($_SESSION['glpiactiveprofile'][$str_right]);
             if (!empty($db_rights) && isset($db_rights[$str_right])) {
-               $_SESSION['glpiactiveprofile'][$str_right] = $db_rights[$str_right]; 
+               $_SESSION['glpiactiveprofile'][$str_right] = $db_rights[$str_right];
             }
          }
       }
@@ -387,8 +384,8 @@ class PluginGenericobjectProfile extends Profile {
          foreach (getAllDatasFromTable('glpi_plugin_genericobject_profiles') as $right) {
             if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
                $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
-               if (!countElementsInTable('glpi_profilerights', 
-                                         "`profiles_id`='".$right['profiles_id']."' 
+               if (!countElementsInTable('glpi_profilerights',
+                                         "`profiles_id`='".$right['profiles_id']."'
                                            AND `name`='$newrightname'")) {
                   switch ($right['right']) {
                      case NULL:
@@ -403,15 +400,15 @@ class PluginGenericobjectProfile extends Profile {
                         break;
                   }
 
-                  $profileRight->add(array('profiles_id' => $right['profiles_id'], 
-                                           'name' => $newrightname, 
+                  $profileRight->add(array('profiles_id' => $right['profiles_id'],
+                                           'name' => $newrightname,
                                            'rights' => $rightvalue));
 
-                  if (!countElementsInTable('glpi_profilerights', 
-                                            "`profiles_id`='".$right['profiles_id']."' 
+                  if (!countElementsInTable('glpi_profilerights',
+                                            "`profiles_id`='".$right['profiles_id']."'
                                               AND `name`='plugin_genericobject_types'")) {
-                     $profileRight->add(array('profiles_id' => $right['profiles_id'], 
-                                              'name' => 'plugin_genericobject_types', 
+                     $profileRight->add(array('profiles_id' => $right['profiles_id'],
+                                              'name' => 'plugin_genericobject_types',
                                               'rights' => 23));
                   }
                }
@@ -435,7 +432,7 @@ class PluginGenericobjectProfile extends Profile {
          }
          //$migration->dropTable('glpi_plugin_genericobject_profiles');
       }
-      if (!countElementsInTable('glpi_profilerights', 
+      if (!countElementsInTable('glpi_profilerights',
                                 "`name` LIKE '%genericobject%'")) {
          self::createFirstAccess();
       }
