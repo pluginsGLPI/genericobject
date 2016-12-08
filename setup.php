@@ -1,13 +1,22 @@
 <?php
 /*
- This file is part of the genericobject plugin.
+ -------------------------------------------------------------------------
+ Genericobject plugin for GLPI
+ Copyright (C) 2016 by the Genericobject Development Team.
 
- Genericobject plugin is free software; you can redistribute it and/or modify
+ https://github.com/pluginsGLPI/genericobject
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of Genericobject.
+
+ Genericobject is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 
- Genericobject plugin is distributed in the hope that it will be useful,
+ Genericobject is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
@@ -23,7 +32,8 @@
  @link      https://forge.indepnet.net/projects/genericobject
  @link      http://www.glpi-project.org/
  @since     2009
- ---------------------------------------------------------------------- */
+ ----------------------------------------------------------------------
+ */
 
 define ('PLUGIN_GENERICOBJECT_VERSION', '2.4.0');
 
@@ -91,7 +101,12 @@ $options = array(
 $go_autoloader = new PluginGenericobjectAutoloader($options);
 $go_autoloader->register();
 
-// Init the hooks of the plugins -Needed
+/**
+ * Init hooks of the plugin.
+ * REQUIRED
+ *
+ * @return void
+ */
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
@@ -165,7 +180,12 @@ function plugin_post_init_genericobject() {
    }
 }
 
-// Get the name and the version of the plugin - Needed
+/**
+ * Get the name and the version of the plugin
+ * REQUIRED
+ *
+ * @return array
+ */
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
                  'version'        => PLUGIN_GENERICOBJECT_VERSION,
@@ -175,7 +195,12 @@ function plugin_version_genericobject() {
                  'minGlpiVersion' => '0.85.3');
 }
 
-// Optional : check prerequisites before install : may print errors or add to message after redirect
+/**
+ * Check pre-requisites before install
+ * OPTIONNAL, but recommanded
+ *
+ * @return boolean
+ */
 function plugin_genericobject_check_prerequisites() {
    if (version_compare(GLPI_VERSION,'0.85.3','lt')) {
       echo "This plugin requires GLPI 0.85.3 or higher";
@@ -184,8 +209,13 @@ function plugin_genericobject_check_prerequisites() {
    return true;
 }
 
-// Check configuration process for plugin : need to return true if succeeded
-// Can display a message only if failure and $verbose is true
+/**
+ * Check configuration process
+ *
+ * @param boolean $verbose Whether to display message on failure. Defaults to false
+ *
+ * @return boolean
+ */
 function plugin_genericobject_check_config($verbose = false) {
    if (true) { // Your configuration check
       return true;

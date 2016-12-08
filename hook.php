@@ -1,13 +1,22 @@
 <?php
 /*
- This file is part of the genericobject plugin.
+ -------------------------------------------------------------------------
+ Genericobject plugin for GLPI
+ Copyright (C) 2016 by the Genericobject Development Team.
 
- Genericobject plugin is free software; you can redistribute it and/or modify
+ https://github.com/pluginsGLPI/genericobject
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of Genericobject.
+
+ {NAME} is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 
- Genericobject plugin is distributed in the hope that it will be useful,
+ Genericobject is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
@@ -23,7 +32,8 @@
  @link      https://forge.indepnet.net/projects/genericobject
  @link      http://www.glpi-project.org/
  @since     2009
- ---------------------------------------------------------------------- */
+ ----------------------------------------------------------------------
+ */
 
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
@@ -89,6 +99,11 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
 
 //----------------------- INSTALL / UNINSTALL FUNCTION -------------------------------//
 
+/**
+ * Plugin install process
+ *
+ * @return boolean
+ */
 function plugin_genericobject_install() {
    global $DB;
 
@@ -133,6 +148,11 @@ function plugin_genericobject_install() {
    return true;
 }
 
+/**
+ * Plugin uninstall process
+ *
+ * @return boolean
+ */
 function plugin_genericobject_uninstall() {
    global $DB;
 
