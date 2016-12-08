@@ -9,13 +9,12 @@ before_script:
   - composer install -o
 #  - mysql -u root -e 'create database glpitest;'
 #  - php tools/cliinstall.php --lang=en_US --db=glpitest --user=root --tests
-  - pear install pear/PHP_CodeSniffer
-  - phpenv rehash
+  - composer require squizlabs/php_codesniffer
 
 script:
 #  - mysql -u root -e 'select version();'
 #  - phpunit --verbose
-  - phpcs -p --ignore=vendor --ignore=js --ignore=css --standard=tools/phpcs-rules.xml  .
+  - ./vendor/bin/phpcs -p --ignore=vendor --ignore=js --ignore=css --standard=tools/phpcs-rules.xml .
 
 matrix:
   include:
