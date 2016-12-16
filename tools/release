@@ -33,6 +33,7 @@ banned = [
     'tests'
 ]
 gh_orga = 'pluginsGLPI'
+script_version = '1.0.0'
 
 def print_err(msg):
     """
@@ -506,7 +507,19 @@ def check_version(buildver):
     if xmlfile != None:
         if verbose:
             print 'XML file found in %s' % xmlfile
-        xmldoc = etree.parse(xmlfile)
+        try:
+            xmldoc = etree.parse(xmlfile)
+            for version in xmldoc.getiterator('num'):
+                if version.text == buildver:
+                    if verbose:
+                        print '%s found in the XML file!' % buildver
+                    return True
+            print_err('%s *NOT* found in the XML file %s' % (buildver, xmlfile))
+        except etree.XMLSyntaxError as err:
+            print_err('%s is *NOT* XML valid!' % (xmlfile))
+            if verbose:
+                print format(err)
+            return False
     else:
         print_err('Plugins website configuration file has not been found!')
         return False
@@ -517,11 +530,11 @@ def main():
     """
     global verbose, tagrefs, force, extra, assume_yes, sign, plugin_name, github, gh_cred_file
 
-    parser = argparse.ArgumentParser(description='Release plugin')
+    parser = argparse.ArgumentParser(description='GLPi plugins release script', version=script_version)
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
-        '-v',
-        '--version',
+        '-r',
+        '--release',
         help='Version to release'
     )
     parser.add_argument(
@@ -625,29 +638,29 @@ def main():
             compile_mo(plugin_repo)
         if args.minify:
             minify(plugin_repo)
-    elif (args.extra or args.commit) and (not args.extra or not args.commit or not args.version):
+    elif (args.extra or args.commit) and (not args.extra or not args.commit or not args.release):
         print_err('You have to specify --version --commit and --extra all together')
         sys.exit(1)
-    elif args.commit and args.version and args.extra:
+    elif args.commit and args.release and args.extra:
         if valid_commit(repo, args.commit):
             if verbose:
                 print 'Commit is valid'
             build = True
-            buildver = args.version
+            buildver = args.release
             extra = args.extra
         else:
             print_err('Invalid commit ref %s' % args.commit)
-    elif args.version:
-        if not valid_version(args.version):
-            print_err('%s is not a valid version number!' % args.version)
+    elif args.release:
+        if not valid_version(args.release):
+            print_err('%s is not a valid version number!' % args.release)
             sys.exit(1)
         else:
             #check if specified version exists
-            if not is_existing_version(args.version):
-                print_err('%s does not exist!' % args.version)
+            if not is_existing_version(args.release):
+                print_err('%s does not exist!' % args.release)
             else:
                 build = True
-                buildver = args.version
+                buildver = args.release
     elif args.propose:
         propose_version()
     else:
