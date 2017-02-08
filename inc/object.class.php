@@ -240,7 +240,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          "/>";
    }
 
-   static function checkItemtypeRight($class = null, $right) {
+   static function checkItemtypeRight($class, $right) {
       if (!is_null($class) and class_exists($class)) {
          $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
             $class

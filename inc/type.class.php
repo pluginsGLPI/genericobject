@@ -1045,7 +1045,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
 
-   public static function addFileFromTemplate($mappings = array(), $template, $directory,
+   public static function addFileFromTemplate($mappings, $template, $directory,
                                                  $filename) {
       if (!empty($mappings)) {
          $file_read = @fopen(GENERICOBJECT_DIR.$template, "rt");
