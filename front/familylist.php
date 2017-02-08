@@ -34,7 +34,7 @@ if (!isset($_GET['id']) || !$family->getFromDB($_GET['id'])) {
                    "genericobject");
 
    echo "<table class='tab_cadre_fixe'>";
-    echo "<tr class='tab_bg_2'><th>".__("Empty family","genericobject")."</th></tr>";
+    echo "<tr class='tab_bg_2'><th>".__("Empty family", "genericobject")."</th></tr>";
    echo "</table>";
 } else {
    $family->getFromDB($_GET['id']);

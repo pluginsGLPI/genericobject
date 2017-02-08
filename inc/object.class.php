@@ -37,13 +37,13 @@ class PluginGenericobjectObject extends CommonDBTM {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
-      if(preg_match("/Injection$/i",$class)) {
+      if (preg_match("/Injection$/i", $class)) {
          $class = str_replace("Injection", "", $class);
       }
       $item     = new $class();
       //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
-      if(isset($LANG['genericobject'][$class][0])) {
+      if (isset($LANG['genericobject'][$class][0])) {
          $type_name = $LANG['genericobject'][$class][0];
       } else {
          $type_name = $item->objecttype->fields['name'];
@@ -137,7 +137,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          //Add configuration icon, if user has right
          if (Session::haveRight('config', UPDATE)) {
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['config']
-               = Toolbox::getItemTypeSearchURL('PluginGenericobjectType',false)."?itemtype=$class";
+               = Toolbox::getItemTypeSearchURL('PluginGenericobjectType', false)."?itemtype=$class";
          }
 
          if ($item->canUsePluginUninstall()) {
@@ -196,9 +196,9 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
       }
 
-      foreach(PluginGenericobjectType::getDropdownForItemtype($class) as $table) {
+      foreach (PluginGenericobjectType::getDropdownForItemtype($class) as $table) {
          $itemtype = getItemTypeForTable($table);
-         if (class_exists($itemtype) ) {
+         if (class_exists($itemtype)) {
             $item     = new $itemtype();
             //If entity dropdown, check rights to view & create
             if ($itemtype::canView()) {
@@ -223,12 +223,12 @@ class PluginGenericobjectObject extends CommonDBTM {
       );
       $finfo = new finfo(FILEINFO_MIME);
       $icon_found = null;
-      foreach($itemtype_icons as $icon) {
-         if ( preg_match("|^image/|", $finfo->file($icon)) ) {
+      foreach ($itemtype_icons as $icon) {
+         if (preg_match("|^image/|", $finfo->file($icon))) {
             $icon_found = preg_replace("|^".GLPI_ROOT."|", "", $icon);
          }
       }
-      if ( !is_null($icon_found)) {
+      if (!is_null($icon_found)) {
          $icon_path = $CFG_GLPI['root_doc'] . $icon_found;
       } else {
          $icon_path = $CFG_GLPI['root_doc'] . $default_icon;
@@ -241,19 +241,19 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    static function checkItemtypeRight($class = null, $right) {
-      if (!is_null($class) and class_exists($class) ) {
+      if (!is_null($class) and class_exists($class)) {
          $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
             $class
          );
 
-         return Session::haveRight($right_name,$right);
+         return Session::haveRight($right_name, $right);
       }
    }
 
    static function canCreate() {
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
-      if(preg_match("/Injection$/i",$class)) {
+      if (preg_match("/Injection$/i", $class)) {
          $class = str_replace("Injection", "", $class);
       }
       return static::checkItemtypeRight($class, CREATE);
@@ -317,7 +317,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
 
          if ($this->canUseHistory()) {
-            $this->addStandardTab('Log',$ong, $options);
+            $this->addStandardTab('Log', $ong, $options);
          }
       }
       return $ong;
@@ -463,7 +463,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
       $this->fields['id'] = $id;
-      $this->initForm($id,$options);
+      $this->initForm($id, $options);
       $this->showFormHeader($options);
 
       if ($previsualisation) {
@@ -541,7 +541,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                   if ($dropdown->maybeRecursive()) {
                      $parameters['entity_sons'] = true;
                   }
-                  if(isset($searchoption['condition'])) {
+                  if (isset($searchoption['condition'])) {
                      $parameters['condition'] = $searchoption['condition'];
                   }
                   if ($dropdown instanceof User) {
@@ -753,8 +753,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       $table   = getTableForItemType(get_called_class());
 
-      foreach (
-         PluginGenericobjectSingletonObjectField::getInstance(get_called_class())
+      foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class())
          as $field => $values
       ) {
          $searchoption = PluginGenericobjectField::getFieldOptions(
@@ -771,7 +770,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             $currentindex++;
          }
 
-         if (in_array($field,array('is_deleted'))) {
+         if (in_array($field, array('is_deleted'))) {
             continue;
          }
 
@@ -1028,7 +1027,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          case "plugin_genericobject_transfer" :
                Dropdown::show('Entity', array('name' => 'new_entity'));
                echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" .
-                  _sx('button','Post') . "\" >";
+                  _sx('button', 'Post') . "\" >";
             break;
          default :
             break;
@@ -1080,7 +1079,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    static function getMenuContent() {
       $types = PluginGenericobjectType::getTypes();
-      foreach($types as $type) {
+      foreach ($types as $type) {
 
          $itemtype = $type['itemtype'];
          $item     = new $itemtype();

@@ -112,7 +112,7 @@ class PluginGenericobjectField extends CommonDBTM {
          echo $dropdownFields;
          echo "</td>";
          echo "<td>";
-         echo "<input type='submit' name='add_field' value=\"" . _sx('button','Add') . "\" class='submit'>";
+         echo "<input type='submit' name='add_field' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
          echo "</tr>";
          echo "</table>";
       }
@@ -156,7 +156,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $input_type = isset($options['input_type'])
          ? $options['input_type']
          : null;
-      switch($input_type) {
+      switch ($input_type) {
 
          case 'dropdown':
             $dropdown_type = isset($options['dropdown_type'])
@@ -164,26 +164,26 @@ class PluginGenericobjectField extends CommonDBTM {
                : null;
             $fk = getForeignKeyFieldForTable(getTableForItemType($itemtype));
 
-            if ( $dropdown_type == 'isolated' ) {
+            if ($dropdown_type == 'isolated') {
                if (!$remove_prefix) {
-                  $field = preg_replace("/s_id$/",$field, $fk);
+                  $field = preg_replace("/s_id$/", $field, $fk);
                } else {
-                  $fk    = preg_replace("/s_id$/","", $fk);
-                  $field = preg_replace("/".$fk."/","", $field);
+                  $fk    = preg_replace("/s_id$/", "", $fk);
+                  $field = preg_replace("/".$fk."/", "", $field);
                }
             }
             $field_table = getTableNameForForeignKeyField($field);
 
             //Prepend plugin's table prefix if this dropdown is not already handled by GLPI natively
-            if (
-               substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
+            if (substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
                and (
                   substr($field_table, strlen('glpi_'))
-                  === substr($field,  0, strlen($field) -strlen('_id'))
+                  === substr($field, 0, strlen($field) -strlen('_id'))
                )
                and !TableExists($field_table)
             ) {
-               if (!$remove_prefix) { $field = 'plugin_genericobject_' . $field;}
+               if (!$remove_prefix) {
+                  $field = 'plugin_genericobject_' . $field;}
             }
             break;
 
@@ -209,7 +209,7 @@ class PluginGenericobjectField extends CommonDBTM {
          $message = "";
          $field_options = array();
          $field = self::getFieldName($field, $itemtype, $values, false);
-         if(!in_array($field, $used)) {
+         if (!in_array($field, $used)) {
             if (!isset($dropdown_types[$field])) {
                //Global management :
                //meaning that a dropdown can be useful in all types (for example type, model, etc.)
@@ -236,7 +236,7 @@ class PluginGenericobjectField extends CommonDBTM {
                   //}
                }
                if (!empty($field_options)) {
-                  $message = "(".trim( implode(", ",$field_options)).")";
+                  $message = "(".trim( implode(", ", $field_options)).")";
                }
             }
             $dropdown_types[$field] = $values['name']." ".$message;
@@ -265,7 +265,7 @@ class PluginGenericobjectField extends CommonDBTM {
    static function getFieldOptions($field, $itemtype="") {
       global $GO_FIELDS;
 
-      $cleaned_field = preg_replace("/^plugin_genericobject_/",'', $field);
+      $cleaned_field = preg_replace("/^plugin_genericobject_/", '', $field);
       if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
          // This field has been dynamically defined because it's an isolated dropdown
          $tmpfield = self::getFieldName(
@@ -379,7 +379,7 @@ class PluginGenericobjectField extends CommonDBTM {
 
          if ($table != '' && !TableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
-            $name = str_replace("glpi_plugin_genericobject_","", $table);
+            $name = str_replace("glpi_plugin_genericobject_", "", $table);
             $name = getSingular($name);
 
             $options['linked_itemtype'] = $itemtype;
@@ -432,7 +432,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $itemtype  = getItemTypeForTable($table);
       $searchopt = Search::getCleanedOptions($itemtype);
       foreach ($searchopt as $num => $option) {
-         if ( (isset($option['field'])  && ($option['field'] == $field))
+         if ((isset($option['field'])  && ($option['field'] == $field))
             || (isset($option['field']) && $option['linkfield'] == $field)) {
             $criteria = array('itemtype' => $itemtype, 'num' => $num);
             $pref->deleteByCriteria($criteria);

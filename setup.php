@@ -38,52 +38,52 @@
 define ('PLUGIN_GENERICOBJECT_VERSION', '2.4.0');
 
 if (!defined("GENERICOBJECT_DIR")) {
-   define("GENERICOBJECT_DIR",GLPI_ROOT . "/plugins/genericobject");
+   define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
 }
 
-if (!defined("GENERICOBJECT_DOC_DIR") ) {
+if (!defined("GENERICOBJECT_DOC_DIR")) {
    define("GENERICOBJECT_DOC_DIR", GLPI_PLUGIN_DOC_DIR . "/genericobject");
-   if(!file_exists(GENERICOBJECT_DOC_DIR)) {
+   if (!file_exists(GENERICOBJECT_DOC_DIR)) {
       mkdir(GENERICOBJECT_DOC_DIR);
    }
 }
 if (!defined("GENERICOBJECT_FRONT_PATH")) {
    define("GENERICOBJECT_FRONT_PATH", GENERICOBJECT_DOC_DIR."/front");
-   if(!file_exists(GENERICOBJECT_FRONT_PATH)) {
+   if (!file_exists(GENERICOBJECT_FRONT_PATH)) {
       mkdir(GENERICOBJECT_FRONT_PATH);
    }
 }
 if (!defined("GENERICOBJECT_AJAX_PATH")) {
    define("GENERICOBJECT_AJAX_PATH", GENERICOBJECT_DOC_DIR . "/ajax");
-   if(!file_exists(GENERICOBJECT_AJAX_PATH)) {
+   if (!file_exists(GENERICOBJECT_AJAX_PATH)) {
       mkdir(GENERICOBJECT_AJAX_PATH);
    }
 }
 
 if (!defined("GENERICOBJECT_CLASS_PATH")) {
    define("GENERICOBJECT_CLASS_PATH", GENERICOBJECT_DOC_DIR . "/inc");
-   if(!file_exists(GENERICOBJECT_CLASS_PATH)) {
+   if (!file_exists(GENERICOBJECT_CLASS_PATH)) {
       mkdir(GENERICOBJECT_CLASS_PATH);
    }
 }
 
 if (!defined("GENERICOBJECT_LOCALES_PATH")) {
    define("GENERICOBJECT_LOCALES_PATH", GENERICOBJECT_DOC_DIR . "/locales");
-   if(!file_exists(GENERICOBJECT_LOCALES_PATH)) {
+   if (!file_exists(GENERICOBJECT_LOCALES_PATH)) {
       mkdir(GENERICOBJECT_LOCALES_PATH);
    }
 }
 
 if (!defined("GENERICOBJECT_FIELDS_PATH")) {
    define("GENERICOBJECT_FIELDS_PATH", GENERICOBJECT_DOC_DIR . "/fields");
-   if(!file_exists(GENERICOBJECT_FIELDS_PATH)) {
+   if (!file_exists(GENERICOBJECT_FIELDS_PATH)) {
       mkdir(GENERICOBJECT_FIELDS_PATH);
    }
 }
 
 if (!defined("GENERICOBJECT_PICS_PATH")) {
    define("GENERICOBJECT_PICS_PATH", GENERICOBJECT_DOC_DIR . "/pics");
-   if(!file_exists(GENERICOBJECT_PICS_PATH)) {
+   if (!file_exists(GENERICOBJECT_PICS_PATH)) {
       mkdir(GENERICOBJECT_PICS_PATH);
    }
 }
@@ -91,7 +91,7 @@ if (!defined("GENERICOBJECT_PICS_PATH")) {
 // Autoload class generated in files/_plugins/genericobject/inc/
 include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/functions.php");
-if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php") ){
+if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
    include_once(GENERICOBJECT_DIR . "/log_filter.settings.php");
 }
 
@@ -202,7 +202,7 @@ function plugin_version_genericobject() {
  * @return boolean
  */
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85.3','lt')) {
+   if (version_compare(GLPI_VERSION, '0.85.3', 'lt')) {
       echo "This plugin requires GLPI 0.85.3 or higher";
       return false;
    }

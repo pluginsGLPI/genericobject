@@ -34,7 +34,7 @@ class PluginGenericobjectProfile extends Profile {
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
-      switch($item->getType()) {
+      switch ($item->getType()) {
          case 'Profile':
             return self::createTabEntry(__('Objects management', 'genericobject'));
             break;
@@ -45,7 +45,7 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      switch($item->getType()) {
+      switch ($item->getType()) {
          case 'Profile':
             $profile = new self();
             $profile->showForm($item->getID());
@@ -110,7 +110,7 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    static function getProfileNameForItemtype($itemtype) {
-      return preg_replace("/^glpi_/","",getTableForItemType($itemtype));
+      return preg_replace("/^glpi_/", "", getTableForItemType($itemtype));
    }
 
 
@@ -189,7 +189,9 @@ class PluginGenericobjectProfile extends Profile {
          }
       }
 
-      if (empty($prof_datas) && !$config) return false;
+      if (empty($prof_datas) && !$config) {
+         return false;
+      }
 
       $prof_datas['profiles_id']   = $id;
       $this->fields       = $prof_datas;
@@ -235,7 +237,7 @@ class PluginGenericobjectProfile extends Profile {
     */
    public static function createFirstAccess() {
       if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"], 'PluginGenericobjectType')) {
-         self::createAccess($_SESSION["glpiactiveprofile"]["id"],"PluginGenericobjectType",true);
+         self::createAccess($_SESSION["glpiactiveprofile"]["id"], "PluginGenericobjectType", true);
       }
    }
 
@@ -250,7 +252,7 @@ class PluginGenericobjectProfile extends Profile {
       $profile->getFromDB($profiles_id);
       $rights = ProfileRight::getProfileRights($profiles_id);
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
-      if($itemtype) {
+      if ($itemtype) {
          _log(
             "get rights on itemtype ".$itemtype." for profile ".$profile->fields['name'], ':',
             isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : "NONE"
@@ -298,7 +300,7 @@ class PluginGenericobjectProfile extends Profile {
       include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
       $types = PluginGenericobjectType::getTypes(true);
-      if ( count( $types) > 0 ) {
+      if (count( $types) > 0) {
          foreach ($types as $_ => $type) {
             $itemtype   = $type['itemtype'];
             $field      = self::getProfileNameForItemtype($itemtype);
@@ -324,21 +326,21 @@ class PluginGenericobjectProfile extends Profile {
 
       // Add types' rights
       $types = PluginGenericobjectType::getTypes(true);
-      foreach($types as $_ => $type) {
+      foreach ($types as $_ => $type) {
          $itemtype = $type['itemtype'];
          $right_names[] = self::getProfileNameForItemtype($itemtype);
       }
 
       // Check for already defined rights
-      foreach($right_names as $right_name) {
+      foreach ($right_names as $right_name) {
          _log($right_name, isset($installed_rights[$right_name]));
-         if ( !isset($installed_rights[$right_name]) ) {
+         if (!isset($installed_rights[$right_name])) {
             $missing_rights[] = $right_name;
          }
       }
 
       //Install missing rights in profile and update the object
-      if ( count($missing_rights) > 0) {
+      if (count($missing_rights) > 0) {
          ProfileRight::addProfileRights($missing_rights);
          self::changeProfile();
       }

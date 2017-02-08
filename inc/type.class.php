@@ -80,28 +80,28 @@ class PluginGenericobjectType extends CommonDBTM {
       $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
          __CLASS__
       );
-      return Session::haveRight($right_name,PURGE);
+      return Session::haveRight($right_name, PURGE);
    }
 
    static function canCreate() {
       $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
          __CLASS__
       );
-      return Session::haveRight($right_name,CREATE);
+      return Session::haveRight($right_name, CREATE);
    }
 
    static function canView() {
       $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
          __CLASS__
       );
-      return Session::haveRight($right_name,READ);
+      return Session::haveRight($right_name, READ);
    }
 
    static function canUpdate() {
       $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
          __CLASS__
       );
-      return Session::haveRight($right_name,UPDATE);
+      return Session::haveRight($right_name, UPDATE);
    }
    function getFromDBByType($itemtype) {
       global $DB;
@@ -189,7 +189,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       //Name must start with a letter
-      if (!preg_match("/^[a-zA-Z]+/i",$input['name'])) {
+      if (!preg_match("/^[a-zA-Z]+/i", $input['name'])) {
          Session::addMessageAfterRedirect(__("Type must start with a letter", "genericobject"), ERROR, true);
          return array();
       }
@@ -322,32 +322,32 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $sopt[9]['table']       = $this->getTable();
       $sopt[9]['field']       = 'use_history';
-      $sopt[9]['name']        = _sx('button','Use')." ".__("Historical");
+      $sopt[9]['name']        = _sx('button', 'Use')." ".__("Historical");
       $sopt[9]['datatype']    = 'bool';
 
       $sopt[13]['table']      = $this->getTable();
       $sopt[13]['field']      = 'use_infocoms';
-      $sopt[13]['name']       = _sx('button','Use')." ".__("Financial and administratives information");
+      $sopt[13]['name']       = _sx('button', 'Use')." ".__("Financial and administratives information");
       $sopt[13]['datatype']   = 'bool';
 
       $sopt[14]['table']      = $this->getTable();
       $sopt[14]['field']      = 'use_documents';
-      $sopt[14]['name']       = _sx('button','Use')." "._n("Document", "Documents", 2);
+      $sopt[14]['name']       = _sx('button', 'Use')." "._n("Document", "Documents", 2);
       $sopt[14]['datatype']   = 'bool';
 
       $sopt[15]['table']      = $this->getTable();
       $sopt[15]['field']      = 'use_loans';
-      $sopt[15]['name']       = _sx('button','Use')." "._n("Reservation", "Reservations", 2);
+      $sopt[15]['name']       = _sx('button', 'Use')." "._n("Reservation", "Reservations", 2);
       $sopt[15]['datatype']   = 'bool';
 
       $sopt[16]['table']      = $this->getTable();
       $sopt[16]['field']      = 'use_contracts';
-      $sopt[16]['name']       = _sx('button','Use')." "._n("Contract", "Contracts", 2);
+      $sopt[16]['name']       = _sx('button', 'Use')." "._n("Contract", "Contracts", 2);
       $sopt[16]['datatype']   = 'bool';
 
       $sopt[17]['table']       = $this->getTable();
       $sopt[17]['field']       = 'use_unicity';
-      $sopt[17]['name']        = _sx('button','Use')." ".__("Fields unicity");
+      $sopt[17]['name']        = _sx('button', 'Use')." ".__("Fields unicity");
       $sopt[17]['datatype']    = 'bool';
 
       $sopt[18]['table']       = $this->getTable();
@@ -469,15 +469,14 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td>";
       if (!$ID) {
          echo __("No");
-      }
-      else {
+      } else {
          Dropdown::showYesNo("is_active", $this->fields["is_active"]);
       }
       echo "</td></td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__("Family of type of objects",'genericobject')."</td>";
+      echo "<td>".__("Family of type of objects", 'genericobject')."</td>";
       echo "<td>";
          PluginGenericobjectTypeFamily::dropdown(
                         array('value' => $this->fields["plugin_genericobject_typefamilies_id"]));
@@ -525,7 +524,7 @@ class PluginGenericobjectType extends CommonDBTM {
             if (!$odd) {
                echo "<tr class='tab_bg_2'>";
             }
-            echo "<td>" . _sx('button','Use') . " " . $label . "</td>";
+            echo "<td>" . _sx('button', 'Use') . " " . $label . "</td>";
             echo "<td>";
 
             switch ($right) {
@@ -574,7 +573,7 @@ class PluginGenericobjectType extends CommonDBTM {
             if (!$odd) {
                echo "<tr class='tab_bg_2'>";
             }
-            echo "<td>" . _sx('button','Use') . " " . $label . "</td>";
+            echo "<td>" . _sx('button', 'Use') . " " . $label . "</td>";
             echo "<td>";
             switch ($right) {
                case 'use_plugin_datainjection' :
@@ -756,7 +755,7 @@ class PluginGenericobjectType extends CommonDBTM {
       PluginGenericobjectProfile::installRights();
       if ($params['create_default_profile']) {
          //Create rights for this new object
-         PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], $itemtype,true);
+         PluginGenericobjectProfile::createAccess($_SESSION["glpiactiveprofile"]["id"], $itemtype, true);
          //Reload profiles
          PluginGenericobjectProfile::changeProfile();
       }
@@ -1208,16 +1207,15 @@ class PluginGenericobjectType extends CommonDBTM {
             $dropdownclass = getItemTypeForTable($dropdowntable);
 
             if (TableExists($dropdowntable) && ! class_exists($dropdownclass)) {
-               $name                       = str_replace("glpi_plugin_genericobject_","", $dropdowntable);
+               $name                       = str_replace("glpi_plugin_genericobject_", "", $dropdowntable);
                $name                       = getSingular($name);
                $params= PluginGenericobjectField::getFieldOptions($field, $dropdownclass);
-               if (
-                  isset($params['dropdown_type'])
+               if (isset($params['dropdown_type'])
                   and $params['dropdown_type'] === 'isolated'
                ) {
                   $params['linked_itemtype'] = $itemtype;
                }
-               self::addNewDropdown($name, 'PluginGenericobject'.ucfirst($name),$params);
+               self::addNewDropdown($name, 'PluginGenericobject'.ucfirst($name), $params);
             }
          }
       }
@@ -1232,7 +1230,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function deleteItemTypeFilesAndClasses($name, $table, $itemtype) {
       global $DB;
 
-      _log("Delete Type",array(
+      _log("Delete Type", array(
          "table"=>$table,
          "name"=>$name,
          "itemtype" => $itemtype,
@@ -1243,7 +1241,7 @@ class PluginGenericobjectType extends CommonDBTM {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
             $table = getTableNameForForeignKeyField($field);
 
-            if($table != getTableForItemType("PluginGenericobjectTypeFamily")) {
+            if ($table != getTableForItemType("PluginGenericobjectTypeFamily")) {
                self::deleteFilesAndClassesForOneItemtype(getSingular($results[1]));
                $DB->query("DROP TABLE IF EXISTS `$table`");
             }
@@ -1524,8 +1522,8 @@ class PluginGenericobjectType extends CommonDBTM {
       //Itemtype must always be singular, otherwise it breaks when using GLPI's framework
       $value = getSingular($value);
 
-      $search  = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
-      $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
+      $search  = explode(",", "ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
+      $replace = explode(",", "c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
       $value = str_replace($search, $replace, $value);
       $value = preg_replace("/[^a-zA-Z0-9]/", '', $value);
 
@@ -1665,8 +1663,7 @@ class PluginGenericobjectType extends CommonDBTM {
          foreach (PluginGenericobjectSingletonObjectField::getInstance($itemtype) as $field => $value) {
             $table = getTableNameForForeignKeyField($field);
             $options = PluginGenericobjectField::getFieldOptions($field, $itemtype);
-            if (
-               isset($options['input_type'])
+            if (isset($options['input_type'])
                and $options['input_type'] === 'dropdown'
                and preg_match('/^glpi_plugin_genericobject/', $table)
             ) {

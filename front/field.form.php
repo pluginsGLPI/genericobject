@@ -36,7 +36,7 @@ if (isset ($_POST["delete"])) {
       foreach ($_POST["fields"] as $field => $value) {
          if ($type->can($_POST["id"], PURGE)
             && $value == 1
-               && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype,  $field)) {
+               && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype, $field)) {
             PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
             Session::addMessageAfterRedirect(__("Field(s) deleted successfully", "genericobject"), true, INFO);
          }

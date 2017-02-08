@@ -41,13 +41,13 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
-      if(preg_match("/Injection$/i",$class)) {
+      if (preg_match("/Injection$/i", $class)) {
          $class = str_replace("Injection", "", $class);
       }
       $item     = new $class();
       //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
-      if(isset($LANG['genericobject'][$class][0])) {
+      if (isset($LANG['genericobject'][$class][0])) {
          return $LANG['genericobject'][$class][0];
       } else {
          return $item->objecttype->fields['name'];
@@ -55,11 +55,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    }
 
    static function canView() {
-      return Session::haveRight($this->$itemtype_1, READ);
+      return Session::haveRight(self::$itemtype_1, READ);
    }
 
    static function canCreate() {
-      return Session::haveRight($this->$itemtype_1, CREATE);
+      return Session::haveRight(self::$itemtype_1, CREATE);
    }
 
    /**

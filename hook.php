@@ -113,8 +113,7 @@ function plugin_genericobject_install() {
 
    $migration = new Migration('0.85+1.1');
 
-   foreach (
-      array(
+   foreach (array(
          'PluginGenericobjectField',
          'PluginGenericobjectCommonDropdown',
          'PluginGenericobjectCommonTreeDropdown',
@@ -129,7 +128,7 @@ function plugin_genericobject_install() {
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            if ( method_exists($itemtype, 'install') ) {
+            if (method_exists($itemtype, 'install')) {
                $itemtype::install($migration);
             }
          }
@@ -168,8 +167,7 @@ function plugin_genericobject_uninstall() {
       }
    }
 
-   foreach (
-      array(
+   foreach (array(
                'PluginGenericobjectType',
                'PluginGenericobjectProfile',
                'PluginGenericobjectField',
@@ -202,7 +200,7 @@ function plugin_genericobject_uninstall() {
 function plugin_datainjection_populate_genericobject() {
    global $INJECTABLE_TYPES;
    $type = new PluginGenericobjectType();
-   foreach($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
+   foreach ($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
       if (class_exists($data ['itemtype']."Injection")) {
          $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = 'genericobject';
       }

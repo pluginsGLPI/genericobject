@@ -52,7 +52,6 @@ class PluginGenericobjectSingletonObjectField {
       global $DB;
       if (!isset(self::$_dbfields[$itemtype]) || $reload) {
          self::$_dbfields[$itemtype] = $DB->list_fields(getTableForItemType($itemtype));
-      } else {
       }
       return self::$_dbfields[$itemtype];
    }

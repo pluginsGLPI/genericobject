@@ -26,7 +26,7 @@
  ---------------------------------------------------------------------- */
 
 include ("../../../inc/includes.php");
-Session::checkRight("profile",UPDATE);
+Session::checkRight("profile", UPDATE);
 
 _log($_POST);
 $prof = new Profile();
@@ -34,8 +34,8 @@ $prof = new Profile();
 /* save profile */
 if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
    $profiles = array();
-   foreach($_POST as $key => $val) {
-      if (preg_match("/^profile_/", $key) ){
+   foreach ($_POST as $key => $val) {
+      if (preg_match("/^profile_/", $key)) {
          $id = preg_replace("/^profile_/", "", $key);
          $profiles[$id] = array(
             "id" => $id,
@@ -44,7 +44,7 @@ if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
       }
    }
    _log($profiles);
-   foreach( $profiles as $profile_id => $input) {
+   foreach ($profiles as $profile_id => $input) {
       $prof->update($input);
    }
 }

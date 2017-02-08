@@ -38,7 +38,7 @@ if (isset($_REQUEST['itemtype'])) {
    $requested_type = $_REQUEST['itemtype'];
    $error = array();
 
-   if (!in_array($requested_type, $types) ){
+   if (!in_array($requested_type, $types)) {
       $error[] = __('The requested type has not been defined yet!');
       if (!PluginGenericobjectType::canCreate()) {
          $error[] = __('Please ask your administrator to create this type of object');
@@ -48,7 +48,7 @@ if (isset($_REQUEST['itemtype'])) {
       $error[]= __('You might need to regenerate the files under '.GENERICOBJECT_DOC_DIR.'.');
    }
 
-   if(count($error) > 0) {
+   if (count($error) > 0) {
       Html::header(__('Type not found!'));
       Html::displayErrorAndDie(implode('<br/>', $error));
 

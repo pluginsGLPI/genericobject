@@ -19,7 +19,7 @@ function dropdown_getTypeName($class,$nb=0) {
       $linked_itemtype_object = new $instance->linked_itemtype();
       $label .= " (" . __($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
    }
-   if($label != '') {
+   if ($label != '') {
       return $label;
    } else {
       return $class;
@@ -50,15 +50,14 @@ function _log() {
    $msg = _format_trace($trace, func_get_args());
    $msg .= "\n";
    $show_log = false;
-   if (
-      !is_null($caller) and
+   if (!is_null($caller) and
       isset($caller['class']) and
       in_array($caller['class'], $LOG_FILTER)
    ) {
       $callee = array_shift($trace);
       $show_log = true;
    }
-   if ( in_array($filename, $LOG_FILTER) ) {
+   if (in_array($filename, $LOG_FILTER)) {
       $show_log = true;
    }
    if ($show_log) {
@@ -71,7 +70,7 @@ function _format_trace($bt, $args) {
    $msg = "";
    $msg = "From \n";
    if (count($bt) > 0) {
-      foreach(array_reverse($bt) as $idx => $trace) {
+      foreach (array_reverse($bt) as $idx => $trace) {
          $msg .= sprintf("  [%d] ", $idx);
          if (isset($trace['class'])) {
             $msg .= $trace['class'].'::';
@@ -85,13 +84,13 @@ function _format_trace($bt, $args) {
    }
 
    if ($tps && function_exists('memory_get_usage')) {
-      $msg .= ' ('.number_format(microtime(true)-$tps,3).'", '.
-         number_format(memory_get_usage()/1024/1024,2).'Mio)';
+      $msg .= ' ('.number_format(microtime(true)-$tps, 3).'", '.
+         number_format(memory_get_usage()/1024/1024, 2).'Mio)';
    }
    $msg .= "\n  ";
    foreach ($args as $arg) {
       if (is_array($arg) || is_object($arg)) {
-         $msg .= " ".str_replace("\n", "\n  ",print_r($arg, true));
+         $msg .= " ".str_replace("\n", "\n  ", print_r($arg, true));
       } else if (is_null($arg)) {
          $msg .= 'NULL ';
       } else if (is_bool($arg)) {
