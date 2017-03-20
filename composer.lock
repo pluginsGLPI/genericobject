@@ -230,7 +230,7 @@
                 }
             ],
             "description": "Modern task runner",
-            "time": "2017-02-08T01:45:50+00:00"
+            "time": "2017-02-08 01:45:50"
         },
         {
             "name": "container-interop/container-interop",
@@ -298,16 +298,16 @@
         },
         {
             "name": "glpi-project/tools",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/glpi-project/tools.git",
-                "reference": "89083f6e71fac05190c7cc76a9c5afd8b1f421ef"
+                "reference": "55b3ba30c9c7f32acf5d9e8d6747e1e369809b13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/glpi-project/tools/zipball/89083f6e71fac05190c7cc76a9c5afd8b1f421ef",
-                "reference": "89083f6e71fac05190c7cc76a9c5afd8b1f421ef",
+                "url": "https://api.github.com/repos/glpi-project/tools/zipball/55b3ba30c9c7f32acf5d9e8d6747e1e369809b13",
+                "reference": "55b3ba30c9c7f32acf5d9e8d6747e1e369809b13",
                 "shasum": ""
             },
             "require": {
@@ -344,7 +344,7 @@
                 "plugins",
                 "tools"
             ],
-            "time": "2017-02-08T08:20:09+00:00"
+            "time": "2017-03-03T14:40:45+00:00"
         },
         {
             "name": "league/container",
