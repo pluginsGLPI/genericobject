@@ -1025,7 +1025,7 @@ class PluginGenericobjectType extends CommonDBTM {
       global $CFG_GLPI;
       $locale_dir = GENERICOBJECT_LOCALES_PATH."/".$name;
       if (!is_dir($locale_dir)) {
-         @ mkdir($locale_dir, 0777, true);
+         @ mkdir($locale_dir, 0755, true);
       }
       $locale_file = $name.".".$_SESSION['glpilanguage'];
       self::addFileFromTemplate(array('NAME'      => $name,

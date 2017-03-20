@@ -136,7 +136,7 @@ function plugin_genericobject_install() {
    }
 
    if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
-      @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true)
+      @ mkdir(GENERICOBJECT_CLASS_PATH, 0755, true)
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
    }
 
