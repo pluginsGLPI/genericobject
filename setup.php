@@ -35,7 +35,7 @@
  ----------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.4.0');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.4.1');
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
@@ -190,8 +190,8 @@ function plugin_post_init_genericobject() {
 function plugin_version_genericobject() {
    return array ('name'           => __("Objects management", "genericobject"),
                  'version'        => PLUGIN_GENERICOBJECT_VERSION,
-                 'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & <a href='http://www.siprossii.com/'>siprossii</a>",
-                 'homepage'       => 'https://github.com/teclib/genericobject',
+                 'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
+                 'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
                  'license'        => 'GPLv2+',
                  'minGlpiVersion' => '0.85.3');
 }
