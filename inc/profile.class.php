@@ -148,7 +148,7 @@ class PluginGenericobjectProfile extends Profile {
 
       $title = __('Objects', 'genericobject');
       if (count($types_rights) == 0) {
-         $title .= __(" (No types defined yet)", "genericobject");
+         $title .= ' ' . __("(No types defined yet)", "genericobject");
       }
 
       $profile->displayRightsChoiceMatrix(
