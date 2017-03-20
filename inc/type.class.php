@@ -1172,14 +1172,33 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    /**
-    *
     * Create, if needed files for an itemtype and it's dropdown
+    *
     * @since 2.2.0
+    *
+    * @return void
     */
    static function checkClassAndFilesForItemType() {
       global $DB;
 
       foreach (self::getTypes(true) as $type) {
+         //ensure old files has been removed
+         if (file_exists(GENERICOBJECT_DIR . "/inc/{$type['name']}.class.php")) {
+            unlink(GENERICOBJECT_CLASS_PATH . "/inc/{$type['name']}.class.php");
+         }
+         if (file_exists(GENERICOBJECT_DIR . "/front/{$type['name']}.form.php")) {
+            unlink(GENERICOBJECT_DIR . "/front/{$type['name']}.form.php");
+         }
+         if (file_exists(GENERICOBJECT_DIR . "/front/{$type['name']}.php")) {
+            unlink(GENERICOBJECT_DIR . "/front/{$type['name']}.form.php");
+         }
+         if (file_exists(GENERICOBJECT_DIR . "/ajax/{$type['name']}.tabs.php")) {
+            unlink(GENERICOBJECT_DIR . "/ajax/{$type['name']}.tabs.php");
+         }
+         if (file_exists(GENERICOBJECT_DIR . "/inc/{$type['name']}.injection.class.php")) {
+            unlink(GENERICOBJECT_DIR . "/inc/{$type['name']}.injection.class.php");
+         }
+
          self::checkClassAndFilesForOneItemType($type['itemtype'], $type['name'], true, false);
       }
    }
