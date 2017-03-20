@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Genericobject\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-25 13:26+0200\n"
+"PO-Revision-Date: 2016-09-15 10:01+0000\n"
+"Last-Translator: Walid Nouh\n"
+"Language-Team: Romanian (Romania) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ro_RO/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro_RO\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#: index.php:59 setup.php:168 front/familylist.php:33 front/familylist.php:41
+#: front/type.form.php:73 inc/object_item.class.php:110
+#: inc/profile.class.php:39 inc/type.class.php:306 inc/type.class.php:389
+msgid "Objects management"
+msgstr "Managementul obiectelor"
+
+#: index.php:69 front/familylist.php:37
+msgid "Empty family"
+msgstr "Familie vida"
+
+#: front/commondropdown.form.php:36 front/commondropdown.php:11
+#: front/commontreedropdown.form.php:36
+msgid "The requested dropdown does not exists"
+msgstr "Dropdown-ul solicitat nu exista"
+
+#: front/field.form.php:41
+msgid "Field(s) deleted successfully"
+msgstr "Campul(urile) sterse cu succes"
+
+#: front/field.form.php:51
+msgid "Field added successfully"
+msgstr "Camp adaugat cu succes"
+
+#: front/object.php:33 front/type.php:37 inc/profile.class.php:292
+#: inc/type.class.php:68
+msgid "Type of objects"
+msgstr "Tipul obiectelor"
+
+#: inc/field.class.php:64
+msgid "Fields associated with the object"
+msgstr "Campuri asociate la obiect"
+
+#: inc/field.class.php:70
+msgid "Label"
+msgstr "Eticheta"
+
+#: inc/field.class.php:71
+msgid "Name in DB"
+msgstr "Nume in DB"
+
+#: inc/field.class.php:110
+msgid "Add new field"
+msgstr "Add camp nou"
+
+#: inc/object.class.php:471
+msgid "Object preview"
+msgstr "Previzualizeaza un obiect de acest tip"
+
+#: inc/object.class.php:734
+msgid "You must configure rights to enable the preview"
+msgstr "Trebuie sa configurati drepturi pe acest obiect pentru a putea previzualiza"
+
+#: inc/profile.class.php:145
+msgid "General"
+msgstr "General"
+
+#: inc/profile.class.php:151
+msgid "Objects"
+msgstr "Obiecte"
+
+#: inc/profile.class.php:153
+msgid " (No types defined yet)"
+msgstr "(Niciun tip definit inca)"
+
+#: inc/type.class.php:180
+msgid "Type name is missing"
+msgstr "Nume tip lipseste"
+
+#: inc/type.class.php:186
+msgid ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr "Tipurile 'camp', 'obiect', si 'tip' sunt rezervate.Va rugam alegeti altul"
+
+#: inc/type.class.php:193
+msgid "Type must start with a letter"
+msgstr "Tipul trebuie sa inceapa cu o litera"
+
+#: inc/type.class.php:200
+msgid "A type already exists with the same name"
+msgstr "UN tip cu acelasi nume exista deja"
+
+#: inc/type.class.php:360 inc/type.class.php:480 inc/typefamily.class.php:36
+msgid "Family of type of objects"
+msgstr "Familia tipului de obiecte"
+
+#: inc/type.class.php:440
+msgid "Internal identifier"
+msgstr "Identificator intern"
+
+#: inc/type.class.php:494
+msgid "Behaviour"
+msgstr "Comportament"
+
+#: inc/type.class.php:512
+msgid "Network connections"
+msgstr "Conexiuni retea"
+
+#: inc/type.class.php:515
+msgid "injection file plugin"
+msgstr "Plugin injectare fisiere"
+
+#: inc/type.class.php:517
+msgid "geninventorynumber plugin"
+msgstr "geninventorynumber plugin"
+
+#: inc/type.class.php:518
+msgid "order plugin"
+msgstr "Plugin  gestiune comenzi"
+
+#: inc/type.class.php:519
+msgid "item's uninstallation plugin"
+msgstr "Plugin dezinstalare elemente"
+
+#: inc/type.class.php:520
+msgid "simcard plugin"
+msgstr ""
+
+#: inc/type.class.php:671
+msgid "Regenerate files"
+msgstr "Fisiere regenerate"
+
+#: inc/type.class.php:684
+msgid "Link to other objects"
+msgstr "Linck catre alte obiecte"
