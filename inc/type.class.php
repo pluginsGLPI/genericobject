@@ -1565,6 +1565,29 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    /**
+    * Ensure names are singular at upgrade
+    *
+    * @return void
+    */
+   static function singularTypes() {
+      global $DB;
+      $table = getTableForItemType(__CLASS__);
+      if (TableExists($table)) {
+         $query = "SELECT id, name, itemtype FROM $table";
+         foreach ($DB->query($query) as $data) {
+            $singularname = self::filterInput($data['name']);
+            $singulartype = getSingular($data['itemtype']);
+            if ($data['name'] != $singularname || $data['itemtype'] != $singulartype) {
+               //do not use objects here to prevent pre/post issues
+               $update = "UPDATE $table SET name='$singularname', itemtype='$singulartype' WHERE id={$data['id']}";
+               $DB->query($update);
+               self::deleteFilesAndClassesForOneItemtype($data['name']);
+            }
+         }
+      }
+   }
+
+   /**
     * Get all types of active&published objects
     */
    static function getTypes($all = false) {
@@ -1981,6 +2004,8 @@ class PluginGenericobjectType extends CommonDBTM {
             $preference->add($tmp);
          }
       }
+
+      self::singularTypes();
 
       //If files are missing, recreate them!
       self::checkClassAndFilesForItemType();
