@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-25 13:26+0200\n"
+"POT-Creation-Date: 2017-03-20 12:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: index.php:59 setup.php:168 front/familylist.php:33 front/familylist.php:41
-#: front/type.form.php:73 inc/object_item.class.php:110
-#: inc/profile.class.php:39 inc/type.class.php:306 inc/type.class.php:389
+#: front/familylist.php:33 front/familylist.php:41 front/type.form.php:73
+#: inc/type.class.php:306 inc/type.class.php:389 inc/profile.class.php:39
+#: inc/object_item.class.php:110 index.php:58 setup.php:190
 msgid "Objects management"
 msgstr ""
 
-#: index.php:69 front/familylist.php:37
+#: front/familylist.php:37 index.php:68
 msgid "Empty family"
 msgstr ""
 
-#: front/commondropdown.form.php:36 front/commondropdown.php:11
-#: front/commontreedropdown.form.php:36
+#: front/commontreedropdown.form.php:36 front/commondropdown.form.php:36
+#: front/commondropdown.php:11
 msgid "The requested dropdown does not exists"
+msgstr ""
+
+#: front/type.php:37 front/object.php:33 inc/type.class.php:68
+#: inc/profile.class.php:291
+msgid "Type of objects"
 msgstr ""
 
 #: front/field.form.php:41
@@ -38,47 +43,6 @@ msgstr ""
 
 #: front/field.form.php:51
 msgid "Field added successfully"
-msgstr ""
-
-#: front/object.php:33 front/type.php:37 inc/profile.class.php:292
-#: inc/type.class.php:68
-msgid "Type of objects"
-msgstr ""
-
-#: inc/field.class.php:64
-msgid "Fields associated with the object"
-msgstr ""
-
-#: inc/field.class.php:70
-msgid "Label"
-msgstr ""
-
-#: inc/field.class.php:71
-msgid "Name in DB"
-msgstr ""
-
-#: inc/field.class.php:110
-msgid "Add new field"
-msgstr ""
-
-#: inc/object.class.php:471
-msgid "Object preview"
-msgstr ""
-
-#: inc/object.class.php:734
-msgid "You must configure rights to enable the preview"
-msgstr ""
-
-#: inc/profile.class.php:145
-msgid "General"
-msgstr ""
-
-#: inc/profile.class.php:151
-msgid "Objects"
-msgstr ""
-
-#: inc/profile.class.php:153
-msgid " (No types defined yet)"
 msgstr ""
 
 #: inc/type.class.php:180
@@ -98,7 +62,7 @@ msgstr ""
 msgid "A type already exists with the same name"
 msgstr ""
 
-#: inc/type.class.php:360 inc/type.class.php:480 inc/typefamily.class.php:36
+#: inc/type.class.php:360 inc/type.class.php:479 inc/typefamily.class.php:36
 msgid "Family of type of objects"
 msgstr ""
 
@@ -106,38 +70,88 @@ msgstr ""
 msgid "Internal identifier"
 msgstr ""
 
-#: inc/type.class.php:494
+#: inc/type.class.php:493
 msgid "Behaviour"
 msgstr ""
 
-#: inc/type.class.php:512
+#: inc/type.class.php:511
 msgid "Network connections"
 msgstr ""
 
-#: inc/type.class.php:515
+#: inc/type.class.php:514
 msgid "injection file plugin"
 msgstr ""
 
-#: inc/type.class.php:517
+#: inc/type.class.php:516
 msgid "geninventorynumber plugin"
 msgstr ""
 
-#: inc/type.class.php:518
+#: inc/type.class.php:517
 msgid "order plugin"
 msgstr ""
 
-#: inc/type.class.php:519
+#: inc/type.class.php:518
 msgid "item's uninstallation plugin"
 msgstr ""
 
-#: inc/type.class.php:520
+#: inc/type.class.php:519
 msgid "simcard plugin"
 msgstr ""
 
-#: inc/type.class.php:671
+#: inc/type.class.php:670
 msgid "Regenerate files"
 msgstr ""
 
-#: inc/type.class.php:684
+#: inc/type.class.php:683
 msgid "Link to other objects"
+msgstr ""
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:1932
+#, php-format
+msgid "Unable to load the class %1$s."
+msgstr ""
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:1934
+#, php-format
+msgid ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+msgstr ""
+
+#: inc/object.class.php:470
+msgid "Object preview"
+msgstr ""
+
+#: inc/object.class.php:732
+msgid "You must configure rights to enable the preview"
+msgstr ""
+
+#: inc/profile.class.php:143
+msgid "General"
+msgstr ""
+
+#: inc/profile.class.php:149
+msgid "Objects"
+msgstr ""
+
+#: inc/profile.class.php:151
+msgid "(No types defined yet)"
+msgstr ""
+
+#: inc/field.class.php:64
+msgid "Fields associated with the object"
+msgstr ""
+
+#: inc/field.class.php:70
+msgid "Label"
+msgstr ""
+
+#: inc/field.class.php:71
+msgid "Name in DB"
+msgstr ""
+
+#: inc/field.class.php:110
+msgid "Add new field"
 msgstr ""

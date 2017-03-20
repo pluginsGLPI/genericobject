@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-25 13:26+0200\n"
-"PO-Revision-Date: 2016-09-15 10:01+0000\n"
-"Last-Translator: Walid Nouh\n"
+"POT-Creation-Date: 2017-03-20 12:04+0100\n"
+"PO-Revision-Date: 2017-03-20 11:05+0000\n"
+"Last-Translator: Johan Cwiklinski <trasher@x-tnd.be>\n"
 "Language-Team: Romanian (Romania) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ro_RO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,20 +18,25 @@ msgstr ""
 "Language: ro_RO\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
-#: index.php:59 setup.php:168 front/familylist.php:33 front/familylist.php:41
-#: front/type.form.php:73 inc/object_item.class.php:110
-#: inc/profile.class.php:39 inc/type.class.php:306 inc/type.class.php:389
+#: front/familylist.php:33 front/familylist.php:41 front/type.form.php:73
+#: inc/type.class.php:306 inc/type.class.php:389 inc/profile.class.php:39
+#: inc/object_item.class.php:110 index.php:58 setup.php:190
 msgid "Objects management"
 msgstr "Managementul obiectelor"
 
-#: index.php:69 front/familylist.php:37
+#: front/familylist.php:37 index.php:68
 msgid "Empty family"
 msgstr "Familie vida"
 
-#: front/commondropdown.form.php:36 front/commondropdown.php:11
-#: front/commontreedropdown.form.php:36
+#: front/commontreedropdown.form.php:36 front/commondropdown.form.php:36
+#: front/commondropdown.php:11
 msgid "The requested dropdown does not exists"
 msgstr "Dropdown-ul solicitat nu exista"
+
+#: front/type.php:37 front/object.php:33 inc/type.class.php:68
+#: inc/profile.class.php:291
+msgid "Type of objects"
+msgstr "Tipul obiectelor"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
@@ -40,47 +45,6 @@ msgstr "Campul(urile) sterse cu succes"
 #: front/field.form.php:51
 msgid "Field added successfully"
 msgstr "Camp adaugat cu succes"
-
-#: front/object.php:33 front/type.php:37 inc/profile.class.php:292
-#: inc/type.class.php:68
-msgid "Type of objects"
-msgstr "Tipul obiectelor"
-
-#: inc/field.class.php:64
-msgid "Fields associated with the object"
-msgstr "Campuri asociate la obiect"
-
-#: inc/field.class.php:70
-msgid "Label"
-msgstr "Eticheta"
-
-#: inc/field.class.php:71
-msgid "Name in DB"
-msgstr "Nume in DB"
-
-#: inc/field.class.php:110
-msgid "Add new field"
-msgstr "Add camp nou"
-
-#: inc/object.class.php:471
-msgid "Object preview"
-msgstr "Previzualizeaza un obiect de acest tip"
-
-#: inc/object.class.php:734
-msgid "You must configure rights to enable the preview"
-msgstr "Trebuie sa configurati drepturi pe acest obiect pentru a putea previzualiza"
-
-#: inc/profile.class.php:145
-msgid "General"
-msgstr "General"
-
-#: inc/profile.class.php:151
-msgid "Objects"
-msgstr "Obiecte"
-
-#: inc/profile.class.php:153
-msgid " (No types defined yet)"
-msgstr "(Niciun tip definit inca)"
 
 #: inc/type.class.php:180
 msgid "Type name is missing"
@@ -99,7 +63,7 @@ msgstr "Tipul trebuie sa inceapa cu o litera"
 msgid "A type already exists with the same name"
 msgstr "UN tip cu acelasi nume exista deja"
 
-#: inc/type.class.php:360 inc/type.class.php:480 inc/typefamily.class.php:36
+#: inc/type.class.php:360 inc/type.class.php:479 inc/typefamily.class.php:36
 msgid "Family of type of objects"
 msgstr "Familia tipului de obiecte"
 
@@ -107,38 +71,88 @@ msgstr "Familia tipului de obiecte"
 msgid "Internal identifier"
 msgstr "Identificator intern"
 
-#: inc/type.class.php:494
+#: inc/type.class.php:493
 msgid "Behaviour"
 msgstr "Comportament"
 
-#: inc/type.class.php:512
+#: inc/type.class.php:511
 msgid "Network connections"
 msgstr "Conexiuni retea"
 
-#: inc/type.class.php:515
+#: inc/type.class.php:514
 msgid "injection file plugin"
 msgstr "Plugin injectare fisiere"
 
-#: inc/type.class.php:517
+#: inc/type.class.php:516
 msgid "geninventorynumber plugin"
 msgstr "geninventorynumber plugin"
 
-#: inc/type.class.php:518
+#: inc/type.class.php:517
 msgid "order plugin"
 msgstr "Plugin  gestiune comenzi"
 
-#: inc/type.class.php:519
+#: inc/type.class.php:518
 msgid "item's uninstallation plugin"
 msgstr "Plugin dezinstalare elemente"
 
-#: inc/type.class.php:520
+#: inc/type.class.php:519
 msgid "simcard plugin"
 msgstr ""
 
-#: inc/type.class.php:671
+#: inc/type.class.php:670
 msgid "Regenerate files"
 msgstr "Fisiere regenerate"
 
-#: inc/type.class.php:684
+#: inc/type.class.php:683
 msgid "Link to other objects"
 msgstr "Linck catre alte obiecte"
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:1932
+#, php-format
+msgid "Unable to load the class %1$s."
+msgstr ""
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:1934
+#, php-format
+msgid ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+msgstr ""
+
+#: inc/object.class.php:470
+msgid "Object preview"
+msgstr "Previzualizeaza un obiect de acest tip"
+
+#: inc/object.class.php:732
+msgid "You must configure rights to enable the preview"
+msgstr "Trebuie sa configurati drepturi pe acest obiect pentru a putea previzualiza"
+
+#: inc/profile.class.php:143
+msgid "General"
+msgstr "General"
+
+#: inc/profile.class.php:149
+msgid "Objects"
+msgstr "Obiecte"
+
+#: inc/profile.class.php:151
+msgid "(No types defined yet)"
+msgstr ""
+
+#: inc/field.class.php:64
+msgid "Fields associated with the object"
+msgstr "Campuri asociate la obiect"
+
+#: inc/field.class.php:70
+msgid "Label"
+msgstr "Eticheta"
+
+#: inc/field.class.php:71
+msgid "Name in DB"
+msgstr "Nume in DB"
+
+#: inc/field.class.php:110
+msgid "Add new field"
+msgstr "Add camp nou"
