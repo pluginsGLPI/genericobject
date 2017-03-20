@@ -111,7 +111,7 @@ function plugin_genericobject_install() {
    include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
-   $migration = new Migration('0.85+1.1');
+   $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
 
    foreach (array(
          'PluginGenericobjectField',
