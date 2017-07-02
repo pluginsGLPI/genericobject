@@ -45,14 +45,12 @@ class PluginGenericobjectType extends CommonDBTM {
    const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
    const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
 
-   const CAN_OPEN_TICKET   = 1024;
+   const CAN_OPEN_TICKET             = 1024;
 
-   function getRights($interface = 'central') {
-      $values = parent::getRights();
-      return $values;
-   }
+   var $dohistory                    = true;
 
-   var $dohistory = true;
+   static $rightname                 = 'plugin_genericobject_types';
+
 
    function __construct($itemtype = false) {
       if ($itemtype) {
@@ -76,35 +74,10 @@ class PluginGenericobjectType extends CommonDBTM {
       return $singleton[$itemtype];
    }
 
-   static function canPurge() {
-      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
-         __CLASS__
-      );
-      return Session::haveRight($right_name, PURGE);
-   }
 
-   static function canCreate() {
-      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
-         __CLASS__
-      );
-      return Session::haveRight($right_name, CREATE);
-   }
-
-   static function canView() {
-      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
-         __CLASS__
-      );
-      return Session::haveRight($right_name, READ);
-   }
-
-   static function canUpdate() {
-      $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
-         __CLASS__
-      );
-      return Session::haveRight($right_name, UPDATE);
-   }
    function getFromDBByType($itemtype) {
       global $DB;
+
       $query  = "SELECT * FROM `" . getTableForItemType(__CLASS__) . "` " .
                 "WHERE `itemtype`='$itemtype'";
       $result = $DB->query($query);
