@@ -163,7 +163,7 @@ function plugin_init_genericobject() {
       if ($object) {
          $PLUGIN_HOOKS['menu_toadd']['genericobject']['assets'] = 'PluginGenericobjectObject';
       }
-    
+
       // Config page
       if (Session::haveRight('config', READ)) {
          $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
