@@ -76,6 +76,60 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+
+   /**
+   * Display information on treeview plugin
+   *
+   * @params itemtype, id, pic, url, name
+   *
+   * @return params
+   **/
+   static function showGenericObjectTreeview($params) {
+      global $CFG_GLPI;
+
+      if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
+         $item = new $params['itemtype']();
+         if ($item->getFromDB($params['id'])) {
+            $params['name'] = $item->fields["name"];
+            $params['url'] = $CFG_GLPI['root_doc']."/plugins/genericobject/front/object.form.php".
+                        "?itemtype=".$params['itemtype']."&id=".$params['id'];
+         }
+      }
+      return $params;
+   }
+
+   /**
+   * Display node search url on treeview plugin
+   *
+   * @params itemtype, id, pic, url, name
+   *
+   * @return params
+   **/
+   static function getParentNodeSearchUrl($params) {
+
+      if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
+
+         $item = new $params['itemtype']();
+         $search = $item->getObjectSearchOptions();
+
+         //get searchoption id for location_id
+         foreach ($search as $key => $val) {
+            if (isset($val['table']) && $val['table'] === 'glpi_locations') {
+               $index= $key;
+            }
+         }
+
+         $token = Session::getNewCSRFToken();
+
+         $params['searchurl'] = $params['itemtype']::getSearchURL()."&is_deleted=0&criteria[0][field]=".$index."&criteria[0]".
+               "[searchtype]=equals&criteria[0][value]=".$params['locations_id']."&search=Rechercher&start=0&_glpi_csrf_token=$token";
+         return $params;
+
+      }
+
+      return $params;
+   }
+
    static function install() {
    }
 
