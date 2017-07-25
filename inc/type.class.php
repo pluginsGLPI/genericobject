@@ -546,7 +546,9 @@ class PluginGenericobjectType extends CommonDBTM {
             "use_plugin_order"              => __("order plugin", "genericobject"),
             "use_plugin_uninstall"          => __("item's uninstallation plugin", "genericobject"),
             "use_plugin_simcard"            => __("simcard plugin", "genericobject"),
+            "use_plugin_treeview"           => __("treeview plugin", "genericobject"),
          ];
+
          $plugin = new Plugin();
          $odd = 0;
          foreach ($use as $right => $label) {
@@ -654,6 +656,16 @@ class PluginGenericobjectType extends CommonDBTM {
                      echo Dropdown::EMPTY_VALUE;
                      echo "<input type='hidden' name='use_plugin_simcard' value='0'>\n";
                   }
+                  break;
+               case 'use_plugin_treeview' :
+                  if ($plugin->isActivated('treeview')) {
+                     Html::showCheckbox(['name' => $right,
+                                         'checked' => $this->fields[$right]]);
+                  } else {
+                     echo Dropdown::EMPTY_VALUE;
+                     echo "<input type='hidden' name='use_plugin_treeview' value='0'>\n";
+                  }
+
                   break;
                case 'use_plugin_geninventorynumber' :
                   if ($plugin->isActivated('geninventorynumber')) {
@@ -1901,6 +1913,14 @@ class PluginGenericobjectType extends CommonDBTM {
       return $this->fields['use_plugin_simcard'];
    }
 
+   function canUsePluginTreeview() {
+      $plugin = new Plugin();
+      if (!$plugin->isInstalled("treeview") || !$plugin->isActivated("treeview")) {
+         return false;
+      }
+      return $this->fields['use_plugin_treeview'];
+   }
+
    function canUsePluginGeninventoryNumber() {
       $plugin = new Plugin();
       if (!$plugin->isInstalled("geninventorynumber")
@@ -2001,6 +2021,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->addField($table, "use_plugin_simcard", "bool");
+      $migration->addField($table, "use_plugin_treeview", "bool");
       $migration->migrationOneTable($table);
 
       //If files are missing, recreate them!
