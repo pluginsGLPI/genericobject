@@ -76,6 +76,40 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+
+   /**
+   * Display information on treeview plugin
+   *
+   * @params itemtype, id, pic, url, name
+   *
+   * @return params
+   **/
+   static function showResourceTreeview($params) {
+      global $CFG_GLPI;
+
+      if(array_key_exists($params['itemtype'],PluginGenericobjectType::getTypes()))  {
+         $item = new $params['itemtype']();
+         if ($item->getFromDB($params['id'])) {
+            $params['name'] = $item->fields["name"];
+            $params['url'] = $CFG_GLPI['root_doc']."/plugins/genericobject/front/object.form.php".
+                        "?itemtype=".$params['itemtype']."&id=".$params['id'];
+         }
+      }
+      return $params;
+   }
+
+   /**
+   * Display node search url on treeview plugin
+   *
+   * @params itemtype, id, pic, url, name
+   *
+   * @return params
+   **/
+   static function getParentNodeSearchUrl($params){
+      $params['searchurl'] = $params['itemtype']::getSearchURL();
+      return $params;
+   }
+
    static function install() {
    }
 
