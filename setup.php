@@ -130,6 +130,32 @@ function plugin_init_genericobject() {
       && $plugin->isActivated("genericobject")
          && isset($_SESSION['glpiactiveprofile'])) {
 
+      //if treeview is installed
+      if ($plugin->isInstalled("treeview")
+            && $plugin->isActivated("treeview") 
+               && class_exists('PluginTreeviewConfig')){
+
+         //foreach type in genericobject
+         foreach (PluginGenericobjectType::getTypes() as $itemtype => $value) {
+            //check if location_id field exist
+            $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
+            if(isset($fields_in_db['locations_id'])){
+
+               //register class
+               PluginTreeviewConfig::registerType($itemtype);
+               $PLUGIN_HOOKS['treeview'][$itemtype] = '../genericobject/pics/default-icon16.png';
+
+               //add hook for overload item show form url
+               $PLUGIN_HOOKS['treeview_params']['genericobject'] = 
+                  array('PluginGenericobjectObject','showResourceTreeview');
+
+               //add hook for overload search form url of itemtype
+               $PLUGIN_HOOKS['treeview_search_url_parent_node']['genericobject'] = 
+                  array('PluginGenericobjectObject','getParentNodeSearchUrl');
+            }
+         }
+      }
+
       $PLUGIN_HOOKS['change_profile']['genericobject'] = array(
             'PluginGenericobjectProfile',
             'changeProfile'
