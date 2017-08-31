@@ -1308,7 +1308,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function deleteItemtypeReferencesInGLPI($itemtype) {
       //Delete references to PluginGenericobjectType in the following tables
-      $itemtypes = array ("Contract_Item", "DisplayPreference", "Document_Item", "Bookmark", "Log");
+      $itemtypes = array ("Contract_Item", "DisplayPreference", "Document_Item", "SavedSearch", "Log");
       foreach ($itemtypes as $type) {
          $item     = new $type();
          $item->deleteByCriteria(array('itemtype' => $itemtype));
