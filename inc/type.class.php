@@ -841,8 +841,8 @@ class PluginGenericobjectType extends CommonDBTM {
          if (!$this->canBeReserved()) {
             PluginGenericobjectField::deleteField($table, 'is_deleted');
          } else {
-            _log(FieldExists($table, 'is_deleted'));
-            if (FieldExists($table, 'is_deleted')) {
+            _log($DB->fieldExists($table, 'is_deleted'));
+            if ($DB->fieldExists($table, 'is_deleted')) {
                Session::addMessageAfterRedirect(
                   __("Dustbin can't be removed since Reservations are used on this type."),
                   false,
@@ -1217,7 +1217,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType($itemtype);
 
       //If class doesn't exist but table exists, create class
-      if (TableExists($table) && ($overwrite || !class_exists($itemtype))) {
+      if ($DB->tableExists($table) && ($overwrite || !class_exists($itemtype))) {
          self::addNewObject($name, $itemtype, array('add_table'              => false,
                                                     'create_default_profile' => false,
                                                     'add_injection_file'     => false,
@@ -1231,7 +1231,7 @@ class PluginGenericobjectType extends CommonDBTM {
             $dropdowntable = getTableNameForForeignKeyField($field);
             $dropdownclass = getItemTypeForTable($dropdowntable);
 
-            if (TableExists($dropdowntable) && ! class_exists($dropdownclass)) {
+            if ($DB->tableExists($dropdowntable) && ! class_exists($dropdownclass)) {
                $name                       = str_replace("glpi_plugin_genericobject_", "", $dropdowntable);
                $name                       = getSingular($name);
                $params= PluginGenericobjectField::getFieldOptions($field, $dropdownclass);
@@ -1334,7 +1334,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $params[$key] = $value;
       }
 
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
                        `id` int(11) NOT NULL auto_increment,
                        `name` varchar(255) collate utf8_unicode_ci default NULL,
@@ -1591,7 +1591,7 @@ class PluginGenericobjectType extends CommonDBTM {
    static function singularTypes() {
       global $DB;
       $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $query = "SELECT id, name, itemtype FROM $table";
          foreach ($DB->query($query) as $data) {
             $singularname = self::filterInput($data['name']);
@@ -1610,8 +1610,9 @@ class PluginGenericobjectType extends CommonDBTM {
     * Get all types of active&published objects
     */
    static function getTypes($all = false) {
+      global $DB;
       $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $mytypes = array();
          foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:""), 'false', 'name') as $data) {
             //If class is not present on the filesystem, do not list itemtype
@@ -1628,8 +1629,9 @@ class PluginGenericobjectType extends CommonDBTM {
     * order by family
     */
    static function getTypesByFamily($all = false) {
+      global $DB;
       $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $mytypes = array();
          foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
             //If class is not present on the filesystem, do not list itemtype
@@ -1752,7 +1754,8 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function canUseTemplate() {
-      return FieldExists(getTableForItemType($this->fields['itemtype']), 'is_template');
+      global $DB;
+      return $DB->fieldExists(getTableForItemType($this->fields['itemtype']), 'is_template');
    }
 
 
@@ -1762,17 +1765,20 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canBeDeleted() {
-      return FieldExists(getTableForItemType($this->fields['itemtype']), 'is_deleted');
+      global $DB;
+      return $DB->fieldExists(getTableForItemType($this->fields['itemtype']), 'is_deleted');
    }
 
 
    function canBeEntityAssigned() {
-      return FieldExists(getTableForItemType($this->fields['itemtype']), 'entities_id');
+      global $DB;
+      return $DB->fieldExists(getTableForItemType($this->fields['itemtype']), 'entities_id');
    }
 
 
    function canBeRecursive() {
-      return FieldExists(getTableForItemType($this->fields['itemtype']), 'is_recursive');
+      global $DB;
+      return $DB->fieldExists(getTableForItemType($this->fields['itemtype']), 'is_recursive');
    }
 
 
@@ -1916,7 +1922,7 @@ class PluginGenericobjectType extends CommonDBTM {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE `$table` (
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
@@ -1984,7 +1990,7 @@ class PluginGenericobjectType extends CommonDBTM {
             die();
          }
          $genericObjectTypeInstance = new $genericObjectType();
-         if (FieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
+         if ($DB->fieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
             $query = "INSERT INTO `" . $notepad->getTable() . "`
                   (`items_id`,
                   `itemtype`,

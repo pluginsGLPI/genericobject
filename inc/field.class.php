@@ -151,6 +151,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * The name may be the same, or not depending if it's an isolated dropdown or not
     */
    static function getFieldName($field, $itemtype, $options, $remove_prefix = false) {
+      global $DB;
       $field_orig = $field;
       $field_table = null;
       $input_type = isset($options['input_type'])
@@ -180,7 +181,7 @@ class PluginGenericobjectField extends CommonDBTM {
                   substr($field_table, strlen('glpi_'))
                   === substr($field, 0, strlen($field) -strlen('_id'))
                )
-               and !TableExists($field_table)
+               and !$DB->tableExists($field_table)
             ) {
                if (!$remove_prefix) {
                   $field = 'plugin_genericobject_' . $field;}
@@ -334,7 +335,7 @@ class PluginGenericobjectField extends CommonDBTM {
 
       _log("add", $field, "from", $table);
       $itemtype = getItemTypeForTable($table);
-      if (!FieldExists($table, $field, false)) {
+      if (!$DB->fieldExists($table, $field, false)) {
          $options  = self::getFieldOptions($field, $itemtype);
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {
@@ -377,7 +378,7 @@ class PluginGenericobjectField extends CommonDBTM {
 
          $table = getTableNameForForeignKeyField($field);
 
-         if ($table != '' && !TableExists($table)) {
+         if ($table != '' && !$DB->tableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
             $name = str_replace("glpi_plugin_genericobject_", "", $table);
             $name = getSingular($name);
@@ -408,7 +409,7 @@ class PluginGenericobjectField extends CommonDBTM {
       self::deleteDisplayPreferences($table, $field);
 
       //If field exists, drop it !
-      if (FieldExists($table, $field)) {
+      if ($DB->fieldExists($table, $field)) {
          $DB->query("ALTER TABLE `$table` DROP `$field`");
       }
 

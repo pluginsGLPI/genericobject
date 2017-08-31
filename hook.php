@@ -187,7 +187,7 @@ function plugin_genericobject_uninstall() {
 
    // Delete all models of datainjection about genericobject
    $table_datainjection_model = 'glpi_plugin_datainjection_models';
-   if (TableExists($table_datainjection_model)) {
+   if ($DB->tableExists($table_datainjection_model)) {
       $DB->query("DELETE FROM $table_datainjection_model WHERE itemtype LIKE 'PluginGenericobject%'");
    }
 
