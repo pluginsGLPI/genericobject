@@ -193,7 +193,13 @@ function plugin_version_genericobject() {
                  'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
                  'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
                  'license'        => 'GPLv2+',
-                 'minGlpiVersion' => '0.85.3');
+                 'requirements'   => [
+                    'glpi' => [
+                        'min' => '9.2',
+                        'dev' => true
+                     ]
+                  ]
+              );
 }
 
 /**
@@ -203,8 +209,9 @@ function plugin_version_genericobject() {
  * @return boolean
  */
 function plugin_genericobject_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '0.85.3', 'lt')) {
-      echo "This plugin requires GLPI 0.85.3 or higher";
+   $version = rtrim(GLPI_VERSION, '-dev');
+   if (version_compare($version, '9.2', 'lt')) {
+      echo "This plugin requires GLPI 9.2 or higher";
       return false;
    }
    return true;
