@@ -382,7 +382,7 @@ class PluginGenericobjectProfile extends Profile {
       $profile      = new Profile();
 
       //Update needed
-      if (TableExists('glpi_plugin_genericobject_profiles')) {
+      if ($DB->tableExists('glpi_plugin_genericobject_profiles')) {
          foreach (getAllDatasFromTable('glpi_plugin_genericobject_profiles') as $right) {
             if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
                $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
