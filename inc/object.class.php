@@ -568,7 +568,14 @@ class PluginGenericobjectObject extends CommonDBTM {
                   } else {
                      $step = 1;
                   }
-                  Dropdown::showInteger($name, $value, $min, $max, $step);
+                  Dropdown::showNumber(
+                     $name, [
+                        'value'  => $value,
+                        'min'    => $min,
+                        'max'    => $max,
+                        'step'   => $step
+                     ]
+                  );
                }
                break;
 
