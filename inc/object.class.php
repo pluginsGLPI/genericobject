@@ -600,11 +600,23 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
 
             case "date":
-                  Html::showDateFormItem($name, $value, true, true);
+                  Html::showDateField(
+                     $name, [
+                        'value'        => $value,
+                        'maybeempty'   => true,
+                        'canedit'      => true
+                     ]
+                  );
                   break;
 
             case "datetime":
-                  Html::showDateTimeFormItem($name, $value, true, true);
+                  Html::showDateTimeField(
+                     $name, [
+                        'value'        => $value,
+                        'timestep'     => true,
+                        'maybeempty'   => true
+                     ]
+                  );
                   break;
 
             default:
