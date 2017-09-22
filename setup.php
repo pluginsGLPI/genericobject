@@ -144,10 +144,25 @@ function plugin_init_genericobject() {
       );
 
       // Display a menu entry ?
-      $PLUGIN_HOOKS['menu_toadd']['genericobject'] = array(
-         'config' => 'PluginGenericobjectType',
-         'assets' => 'PluginGenericobjectObject'
-      );
+      if (Session::haveRight('plugin_genericobject_types', READ)) {
+         $PLUGIN_HOOKS['menu_toadd']['genericobject']['config'] = 'PluginGenericobjectType';
+      }
+
+      $object = false;
+      foreach ($DB->request('glpi_profilerights',
+                            "`profiles_id` = ".$_SESSION['glpiactiveprofile']['id']."
+                             AND `name` LIKE 'plugin_genericobject_%'
+                             AND `name` != 'plugin_genericobject_types'") as $obj) {
+
+         if ($obj['rights'] > 0) {
+            $profright = true;
+         }
+      }
+      $object = $profright;
+
+      if ($object) {
+         $PLUGIN_HOOKS['menu_toadd']['genericobject']['assets'] = 'PluginGenericobjectObject';
+      }
 
       // Config page
       if (Session::haveRight('config', READ)) {
