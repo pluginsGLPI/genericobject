@@ -743,10 +743,9 @@ class PluginGenericobjectType extends CommonDBTM {
    /**
     *
     * Add a new dropdown :class & files
-    * @since
-    * @param unknown_type $name
-    * @param unknown_type $itemtype
-    * @param unknown_type $options
+    * @param string $name
+    * @param string $itemtype
+    * @param array $options
     */
    static function addNewDropdown($name, $itemtype, $options = array()) {
       $params['entities_id']     = false;
@@ -770,10 +769,10 @@ class PluginGenericobjectType extends CommonDBTM {
     *
     * Add or delete, if needed some fields to make sure that the itemtype is compatible with
     * GLPI framework
-    *
-    * @return nothing
     */
    function checkNecessaryFieldsUpdate() {
+      global $DB;
+
       $itemtype = $this->fields["itemtype"];
       $item     = new $itemtype();
       $item->getEmpty();
