@@ -281,47 +281,47 @@ class PluginGenericobjectObject extends CommonDBTM {
    }
 
    function defineTabs($options = []) {
-      $ong = [];
+      $tabs = [];
 
-      $this->addDefaultFormTab($ong);
+      $this->addDefaultFormTab($tabs);
 
       if (!$this->isNewItem()) {
 
          if ($this->canUseNetworkPorts()) {
-            $this->addStandardTab('NetworkPort', $ong, $options);
+            $this->addStandardTab('NetworkPort', $tabs, $options);
          }
 
          if ($this->canUseInfocoms()) {
-            $this->addStandardTab('Infocom', $ong, $options);
+            $this->addStandardTab('Infocom', $tabs, $options);
          }
 
          if ($this->canUseContracts()) {
-            $this->addStandardTab('Contract_Item', $ong, $options);
+            $this->addStandardTab('Contract_Item', $tabs, $options);
          }
 
          if ($this->canUseDocuments()) {
-            $this->addStandardTab('Document_Item', $ong, $options);
+            $this->addStandardTab('Document_Item', $tabs, $options);
          }
 
          if ($this->canUseTickets()) {
-            $this->addStandardTab('Ticket', $ong, $options);
-            $this->addStandardTab('Item_Problem', $ong, $options);
-            $this->addStandardTab('Change_Item', $ong, $options);
+            $this->addStandardTab('Ticket', $tabs, $options);
+            $this->addStandardTab('Item_Problem', $tabs, $options);
+            $this->addStandardTab('Change_Item', $tabs, $options);
          }
 
          if ($this->canUseNotepad()) {
-            $this->addStandardTab('Notepad', $ong, $options);
+            $this->addStandardTab('Notepad', $tabs, $options);
          }
 
          if ($this->canBeReserved()) {
-            $this->addStandardTab('Reservation', $ong, $options);
+            $this->addStandardTab('Reservation', $tabs, $options);
          }
 
          if ($this->canUseHistory()) {
-            $this->addStandardTab('Log', $ong, $options);
+            $this->addStandardTab('Log', $tabs, $options);
          }
       }
-      return $ong;
+      return $tabs;
    }
 
 
