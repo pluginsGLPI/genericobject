@@ -98,13 +98,29 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</table>";
       if ($haveCheckbox) {
-         Html::openArrowMassives('fieldslist', true);
-         Html::closeArrowMassives(array('delete' => __("Delete permanently")));
+         echo "<table class='tab_glpi' width='950px'>";
+         echo "<tr>";
+         echo "<td><img src='".$CFG_GLPI["root_doc"]."/pics/arrow-left.png'
+                    alt=''></td>";
+         echo "<td class='center' style='white-space:nowrap;'>";
+         echo "<a onclick= \"if ( markCheckboxes('fieldslist') ) return false;\"
+                href='#'>".__('Check all')."</a></td>";
+         echo "<td>/</td>";
+         echo "<td class='center' style='white-space:nowrap;'>";
+         echo "<a onclick= \"if ( unMarkCheckboxes('fieldslist') ) return false;\"
+                href='#'>".__('Uncheck all')."</a></td>";
+         echo "<td class='left' width='80%'>";
+         echo Html::submit(__("Delete permanently"), [
+            'name' => 'delete',
+         ]);
+         echo "</td></tr>";
+         echo "</table>";
       }
 
       $dropdownFields = self::dropdownFields("new_field", $itemtype, $used_fields);
 
       if ($dropdownFields) {
+         echo "<br>";
          echo "<table class='tab_cadre genericobject_fields add_new'>";
          echo "<tr class='tab_bg_1'>";
          echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
@@ -299,6 +315,8 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td width='10'>";
       if (!$blacklist && !$readonly) {
          echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
+      } else {
+         echo "<i class='fa fa-lock' title='".__("Read-only field", 'genericobject')."'>";
       }
       echo "</td>";
       echo "<td>" . __($options['name'], 'genericobject') . "</td>";
