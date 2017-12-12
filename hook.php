@@ -52,7 +52,7 @@ function plugin_genericobject_AssignToTicket($types) {
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown() {
 
-   $dropdowns = array('PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2));
+   $dropdowns = ['PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2)];
 
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
@@ -72,7 +72,7 @@ function plugin_genericobject_getDropdown() {
 
 // Define dropdown relations
 function plugin_genericobject_getDatabaseRelations() {
-   $dropdowns = array();
+   $dropdowns = [];
 
    //TODO : purt here relations
    /*
@@ -81,7 +81,7 @@ function plugin_genericobject_getDatabaseRelations() {
       foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
                                    "`is_active`='1'") as $itemtype) {
          foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
-            $dropdowns[$table][] = array()
+            $dropdowns[$table][] = []
          }
       }
    }
@@ -89,7 +89,7 @@ function plugin_genericobject_getDatabaseRelations() {
    return $dropdowns;
 }
 
-function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
+function plugin_uninstall_addUninstallTypes($uninstal_types = []) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $type) {
       if ($type["use_plugin_uninstall"]) {
          $uninstal_types[] = $type["itemtype"];
@@ -113,15 +113,14 @@ function plugin_genericobject_install() {
 
    $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
 
-   foreach (array(
-         'PluginGenericobjectField',
-         'PluginGenericobjectCommonDropdown',
-         'PluginGenericobjectCommonTreeDropdown',
-         'PluginGenericobjectProfile',
-         'PluginGenericobjectType',
-         'PluginGenericobjectTypeFamily'
-      ) as $itemtype
-   ) {
+   foreach ([
+      'PluginGenericobjectField',
+      'PluginGenericobjectCommonDropdown',
+      'PluginGenericobjectCommonTreeDropdown',
+      'PluginGenericobjectProfile',
+      'PluginGenericobjectType',
+      'PluginGenericobjectTypeFamily'
+   ] as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
@@ -167,13 +166,12 @@ function plugin_genericobject_uninstall() {
       }
    }
 
-   foreach (array(
-               'PluginGenericobjectType',
-               'PluginGenericobjectProfile',
-               'PluginGenericobjectField',
-               'PluginGenericobjectTypeFamily'
-      ) as $itemtype
-   ) {
+   foreach ([
+      'PluginGenericobjectType',
+      'PluginGenericobjectProfile',
+      'PluginGenericobjectField',
+      'PluginGenericobjectTypeFamily'
+   ] as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
@@ -212,12 +210,12 @@ function plugin_genericobject_MassiveActions($type) {
    if (isset($types[$type])) {
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
-         return array('PluginGenericobjectObject'.
-         MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer"));
+         return ['PluginGenericobjectObject'.
+         MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer")];
       } else {
-         return array();
+         return [];
       }
    } else {
-      return array();
+      return [];
    }
 }

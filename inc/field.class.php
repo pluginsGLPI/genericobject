@@ -40,10 +40,10 @@ class PluginGenericobjectField extends CommonDBTM {
       $object_type->getFromDB($id);
       $itemtype     = $object_type->fields['itemtype'];
       $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
-      $used_fields  = array();
+      $used_fields  = [];
 
       //Reset fields definition only to keep the itemtype ones
-      $GO_FIELDS = array();
+      $GO_FIELDS = [];
       plugin_genericobject_includeCommonFields(true);
 
       PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
@@ -218,13 +218,13 @@ class PluginGenericobjectField extends CommonDBTM {
     *
     * @return the dropdown random ID
     */
-   static function dropdownFields($name,$itemtype, $used = array()) {
+   static function dropdownFields($name,$itemtype, $used = []) {
       global $GO_FIELDS;
 
-      $dropdown_types = array();
+      $dropdown_types = [];
       foreach ($GO_FIELDS as $field => $values) {
          $message = "";
-         $field_options = array();
+         $field_options = [];
          $field = self::getFieldName($field, $itemtype, $values, false);
          if (!in_array($field, $used)) {
             if (!isset($dropdown_types[$field])) {
@@ -266,7 +266,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
 
       ksort($dropdown_types);
-      return Dropdown::showFromArray($name, $dropdown_types, array('display' => false));
+      return Dropdown::showFromArray($name, $dropdown_types, ['display' => false]);
    }
 
    /**
@@ -287,10 +287,10 @@ class PluginGenericobjectField extends CommonDBTM {
          // This field has been dynamically defined because it's an isolated dropdown
          $tmpfield = self::getFieldName(
             $field, $itemtype,
-            array(
+            [
                'dropdown_type' => 'isolated',
-               'input_type' => 'dropdown'
-            ),
+               'input_type'    => 'dropdown'
+            ],
             true
          );
          $options             = $GO_FIELDS[$tmpfield];
@@ -325,16 +325,16 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td width='10'>";
       if ((!$blacklist || $readonly) && $index > 1) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
-                               array('field' => $field, 'action' => 'up', 'itemtype' => $itemtype),
-                               $CFG_GLPI["root_doc"] . "/pics/deplier_up.png");
+                              ['field' => $field, 'action' => 'up', 'itemtype' => $itemtype],
+                              $CFG_GLPI["root_doc"] . "/pics/deplier_up.png");
       }
       echo "</td>";
 
       echo "<td width='10'>";
       if ((!$blacklist || $readonly) && !$last) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
-                               array('field' => $field, 'action' => 'down', 'itemtype' => $itemtype),
-                               $CFG_GLPI["root_doc"] . "/pics/deplier_down.png");
+                              ['field' => $field, 'action' => 'down', 'itemtype' => $itemtype],
+                              $CFG_GLPI["root_doc"] . "/pics/deplier_down.png");
       }
       echo "</td>";
 
@@ -453,8 +453,10 @@ class PluginGenericobjectField extends CommonDBTM {
       foreach ($searchopt as $num => $option) {
          if ((isset($option['field'])  && ($option['field'] == $field))
             || (isset($option['field']) && $option['linkfield'] == $field)) {
-            $criteria = array('itemtype' => $itemtype, 'num' => $num);
-            $pref->deleteByCriteria($criteria);
+            $pref->deleteByCriteria([
+               'itemtype' => $itemtype,
+               'num'      => $num
+            ]);
             break;
          }
       }
@@ -465,7 +467,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @params an array which contains the itemtype, the field to move and the action (up/down)
     * @return nothing
     */
-   static function changeFieldOrder($params = array()) {
+   static function changeFieldOrder($params = []) {
       global $DB;
       $itemtype = $params['itemtype'];
       $field    = $params['field'];
@@ -510,7 +512,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       /*
       if ($type->fields['use_direct_connections']) {
-         foreach(array('users_id','groups_id',' states_id','locations_id') as $tmp_field) {
+         foreach(['users_id','groups_id',' states_id','locations_id'] as $tmp_field) {
             if ($tmp_field == $field) {
                return false;
             }

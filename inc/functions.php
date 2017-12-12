@@ -26,7 +26,7 @@ function dropdown_getTypeName($class,$nb=0) {
    }
 }
 global $LOG_FILTER;
-$LOG_FILTER = array();
+$LOG_FILTER = [];
 /*
  * a simple logger function
  * You can disable logging by using the global $LOG_FILTER
@@ -35,12 +35,12 @@ $LOG_FILTER = array();
 function _log() {
    global $LOG_FILTER;
    $trace = debug_backtrace();
-   //call_user_func_array("Toolbox::logInFile", array('generic-object', print_r($trace,true) . "\n", true));
+   //call_user_func_array("Toolbox::logInFile", ['generic-object', print_r($trace,true) . "\n", true]);
    if (count($trace)>0) {
       $glpi_root = str_replace( "\\", "/", GLPI_ROOT );
       $trace_file = str_replace( "\\", "/", $trace[0]['file'] );
       $filename = preg_replace("|^".$glpi_root."/plugins/genericobject/|", "", $trace_file);
-      //call_user_func_array("Toolbox::logInFile", array('generic-object', $filename . "\n", true));
+      //call_user_func_array("Toolbox::logInFile", ['generic-object', $filename . "\n", true]);
    }
    if (count($trace) > 1) {
       $caller = $trace[1];
@@ -61,7 +61,7 @@ function _log() {
       $show_log = true;
    }
    if ($show_log) {
-      call_user_func_array("Toolbox::logInFile", array('generic-object', $msg, true));
+      call_user_func_array("Toolbox::logInFile", ['generic-object', $msg, true]);
    }
 }
 

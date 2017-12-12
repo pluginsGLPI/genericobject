@@ -29,7 +29,7 @@ class PluginGenericobjectProfile extends Profile {
 
    /* if profile deleted */
    function cleanProfiles($id) {
-      $this->deleteByCriteria(array('id' => $id));
+      $this->deleteByCriteria(['id' => $id]);
    }
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
@@ -114,7 +114,7 @@ class PluginGenericobjectProfile extends Profile {
 
 
    /* profiles modification */
-   function showForm($profiles_id, $options = array()) {
+   function showForm($profiles_id, $options = []) {
       if (!Session::haveRight("profile", READ)) {
          return false;
       }
@@ -136,11 +136,11 @@ class PluginGenericobjectProfile extends Profile {
 
       $profile->displayRightsChoiceMatrix(
          $general_rights,
-         array(
+         [
             'canedit'       => $canedit,
             'default_class' => 'tab_bg_2',
             'title'         => __('General', 'genericobject')
-         )
+         ]
       );
 
       $types_rights = self::getTypesRights();
@@ -152,17 +152,17 @@ class PluginGenericobjectProfile extends Profile {
 
       $profile->displayRightsChoiceMatrix(
          $types_rights,
-         array(
+         [
             'canedit'       => $canedit,
             'default_class' => 'tab_bg_2',
             'title'         => $title
-         )
+         ]
       );
       $profile->showLegend();
       if ($canedit) {
          echo "<div class='center'>";
-         echo Html::hidden('id', array('value' => $profiles_id));
-         echo Html::submit(_sx('button', 'Save'), array('name' => 'update'));
+         echo Html::hidden('id', ['value' => $profiles_id]);
+         echo Html::submit(_sx('button', 'Save'), ['name' => 'update']);
          echo "</div>\n";
          Html::closeForm();
       }
@@ -278,23 +278,20 @@ class PluginGenericobjectProfile extends Profile {
          } else {
             $r = 0;
          }
-         $profile_right->updateProfileRights($right['id'],
-                                             array($itemtype_rightname => $r));
+         $profile_right->updateProfileRights($right['id'], [$itemtype_rightname => $r]);
       }
    }
 
    public static function getGeneralRights() {
-      $rights = array();
-      $rights[] = array(
+      return [[
          'itemtype' => 'PluginGenericobjectType',
          'label'    => __("Type of objects", "genericobject"),
          'field'    => self::getProfileNameForItemtype('PluginGenericobjectType'),
-      );
-      return $rights;
+      ]];
    }
 
    public static function getTypesRights() {
-      $rights = array();
+      $rights = [];
 
       include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
@@ -304,11 +301,11 @@ class PluginGenericobjectProfile extends Profile {
             $itemtype   = $type['itemtype'];
             $field      = self::getProfileNameForItemtype($itemtype);
             $objecttype = new PluginGenericobjectType($itemtype);
-            $rights[]   = array(
+            $rights[]   = [
                'itemtype' => $itemtype,
                'label'    => $itemtype::getTypeName(),
                'field'    => self::getProfileNameForItemtype($itemtype)
-            );
+            ];
          }
       }
 
@@ -316,9 +313,9 @@ class PluginGenericobjectProfile extends Profile {
    }
 
    public static function installRights($first=false) {
-      $missing_rights = array();
+      $missing_rights = [];
       $installed_rights = ProfileRight::getAllPossibleRights();
-      $right_names = array();
+      $right_names = [];
 
       // Add common plugin's rights
       $right_names[] = self::getProfileNameForItemtype('PluginGenericobjectType');
@@ -352,8 +349,7 @@ class PluginGenericobjectProfile extends Profile {
     * @return nothing
     */
    public static function deleteTypeFromProfile($itemtype) {
-      $rights = array();
-      $rights[] = self::getProfileNameForItemtype($itemtype);
+      $rights = [self::getProfileNameForItemtype($itemtype)];
       ProfileRight::deleteProfileRights($rights);
    }
 
@@ -401,16 +397,16 @@ class PluginGenericobjectProfile extends Profile {
                         break;
                   }
 
-                  $profileRight->add(array('profiles_id' => $right['profiles_id'],
-                                           'name' => $newrightname,
-                                           'rights' => $rightvalue));
+                  $profileRight->add(['profiles_id' => $right['profiles_id'],
+                                      'name'        => $newrightname,
+                                      'rights'      => $rightvalue]);
 
                   if (!countElementsInTable('glpi_profilerights',
                                             "`profiles_id`='".$right['profiles_id']."'
                                               AND `name`='plugin_genericobject_types'")) {
-                     $profileRight->add(array('profiles_id' => $right['profiles_id'],
-                                              'name' => 'plugin_genericobject_types',
-                                              'rights' => 23));
+                     $profileRight->add(['profiles_id' => $right['profiles_id'],
+                                         'name'        => 'plugin_genericobject_types',
+                                         'rights'      => 23]);
                   }
                }
 
@@ -422,7 +418,7 @@ class PluginGenericobjectProfile extends Profile {
                         $helpdesk_item_types[] = $right['itemtype'];
                      }
                   } else {
-                     $helpdesk_item_types = array($right['itemtype']);
+                     $helpdesk_item_types = [$right['itemtype']];
                   }
 
                   $tmp['id'] = $profile->getID();
@@ -441,7 +437,7 @@ class PluginGenericobjectProfile extends Profile {
 
    static function uninstall() {
       global $DB;
-      $query = "DELETE FROM `glpi_profilerights` 
+      $query = "DELETE FROM `glpi_profilerights`
                 WHERE `name` LIKE '%plugin_genericobject%'";
       $DB->query($query) or die($DB->error());
    }

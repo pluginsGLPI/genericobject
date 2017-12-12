@@ -34,7 +34,7 @@ if (isset($_GET['itemtype'])
    $type->getFromDBByType($_GET['itemtype']);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
 
-} else if (Session::haveRightsOr('plugin_genericobject_types', array(READ, CREATE, UPDATE, PURGE))) {
+} else if (Session::haveRightsOr('plugin_genericobject_types', [READ, CREATE, UPDATE, PURGE])) {
    Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "config",
                 "PluginGenericobjectType");
    Search::Show('PluginGenericobjectType');

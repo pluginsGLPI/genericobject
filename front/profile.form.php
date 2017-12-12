@@ -33,14 +33,14 @@ $prof = new Profile();
 
 /* save profile */
 if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
-   $profiles = array();
+   $profiles = [];
    foreach ($_POST as $key => $val) {
       if (preg_match("/^profile_/", $key)) {
          $id = preg_replace("/^profile_/", "", $key);
-         $profiles[$id] = array(
+         $profiles[$id] = [
             "id" => $id,
             "_".PluginGenericobjectProfile::getProfileNameForItemtype($_POST['itemtype']) => $val
-            );
+         ];
       }
    }
    _log($profiles);
