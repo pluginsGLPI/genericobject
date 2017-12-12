@@ -310,11 +310,9 @@ class PluginGenericobjectField extends CommonDBTM {
       $options  = self::getFieldOptions($field, $itemtype);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
-      $sel ="";
-
       echo "<td width='10'>";
       if (!$blacklist && !$readonly) {
-         echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
+         echo "<input type='checkbox' name='fields[" .$field. "]' value='1'>";
       } else {
          echo "<i class='fa fa-lock' title='".__("Read-only field", 'genericobject')."'>";
       }
