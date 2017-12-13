@@ -1,1 +1,6 @@
 log_filter.settings.php
+dist/
+vendor/
+.gh_token
+*.min.*
+

@@ -35,7 +35,7 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
 } else {
    $types = PluginGenericobjectType::getTypesByFamily();
    foreach ($types as $family => $typeData) {
-      foreach($typeData as $ID => $value) {
+      foreach ($typeData as $ID => $value) {
          if (!Session::haveRight($value['itemtype'], READ)) {
             unset($types[$family][$ID]);
          }
@@ -44,10 +44,9 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
 
    //There's only one family
    if (count($types) == 1) {
-
-       //There's only one itemtype ? If yes, then automatically
-       //redirect to the search engine
-       if(key($types) == NULL) {
+      //There's only one itemtype ? If yes, then automatically
+      //redirect to the search engine
+      if (key($types) == NULL) {
          $mytypes = $types;
          $tmp = array_pop($mytypes);
          if (count($tmp) == 1) {
@@ -59,21 +58,21 @@ if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id']!='') {
    Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "plugins",
       "genericobject");
 
-   foreach($types as $family => $typeData) {
+   foreach ($types as $family => $typeData) {
 
       $PluginGenericobjectTypefamily = new PluginGenericobjectTypefamily();
       $PluginGenericobjectTypefamily->getFromDB($family);
 
       echo "<table class='tab_cadre_fixe'>";
-      if($family == 0) {
-         echo "<tr class='tab_bg_2'><th>".__("Empty family","genericobject")."</th></tr>";
+      if ($family == 0) {
+         echo "<tr class='tab_bg_2'><th>".__("Empty family", "genericobject")."</th></tr>";
       } else {
          echo "<tr class='tab_bg_2'><th>".$PluginGenericobjectTypefamily->getField("name")."</th></tr>";
       }
       if (!count($types)) {
          echo "<tr class='tab_bg_1'><td align='center'>".__("No item to display")."</td></tr>";
       } else {
-         foreach($typeData as $ID => $value) {
+         foreach ($typeData as $ID => $value) {
             echo "<tr class='tab_bg_1'><td align='center'>";
             echo "<a href='".Toolbox::getItemTypeSearchURL($value['itemtype'])."'>";
             $itemtype = $value['itemtype'];

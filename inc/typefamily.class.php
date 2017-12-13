@@ -40,7 +40,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
-      if (!TableExists($table)) {
+      if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE `$table` (
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
@@ -59,7 +59,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $query = "DROP TABLE IF EXISTS `$table`";
          $DB->query($query) or die($DB->error());
       }
@@ -75,11 +75,11 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
                     WHERE t.id IN (SELECT DISTINCT `id`
                                    FROM glpi_plugin_genericobject_types
                                    WHERE is_active=1)";
-      $families = array();
-      foreach($DB->request($query) as $fam) {
+      $families = [];
+      foreach ($DB->request($query) as $fam) {
          $itemtype = $fam['itemtype'];
          if ($itemtype::canCreate()) {
-           $families[$fam['id']] = $fam['name'];
+            $families[$fam['id']] = $fam['name'];
          }
       }
       return $families;

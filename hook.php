@@ -1,13 +1,22 @@
 <?php
 /*
- This file is part of the genericobject plugin.
+ -------------------------------------------------------------------------
+ Genericobject plugin for GLPI
+ Copyright (C) 2016 by the Genericobject Development Team.
 
- Genericobject plugin is free software; you can redistribute it and/or modify
+ https://github.com/pluginsGLPI/genericobject
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of Genericobject.
+
+ {NAME} is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 
- Genericobject plugin is distributed in the hope that it will be useful,
+ Genericobject is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
@@ -23,7 +32,8 @@
  @link      https://forge.indepnet.net/projects/genericobject
  @link      http://www.glpi-project.org/
  @since     2009
- ---------------------------------------------------------------------- */
+ ----------------------------------------------------------------------
+ */
 
 function plugin_genericobject_AssignToTicket($types) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
@@ -42,7 +52,7 @@ function plugin_genericobject_AssignToTicket($types) {
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown() {
 
-   $dropdowns = array('PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2));
+   $dropdowns = ['PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2)];
 
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
@@ -62,16 +72,16 @@ function plugin_genericobject_getDropdown() {
 
 // Define dropdown relations
 function plugin_genericobject_getDatabaseRelations() {
-   $dropdowns = array();
+   $dropdowns = [];
 
    //TODO : purt here relations
-/*
+   /*
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
       foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
                                    "`is_active`='1'") as $itemtype) {
          foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
-            $dropdowns[$table][] = array()
+            $dropdowns[$table][] = []
          }
       }
    }
@@ -79,41 +89,45 @@ function plugin_genericobject_getDatabaseRelations() {
    return $dropdowns;
 }
 
-function plugin_uninstall_addUninstallTypes($uninstal_types = array()) {
-   foreach (PluginGenericobjectType::getTypes() as $tmp => $type)
+function plugin_uninstall_addUninstallTypes($uninstal_types = []) {
+   foreach (PluginGenericobjectType::getTypes() as $tmp => $type) {
       if ($type["use_plugin_uninstall"]) {
          $uninstal_types[] = $type["itemtype"];
       }
+   }
    return $uninstal_types;
 }
 
 //----------------------- INSTALL / UNINSTALL FUNCTION -------------------------------//
 
+/**
+ * Plugin install process
+ *
+ * @return boolean
+ */
 function plugin_genericobject_install() {
    global $DB;
 
    include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
-   $migration = new Migration('0.85+1.1');
+   $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
 
-   foreach (
-      array(
-         'PluginGenericobjectField',
-         'PluginGenericobjectCommonDropdown',
-         'PluginGenericobjectCommonTreeDropdown',
-         'PluginGenericobjectProfile',
-         'PluginGenericobjectType',
-         'PluginGenericobjectTypeFamily'
-      ) as $itemtype
-   ) {
+   foreach ([
+      'PluginGenericobjectField',
+      'PluginGenericobjectCommonDropdown',
+      'PluginGenericobjectCommonTreeDropdown',
+      'PluginGenericobjectProfile',
+      'PluginGenericobjectType',
+      'PluginGenericobjectTypeFamily'
+   ] as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
-            if ( method_exists($itemtype, 'install') ) {
+            if (method_exists($itemtype, 'install')) {
                $itemtype::install($migration);
             }
          }
@@ -121,7 +135,7 @@ function plugin_genericobject_install() {
    }
 
    if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
-      @ mkdir(GENERICOBJECT_CLASS_PATH, 0777, true)
+      @ mkdir(GENERICOBJECT_CLASS_PATH, 0755, true)
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
    }
 
@@ -133,6 +147,11 @@ function plugin_genericobject_install() {
    return true;
 }
 
+/**
+ * Plugin uninstall process
+ *
+ * @return boolean
+ */
 function plugin_genericobject_uninstall() {
    global $DB;
 
@@ -147,14 +166,12 @@ function plugin_genericobject_uninstall() {
       }
    }
 
-   foreach (
-      array(
-               'PluginGenericobjectType',
-               'PluginGenericobjectProfile',
-               'PluginGenericobjectField',
-               'PluginGenericobjectTypeFamily'
-      ) as $itemtype
-   ) {
+   foreach ([
+      'PluginGenericobjectType',
+      'PluginGenericobjectProfile',
+      'PluginGenericobjectField',
+      'PluginGenericobjectTypeFamily'
+   ] as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
          $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
@@ -168,7 +185,7 @@ function plugin_genericobject_uninstall() {
 
    // Delete all models of datainjection about genericobject
    $table_datainjection_model = 'glpi_plugin_datainjection_models';
-   if (TableExists($table_datainjection_model)) {
+   if ($DB->tableExists($table_datainjection_model)) {
       $DB->query("DELETE FROM $table_datainjection_model WHERE itemtype LIKE 'PluginGenericobject%'");
    }
 
@@ -181,7 +198,7 @@ function plugin_genericobject_uninstall() {
 function plugin_datainjection_populate_genericobject() {
    global $INJECTABLE_TYPES;
    $type = new PluginGenericobjectType();
-   foreach($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
+   foreach ($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
       if (class_exists($data ['itemtype']."Injection")) {
          $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = 'genericobject';
       }
@@ -193,12 +210,12 @@ function plugin_genericobject_MassiveActions($type) {
    if (isset($types[$type])) {
       $objecttype = PluginGenericobjectType::getInstance($type);
       if ($objecttype->isTransferable()) {
-         return array('PluginGenericobjectObject'.
-        MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer"));
+         return ['PluginGenericobjectObject'.
+         MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_transfer' => __("Transfer")];
       } else {
-         return array();
+         return [];
       }
    } else {
-      return array();
+      return [];
    }
 }

@@ -30,28 +30,28 @@ include ('../../../inc/includes.php');
 $family = new PluginGenericobjectTypeFamily();
 
 if (!isset($_GET['id']) || !$family->getFromDB($_GET['id'])) {
-	Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "assets",
-	                "genericobject");
+   Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+                   "genericobject");
 
-	echo "<table class='tab_cadre_fixe'>";
-    echo "<tr class='tab_bg_2'><th>".__("Empty family","genericobject")."</th></tr>";
-	echo "</table>";
+   echo "<table class='tab_cadre_fixe'>";
+    echo "<tr class='tab_bg_2'><th>".__("Empty family", "genericobject")."</th></tr>";
+   echo "</table>";
 } else {
-	$family->getFromDB($_GET['id']);
-	Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "assets",
-	                $family->getName());
+   $family->getFromDB($_GET['id']);
+   Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "assets",
+                   $family->getName());
 
-	echo "<table class='tab_cadre_fixe'>";
-	$types = PluginGenericobjectTypeFamily::getItemtypesByFamily($_GET['id']);
+   echo "<table class='tab_cadre_fixe'>";
+   $types = PluginGenericobjectTypeFamily::getItemtypesByFamily($_GET['id']);
     echo "<tr class='tab_bg_2'><th>".Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $_GET['id'])."</th></tr>";
-	foreach ($types as $type) {
-		$itemtype = $type['itemtype'];
+   foreach ($types as $type) {
+      $itemtype = $type['itemtype'];
         echo "<tr class='tab_bg_1'><td align='center'>";
         echo "<a href='".$itemtype::getSearchURL()."'>";
         echo $itemtype::getTypeName();
         echo "</a></td></tr>";
-    }
-	echo "</table>";
+   }
+   echo "</table>";
 }
 
 Html::footer();

@@ -1,0 +1,10 @@
+{
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+    },
+    "require": {
+        "zendframework/zend-loader": "^2.5",
+        "glpi-project/tools": "^0.1.2"
+    }
+}

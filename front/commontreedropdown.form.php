@@ -27,7 +27,7 @@
 
 include ("../../../inc/includes.php");
 
-if ( isset($_REQUEST['itemtype']) ) {
+if (isset($_REQUEST['itemtype'])) {
    $itemtype = $_REQUEST['itemtype'];
    if (class_exists($itemtype)) {
       $dropdown = new $itemtype();

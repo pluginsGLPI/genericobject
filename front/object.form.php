@@ -36,9 +36,9 @@ if (isset($_REQUEST['itemtype'])) {
    $types = array_keys(PluginGenericobjectType::getTypes());
 
    $requested_type = $_REQUEST['itemtype'];
-   $error = array();
+   $error = [];
 
-   if (!in_array($requested_type, $types) ){
+   if (!in_array($requested_type, $types)) {
       $error[] = __('The requested type has not been defined yet!');
       if (!PluginGenericobjectType::canCreate()) {
          $error[] = __('Please ask your administrator to create this type of object');
@@ -48,7 +48,7 @@ if (isset($_REQUEST['itemtype'])) {
       $error[]= __('You might need to regenerate the files under '.GENERICOBJECT_DOC_DIR.'.');
    }
 
-   if(count($error) > 0) {
+   if (count($error) > 0) {
       Html::header(__('Type not found!'));
       Html::displayErrorAndDie(implode('<br/>', $error));
 
@@ -80,19 +80,19 @@ if (!is_null($itemtype)) {
       } else {
          Html::back();
       }
-   } elseif (isset ($_POST["update"])) {
+   } else if (isset ($_POST["update"])) {
       $item->check($id, UPDATE);
       $item->update($_POST);
       Html::back();
-   } elseif (isset ($_POST["restore"])) {
+   } else if (isset ($_POST["restore"])) {
       $item->check($id, DELETE);
       $item->restore($_POST);
       Html::back();
-   } elseif (isset($_POST["purge"])) {
+   } else if (isset($_POST["purge"])) {
       $item->check($id, PURGE);
       $item->delete($_POST, 1);
       $item->redirectToList();
-   } elseif (isset($_POST["delete"])) {
+   } else if (isset($_POST["delete"])) {
       $item->check($id, DELETE);
       $item->delete($_POST);
       $item->redirectToList();
@@ -101,7 +101,7 @@ if (!is_null($itemtype)) {
    Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
              "assets", ($menu!==false?$menu:$itemtype), strtolower($itemtype));
 
-   $item->display($_GET, array( 'withtemplate' => $_GET["withtemplate"]));
+   $item->display($_GET, ['withtemplate' => $_GET["withtemplate"]]);
 
    Html::footer();
 } else {

@@ -44,26 +44,26 @@ if (isset ($_GET["action"])) {
                                                $_GET["action"]);
    Html::back();
 
-//Add a new itemtype
-} elseif (isset ($_POST["add"])) {
+} else if (isset ($_POST["add"])) {
+   //Add a new itemtype
    $new_id = $type->add($_POST);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
 
-//Update an existing itemtype
-} elseif (isset ($_POST["update"])) {
+} else if (isset ($_POST["update"])) {
+   //Update an existing itemtype
    if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
       $_POST['linked_itemtypes'] = json_encode($_POST['itemtypes']);
    }
    $type->update($_POST);
    Html::back();
 
-//Delete an itemtype
-} elseif (isset ($_POST["purge"])) {
+} else if (isset ($_POST["purge"])) {
+   //Delete an itemtype
    $type->delete($_POST);
    $type->redirectToList();
 
-//Regenerate files for an itemtype
-} elseif (isset($_POST['regenerate'])) {
+} else if (isset($_POST['regenerate'])) {
+   //Regenerate files for an itemtype
    $type->getFromDB($_POST["id"]);
    PluginGenericobjectType::checkClassAndFilesForOneItemType($type->fields['itemtype'],
                                                              $type->fields['name'], true);

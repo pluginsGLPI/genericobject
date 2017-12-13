@@ -17,10 +17,10 @@
  --------------------------------------------------------------------------
  @package   genericobject
  @author    the genericobject plugin team
- @copyright Copyright (c) 2010-2011 Order plugin team
+ @copyright Copyright (c) 2010-2017 Genericobject plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/genericobject
+ @link      https://github.com/pluginsGLPI/genericobject
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
@@ -52,18 +52,18 @@ class %%INJECTIONCLASS%% extends %%CLASSNAME%%
    }
 
    function connectedTo() {
-      return array();
+      return [];
    }
-   
+
    /**
     * Standard method to add an object into glpi
     *
     * @param values fields to add into glpi
     * @param options options used during creation
-    * @return an array of IDs of newly created objects : for example array(Computer=>1, Networkport=>10)
+    * @return an array of IDs of newly created objects : for example [Computer=>1, Networkport=>10]
     *
    **/
-   function addOrUpdateObject($values=array(), $options=array()) {
+   function addOrUpdateObject($values = [], $options = []) {
 
       $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
       $lib->processAddOrUpdate();
@@ -75,5 +75,5 @@ class %%INJECTIONCLASS%% extends %%CLASSNAME%%
       $parentclass = new $parent();
       return $parentclass->getObjectSearchOptions(true);
    }
-   
+
 }
