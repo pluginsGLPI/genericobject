@@ -1123,9 +1123,6 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
             }
 
-            // $menu[strtolower($itemtype)] = ['title' => $type['itemtype']::getMenuName(),
-            //                                 'page'  => $itemtype::getSearchUrl(false)];
-
             if ($type['plugin_genericobject_typefamilies_id'] > 0
                && (!isset($_GET['itemtype'])
                   || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {

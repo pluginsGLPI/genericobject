@@ -35,12 +35,10 @@ $LOG_FILTER = [];
 function _log() {
    global $LOG_FILTER;
    $trace = debug_backtrace();
-   //call_user_func_array("Toolbox::logInFile", ['generic-object', print_r($trace,true) . "\n", true]);
    if (count($trace)>0) {
       $glpi_root = str_replace( "\\", "/", GLPI_ROOT );
       $trace_file = str_replace( "\\", "/", $trace[0]['file'] );
       $filename = preg_replace("|^".$glpi_root."/plugins/genericobject/|", "", $trace_file);
-      //call_user_func_array("Toolbox::logInFile", ['generic-object', $filename . "\n", true]);
    }
    if (count($trace) > 1) {
       $caller = $trace[1];
