@@ -88,8 +88,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
     * @since 2.2.0
     */
    static function registerType() {
-      Plugin::registerClass(get_called_class(),
-                            array('addtabon' => self::getLinkedItemTypes()));
+      Plugin::registerClass(get_called_class(), ['addtabon' => self::getLinkedItemTypes()]);
    }
 
    static function getLinkedItemTypes() {
@@ -107,7 +106,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes();
          if (in_array(get_class($item), $itemtypes) || get_class($item) == self::getItemType1()) {
-            return array(1 => __("Objects management", "genericobject"));
+            return [1 => __("Objects management", "genericobject")];
          }
       }
       return '';

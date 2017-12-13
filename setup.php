@@ -35,7 +35,7 @@
  ----------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.4.1');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.0');
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
@@ -96,10 +96,9 @@ if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
    include_once(GENERICOBJECT_DIR . "/log_filter.settings.php");
 }
 
-$options = array(
+$go_autoloader = new PluginGenericobjectAutoloader([
    GENERICOBJECT_CLASS_PATH
-);
-$go_autoloader = new PluginGenericobjectAutoloader($options);
+]);
 $go_autoloader->register();
 
 /**
@@ -130,24 +129,24 @@ function plugin_init_genericobject() {
       && $plugin->isActivated("genericobject")
          && isset($_SESSION['glpiactiveprofile'])) {
 
-      $PLUGIN_HOOKS['change_profile']['genericobject'] = array(
+      $PLUGIN_HOOKS['change_profile']['genericobject'] = [
             'PluginGenericobjectProfile',
             'changeProfile'
-      );
+      ];
 
       plugin_genericobject_includeCommonFields();
       $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
 
       // add css styles
-      $PLUGIN_HOOKS['add_css']['genericobject'] = array(
+      $PLUGIN_HOOKS['add_css']['genericobject'] = [
          "css/styles.css"
-      );
+      ];
 
       // Display a menu entry ?
-      $PLUGIN_HOOKS['menu_toadd']['genericobject'] = array(
+      $PLUGIN_HOOKS['menu_toadd']['genericobject'] = [
          'config' => 'PluginGenericobjectType',
          'assets' => 'PluginGenericobjectObject'
-      );
+      ];
 
       // Config page
       if (Session::haveRight('config', READ)) {
@@ -167,9 +166,7 @@ function plugin_post_init_genericobject() {
    global $GO_FIELDS;
    Plugin::registerClass(
       'PluginGenericobjectProfile',
-      array('addtabon' => array(
-         'Profile', 'PluginGenericobjectType'
-      ))
+      ['addtabon' => ['Profile', 'PluginGenericobjectType']]
    );
 
    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {

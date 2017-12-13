@@ -75,7 +75,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
                     WHERE t.id IN (SELECT DISTINCT `id`
                                    FROM glpi_plugin_genericobject_types
                                    WHERE is_active=1)";
-      $families = array();
+      $families = [];
       foreach ($DB->request($query) as $fam) {
          $itemtype = $fam['itemtype'];
          if ($itemtype::canCreate()) {

@@ -36,7 +36,7 @@ if (isset($_REQUEST['itemtype'])) {
    $types = array_keys(PluginGenericobjectType::getTypes());
 
    $requested_type = $_REQUEST['itemtype'];
-   $error = array();
+   $error = [];
 
    if (!in_array($requested_type, $types)) {
       $error[] = __('The requested type has not been defined yet!');
@@ -101,7 +101,7 @@ if (!is_null($itemtype)) {
    Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
              "assets", ($menu!==false?$menu:$itemtype), strtolower($itemtype));
 
-   $item->display($_GET, array( 'withtemplate' => $_GET["withtemplate"]));
+   $item->display($_GET, ['withtemplate' => $_GET["withtemplate"]]);
 
    Html::footer();
 } else {
