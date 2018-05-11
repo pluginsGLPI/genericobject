@@ -35,7 +35,7 @@
  ----------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.0');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.6.0');
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
