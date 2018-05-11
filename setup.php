@@ -38,9 +38,9 @@
 define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.2');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.2");
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.3");
 // Maximum GLPI version, exclusive
-define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.3");
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.4");
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
