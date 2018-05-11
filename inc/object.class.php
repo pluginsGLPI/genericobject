@@ -753,13 +753,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
-
-   function getSearchOptions() {
-      return $this->getObjectSearchOptions();
-   }
-
-
-   function getObjectSearchOptions() {
+   function rawSearchOptions() {
       global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
       $datainjection_blacklisted = ['id', 'date_mod', 'entities_id', 'date_creation'];
@@ -767,8 +761,13 @@ class PluginGenericobjectObject extends CommonDBTM {
                            'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90,
                            'date_creation' => 121];
       $index   = 3;
+
       $options = [];
-      $options['common']             = __('Characteristics');
+
+      $options[] = [
+         'id'   => 'common',
+         'name' => __('Characteristics'),
+      ];
 
       $table   = getTableForItemType(get_called_class());
 
@@ -780,6 +779,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             $this->objecttype->fields['itemtype']
          );
 
+         if ($field == 'is_deleted') {
+            continue;
+         }
+
          //Some fields have fixed index values...
          $currentindex = $index;
          if (isset($index_exceptions[$field])) {
@@ -789,9 +792,9 @@ class PluginGenericobjectObject extends CommonDBTM {
             $currentindex++;
          }
 
-         if ($field == 'is_deleted') {
-            continue;
-         }
+         $option = [
+            'id' => $currentindex,
+         ];
 
          $item = new $this->objecttype->fields['itemtype'];
 
@@ -806,7 +809,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
 
          if (preg_match("/(s_id_)/", $field)) {
-            $options[$currentindex]['linkfield'] = $field;
+            $option['linkfield'] = $field;
          }
 
          if ($tmp != '') {
@@ -814,34 +817,33 @@ class PluginGenericobjectObject extends CommonDBTM {
             $tmpobj     = new $itemtype();
 
             //Set table
-            $options[$currentindex]['table'] = $tmp;
+            $option['table'] = $tmp;
 
             //Set field
             if ($tmpobj instanceof CommonTreeDropdown) {
-               $options[$currentindex]['field'] = 'completename';
+               $option['field'] = 'completename';
             } else {
-               $options[$currentindex]['field'] = 'name';
+               $option['field'] = 'name';
             }
 
          } else {
-            $options[$currentindex]['table'] = $table;
-            $options[$currentindex]['field'] = $field;
+            $option['table'] = $table;
+            $option['field'] = $field;
 
          }
 
-         $options[$currentindex]['name']  = $searchoption['name'];
+         $option['name']  = $searchoption['name'];
 
          //Massive action or not
          if (isset($searchoption['massiveaction'])) {
-            $options[$currentindex]['massiveaction']
-               = $searchoption['massiveaction'];
+            $option['massiveaction'] = $searchoption['massiveaction'];
          }
 
          //Datainjection option
          if (!in_array($field, $datainjection_blacklisted)) {
-            $options[$currentindex]['injectable'] = 1;
+            $option['injectable'] = 1;
          } else {
-            $options[$currentindex]['injectable'] = 0;
+            $option['injectable'] = 0;
          }
 
          //Field type
@@ -849,87 +851,97 @@ class PluginGenericobjectObject extends CommonDBTM {
             default:
             case "varchar(255)":
                if ($field == 'name') {
-                  $options[$currentindex]['datatype']      = 'itemlink';
-                  $options[$currentindex]['itemlink_type'] = get_called_class();
-                  $options[$currentindex]['massiveaction'] = false;
+                  $option['datatype']      = 'itemlink';
+                  $option['itemlink_type'] = get_called_class();
+                  $option['massiveaction'] = false;
                } else {
                   if (isset($searchoption['datatype']) && $searchoption['datatype'] == 'weblink') {
-                     $options[$currentindex]['datatype'] = 'weblink';
+                     $option['datatype'] = 'weblink';
                   } else {
-                     $options[$currentindex]['datatype'] = 'string';
+                     $option['datatype'] = 'string';
                   }
                }
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['checktype']   = 'text';
-                  $options[$currentindex]['displaytype'] = 'text';
+                  $option['checktype']   = 'text';
+                  $option['displaytype'] = 'text';
                }
                break;
             case "tinyint(1)":
-               $options[$currentindex]['datatype'] = 'bool';
+               $option['datatype'] = 'bool';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['displaytype'] = 'bool';
+                  $option['displaytype'] = 'bool';
                }
                break;
             case "text":
             case "longtext":
-               $options[$currentindex]['datatype'] = 'text';
+               $option['datatype'] = 'text';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['displaytype'] = 'multiline_text';
+                  $option['displaytype'] = 'multiline_text';
                }
                break;
             case "int(11)":
                if ($tmp != '') {
-                  $options[$currentindex]['datatype'] = 'dropdown';
+                  $option['datatype'] = 'dropdown';
                } else {
-                  $options[$currentindex]['datatype'] = 'integer';
+                  $option['datatype'] = 'integer';
                }
 
                if ($item->canUsePluginDataInjection()) {
                   if ($tmp != '') {
-                     $options[$currentindex]['displaytype'] = 'dropdown';
-                     $options[$currentindex]['checktype']   = 'text';
+                     $option['displaytype'] = 'dropdown';
+                     $option['checktype']   = 'text';
                   } else {
                      //Datainjection specific
-                     $options[$currentindex]['displaytype'] = 'dropdown_integer';
-                     $options[$currentindex]['checktype']   = 'integer';
+                     $option['displaytype'] = 'dropdown_integer';
+                     $option['checktype']   = 'integer';
                   }
                }
                break;
             case "float":
             case "decimal":
-               $options[$currentindex]['datatype'] = $values['Type'];
+               $option['datatype'] = $values['Type'];
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['display']   = 'text';
-                  $options[$currentindex]['checktype'] = $values['Type'];
+                  $option['display']   = 'text';
+                  $option['checktype'] = $values['Type'];
                }
                break;
             case "date":
-               $options[$currentindex]['datatype'] = 'date';
+               $option['datatype'] = 'date';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['displaytype'] = 'date';
-                  $options[$currentindex]['checktype']   = 'date';
+                  $option['displaytype'] = 'date';
+                  $option['checktype']   = 'date';
                }
                break;
             case "datetime":
-               $options[$currentindex]['datatype'] = 'datetime';
+               $option['datatype'] = 'datetime';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
-                  $options[$currentindex]['displaytype'] = 'date';
-                  $options[$currentindex]['checktype']   = 'date';
+                  $option['displaytype'] = 'date';
+                  $option['checktype']   = 'date';
                }
                if ($field == 'date_mod') {
-                  $options[$currentindex]['massiveaction'] = false;
+                  $option['massiveaction'] = false;
                }
                break;
          }
+
+         $options[] = $option;
+
          $index = $currentindex + 1;
       }
-      ksort($options);
+
+      usort(
+         $options,
+         function ($a, $b) {
+            return ($a['id'] < $b['id']) ? -1 : 1;
+         }
+      );
+
       return $options;
    }
 
