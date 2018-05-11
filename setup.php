@@ -89,7 +89,6 @@ if (!defined("GENERICOBJECT_PICS_PATH")) {
 }
 
 // Autoload class generated in files/_plugins/genericobject/inc/
-include_once( GENERICOBJECT_DIR . "/vendor/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/functions.php");
 if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
