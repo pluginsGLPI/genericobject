@@ -192,7 +192,7 @@ function plugin_version_genericobject() {
                  'license'        => 'GPLv2+',
                  'requirements'   => [
                     'glpi' => [
-                        'min' => '9.2',
+                        'min' => '9.3',
                         'dev' => true
                      ]
                   ]
@@ -207,8 +207,8 @@ function plugin_version_genericobject() {
  */
 function plugin_genericobject_check_prerequisites() {
    $version = rtrim(GLPI_VERSION, '-dev');
-   if (version_compare($version, '9.2', 'lt')) {
-      echo "This plugin requires GLPI 9.2 or higher";
+   if (version_compare($version, '9.3', 'lt')) {
+      echo "This plugin requires GLPI 9.3 or higher";
       return false;
    }
    return true;
