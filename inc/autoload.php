@@ -1,8 +1,6 @@
 <?php
 
-use Zend\Loader\SplAutoloader;
-
-class PluginGenericobjectAutoloader implements SplAutoloader
+class PluginGenericobjectAutoloader
 {
    protected $paths = [];
 

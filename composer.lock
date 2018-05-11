@@ -1,56 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "057afc80238489ff952413bcb2390171",
-    "packages": [
-        {
-            "name": "zendframework/zend-loader",
-            "version": "2.5.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-loader.git",
-                "reference": "c5fd2f071bde071f4363def7dea8dec7393e135c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/c5fd2f071bde071f4363def7dea8dec7393e135c",
-                "reference": "c5fd2f071bde071f4363def7dea8dec7393e135c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.23"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev",
-                    "dev-develop": "2.6-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Loader\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://github.com/zendframework/zend-loader",
-            "keywords": [
-                "loader",
-                "zf2"
-            ],
-            "time": "2015-06-03T14:05:47+00:00"
-        }
-    ],
+    "content-hash": "44cc6cfa94aea760ec23cb56876bae78",
+    "packages": [],
     "packages-dev": [
         {
             "name": "consolidation/annotated-command",
@@ -255,12 +210,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/Robo.git",
-                "reference": "ba32ac5f021387caa32166cc802cc01bd00a5504"
+                "reference": "55c68dd3c6e5ca135e0ad45b332e5cfd67a4d833"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/Robo/zipball/ba32ac5f021387caa32166cc802cc01bd00a5504",
-                "reference": "ba32ac5f021387caa32166cc802cc01bd00a5504",
+                "url": "https://api.github.com/repos/consolidation/Robo/zipball/55c68dd3c6e5ca135e0ad45b332e5cfd67a4d833",
+                "reference": "55c68dd3c6e5ca135e0ad45b332e5cfd67a4d833",
                 "shasum": ""
             },
             "require": {
@@ -284,8 +239,11 @@
                 "codeception/aspect-mock": "^1|^2.1.1",
                 "codeception/base": "^2.3.7",
                 "codeception/verify": "^0.3.2",
-                "greg-1-anderson/composer-test-scenarios": "^1",
+                "g-1-a/composer-test-scenarios": "^2",
+                "goaop/framework": "~2.1.2",
+                "goaop/parser-reflection": "^1.1.0",
                 "natxet/cssmin": "3.0.4",
+                "nikic/php-parser": "^3.1.5",
                 "patchwork/jsqueeze": "~2",
                 "pear/archive_tar": "^1.4.2",
                 "phpunit/php-code-coverage": "~2|~4",
@@ -324,7 +282,7 @@
                 }
             ],
             "description": "Modern task runner",
-            "time": "2017-12-13 02:11:56"
+            "time": "2018-05-08T13:34:54+00:00"
         },
         {
             "name": "container-interop/container-interop",
