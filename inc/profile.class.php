@@ -76,23 +76,22 @@ class PluginGenericobjectProfile extends Profile {
       echo "</strong></th></tr>";
 
       echo "<tr><td class='genericobject_type_profiles'>";
-      $rights = [];
       foreach (getAllDatasFromTable(getTableForItemtype("Profile")) as $profile) {
          $prof = new Profile();
          $prof->getFromDB($profile['id']);
-         $right = self::getProfileforItemtype($profile['id'], $itemtype);
-         $label = $profile['name'];
-         $rights[] = [
-            'label' => $label,
-            'itemtype' => $itemtype,
-            'field' =>  self::getProfileNameForItemtype($itemtype),
-            'html_field' => "profile_" . $profile['id'],
+         $rights = [
+            [
+               'label' => $profile['name'],
+               'itemtype' => $itemtype,
+               'field' =>  self::getProfileNameForItemtype($itemtype),
+               'html_field' => "profile_" . $profile['id'],
+            ]
          ];
+         $prof->displayRightsChoiceMatrix(
+            $rights
+         );
       }
 
-      $prof->displayRightsChoiceMatrix(
-         $rights
-      );
       echo "</td></tr>";
       echo "<input type='hidden' name='itemtype' value='".$itemtype."'>";
 
