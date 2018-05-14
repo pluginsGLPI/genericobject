@@ -1003,15 +1003,24 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!is_dir($locale_dir)) {
          @ mkdir($locale_dir, 0755, true);
       }
-      $locale_file = $name.".".$_SESSION['glpilanguage'];
-      self::addFileFromTemplate(['NAME'      => $name,
-                                 'CLASSNAME' => self::getClassByName($name)],
-                                self::LOCALE_TEMPLATE, $locale_dir,
-                                $locale_file);
+
+      $locale_files = [
+         $name . '.' . $_SESSION['glpilanguage'],
+      ];
       if ($CFG_GLPI['language'] != $_SESSION['glpilanguage']) {
-         $locale_file = $name.".".$CFG_GLPI['language'];
-         self::addFileFromTemplate(['CLASSNAME' => $name], self::LOCALE_TEMPLATE, $locale_dir,
-                                   $locale_file);
+         $locale_files[] = $name . '.' . $CFG_GLPI['language'];
+      }
+
+      foreach ($locale_files as $locale_file) {
+         self::addFileFromTemplate(
+            [
+               'NAME'      => $name,
+               'CLASSNAME' => self::getClassByName($name),
+            ],
+            self::LOCALE_TEMPLATE,
+            $locale_dir,
+            $locale_file
+         );
       }
    }
 
