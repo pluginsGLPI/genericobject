@@ -1947,6 +1947,9 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_plugin_simcard", "bool");
       $migration->migrationOneTable($table);
 
+      //If files are missing, recreate them!
+      self::checkClassAndFilesForItemType();
+
       // Migrate notepad data
       $allGenericObjectTypes = PluginGenericobjectType::getTypes(true);
 
@@ -2003,9 +2006,6 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       self::singularTypes();
-
-      //If files are missing, recreate them!
-      self::checkClassAndFilesForItemType();
    }
 
 
