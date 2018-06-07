@@ -807,6 +807,8 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          if (preg_match("/(s_id_)/", $field)) {
             $options[$currentindex]['linkfield'] = $field;
+         } else {
+            $options[$currentindex]['linkfield'] = '';
          }
 
          if ($tmp != '') {
@@ -927,6 +929,53 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
          }
+
+         if ($item->canUsePluginDataInjection()) {
+            // add datainjection links
+
+            switch ($field) {
+               case 'is_deleted':
+               case 'is_template':
+               case 'template_name':
+               case 'is_recursive':
+               case 'name':
+               case 'serial':
+               case 'otherserial':
+               case 'comment':
+               case 'is_helpdesk_visible':
+               case 'other':
+               case 'contact':
+               case 'contact_num':
+               case 'creationdate':
+               case 'expirationdate':
+               case 'is_global':
+               case 'url':
+                  $options[$currentindex]['linkfield'] = $options[$currentindex]['field'];
+                  break;
+
+               case 'locations_id':
+               case 'states_id':
+               case 'users_id':
+               case 'groups_id': // doesn't work when groups_id_tech is present
+               // case 'groups_id_tech':
+               case 'manufacturers_id':
+               case 'users_id_tech':
+               case 'domains_id':
+                  $options[$currentindex]['linkfield'] = str_replace('glpi_', '', $options[$currentindex]['table']) . '_id';
+                  break;
+
+               default:
+                  if (
+                     preg_match('/^plugin_genericobject_(.*)models_id/', $field) === 1
+                     || preg_match('/^plugin_genericobject_(.*)types_id/', $field) === 1
+                     || preg_match('/^plugin_genericobject_(.*)categories_id/', $field)
+                  ) {
+                     // models, types and categories are in specifically named tables & columns
+                     $options[$currentindex]['linkfield'] = str_replace('glpi_', '', $options[$currentindex]['table']) . '_id';
+                  }
+            }
+         }
+
          $index = $currentindex + 1;
       }
       ksort($options);
