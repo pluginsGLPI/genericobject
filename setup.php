@@ -35,7 +35,7 @@
  ----------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.1');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.2');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.2");
