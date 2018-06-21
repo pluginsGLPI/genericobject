@@ -35,7 +35,12 @@
  ----------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.1');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.5.2');
+
+// Minimal GLPI version, inclusive
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.2");
+// Maximum GLPI version, exclusive
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.3");
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
@@ -89,7 +94,6 @@ if (!defined("GENERICOBJECT_PICS_PATH")) {
 }
 
 // Autoload class generated in files/_plugins/genericobject/inc/
-include_once( GENERICOBJECT_DIR . "/vendor/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/autoload.php");
 include_once( GENERICOBJECT_DIR . "/inc/functions.php");
 if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
@@ -185,18 +189,20 @@ function plugin_post_init_genericobject() {
  * @return array
  */
 function plugin_version_genericobject() {
-   return array ('name'           => __("Objects management", "genericobject"),
-                 'version'        => PLUGIN_GENERICOBJECT_VERSION,
-                 'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
-                 'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
-                 'license'        => 'GPLv2+',
-                 'requirements'   => [
-                    'glpi' => [
-                        'min' => '9.2',
-                        'dev' => true
-                     ]
-                  ]
-              );
+   return [
+      'name'           => __("Objects management", "genericobject"),
+      'version'        => PLUGIN_GENERICOBJECT_VERSION,
+      'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
+      'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
+      'license'        => 'GPLv2+',
+      'requirements'   => [
+         'glpi' => [
+            'min' => PLUGIN_GENERICOBJECT_MIN_GLPI,
+            'max' => PLUGIN_GENERICOBJECT_MAX_GLPI,
+            'dev' => true, //Required to allow 9.2-dev
+          ]
+       ]
+   ];
 }
 
 /**
@@ -206,11 +212,25 @@ function plugin_version_genericobject() {
  * @return boolean
  */
 function plugin_genericobject_check_prerequisites() {
-   $version = rtrim(GLPI_VERSION, '-dev');
-   if (version_compare($version, '9.2', 'lt')) {
-      echo "This plugin requires GLPI 9.2 or higher";
-      return false;
+
+   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
+   if (!method_exists('Plugin', 'checkGlpiVersion')) {
+      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
+      $matchMinGlpiReq = version_compare($version, PLUGIN_GENERICOBJECT_MIN_GLPI, '>=');
+      $matchMaxGlpiReq = version_compare($version, PLUGIN_GENERICOBJECT_MAX_GLPI, '<');
+
+      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
+         echo vsprintf(
+            'This plugin requires GLPI >= %1$s and < %2$s.',
+            [
+               PLUGIN_GENERICOBJECT_MIN_GLPI,
+               PLUGIN_GENERICOBJECT_MAX_GLPI,
+            ]
+         );
+         return false;
+      }
    }
+
    return true;
 }
 
