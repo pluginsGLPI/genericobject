@@ -6,7 +6,7 @@
  *    - PluginGenericobjectCommonDropdown
  *    - PluginGenericobjectCommonTreeDropdown
  */
-function dropdown_getTypeName($class,$nb=0) {
+function dropdown_getTypeName($class, $nb = 0) {
    global $GO_FIELDS;
    $fk = getForeignKeyFieldForTable(getTableForItemType($class));
    $instance = new $class();

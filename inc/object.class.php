@@ -33,7 +33,7 @@ class PluginGenericobjectObject extends CommonDBTM {
    private $cpt = 0;
 
    //Get itemtype name
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !

@@ -115,18 +115,18 @@ function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
 
-   $GO_READONLY_FIELDS  = array ("is_helpdesk_visible", "comment");
+   $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment"];
 
-   $GO_BLACKLIST_FIELDS = array ("itemtype", "table", "is_deleted", "id", "entities_id",
-                                 "is_recursive", "is_template", "notepad", "template_name",
-                                 "date_mod", "name", "is_helpdesk_visible", "comment",
-                                 "date_creation");
+   $GO_BLACKLIST_FIELDS =  ["itemtype", "table", "is_deleted", "id", "entities_id",
+                            "is_recursive", "is_template", "notepad", "template_name",
+                            "date_mod", "name", "is_helpdesk_visible", "comment",
+                            "date_creation"];
 
-   $GO_LINKED_TYPES     = array ('Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
-                                  'Printer', 'NetworkEquipment');
+   $GO_LINKED_TYPES     =  ['Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
+                            'Printer', 'NetworkEquipment'];
 
    $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
-   $GENERICOBJECT_PDF_TYPES                         = array ();
+   $GENERICOBJECT_PDF_TYPES                         =  [];
    $plugin                                          = new Plugin();
 
    if ($plugin->isInstalled("genericobject")
@@ -279,7 +279,7 @@ function plugin_genericobject_includeCommonFields($force = false) {
    }
 }
 
-function plugin_genericobject_haveRight($class,$right) {
+function plugin_genericobject_haveRight($class, $right) {
 
    $right_name = PluginGenericobjectProfile::getProfileNameForItemtype($class);
    return Session::haveRight($right_name, $right);

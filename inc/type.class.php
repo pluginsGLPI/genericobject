@@ -62,7 +62,7 @@ class PluginGenericobjectType extends CommonDBTM {
       return false;
    }
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __("Type of objects", "genericobject");
    }
 
@@ -96,7 +96,7 @@ class PluginGenericobjectType extends CommonDBTM {
       return $tabs;
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       if (!$withtemplate) {
          switch ($item->getType()) {
             case __CLASS__ :
@@ -106,12 +106,12 @@ class PluginGenericobjectType extends CommonDBTM {
                $obj->getEmpty();
                $nb_fields = count($obj->fields);
 
-               $tabs = array (
+               $tabs =  [
                   1  => __("Main"),
                   3 => _n("Field", "Fields", 2),
                   3 => self::createTabEntry(_n("Field", "Fields", Session::getPluralNumber()), $nb_fields),
                   5 => __("Preview")
-               );
+               ];
                if ($item->canUseDirectConnections()) {
                   $tabs[7] = __("Associated element");
                }
@@ -122,7 +122,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       if ($item->getType() == __CLASS__) {
          switch ($tabnum) {
             case 1 :
@@ -1336,7 +1336,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function deleteItemtypeReferencesInGLPI($itemtype) {
       //Delete references to PluginGenericobjectType in the following tables
-      $itemtypes = array ("Contract_Item", "DisplayPreference", "Document_Item", "SavedSearch", "Log");
+      $itemtypes =  ["Contract_Item", "DisplayPreference", "Document_Item", "SavedSearch", "Log"];
       foreach ($itemtypes as $type) {
          $item     = new $type();
          $item->deleteByCriteria(['itemtype' => $itemtype]);
@@ -1648,7 +1648,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
          return $mytypes;
       } else {
-         return array ();
+         return  [];
       }
    }
 
@@ -1669,7 +1669,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
          return $mytypes;
       } else {
-         return array ();
+         return  [];
       }
    }
 
