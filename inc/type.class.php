@@ -62,7 +62,7 @@ class PluginGenericobjectType extends CommonDBTM {
       return false;
    }
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __("Type of objects", "genericobject");
    }
 
@@ -96,7 +96,7 @@ class PluginGenericobjectType extends CommonDBTM {
       return $tabs;
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       if (!$withtemplate) {
          switch ($item->getType()) {
             case __CLASS__ :
@@ -106,12 +106,12 @@ class PluginGenericobjectType extends CommonDBTM {
                $obj->getEmpty();
                $nb_fields = count($obj->fields);
 
-               $tabs = array (
+               $tabs =  [
                   1  => __("Main"),
                   3 => _n("Field", "Fields", 2),
                   3 => self::createTabEntry(_n("Field", "Fields", Session::getPluralNumber()), $nb_fields),
                   5 => __("Preview")
-               );
+               ];
                if ($item->canUseDirectConnections()) {
                   $tabs[7] = __("Associated element");
                }
@@ -122,7 +122,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       if ($item->getType() == __CLASS__) {
          switch ($tabnum) {
             case 1 :
@@ -281,80 +281,127 @@ class PluginGenericobjectType extends CommonDBTM {
 
    }
 
-   function getSearchOptions() {
-      $sopt['common'] = __("Objects management", "genericobject");
+   function rawSearchOptions() {
+      $sopt = [];
 
-      $sopt[1]['table']       = $this->getTable();
-      $sopt[1]['field']       = 'name';
-      $sopt[1]['name']        = __("Model");
-      $sopt[1]['datatype']    = 'itemlink';
+      $sopt[] = [
+         'id'   => 'common',
+         'name' => __("Objects management", "genericobject"),
+      ];
 
-      $sopt[5]['table']       = $this->getTable();
-      $sopt[5]['field']       = 'is_active';
-      $sopt[5]['name']        = __("Active");
-      $sopt[5]['datatype']    = 'bool';
+      $sopt[] = [
+         'id'            => 1,
+         'table'         => $this->getTable(),
+         'field'         => 'name',
+         'name'          => __('Model'),
+         'datatype'      => 'itemlink',
+      ];
 
-      $sopt[6]['table']       = $this->getTable();
-      $sopt[6]['field']       = 'use_tickets';
-      $sopt[6]['name']        = __("Associable to a ticket");
-      $sopt[6]['datatype']    = 'bool';
+      $sopt[] = [
+         'id'            => 5,
+         'table'         => $this->getTable(),
+         'field'         => 'is_active',
+         'name'          => __('Active'),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[9]['table']       = $this->getTable();
-      $sopt[9]['field']       = 'use_history';
-      $sopt[9]['name']        = _sx('button', 'Use')." ".__("Historical");
-      $sopt[9]['datatype']    = 'bool';
+      $sopt[] = [
+         'id'            => 6,
+         'table'         => $this->getTable(),
+         'field'         => 'use_tickets',
+         'name'          => __('Associable to a ticket'),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[13]['table']      = $this->getTable();
-      $sopt[13]['field']      = 'use_infocoms';
-      $sopt[13]['name']       = _sx('button', 'Use')." ".__("Financial and administratives information");
-      $sopt[13]['datatype']   = 'bool';
+      $sopt[] = [
+         'id'            => 9,
+         'table'         => $this->getTable(),
+         'field'         => 'use_history',
+         'name'          => _sx('button', 'Use') . ' ' . __('Historical'),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[14]['table']      = $this->getTable();
-      $sopt[14]['field']      = 'use_documents';
-      $sopt[14]['name']       = _sx('button', 'Use')." "._n("Document", "Documents", 2);
-      $sopt[14]['datatype']   = 'bool';
+      $sopt[] = [
+         'id'            => 13,
+         'table'         => $this->getTable(),
+         'field'         => 'use_infocoms',
+         'name'          => _sx('button', 'Use') . ' ' . __('Financial and administratives information'),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[15]['table']      = $this->getTable();
-      $sopt[15]['field']      = 'use_loans';
-      $sopt[15]['name']       = _sx('button', 'Use')." "._n("Reservation", "Reservations", 2);
-      $sopt[15]['datatype']   = 'bool';
+      $sopt[] = [
+         'id'            => 14,
+         'table'         => $this->getTable(),
+         'field'         => 'use_documents',
+         'name'          => _sx('button', 'Use') . ' ' . _n('Document', 'Documents', 2),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[16]['table']      = $this->getTable();
-      $sopt[16]['field']      = 'use_contracts';
-      $sopt[16]['name']       = _sx('button', 'Use')." "._n("Contract", "Contracts", 2);
-      $sopt[16]['datatype']   = 'bool';
+      $sopt[] = [
+         'id'            => 15,
+         'table'         => $this->getTable(),
+         'field'         => 'use_loans',
+         'name'          => _sx('button', 'Use') . ' ' . _n('Reservation', 'Reservations', 2),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[17]['table']       = $this->getTable();
-      $sopt[17]['field']       = 'use_unicity';
-      $sopt[17]['name']        = _sx('button', 'Use')." ".__("Fields unicity");
-      $sopt[17]['datatype']    = 'bool';
+      $sopt[] = [
+         'id'            => 16,
+         'table'         => $this->getTable(),
+         'field'         => 'use_contracts',
+         'name'          => _sx('button', 'Use') . ' ' . _n('Contract', 'Contracts', 2),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[18]['table']       = $this->getTable();
-      $sopt[18]['field']       = 'use_global_search';
-      $sopt[18]['name']        = __("Global search");
-      $sopt[18]['datatype']    = 'bool';
+      $sopt[] = [
+         'id'            => 17,
+         'table'         => $this->getTable(),
+         'field'         => 'use_unicity',
+         'name'          => _sx('button', 'Use') . ' ' . __('Fields unicity'),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[19]['table']       = 'glpi_plugin_genericobject_typefamilies';
-      $sopt[19]['field']       = 'name';
-      $sopt[19]['name']        = __('Family of type of objects', 'genericobject');
-      $sopt[19]['datatype']    = 'dropdown';
+      $sopt[] = [
+         'id'            => 18,
+         'table'         => $this->getTable(),
+         'field'         => 'use_global_search',
+         'name'          => __('Global search'),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[20]['table']       = $this->getTable();
-      $sopt[20]['field']       = 'use_projects';
-      $sopt[20]['name']        = _n('Project', 'Projects', 2);
-      $sopt[20]['datatype']    = 'bool';
+      $sopt[] = [
+         'id'            => 19,
+         'table'         => 'glpi_plugin_genericobject_typefamilies',
+         'field'         => 'name',
+         'name'          => __('Family of type of objects', 'genericobject'),
+         'datatype'      => 'dropdown',
+      ];
 
-      $sopt[21]['table']          = $this->getTable();
-      $sopt[21]['field']          = 'date_mod';
-      $sopt[21]['name']           = __('Last update');
-      $sopt[21]['datatype']       = 'datetime';
-      $sopt[21]['massiveaction']  = false;
+      $sopt[] = [
+         'id'            => 20,
+         'table'         => $this->getTable(),
+         'field'         => 'use_projects',
+         'name'          => _n('Project', 'Projects', 2),
+         'datatype'      => 'bool',
+      ];
 
-      $sopt[121]['table']          = $this->getTable();
-      $sopt[121]['field']          = 'date_creation';
-      $sopt[121]['name']           = __('Creation date');
-      $sopt[121]['datatype']       = 'datetime';
-      $sopt[121]['massiveaction']  = false;
+      $sopt[] = [
+         'id'            => 21,
+         'table'         => $this->getTable(),
+         'field'         => 'date_mod',
+         'name'          => __('Last update'),
+         'datatype'      => 'datetime',
+         'massiveaction' => false,
+      ];
+
+      $sopt[] = [
+         'id'            => 121,
+         'table'         => $this->getTable(),
+         'field'         => 'date_creation',
+         'name'          => __('Creation date'),
+         'datatype'      => 'datetime',
+         'massiveaction' => false,
+      ];
 
       return $sopt;
    }
@@ -1289,7 +1336,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function deleteItemtypeReferencesInGLPI($itemtype) {
       //Delete references to PluginGenericobjectType in the following tables
-      $itemtypes = array ("Contract_Item", "DisplayPreference", "Document_Item", "SavedSearch", "Log");
+      $itemtypes =  ["Contract_Item", "DisplayPreference", "Document_Item", "SavedSearch", "Log"];
       foreach ($itemtypes as $type) {
          $item     = new $type();
          $item->deleteByCriteria(['itemtype' => $itemtype]);
@@ -1601,7 +1648,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
          return $mytypes;
       } else {
-         return array ();
+         return  [];
       }
    }
 
@@ -1622,7 +1669,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
          return $mytypes;
       } else {
-         return array ();
+         return  [];
       }
    }
 
