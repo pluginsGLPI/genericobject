@@ -31,7 +31,7 @@ if (!isset ($_GET["id"])) {
    $_GET["id"] = '';
 }
 $type        = new PluginGenericobjectType();
-$extraparams = array ();
+$extraparams =  [];
 if (isset ($_POST["select"]) && $_POST["select"] == "all") {
    $extraparams["selected"] = "checked";
 }

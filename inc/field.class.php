@@ -218,7 +218,7 @@ class PluginGenericobjectField extends CommonDBTM {
     *
     * @return the dropdown random ID
     */
-   static function dropdownFields($name,$itemtype, $used = []) {
+   static function dropdownFields($name, $itemtype, $used = []) {
       global $GO_FIELDS;
 
       $dropdown_types = [];
@@ -279,7 +279,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param $itemtype the itemtype
     * @return an array which contains the full field definition
     */
-   static function getFieldOptions($field, $itemtype="") {
+   static function getFieldOptions($field, $itemtype = "") {
       global $GO_FIELDS;
 
       $cleaned_field = preg_replace("/^plugin_genericobject_/", '', $field);
@@ -346,7 +346,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param field the field to delete
     * @return nothing
     */
-   public static function addNewField($table, $field, $after=false) {
+   public static function addNewField($table, $field, $after = false) {
       global $DB;
 
       _log("add", $field, "from", $table);
@@ -501,7 +501,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
    }
 
-   public static function checkNecessaryFieldsDelete($itemtype,$field) {
+   public static function checkNecessaryFieldsDelete($itemtype, $field) {
       $type = new PluginGenericobjectType();
       $type->getFromDBByType($itemtype);
 

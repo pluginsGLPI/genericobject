@@ -37,7 +37,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    static public $items_id_2 = 'items_id';
 
    //Get itemtype name
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
@@ -102,7 +102,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       return $classname::$itemtype_1;
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes();
          if (in_array(get_class($item), $itemtypes) || get_class($item) == self::getItemType1()) {
@@ -112,7 +112,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       return '';
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       $itemtypes = self::getLinkedItemTypes();
       if (get_class($item) == self::getItemType1()) {
          self::showItemsForSource($item);

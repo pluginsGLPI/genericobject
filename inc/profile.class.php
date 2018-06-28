@@ -32,7 +32,7 @@ class PluginGenericobjectProfile extends Profile {
       $this->deleteByCriteria(['id' => $id]);
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       switch ($item->getType()) {
          case 'Profile':
@@ -44,7 +44,7 @@ class PluginGenericobjectProfile extends Profile {
       }
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       switch ($item->getType()) {
          case 'Profile':
             $profile = new self();
@@ -55,7 +55,7 @@ class PluginGenericobjectProfile extends Profile {
             self::showForItemtype($item);
             break;
       }
-      return TRUE;
+      return true;
    }
 
    static function showForItemtype($type) {
@@ -177,7 +177,7 @@ class PluginGenericobjectProfile extends Profile {
 
    function getProfilesFromDB($id, $config = true) {
       global $DB;
-      $prof_datas = array ();
+      $prof_datas =  [];
       foreach (getAllDatasFromTable(getTableForItemType(__CLASS__),
                                     "`profiles_id`='" . $id . "'") as $prof) {
          if ($prof['right'] != "" || $config) {
@@ -265,7 +265,7 @@ class PluginGenericobjectProfile extends Profile {
     * @param profileID the profile ID
     * @return nothing
     */
-   public static function createAccess($profiles_id, $itemtype, $first=false) {
+   public static function createAccess($profiles_id, $itemtype, $first = false) {
 
       $rights             = getAllDatasFromTable('glpi_profiles');
       $profile_right      = new ProfileRight();
@@ -311,7 +311,7 @@ class PluginGenericobjectProfile extends Profile {
       return $rights;
    }
 
-   public static function installRights($first=false) {
+   public static function installRights($first = false) {
       $missing_rights = [];
       $installed_rights = ProfileRight::getAllPossibleRights();
       $right_names = [];
@@ -384,7 +384,7 @@ class PluginGenericobjectProfile extends Profile {
                                          "`profiles_id`='".$right['profiles_id']."'
                                            AND `name`='$newrightname'")) {
                   switch ($right['right']) {
-                     case NULL:
+                     case null:
                      case '':
                         $rightvalue = 0;
                         break;
