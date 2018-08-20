@@ -175,7 +175,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $input['name']     = self::filterInput($input['name']);
 
       //Name must not be present in DB
-      if (countElementsInTable(getTableForItemType(__CLASS__), ['name' => $input['name'])) {
+      if (countElementsInTable(getTableForItemType(__CLASS__), ['name' => $input['name']])) {
          Session::addMessageAfterRedirect(__("A type already exists with the same name", "genericobject"), ERROR, true);
          return [];
       } else {
