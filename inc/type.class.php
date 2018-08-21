@@ -970,7 +970,7 @@ class PluginGenericobjectType extends CommonDBTM {
         KEY `date_mod` (`date_mod`),
         KEY `date_creation` (`date_creation`),
         KEY `item` (`itemtype`,`items_id`)
-      ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
    }
 
@@ -1373,7 +1373,7 @@ class PluginGenericobjectType extends CommonDBTM {
                        KEY `date_mod` (`date_mod`),
                        KEY `date_creation` (`date_creation`),
                        KEY `name` (`name`)
-                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query);
       }
       if ($params['entities_id']) {
