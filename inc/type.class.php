@@ -1249,7 +1249,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if ($DB->tableExists($table) && ($overwrite || !class_exists($itemtype))) {
          self::addNewObject($name, $itemtype, ['add_table'              => false,
                                                'create_default_profile' => false,
-                                               'add_injection_file'     => false,
+                                               'add_injection_file'     => $overwrite,
                                                'add_language_file'      => false,
                                                'overwrite_locales'      => $overwrite_locales ]);
       }
