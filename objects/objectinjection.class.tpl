@@ -70,10 +70,26 @@ class %%INJECTIONCLASS%% extends %%CLASSNAME%%
       return $lib->getInjectionResults();
    }
 
+   /**
+    * Get search options formatted for injection mapping usage in datainjection plugin.
+    *
+    * @return array
+    */
    function getOptions($primary_type = '') {
-      $parent = get_parent_class($this);
-      $parentclass = new $parent();
-      return $parentclass->getObjectSearchOptions(true);
+      $plugin = new Plugin();
+      if (!$plugin->isActivated('datainjection')) {
+         return [];
+      }
+
+      return PluginDatainjectionCommonInjectionLib::addToSearchOptions(
+         Search::getOptions(get_parent_class($this)),
+         [
+            'ignore_fields' => PluginDatainjectionCommonInjectionLib::getBlacklistedOptions(
+               get_parent_class($this)
+            ),
+         ],
+         $this
+      );
    }
 
 }
