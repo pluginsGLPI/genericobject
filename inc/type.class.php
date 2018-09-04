@@ -175,7 +175,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $input['name']     = self::filterInput($input['name']);
 
       //Name must not be present in DB
-      if (countElementsInTable(getTableForItemType(__CLASS__), "`name`='".$input['name']."'")) {
+      if (countElementsInTable(getTableForItemType(__CLASS__), ['name' => $input['name']])) {
          Session::addMessageAfterRedirect(__("A type already exists with the same name", "genericobject"), ERROR, true);
          return [];
       } else {
@@ -940,7 +940,7 @@ class PluginGenericobjectType extends CommonDBTM {
                   PRIMARY KEY ( `id` ),
                   KEY `date_mod` (`date_mod`),
                   KEY `date_creation` (`date_creation`)
-                  ) ENGINE = MYISAM COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE = InnoDB COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
 
       $query = "INSERT INTO `glpi_displaypreferences` (`id`, `itemtype`, `num`, `rank`, `users_id`) " .
@@ -970,7 +970,7 @@ class PluginGenericobjectType extends CommonDBTM {
         KEY `date_mod` (`date_mod`),
         KEY `date_creation` (`date_creation`),
         KEY `item` (`itemtype`,`items_id`)
-      ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
       $DB->query($query);
    }
 
@@ -1249,7 +1249,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if ($DB->tableExists($table) && ($overwrite || !class_exists($itemtype))) {
          self::addNewObject($name, $itemtype, ['add_table'              => false,
                                                'create_default_profile' => false,
-                                               'add_injection_file'     => false,
+                                               'add_injection_file'     => $overwrite,
                                                'add_language_file'      => false,
                                                'overwrite_locales'      => $overwrite_locales ]);
       }
@@ -1373,7 +1373,7 @@ class PluginGenericobjectType extends CommonDBTM {
                        KEY `date_mod` (`date_mod`),
                        KEY `date_creation` (`date_creation`),
                        KEY `name` (`name`)
-                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query);
       }
       if ($params['entities_id']) {
@@ -1596,7 +1596,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
    static function getFamilyNameByItemtype($itemtype) {
       $types = getAllDatasFromTable("glpi_plugin_genericobject_types",
-                                    "`itemtype`='$itemtype' AND `is_active`='1'");
+                                    ['itemtype' => $itemtype, 'is_active' => 1]);
       if (empty($types)) {
          return false;
       } else {
@@ -1642,7 +1642,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:""), 'false', 'name') as $data) {
+         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : []), false, 'name') as $data) {
             //If class is not present on the filesystem, do not list itemtype
             $mytypes[$data['itemtype']] = $data;
          }
@@ -1661,7 +1661,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all?" is_active=" . self::ACTIVE:"")) as $data) {
+         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
                $mytypes[$data['plugin_genericobject_typefamilies_id']][$data['itemtype']] = $data;
@@ -1981,7 +1981,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `linked_itemtypes` text NULL,
                            `plugin_genericobject_typefamilies_id` INT( 11 ) NOT NULL DEFAULT 0,
                            PRIMARY KEY ( `id` )
-                           ) ENGINE = MYISAM COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                           ) ENGINE = InnoDB COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
       }
 
@@ -2050,8 +2050,7 @@ class PluginGenericobjectType extends CommonDBTM {
                 14 => 10, 15 => 11];
       foreach ($prefs as $num => $rank) {
          if (!countElementsInTable("glpi_displaypreferences",
-                                    "`itemtype`='".__CLASS__."' AND `num`='$num'
-                                       AND `users_id`='0'")) {
+                                   ['itemtype' => __CLASS__, 'num' => $num, 'users_id' => 0])) {
             $preference      = new DisplayPreference();
             $tmp['itemtype'] = __CLASS__;
             $tmp['num']      = $num;

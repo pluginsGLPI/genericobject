@@ -8,10 +8,12 @@
       <short>
          <fr><![CDATA[Faites l'inventaire de nouveaux types d'objets]]></fr>
          <en><![CDATA[Do the inventory of new, non-native object types]]></en>
+	 <cs><![CDATA[Inventarizace nových, nenativních typů objektů]]></cs>
       </short>
       <long>
 	 <fr><![CDATA[Ce plugin vous permet de faire l'inventaire de nouveaux types d'objets génériques, sans avoir à programmer. Generic Objects vous permet de créer ces nouveaux types, les champs disponibles pour ces types. Il est intégré à GLPi dans ses fonctionnalités mère (Helpdesk, réservation, gabarits, etc.). Generic Objects est compatible avec le plugin File Injection permettant l'injection des données.]]></fr>
          <en><![CDATA[This plugin allows you to do the inventory of new item types without having to code, it allows you to create those new item types, it allows type creation, manages available fields. Has full integration with the software (Helpdesk, loans, templates, etc.) It has support and connectivity for and with the File Injection plugin]]></en>
+	 <cs><![CDATA[Tento zásuvný modul umožňuje inventarizovat nové typy položek, aniž by bylo třeba programovat. Umožňuje vytvářet tyto nové typy položek, typů a spravovat kolonky, které budou k dispozici. Je plně začleněný do software (Služba podpory, zápůjčky, šablony, atd.) Má podporu a propojení pro a se zásuvným modulem Vkládání dat ze souboru]]></cs>
       </long>
    </description>
    <homepage>https://github.com/pluginsGLPI/genericobject</homepage>
@@ -22,6 +24,10 @@
       <author>Walid Nouh</author>
    </authors>
    <versions>
+      <version>
+         <num>2.6.1</num>
+         <compatibility>9.3</compatibility>
+      </version>
       <version>
          <num>2.6.0</num>
          <compatibility>9.3</compatibility>
@@ -109,6 +115,7 @@
       </version>
    </versions>
    <langs>
+      <lang>cs_CZ</lang>
       <lang>fr_FR</lang>
       <lang>en_GB</lang>
       <lang>es_AR</lang>
@@ -129,6 +136,13 @@
             <tag>helpdesk</tag>
             <tag>loans</tag>
          </en>
+	 <cs>
+            <tag>inventář</tag>
+            <tag>objekty</tag>
+            <tag>obecné</tag>
+            <tag>službapodpory</tag>
+            <tag>zápůjčky</tag>
+         </cs>
    </tags>
    <license>GPL v2+</license>
 </root>

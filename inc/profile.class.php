@@ -179,7 +179,7 @@ class PluginGenericobjectProfile extends Profile {
       global $DB;
       $prof_datas =  [];
       foreach (getAllDatasFromTable(getTableForItemType(__CLASS__),
-                                    "`profiles_id`='" . $id . "'") as $prof) {
+                                    ['profiles_id' => $id]) as $prof) {
          if ($prof['right'] != "" || $config) {
             $prof_datas[$prof['itemtype']]                = $prof['right'];
             $prof_datas[$prof['itemtype'].'_open_ticket'] = $prof['open_ticket'];
@@ -381,8 +381,8 @@ class PluginGenericobjectProfile extends Profile {
             if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
                $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
                if (!countElementsInTable('glpi_profilerights',
-                                         "`profiles_id`='".$right['profiles_id']."'
-                                           AND `name`='$newrightname'")) {
+                                         ['profiles_id' => $right['profiles_id'],
+                                          'name' => $newrightname])) {
                   switch ($right['right']) {
                      case null:
                      case '':
@@ -401,8 +401,8 @@ class PluginGenericobjectProfile extends Profile {
                                       'rights'      => $rightvalue]);
 
                   if (!countElementsInTable('glpi_profilerights',
-                                            "`profiles_id`='".$right['profiles_id']."'
-                                              AND `name`='plugin_genericobject_types'")) {
+                                            ['profiles_id' => $right['profiles_id'],
+                                             'name'        => 'plugin_genericobject_types'])) {
                      $profileRight->add(['profiles_id' => $right['profiles_id'],
                                          'name'        => 'plugin_genericobject_types',
                                          'rights'      => 23]);
@@ -428,8 +428,7 @@ class PluginGenericobjectProfile extends Profile {
          }
          //$migration->dropTable('glpi_plugin_genericobject_profiles');
       }
-      if (!countElementsInTable('glpi_profilerights',
-                                "`name` LIKE '%genericobject%'")) {
+      if (!countElementsInTable('glpi_profilerights', ['name' => ['LIKE', '%genericobject%']])) {
          self::createFirstAccess();
       }
    }

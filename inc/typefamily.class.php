@@ -50,7 +50,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
                            PRIMARY KEY (`id`),
                            KEY `date_mod` (`date_mod`),
                            KEY `date_creation` (`date_creation`)
-                           ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                           ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
       }
    }
@@ -87,8 +87,12 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
 
 
    static function getItemtypesByFamily($families_id) {
-      return getAllDatasFromTable('glpi_plugin_genericobject_types',
-                                  "plugin_genericobject_typefamilies_id='$families_id'
-                                     AND is_active='1'");
+      return getAllDatasFromTable(
+         'glpi_plugin_genericobject_types',
+         [
+            'plugin_genericobject_typefamilies_id' => $families_id,
+            'is_active' => 1
+         ]
+      );
    }
 }
