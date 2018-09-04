@@ -50,7 +50,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
                            PRIMARY KEY (`id`),
                            KEY `date_mod` (`date_mod`),
                            KEY `date_creation` (`date_creation`)
-                           ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                           ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
       }
    }
