@@ -522,7 +522,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
-         if(strpos($description['Field'], 'plugin_genericobject_emptyspace') === 0) {
+         if (strpos($description['Field'], 'plugin_genericobject_emptyspace') === 0) {
             $searchoption['name'] = "&nbsp;";
             $description['Type'] = 'emptyspace';
          }
