@@ -706,6 +706,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             echo '<td>&nbsp;<!--label--></td>';
             echo '<td>&nbsp;<!--input--></td>';
          echo '</tr>';
+         $this->cpt = 0;
       }
 
       //Display the spacer.
