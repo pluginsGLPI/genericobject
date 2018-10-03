@@ -522,6 +522,11 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
+         if (strpos($description['Field'], 'plugin_genericobject_emptyspace') === 0) {
+            $searchoption['name'] = "&nbsp;";
+            $description['Type'] = 'emptyspace';
+         }
+
          $this->startColumn();
          echo $searchoption['name'];
          if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
@@ -600,6 +605,10 @@ class PluginGenericobjectObject extends CommonDBTM {
                      "</textarea>";
                break;
 
+            case "emptyspace":
+               echo '&nbsp;';
+               break;
+
             case "date":
                   Html::showDateField(
                      $name, [
@@ -676,7 +685,6 @@ class PluginGenericobjectObject extends CommonDBTM {
          echo "</tr>";
       }
    }
-
 
    function prepareInputForAdd($input) {
 
