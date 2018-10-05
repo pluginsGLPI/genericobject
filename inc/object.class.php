@@ -522,6 +522,16 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
+         if (strpos($description['Field'], 'plugin_genericobject_hrowspacer') === 0) {
+            $this->displayHRowSpacer();
+            return;
+         }
+
+         if (strpos($description['Field'], 'plugin_genericobject_emptyspace') === 0) {
+            $searchoption['name'] = "&nbsp;";
+            $description['Type'] = 'emptyspace';
+         }
+
          $this->startColumn();
          echo $searchoption['name'];
          if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
@@ -598,6 +608,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "text":
                echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value .
                      "</textarea>";
+               break;
+
+            case "emptyspace":
+               echo '&nbsp;';
                break;
 
             case "date":
@@ -677,6 +691,31 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   /**
+    * Display a vertical spacer that looks like an <hr/>
+    *
+    * @param string $color      (Optional) A value for the border color attribute.
+    * @param string $tr_classes (Optional) CSS classes for the <tr> tag.
+    * @return void
+    * @todo Style using CSS classes
+   **/
+   public function displayHRowSpacer($color = '#f5f5f5', $tr_classes = "genericobject__hrowspacer") {
+      //Case: A row created previously must be closed.
+      //      We expect a well formed left column and a missing right column.
+      if ($this->cpt > 0) {
+            echo '<td>&nbsp;<!--label--></td>';
+            echo '<td>&nbsp;<!--input--></td>';
+         echo '</tr>';
+         $this->cpt = 0;
+      }
+
+      //Display the spacer.
+      echo '<tr class="'.htmlspecialchars($tr_classes).'">';
+         echo '<td colspan="4" style="padding:1rem 0;">';
+            echo '<hr style="border:1px solid '.htmlspecialchars($color).';"/>';
+         echo '</td>';
+      echo '</tr>';
+   }
 
    function prepareInputForAdd($input) {
 
