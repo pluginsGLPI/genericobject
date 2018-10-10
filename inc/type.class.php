@@ -1752,6 +1752,36 @@ class PluginGenericobjectType extends CommonDBTM {
       return $associated_tables;
    }
 
+   /**
+    * Get all fields of a given input type and item type.
+    * Note: Copied and adapted from method getDropdownForItemtype.
+    * 
+    * @param   string  item_type    the itemtype
+    * @param   string  input_type   The input type (as specified in itemtype.constant.php files)
+    * 
+    * @return an array of field names
+    */
+   static function listFieldsByInputType($item_type, $input_type) {
+      global $DB;
+      $retval = [];
+      if (class_exists($item_type)) {
+         $source_table = getTableForItemType($item_type);
+         foreach (PluginGenericobjectSingletonObjectField::getInstance($item_type)
+                  as $field => $value) {
+            //Will use table name to make sure GenericObject (GO) owns the field.
+            $table = getTableNameForForeignKeyField($field);
+            $options = PluginGenericobjectField::getFieldOptions($field, $item_type);
+            if (isset($options['input_type'])
+               and strtolower($options['input_type']) === strtolower($input_type)
+               and preg_match('/^glpi_plugin_genericobject/', $table)//GO must own the field.
+            ) {
+               $retval[] = $field;
+            }
+         }
+      }
+
+      return $retval;
+   }
 
    static function deleteDropdownsForItemtype($itemtype) {
       global $DB;
