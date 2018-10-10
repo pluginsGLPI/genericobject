@@ -515,7 +515,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function displayField($canedit, $name, $value, $template, $description = []) {
-      global $GO_BLACKLIST_FIELDS;
+      global $DB, $GO_BLACKLIST_FIELDS;
 
       $searchoption  = PluginGenericobjectField::getFieldOptions($name, get_called_class());
 
@@ -633,6 +633,47 @@ class PluginGenericobjectObject extends CommonDBTM {
                      ]
                   );
                   break;
+
+            case "combobox" :
+            case "json" :
+               //List selectable values
+               $elements = [];
+               $fk_table = getTableNameForForeignKeyField($name);
+               if(is_string($fk_table) && strlen($fk_table) > 0) {
+                  $itemtype = getItemTypeForTable($fk_table);
+                  $dropdown = new $itemtype();
+
+                  $query = [
+                     'SELECT' => ['id', 'name'],
+                     'FROM' => $fk_table
+                  ];
+
+                  if ($dropdown->isEntityAssign()) {
+                     $query['WHERE']["entities_id"] = $this->fields['entities_id'];
+                  }
+
+                  foreach($DB->request($query) as $id => $row) {
+                     if(isset($row['id']) && isset($row['name'])) {
+                        $elements[$row['id']] = $row['name'];
+                     }
+                  }
+               }
+
+               //List selected values
+               $values = json_decode($value);
+               $values = is_array($values) ? $values : [];
+
+               //Display combobox
+               Dropdown::showFromArray(
+                  $name,
+                  asort($elements),
+                  [
+                     'display' => true,
+                     'multiple' => true,
+                     'values' => $values,
+                  ]
+               );
+               break;
 
             default:
             case "float":
