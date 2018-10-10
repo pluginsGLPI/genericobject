@@ -660,8 +660,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
 
                //List selected values
-               $values = json_decode($value);
-               $values = is_array($values) ? $values : [];
+               $values = $this->deserializeComboboxField($value);
 
                //Display combobox
                asort($elements);
@@ -768,6 +767,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       unset ($input['id']);
       unset ($input['withtemplate']);
 
+      $input = $this->serializeAllComboboxInputs($input);
+
       return $input;
    }
 
@@ -797,6 +798,17 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   /**
+    * Prepare input datas for updating the item
+    *
+    * @param array $input data used to update the item
+    *
+    * @return array the modified $input array
+   **/
+   function prepareInputForUpdate($input) {
+      $input = $this->serializeAllComboboxInputs($input);
+      return $input;
+   }
 
    function cleanDBonPurge() {
       $parameters = ['items_id' => $this->getID(), 'itemtype' => get_called_class()];
