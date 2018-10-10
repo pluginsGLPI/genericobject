@@ -664,9 +664,10 @@ class PluginGenericobjectObject extends CommonDBTM {
                $values = is_array($values) ? $values : [];
 
                //Display combobox
+               asort($elements);
                Dropdown::showFromArray(
                   $name,
-                  asort($elements),
+                  $elements,
                   [
                      'display' => true,
                      'multiple' => true,
