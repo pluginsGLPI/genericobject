@@ -1273,4 +1273,103 @@ class PluginGenericobjectObject extends CommonDBTM {
       return $menu;
    }
 
+    /**
+    * Given an associative array of field-value pairs, serialize all combobox fields.
+    * Use case: Serialize combobox fields values from array to string.
+    *
+    * @param   array   $data
+    * @return  array   The potentially modified data array
+    **/
+   public function serializeAllComboboxInputs($data) {
+      foreach ($this->listComboboxFields() as $name) {
+         if (isset($data[$name])) {
+            $data[$name] = $this->serializeComboboxField($data[$name]);
+         }
+      }   
+      return $data;
+   }
+
+   /**
+    * Given an associative array of field-value pairs, deserialize all combobox fields.
+    * Use case: Deserialize combobox fields values from string to array.
+    *
+    * @param   array   $data
+    * @return  array   A potentially modified data array
+    * @todo Code a function to get the list of all combobox fields.
+    **/
+   public function deSerializeAllComboboxInputs($data) {
+      foreach ($this->listComboboxFields() as $name) {
+         if (isset($data[$name])) {
+            $data[$name] = $this->deSerializeComboboxField($data[$name]);
+         }
+      }   
+      return $data;
+   }
+
+   /**
+    * Get a list of all combobox fields.
+    *
+    * @return  array   A list of field names.
+    **/
+   public function listComboboxFields() {
+      return PluginGenericobjectType::listFieldsByInputType(get_called_class(), 'combobox');
+   }
+
+   /**
+    * Serialize an input field of type Combobox before saving into database.
+    *
+    * @param   array   $value An array to serialize
+    * @return  string   A serialized value
+    * @throws  Exception
+    **/
+   public function serializeComboboxField($value) {
+      if ( ! is_array($value)) {
+         throw new Exception('Usage: Parameter "value" must be of type array.');
+      }
+      
+      $value = json_encode($value);
+      
+      if ( ! is_string($value)) {
+         throw new Exception('Serialization error: '.json_last_error_msg());
+      }
+      
+      return $value;
+   }
+
+   /**
+    * Deserialize an input field of type Combobox read from database.
+    *
+    * @param   string/null   $value A serialized value
+    * @return  array   A deserialized value
+    **/
+   public function deserializeComboboxField($value) {
+      //Value from DB may be null or an empty string, else assume it's a valid json string.
+      $value = is_string($value) && strlen($value) > 0 ? json_decode($value) : [];
+      
+      if ( ! is_array($value)) {
+         throw new Exception('Invalid value or deserialization error: '.json_last_error_msg());
+      }
+      
+      return $value;
+   }
+
+   /**
+    * Add a key-value pair for any field name that is not a key in data.
+    * Use case: Adding a default value in $_POST array when combobox is empty.
+    *
+    * @param   array   $data     An associative map of field-value pairs
+    * @param   array   $fields   A list of field names
+    * @param   mixed   $value    The value to associate to missing fields.
+    * 
+    * @return  array   A potentially modified data array.
+    **/
+   public static function fillMissingKeys($data, $fields, $value) {
+      foreach ($fields as $name) {
+         if ( ! isset($data[$name])) {
+            $data[$name] = $value;
+         }
+      }
+      return $data;
+   }
+
 }
