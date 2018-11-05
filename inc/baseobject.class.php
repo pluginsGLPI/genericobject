@@ -25,7 +25,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-class PluginGenericobjectObject extends CommonDBTM {
+class PluginGenericobjectBaseObject extends CommonDBTM {
 
    protected $objecttype;
 
