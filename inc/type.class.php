@@ -1484,7 +1484,7 @@ class PluginGenericobjectType extends CommonDBTM {
       //Delete if exists datainjection models
       if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
          $model = new PluginDatainjectionModel();
-         foreach ($model->find("`itemtype`='$itemtype'") as $data) {
+         foreach ($model->find(['itemtype' => $itemtype]) as $data) {
             $model->delete($data);
          }
       }
@@ -1498,7 +1498,7 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function deleteLoans($itemtype) {
       $reservation_item = new ReservationItem();
-      foreach ($reservation_item->find("`itemtype`='$itemtype'") as $data) {
+      foreach ($reservation_item->find(['itemtype' => $itemtype]) as $data) {
          $reservation_item->delete($data);
       }
    }
@@ -1533,7 +1533,7 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    static function deleteNetworking($itemtype) {
       $networkport = new NetworkPort();
-      foreach ($networkport->find("`itemtype`='$itemtype'") as $port) {
+      foreach ($networkport->find(['itemtype' => $itemtype]) as $port) {
          $networkport->delete($port);
       }
    }
