@@ -198,7 +198,7 @@ function plugin_genericobject_uninstall() {
 function plugin_datainjection_populate_genericobject() {
    global $INJECTABLE_TYPES;
    $type = new PluginGenericobjectType();
-   foreach ($type->find("`use_plugin_datainjection`='1' AND `is_active`='1'") as $data) {
+   foreach ($type->find(['use_plugin_datainjection' => 1, 'is_active' => 1]) as $data) {
       if (class_exists($data ['itemtype']."Injection")) {
          $INJECTABLE_TYPES[$data ['itemtype']."Injection"] = 'genericobject';
       }
