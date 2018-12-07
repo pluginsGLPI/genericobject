@@ -3,151 +3,151 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# jchan <jhornqvist@gmail.com>, 2018
+# Markku Vepsä, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-22 13:21+0000\n"
-"PO-Revision-Date: 2018-09-10 09:31+0000\n"
-"Last-Translator: jchan <jhornqvist@gmail.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/sv_SE/)\n"
+"PO-Revision-Date: 2018-11-13 19:30+0000\n"
+"Last-Translator: Markku Vepsä\n"
+"Language-Team: Finnish (Finland) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/fi_FI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
+"Language: fi_FI\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: front/type.php:38 front/object.php:33 inc/profile.class.php:287
 #: inc/type.class.php:66
 msgid "Type of objects"
-msgstr "Typ av tillgång"
+msgstr "Kohteiden tyyppi"
 
 #: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
 #: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
 #: inc/type.class.php:289 inc/type.class.php:415 setup.php:193
 msgid "Objects management"
-msgstr "Hantera tillgångar"
+msgstr "Kohteiden hallinta"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
-msgstr "Fältet(en) raderades"
+msgstr "Kenttä/kentät poistettu onnistuneesti"
 
 #: front/field.form.php:51
 msgid "Field added successfully"
-msgstr "Attribut tillagt"
+msgstr "Kenttä lisätty onnistuneesti"
 
 #: front/commondropdown.php:11 front/commontreedropdown.form.php:36
 #: front/commondropdown.form.php:36
 msgid "The requested dropdown does not exists"
-msgstr "Den begärda rullmenyn saknas"
+msgstr "Pyydettyä alasvetovalikkoa ei ole olemassa"
 
 #: front/familylist.php:37 index.php:68
 msgid "Empty family"
-msgstr "Tom familj"
+msgstr "Tyhjä perhe"
 
 #: inc/profile.class.php:141
 msgid "General"
-msgstr "Allmänt"
+msgstr "Yleinen"
 
 #: inc/profile.class.php:147
 msgid "Objects"
-msgstr "Tillgångar"
+msgstr "Kohteet"
 
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
-msgstr "(Inga typer har skapats ännu)"
+msgstr "(Tyyppejä ei ole vielä määritelty)"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
-msgstr "Fält kopplade till tillgången"
+msgstr "Kohteeseen liittyvät kentät"
 
 #: inc/field.class.php:70
 msgid "Label"
-msgstr "Etikett"
+msgstr "Etiketti"
 
 #: inc/field.class.php:71
 msgid "Name in DB"
-msgstr "Namn i DB"
+msgstr "Nimi tietokannassa"
 
 #: inc/field.class.php:126
 msgid "Add new field"
-msgstr "Lägg till nytt fält"
+msgstr "Lisää uusi kenttä"
 
 #: inc/field.class.php:317
 msgid "Read-only field"
-msgstr "Skrivskyddat fält"
+msgstr "Vain luku kenttä"
 
 #: inc/type.class.php:153
 msgid "Type name is missing"
-msgstr "Typnamn saknas"
+msgstr "Tyyppinimi puuttuu"
 
 #: inc/type.class.php:159
 msgid "Type name must be longer"
-msgstr "Typnamnet måste vara längre"
+msgstr "Tyyppinimen on oltava pidempi"
 
 #: inc/type.class.php:165
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Typnamnen 'fält, 'objekt' och 'typ' är reserverade av systemet. Var vänlig välj ett annat namn."
+msgstr "Tyypit \"kenttä\", \"kohde\" ja \"tyyppi\" ovat varattuja. Valitse joku toinen"
 
 #: inc/type.class.php:172
 msgid "Type must start with a letter"
-msgstr "Typnamnet måste börja med en bokstav"
+msgstr "Tyypin täytyy alkaa kirjaimella"
 
 #: inc/type.class.php:179
 msgid "A type already exists with the same name"
-msgstr "Typnamnet existerar redan"
+msgstr "Samanniminen tyyppi on jo olemassa"
 
 #: inc/type.class.php:376 inc/type.class.php:505 inc/typefamily.class.php:36
 msgid "Family of type of objects"
-msgstr "Ingår i typfamilj"
+msgstr "Kohteiden tyypin perhe"
 
 #: inc/type.class.php:466
 msgid "Internal identifier"
-msgstr "Internt namn"
+msgstr "Sisäinen tunniste"
 
 #: inc/type.class.php:520
 msgid "Behaviour"
-msgstr "Beteende"
+msgstr "Käyttäytyminen"
 
 #: inc/type.class.php:539
 msgid "Network connections"
-msgstr "Nätverksanslutningar"
+msgstr "Verkkoyhteydet"
 
 #: inc/type.class.php:543
 msgid "injection file plugin"
-msgstr "Injection file plug-in"
+msgstr "Tiedoston tuonti -liitännäinen"
 
 #: inc/type.class.php:545
 msgid "geninventorynumber plugin"
-msgstr "Geninventorynumber plug-in"
+msgstr "Inventaarinumeron luonti liitännäinen"
 
 #: inc/type.class.php:546
 msgid "order plugin"
-msgstr "Order plug-in"
+msgstr "Tilaus -liitännäinen"
 
 #: inc/type.class.php:547
 msgid "item's uninstallation plugin"
-msgstr "Item's uninstallation plug-in"
+msgstr "Kohteen poisto -liitännäinen"
 
 #: inc/type.class.php:548
 msgid "simcard plugin"
-msgstr "Simcard plug-in"
+msgstr "SIM-kortti -liitännäinen"
 
 #: inc/type.class.php:700
 msgid "Regenerate files"
-msgstr "Skapa filer på nytt"
+msgstr "Luo tiedostot uudelleen"
 
 #: inc/type.class.php:713
 msgid "Link to other objects"
-msgstr "Länka till andra tillgångar"
+msgstr "Linkki muihin kohteisiin"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2017
 #, php-format
 msgid "Unable to load the class %1$s."
-msgstr "Kunde inte läsa in klass %1$s-"
+msgstr "Ei voida ladata luokkaa %1$s."
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2019
@@ -155,12 +155,12 @@ msgstr "Kunde inte läsa in klass %1$s-"
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr "Du har troligtvis skräpdata i databasen för denna plug-in och saknar filer i %1$s"
+msgstr "Tietokannassa on ongelma liittyen liitännäiseen ja puuttuvia tiedostoja %1$s"
 
 #: inc/object.class.php:471
 msgid "Object preview"
-msgstr "Förhandsgranska tillgång"
+msgstr "Kohteen esikatselu"
 
 #: inc/object.class.php:751
 msgid "You must configure rights to enable the preview"
-msgstr "Du måste konfigurera rättigheter för att aktivera förhandsgranskning"
+msgstr "Oikeudet on määritettävä, jotta esikatselu voidaan ottaa käyttöön"
