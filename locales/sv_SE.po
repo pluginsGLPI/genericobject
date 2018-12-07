@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Johan Hörnqvist <jhornqvist@gmail.com>, 2018
+# jchan <jhornqvist@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-22 13:21+0000\n"
-"PO-Revision-Date: 2018-09-06 22:04+0000\n"
-"Last-Translator: Johan Hörnqvist <jhornqvist@gmail.com>\n"
+"PO-Revision-Date: 2018-09-10 09:31+0000\n"
+"Last-Translator: jchan <jhornqvist@gmail.com>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,7 @@ msgstr "Hantera tillgångar"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
-msgstr "Attribut raderat"
+msgstr "Fältet(en) raderades"
 
 #: front/field.form.php:51
 msgid "Field added successfully"
@@ -60,7 +60,7 @@ msgstr "(Inga typer har skapats ännu)"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
-msgstr "Attribut kopplade till tillgången"
+msgstr "Fält kopplade till tillgången"
 
 #: inc/field.class.php:70
 msgid "Label"
@@ -72,15 +72,15 @@ msgstr "Namn i DB"
 
 #: inc/field.class.php:126
 msgid "Add new field"
-msgstr "Lägg till nytt attribut"
+msgstr "Lägg till nytt fält"
 
 #: inc/field.class.php:317
 msgid "Read-only field"
-msgstr "Skrivskyddat attribut"
+msgstr "Skrivskyddat fält"
 
 #: inc/type.class.php:153
 msgid "Type name is missing"
-msgstr "Typnamnet saknas"
+msgstr "Typnamn saknas"
 
 #: inc/type.class.php:159
 msgid "Type name must be longer"
@@ -89,7 +89,7 @@ msgstr "Typnamnet måste vara längre"
 #: inc/type.class.php:165
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Typnamnen 'attribut', 'objekt' och 'typ' är reserverade av systemet. Var vänlig välj ett annat namn."
+msgstr "Typnamnen 'fält, 'objekt' och 'typ' är reserverade av systemet. Var vänlig välj ett annat namn."
 
 #: inc/type.class.php:172
 msgid "Type must start with a letter"
@@ -101,7 +101,7 @@ msgstr "Typnamnet existerar redan"
 
 #: inc/type.class.php:376 inc/type.class.php:505 inc/typefamily.class.php:36
 msgid "Family of type of objects"
-msgstr "Tillhör typfamilj"
+msgstr "Ingår i typfamilj"
 
 #: inc/type.class.php:466
 msgid "Internal identifier"
@@ -155,7 +155,7 @@ msgstr "Kunde inte läsa in klass %1$s-"
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr "Du har troligtvis skräpdata i databasen för denna plug-in och saknade filer i %1$s"
+msgstr "Du har troligtvis skräpdata i databasen för denna plug-in och saknar filer i %1$s"
 
 #: inc/object.class.php:471
 msgid "Object preview"

@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# polar147 <andrei_simoni@hotmail.com>, 2017
+# Andrei Bernardo Simoni <andrei_simoni@hotmail.com>, 2017
 # Arthur Ramos Schaefer <arthur.r.schaefer@gmail.com>, 2017
 msgid ""
 msgstr ""
