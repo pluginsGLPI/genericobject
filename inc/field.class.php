@@ -384,6 +384,9 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'decimal' :
                $query .= "DECIMAL(20,4) NOT NULL DEFAULT '0.0000'";
                break;
+            case 'combobox' :
+               $query .= "JSON NULL";
+               break;
          }
          if ($after) {
             $query.=" AFTER `$after`";

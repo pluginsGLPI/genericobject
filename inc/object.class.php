@@ -515,7 +515,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function displayField($canedit, $name, $value, $template, $description = []) {
-      global $GO_BLACKLIST_FIELDS;
+      global $DB, $GO_BLACKLIST_FIELDS;
 
       $searchoption  = PluginGenericobjectField::getFieldOptions($name, get_called_class());
 
@@ -634,6 +634,47 @@ class PluginGenericobjectObject extends CommonDBTM {
                   );
                   break;
 
+            case "combobox" :
+            case "json" :
+               //List selectable values
+               $elements = [];
+               $fk_table = getTableNameForForeignKeyField($name);
+               if(is_string($fk_table) && strlen($fk_table) > 0) {
+                  $itemtype = getItemTypeForTable($fk_table);
+                  $dropdown = new $itemtype();
+
+                  $query = [
+                     'SELECT' => ['id', 'name'],
+                     'FROM' => $fk_table
+                  ];
+
+                  if ($dropdown->isEntityAssign()) {
+                     $query['WHERE']["entities_id"] = $this->fields['entities_id'];
+                  }
+
+                  foreach($DB->request($query) as $id => $row) {
+                     if(isset($row['id']) && isset($row['name'])) {
+                        $elements[$row['id']] = $row['name'];
+                     }
+                  }
+               }
+
+               //List selected values
+               $values = $this->deserializeComboboxField($value);
+
+               //Display combobox
+               asort($elements);
+               Dropdown::showFromArray(
+                  $name,
+                  $elements,
+                  [
+                     'display' => true,
+                     'multiple' => true,
+                     'values' => $values,
+                  ]
+               );
+               break;
+
             default:
             case "float":
                   echo "<input type='text' name='$name' value='$value'>";
@@ -726,6 +767,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       unset ($input['id']);
       unset ($input['withtemplate']);
 
+      $input = $this->serializeAllComboboxInputs($input);
+
       return $input;
    }
 
@@ -755,6 +798,17 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   /**
+    * Prepare input datas for updating the item
+    *
+    * @param array $input data used to update the item
+    *
+    * @return array the modified $input array
+   **/
+   function prepareInputForUpdate($input) {
+      $input = $this->serializeAllComboboxInputs($input);
+      return $input;
+   }
 
    function cleanDBonPurge() {
       $parameters = ['items_id' => $this->getID(), 'itemtype' => get_called_class()];
@@ -1217,6 +1271,105 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       $menu['is_multi_entries']= true;
       return $menu;
+   }
+
+    /**
+    * Given an associative array of field-value pairs, serialize all combobox fields.
+    * Use case: Serialize combobox fields values from array to string.
+    *
+    * @param   array   $data
+    * @return  array   The potentially modified data array
+    **/
+   public function serializeAllComboboxInputs($data) {
+      foreach ($this->listComboboxFields() as $name) {
+         if (isset($data[$name])) {
+            $data[$name] = $this->serializeComboboxField($data[$name]);
+         }
+      }   
+      return $data;
+   }
+
+   /**
+    * Given an associative array of field-value pairs, deserialize all combobox fields.
+    * Use case: Deserialize combobox fields values from string to array.
+    *
+    * @param   array   $data
+    * @return  array   A potentially modified data array
+    * @todo Code a function to get the list of all combobox fields.
+    **/
+   public function deSerializeAllComboboxInputs($data) {
+      foreach ($this->listComboboxFields() as $name) {
+         if (isset($data[$name])) {
+            $data[$name] = $this->deSerializeComboboxField($data[$name]);
+         }
+      }   
+      return $data;
+   }
+
+   /**
+    * Get a list of all combobox fields.
+    *
+    * @return  array   A list of field names.
+    **/
+   public function listComboboxFields() {
+      return PluginGenericobjectType::listFieldsByInputType(get_called_class(), 'combobox');
+   }
+
+   /**
+    * Serialize an input field of type Combobox before saving into database.
+    *
+    * @param   array   $value An array to serialize
+    * @return  string   A serialized value
+    * @throws  Exception
+    **/
+   public function serializeComboboxField($value) {
+      if ( ! is_array($value)) {
+         throw new Exception('Usage: Parameter "value" must be of type array.');
+      }
+      
+      $value = json_encode($value);
+      
+      if ( ! is_string($value)) {
+         throw new Exception('Serialization error: '.json_last_error_msg());
+      }
+      
+      return $value;
+   }
+
+   /**
+    * Deserialize an input field of type Combobox read from database.
+    *
+    * @param   string/null   $value A serialized value
+    * @return  array   A deserialized value
+    **/
+   public function deserializeComboboxField($value) {
+      //Value from DB may be null or an empty string, else assume it's a valid json string.
+      $value = is_string($value) && strlen($value) > 0 ? json_decode($value) : [];
+      
+      if ( ! is_array($value)) {
+         throw new Exception('Invalid value or deserialization error: '.json_last_error_msg());
+      }
+      
+      return $value;
+   }
+
+   /**
+    * Add a key-value pair for any field name that is not a key in data.
+    * Use case: Adding a default value in $_POST array when combobox is empty.
+    *
+    * @param   array   $data     An associative map of field-value pairs
+    * @param   array   $fields   A list of field names
+    * @param   mixed   $value    The value to associate to missing fields.
+    * 
+    * @return  array   A potentially modified data array.
+    **/
+   public static function fillMissingKeys($data, $fields, $value) {
+      foreach ($fields as $name) {
+         if ( ! isset($data[$name])) {
+            $data[$name] = $value;
+         }
+      }
+      return $data;
    }
 
 }

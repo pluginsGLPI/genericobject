@@ -82,6 +82,15 @@ if (!is_null($itemtype)) {
       }
    } else if (isset ($_POST["update"])) {
       $item->check($id, UPDATE);
+      //Use case: Comboboxes with no value selected are not posted as part of a form's data.
+      //          Assigning an empty array to these missing fields will update the database.
+      //          This logic only applies when receiving data from HTML forms.
+      $_POST = call_user_func(
+         [$item, 'fillMissingKeys'],
+         $_POST,
+         $item->listComboboxFields(),
+         []
+      );
       $item->update($_POST);
       Html::back();
    } else if (isset ($_POST["restore"])) {
