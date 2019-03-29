@@ -3,152 +3,151 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Andrei Bernardo Simoni <andrei_simoni@hotmail.com>, 2017
-# Arthur Ramos Schaefer <arthur.r.schaefer@gmail.com>, 2017
+# Markku Vepsä, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-22 13:21+0000\n"
-"PO-Revision-Date: 2017-12-13 13:22+0000\n"
-"Last-Translator: alexandre delaunay <delaunay.alexandre@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/pt_BR/)\n"
+"PO-Revision-Date: 2018-11-13 19:30+0000\n"
+"Last-Translator: Markku Vepsä\n"
+"Language-Team: Finnish (Finland) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/fi_FI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fi_FI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: front/type.php:38 front/object.php:33 inc/profile.class.php:287
 #: inc/type.class.php:66
 msgid "Type of objects"
-msgstr "Tipos de objetos"
+msgstr "Kohteiden tyyppi"
 
 #: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
 #: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
 #: inc/type.class.php:289 inc/type.class.php:415 setup.php:193
 msgid "Objects management"
-msgstr "Gerenciamento de objetos"
+msgstr "Kohteiden hallinta"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
-msgstr "Campo(s) excluído(s) com sucesso"
+msgstr "Kenttä/kentät poistettu onnistuneesti"
 
 #: front/field.form.php:51
 msgid "Field added successfully"
-msgstr "Campo adicionado com sucesso"
+msgstr "Kenttä lisätty onnistuneesti"
 
 #: front/commondropdown.php:11 front/commontreedropdown.form.php:36
 #: front/commondropdown.form.php:36
 msgid "The requested dropdown does not exists"
-msgstr "O menu suspenso solicitado não existe"
+msgstr "Pyydettyä alasvetovalikkoa ei ole olemassa"
 
 #: front/familylist.php:37 index.php:68
 msgid "Empty family"
-msgstr "Família vazia"
+msgstr "Tyhjä perhe"
 
 #: inc/profile.class.php:141
 msgid "General"
-msgstr "Geral"
+msgstr "Yleinen"
 
 #: inc/profile.class.php:147
 msgid "Objects"
-msgstr "Objetos"
+msgstr "Kohteet"
 
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
-msgstr ""
+msgstr "(Tyyppejä ei ole vielä määritelty)"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
-msgstr "Campos associados com o objeto"
+msgstr "Kohteeseen liittyvät kentät"
 
 #: inc/field.class.php:70
 msgid "Label"
-msgstr "Etiqueta"
+msgstr "Etiketti"
 
 #: inc/field.class.php:71
 msgid "Name in DB"
-msgstr "Nome no banco de dados"
+msgstr "Nimi tietokannassa"
 
 #: inc/field.class.php:126
 msgid "Add new field"
-msgstr "Adicionar novo campo"
+msgstr "Lisää uusi kenttä"
 
 #: inc/field.class.php:317
 msgid "Read-only field"
-msgstr ""
+msgstr "Vain luku kenttä"
 
 #: inc/type.class.php:153
 msgid "Type name is missing"
-msgstr "O nome do tipo está faltando"
+msgstr "Tyyppinimi puuttuu"
 
 #: inc/type.class.php:159
 msgid "Type name must be longer"
-msgstr ""
+msgstr "Tyyppinimen on oltava pidempi"
 
 #: inc/type.class.php:165
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Tipos 'campo', 'objeto' e 'tipo' estão reservados. Por favor escolha outro"
+msgstr "Tyypit \"kenttä\", \"kohde\" ja \"tyyppi\" ovat varattuja. Valitse joku toinen"
 
 #: inc/type.class.php:172
 msgid "Type must start with a letter"
-msgstr "O tipo deve começar com uma letra"
+msgstr "Tyypin täytyy alkaa kirjaimella"
 
 #: inc/type.class.php:179
 msgid "A type already exists with the same name"
-msgstr "Um tipo com o mesmo nome já existe "
+msgstr "Samanniminen tyyppi on jo olemassa"
 
 #: inc/type.class.php:376 inc/type.class.php:505 inc/typefamily.class.php:36
 msgid "Family of type of objects"
-msgstr "Família de tipo de objetos"
+msgstr "Kohteiden tyypin perhe"
 
 #: inc/type.class.php:466
 msgid "Internal identifier"
-msgstr "Identificador interno"
+msgstr "Sisäinen tunniste"
 
 #: inc/type.class.php:520
 msgid "Behaviour"
-msgstr "Comportamento"
+msgstr "Käyttäytyminen"
 
 #: inc/type.class.php:539
 msgid "Network connections"
-msgstr "Conexões de rede"
+msgstr "Verkkoyhteydet"
 
 #: inc/type.class.php:543
 msgid "injection file plugin"
-msgstr "plugin datainjection"
+msgstr "Tiedoston tuonti -liitännäinen"
 
 #: inc/type.class.php:545
 msgid "geninventorynumber plugin"
-msgstr "plugin getinventorynumber"
+msgstr "Inventaarinumeron luonti liitännäinen"
 
 #: inc/type.class.php:546
 msgid "order plugin"
-msgstr "plugin order"
+msgstr "Tilaus -liitännäinen"
 
 #: inc/type.class.php:547
 msgid "item's uninstallation plugin"
-msgstr "plugin item's uninstallation"
+msgstr "Kohteen poisto -liitännäinen"
 
 #: inc/type.class.php:548
 msgid "simcard plugin"
-msgstr "plugin simcard"
+msgstr "SIM-kortti -liitännäinen"
 
 #: inc/type.class.php:700
 msgid "Regenerate files"
-msgstr "Regenerar arquivos"
+msgstr "Luo tiedostot uudelleen"
 
 #: inc/type.class.php:713
 msgid "Link to other objects"
-msgstr "Conexão com outros objetos"
+msgstr "Linkki muihin kohteisiin"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2017
 #, php-format
 msgid "Unable to load the class %1$s."
-msgstr ""
+msgstr "Ei voida ladata luokkaa %1$s."
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2019
@@ -156,12 +155,12 @@ msgstr ""
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr ""
+msgstr "Tietokannassa on ongelma liittyen liitännäiseen ja puuttuvia tiedostoja %1$s"
 
 #: inc/object.class.php:471
 msgid "Object preview"
-msgstr "Pré-visualização do objet"
+msgstr "Kohteen esikatselu"
 
 #: inc/object.class.php:751
 msgid "You must configure rights to enable the preview"
-msgstr "Você deve configurar os direitos para habilitar pré-visualização"
+msgstr "Oikeudet on määritettävä, jotta esikatselu voidaan ottaa käyttöön"

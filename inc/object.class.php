@@ -760,6 +760,18 @@ class PluginGenericobjectObject extends CommonDBTM {
       $index_exceptions = ['name' => 1, 'id' => 2, 'comment' => 16, 'date_mod' => 19,
                            'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90,
                            'date_creation' => 121];
+
+      // Don't use indexes blacklisted by other item types in plugin DataInjection.
+      $plugin = new Plugin();
+      if ($plugin->isActivated("datainjection")
+         && class_exists('PluginDatainjectionCommonInjectionLib')) {
+         $blacklisted_indexes = PluginDatainjectionCommonInjectionLib::getBlacklistedOptions(
+            get_called_class() //A class that extends PluginGenericobjectObject
+         );
+      } else {
+         $blacklisted_indexes = [];
+      }
+
       $index   = 3;
 
       $options = [];
@@ -770,6 +782,9 @@ class PluginGenericobjectObject extends CommonDBTM {
       ];
 
       $table   = getTableForItemType(get_called_class());
+
+      // Prevent usage of reserved and blacklisted indexes
+      $taken_indexes = array_merge($index_exceptions, $blacklisted_indexes);
 
       foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class())
          as $field => $values
@@ -787,14 +802,17 @@ class PluginGenericobjectObject extends CommonDBTM {
          $currentindex = $index;
          if (isset($index_exceptions[$field])) {
             $currentindex = $index_exceptions[$field];
-         } else if (in_array($currentindex, $index_exceptions)) {
-            //If this index is reserved, jump to next
-            $currentindex++;
+         } else {
+            //If this index is reserved, jump to next available one.
+            while (in_array($currentindex, $taken_indexes)) {
+               $currentindex++;
+            }
          }
 
          $option = [
             'id' => $currentindex,
          ];
+         $taken_indexes[] = $option['id'];
 
          $item = new $this->objecttype->fields['itemtype'];
 
@@ -1009,17 +1027,16 @@ class PluginGenericobjectObject extends CommonDBTM {
                   continue;
                } else {
                   $tmp   = [];
-                  $where = "";
+                  $where = [];
                   if ($dropdown instanceof CommonTreeDropdown) {
-                     $tmp['completename'] = $dropdown->fields['completename'];
-                     $where               = "`completename`='".
-                                             Toolbox::addslashes_deep($tmp['completename'])."'";
+                     $tmp['completename']   = $dropdown->fields['completename'];
+                     $where['completename'] = Toolbox::addslashes_deep($tmp['completename']);
                   } else {
-                     $tmp['name'] = $dropdown->fields['name'];
-                     $where       = "`name`='".Toolbox::addslashes_deep($tmp['name'])."'";
+                     $tmp['name']   = $dropdown->fields['name'];
+                     $where['name'] = Toolbox::addslashes_deep($tmp['name']);
                   }
-                  $tmp['entities_id'] = $new_entity;
-                  $where             .= " AND `entities_id`='".$tmp['entities_id']."'";
+                  $tmp['entities_id']   = $new_entity;
+                  $where['entities_id'] = $tmp['entities_id'];
                   //There's a dropdown value in the target entity
                   if ($found = $dropdown->find($where)) {
                      $myfound = array_pop($found);
