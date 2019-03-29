@@ -522,6 +522,17 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
+         if (strpos($description['Field'], 'plugin_genericobject_hrowspacer') === 0) {
+            $this->displayHRowSpacer();
+            return;
+         }
+
+         if (strpos($description['Field'], 'plugin_genericobject_emptyspace') === 0) {
+            $searchoption['name'] = "&nbsp;";
+            $description['Type'] = 'emptyspace';
+         }
+
+
          $this->startColumn();
          echo $searchoption['name'];
          if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
@@ -619,8 +630,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
                      ]
                   );
                   break;
-
-            default:
             case "float":
                   echo "<input type='text' name='$name' value='$value'>";
                   break;
@@ -677,7 +686,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       }
    }
 
-
    function prepareInputForAdd($input) {
 
       //Template management
@@ -686,7 +694,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       }
       unset ($input['id']);
       unset ($input['withtemplate']);
-
       return $input;
    }
 
@@ -715,7 +722,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
          Computer_Item::cloneComputer($this->input["_oldID"], $this->fields['id']);
       }
    }
-
 
    function cleanDBonPurge() {
       $parameters = ['items_id' => $this->getID(), 'itemtype' => get_called_class()];
@@ -1178,5 +1184,4 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       $menu['is_multi_entries']= true;
       return $menu;
    }
-
 }

@@ -360,6 +360,8 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'bool' :
                $query .= "TINYINT (1) NOT NULL DEFAULT '0'";
                break;
+            case 'hrowspacer' :
+            case 'emptyspace' :
             case 'text' :
                $query .= "VARCHAR ( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT ''";
                break;
@@ -381,6 +383,9 @@ class PluginGenericobjectField extends CommonDBTM {
                break;
             case 'decimal' :
                $query .= "DECIMAL(20,4) NOT NULL DEFAULT '0.0000'";
+               break;
+            case 'combobox' :
+               $query .= "JSON NULL";
                break;
          }
          if ($after) {

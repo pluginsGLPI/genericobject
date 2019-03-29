@@ -111,6 +111,7 @@ $child_classes = [
       'template_path' => GENERICOBJECT_DIR.'/objects/object_child.class.tpl',
     ],
 ];
+
 foreach($child_classes as $config) {
    if( ! file_exists($config['child_path'])) {
       file_put_contents(
