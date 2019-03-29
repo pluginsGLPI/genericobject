@@ -515,7 +515,7 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
 
 
    function displayField($canedit, $name, $value, $template, $description = []) {
-      global $DB, $GO_BLACKLIST_FIELDS;
+      global $GO_BLACKLIST_FIELDS;
 
       $searchoption  = PluginGenericobjectField::getFieldOptions($name, get_called_class());
 
@@ -531,6 +531,7 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
             $searchoption['name'] = "&nbsp;";
             $description['Type'] = 'emptyspace';
          }
+
 
          $this->startColumn();
          echo $searchoption['name'];
@@ -610,10 +611,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
                      "</textarea>";
                break;
 
-            case "emptyspace":
-               echo '&nbsp;';
-               break;
-
             case "date":
                   Html::showDateField(
                      $name, [
@@ -633,49 +630,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
                      ]
                   );
                   break;
-
-            case "combobox" :
-            case "json" :
-               //List selectable values
-               $elements = [];
-               $fk_table = getTableNameForForeignKeyField($name);
-               if(is_string($fk_table) && strlen($fk_table) > 0) {
-                  $itemtype = getItemTypeForTable($fk_table);
-                  $dropdown = new $itemtype();
-
-                  $query = [
-                     'SELECT' => ['id', 'name'],
-                     'FROM' => $fk_table
-                  ];
-
-                  if ($dropdown->isEntityAssign()) {
-                     $query['WHERE']["entities_id"] = $this->fields['entities_id'];
-                  }
-
-                  foreach($DB->request($query) as $id => $row) {
-                     if(isset($row['id']) && isset($row['name'])) {
-                        $elements[$row['id']] = $row['name'];
-                     }
-                  }
-               }
-
-               //List selected values
-               $values = $this->deserializeComboboxField($value);
-
-               //Display combobox
-               asort($elements);
-               Dropdown::showFromArray(
-                  $name,
-                  $elements,
-                  [
-                     'display' => true,
-                     'multiple' => true,
-                     'values' => $values,
-                  ]
-               );
-               break;
-
-            default:
             case "float":
                   echo "<input type='text' name='$name' value='$value'>";
                   break;
@@ -732,32 +686,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       }
    }
 
-   /**
-    * Display a vertical spacer that looks like an <hr/>
-    *
-    * @param string $color      (Optional) A value for the border color attribute.
-    * @param string $tr_classes (Optional) CSS classes for the <tr> tag.
-    * @return void
-    * @todo Style using CSS classes
-   **/
-   public function displayHRowSpacer($color = '#f5f5f5', $tr_classes = "genericobject__hrowspacer") {
-      //Case: A row created previously must be closed.
-      //      We expect a well formed left column and a missing right column.
-      if ($this->cpt > 0) {
-            echo '<td>&nbsp;<!--label--></td>';
-            echo '<td>&nbsp;<!--input--></td>';
-         echo '</tr>';
-         $this->cpt = 0;
-      }
-
-      //Display the spacer.
-      echo '<tr class="'.htmlspecialchars($tr_classes).'">';
-         echo '<td colspan="4" style="padding:1rem 0;">';
-            echo '<hr style="border:1px solid '.htmlspecialchars($color).';"/>';
-         echo '</td>';
-      echo '</tr>';
-   }
-
    function prepareInputForAdd($input) {
 
       //Template management
@@ -766,9 +694,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       }
       unset ($input['id']);
       unset ($input['withtemplate']);
-
-      $input = $this->serializeAllComboboxInputs($input);
-
       return $input;
    }
 
@@ -796,18 +721,6 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
          // Add connected devices
          Computer_Item::cloneComputer($this->input["_oldID"], $this->fields['id']);
       }
-   }
-
-   /**
-    * Prepare input datas for updating the item
-    *
-    * @param array $input data used to update the item
-    *
-    * @return array the modified $input array
-   **/
-   function prepareInputForUpdate($input) {
-      $input = $this->serializeAllComboboxInputs($input);
-      return $input;
    }
 
    function cleanDBonPurge() {
@@ -1271,104 +1184,4 @@ class PluginGenericobjectBaseObject extends CommonDBTM {
       $menu['is_multi_entries']= true;
       return $menu;
    }
-
-    /**
-    * Given an associative array of field-value pairs, serialize all combobox fields.
-    * Use case: Serialize combobox fields values from array to string.
-    *
-    * @param   array   $data
-    * @return  array   The potentially modified data array
-    **/
-   public function serializeAllComboboxInputs($data) {
-      foreach ($this->listComboboxFields() as $name) {
-         if (isset($data[$name])) {
-            $data[$name] = $this->serializeComboboxField($data[$name]);
-         }
-      }   
-      return $data;
-   }
-
-   /**
-    * Given an associative array of field-value pairs, deserialize all combobox fields.
-    * Use case: Deserialize combobox fields values from string to array.
-    *
-    * @param   array   $data
-    * @return  array   A potentially modified data array
-    * @todo Code a function to get the list of all combobox fields.
-    **/
-   public function deSerializeAllComboboxInputs($data) {
-      foreach ($this->listComboboxFields() as $name) {
-         if (isset($data[$name])) {
-            $data[$name] = $this->deSerializeComboboxField($data[$name]);
-         }
-      }   
-      return $data;
-   }
-
-   /**
-    * Get a list of all combobox fields.
-    *
-    * @return  array   A list of field names.
-    **/
-   public function listComboboxFields() {
-      return PluginGenericobjectType::listFieldsByInputType(get_called_class(), 'combobox');
-   }
-
-   /**
-    * Serialize an input field of type Combobox before saving into database.
-    *
-    * @param   array   $value An array to serialize
-    * @return  string   A serialized value
-    * @throws  Exception
-    **/
-   public function serializeComboboxField($value) {
-      if ( ! is_array($value)) {
-         throw new Exception('Usage: Parameter "value" must be of type array.');
-      }
-      
-      $value = json_encode($value);
-      
-      if ( ! is_string($value)) {
-         throw new Exception('Serialization error: '.json_last_error_msg());
-      }
-      
-      return $value;
-   }
-
-   /**
-    * Deserialize an input field of type Combobox read from database.
-    *
-    * @param   string/null   $value A serialized value
-    * @return  array   A deserialized value
-    **/
-   public function deserializeComboboxField($value) {
-      //Value from DB may be null or an empty string, else assume it's a valid json string.
-      $value = is_string($value) && strlen($value) > 0 ? json_decode($value) : [];
-      
-      if ( ! is_array($value)) {
-         throw new Exception('Invalid value or deserialization error: '.json_last_error_msg());
-      }
-      
-      return $value;
-   }
-
-   /**
-    * Add a key-value pair for any field name that is not a key in data.
-    * Use case: Adding a default value in $_POST array when combobox is empty.
-    *
-    * @param   array   $data     An associative map of field-value pairs
-    * @param   array   $fields   A list of field names
-    * @param   mixed   $value    The value to associate to missing fields.
-    * 
-    * @return  array   A potentially modified data array.
-    **/
-   public static function fillMissingKeys($data, $fields, $value) {
-      foreach ($fields as $name) {
-         if ( ! isset($data[$name])) {
-            $data[$name] = $value;
-         }
-      }
-      return $data;
-   }
-
 }
