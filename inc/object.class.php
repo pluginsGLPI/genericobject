@@ -1120,17 +1120,16 @@ class PluginGenericobjectObject extends CommonDBTM {
                   continue;
                } else {
                   $tmp   = [];
-                  $where = "";
+                  $where = [];
                   if ($dropdown instanceof CommonTreeDropdown) {
-                     $tmp['completename'] = $dropdown->fields['completename'];
-                     $where               = "`completename`='".
-                                             Toolbox::addslashes_deep($tmp['completename'])."'";
+                     $tmp['completename']   = $dropdown->fields['completename'];
+                     $where['completename'] = Toolbox::addslashes_deep($tmp['completename']);
                   } else {
-                     $tmp['name'] = $dropdown->fields['name'];
-                     $where       = "`name`='".Toolbox::addslashes_deep($tmp['name'])."'";
+                     $tmp['name']   = $dropdown->fields['name'];
+                     $where['name'] = Toolbox::addslashes_deep($tmp['name']);
                   }
-                  $tmp['entities_id'] = $new_entity;
-                  $where             .= " AND `entities_id`='".$tmp['entities_id']."'";
+                  $tmp['entities_id']   = $new_entity;
+                  $where['entities_id'] = $tmp['entities_id'];
                   //There's a dropdown value in the target entity
                   if ($found = $dropdown->find($where)) {
                      $myfound = array_pop($found);
