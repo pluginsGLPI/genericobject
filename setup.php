@@ -99,6 +99,25 @@ include_once( GENERICOBJECT_DIR . "/inc/functions.php");
 if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
    include_once(GENERICOBJECT_DIR . "/log_filter.settings.php");
 }
+// Backward compatible solution for allowing users to extend core plugin classes.
+// All file paths are absolute.
+// These are the only core classes that can be extended by users.
+// REM: Should happen before autoloader initialization.
+$child_classes = [
+   [
+      'class_name' => 'PluginGenericobjectObject',
+      'child_path' => GENERICOBJECT_CLASS_PATH.'/object.class.php',
+      'template_path' => GENERICOBJECT_DIR.'/objects/object_child.class.tpl',
+    ],
+];
+foreach ($child_classes as $config) {
+   if (! file_exists($config['child_path'])) {
+      file_put_contents(
+         $config['child_path'],
+         file_get_contents($config['template_path'])
+      );
+   }
+}
 
 $go_autoloader = new PluginGenericobjectAutoloader([
    GENERICOBJECT_CLASS_PATH

@@ -108,7 +108,8 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = []) {
 function plugin_genericobject_install() {
    global $DB;
 
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/baseobject.class.php");
+   include_once(GLPI_ROOT."/files/_plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
    $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
@@ -155,7 +156,8 @@ function plugin_genericobject_install() {
 function plugin_genericobject_uninstall() {
    global $DB;
 
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
+   include_once(GLPI_ROOT."/plugins/genericobject/inc/baseobject.class.php");
+   include_once(GLPI_ROOT."/files/_plugins/genericobject/inc/object.class.php");
    include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
    //For each type
