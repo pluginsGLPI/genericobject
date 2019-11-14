@@ -82,7 +82,7 @@ class PluginGenericobjectType extends CommonDBTM {
                 "WHERE `itemtype`='$itemtype'";
       $result = $DB->query($query);
       if ($DB->numrows($result) > 0) {
-         $this->fields = $DB->fetch_array($result);
+         $this->fields = $DB->fetchArray($result);
       } else {
          $this->getEmpty();
       }
@@ -102,9 +102,12 @@ class PluginGenericobjectType extends CommonDBTM {
             case __CLASS__ :
                // Number of fields in database
                $itemtype = $item->fields['itemtype'];
-               $obj = new $itemtype();
-               $obj->getEmpty();
-               $nb_fields = count($obj->fields);
+               $nb_fields = 0;
+               if (class_exists($itemtype)) {
+                  $obj = new $itemtype();
+                  $obj->getEmpty();
+                  $nb_fields = count($obj->fields);
+               }
 
                $tabs =  [
                   1  => __("Main"),
@@ -256,7 +259,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
 
          $prof     = new Profile();
-         $profiles = getAllDatasFromTable('glpi_profiles');
+         $profiles = getAllDataFromTable('glpi_profiles');
          foreach ($profiles as $profile) {
             $helpdesk_item_types = json_decode($profile['helpdesk_item_type'], true);
             if ($helpdesk_item_types !== null) {
@@ -948,8 +951,8 @@ class PluginGenericobjectType extends CommonDBTM {
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
                   `comment` text COLLATE utf8_unicode_ci,
                   `notepad` text COLLATE utf8_unicode_ci,
-                  `date_mod` DATETIME DEFAULT NULL,
-                  `date_creation` DATETIME DEFAULT NULL,
+                  `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                  `date_creation` TIMESTAMP NULL DEFAULT NULL,
                   PRIMARY KEY ( `id` ),
                   KEY `date_mod` (`date_mod`),
                   KEY `date_creation` (`date_creation`)
@@ -974,8 +977,8 @@ class PluginGenericobjectType extends CommonDBTM {
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."_items` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
-        `date_mod` DATETIME DEFAULT NULL,
-        `date_creation` DATETIME DEFAULT NULL,
+        `date_mod` TIMESTAMP NULL DEFAULT NULL,
+        `date_creation` TIMESTAMP NULL DEFAULT NULL,
         `$fk` int(11) NOT NULL DEFAULT '0',
         `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
         PRIMARY KEY (`id`),
@@ -1267,7 +1270,7 @@ class PluginGenericobjectType extends CommonDBTM {
                                                'overwrite_locales'      => $overwrite_locales ]);
       }
 
-      foreach ($DB->list_fields($table) as $field => $options) {
+      foreach ($DB->listFields($table) as $field => $options) {
          if (preg_match("/s_id$/", $field)) {
             $dropdowntable = getTableNameForForeignKeyField($field);
             $dropdownclass = getItemTypeForTable($dropdowntable);
@@ -1303,7 +1306,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       ]);
       //Delete files related to dropdowns
-      foreach ($DB->list_fields($table) as $field => $options) {
+      foreach ($DB->listFields($table) as $field => $options) {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
             $table = getTableNameForForeignKeyField($field);
 
@@ -1380,8 +1383,8 @@ class PluginGenericobjectType extends CommonDBTM {
                        `id` int(11) NOT NULL auto_increment,
                        `name` varchar(255) collate utf8_unicode_ci default NULL,
                        `comment` text collate utf8_unicode_ci,
-                       `date_mod` DATETIME DEFAULT NULL,
-                       `date_creation` DATETIME NOT NULL,
+                       `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                       `date_creation` TIMESTAMP NOT NULL,
                        PRIMARY KEY  (`id`),
                        KEY `date_mod` (`date_mod`),
                        KEY `date_creation` (`date_creation`),
@@ -1608,7 +1611,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    static function getFamilyNameByItemtype($itemtype) {
-      $types = getAllDatasFromTable("glpi_plugin_genericobject_types",
+      $types = getAllDataFromTable("glpi_plugin_genericobject_types",
                                     ['itemtype' => $itemtype, 'is_active' => 1]);
       if (empty($types)) {
          return false;
@@ -1655,7 +1658,14 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : []), false, 'name') as $data) {
+         $all_types = getAllDataFromTable(
+            $table,
+            [
+               'WHERE' => !$all ? ['is_active' => self::ACTIVE] : [],
+               'ORDER' => 'name',
+            ]
+         );
+         foreach ($all_types as $data) {
             //If class is not present on the filesystem, do not list itemtype
             $mytypes[$data['itemtype']] = $data;
          }
@@ -1674,7 +1684,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
+         foreach (getAllDataFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
                $mytypes[$data['plugin_genericobject_typefamilies_id']][$data['itemtype']] = $data;
@@ -1979,8 +1989,8 @@ class PluginGenericobjectType extends CommonDBTM {
                            `is_active` tinyint(1) NOT NULL default '0',
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
                            `comment` text NULL,
-                           `date_mod` datetime DEFAULT NULL,
-                           `date_creation` datetime DEFAULT NULL,
+                           `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                           `date_creation` TIMESTAMP NULL DEFAULT NULL,
                            `use_global_search` tinyint(1) NOT NULL default '0',
                            `use_unicity` tinyint(1) NOT NULL default '0',
                            `use_history` tinyint(1) NOT NULL default '0',
@@ -2015,10 +2025,10 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_projects", "bool");
       $migration->addField($table, "use_notepad", "bool");
       $migration->addField($table, "comment", "text");
-      if (!$migration->addField($table, "date_mod", "datetime")) {
-         $migration->changeField($table, "date_mod", "date_mod", "datetime");
+      if (!$migration->addField($table, "date_mod", "timestamp")) {
+         $migration->changeField($table, "date_mod", "date_mod", "timestamp");
       }
-      $migration->addField($table, "date_creation", "datetime");
+      $migration->addField($table, "date_creation", "timestamp");
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->addField($table, "use_plugin_simcard", "bool");
@@ -2102,5 +2112,253 @@ class PluginGenericobjectType extends CommonDBTM {
       //Delete table
       $query = "DROP TABLE IF EXISTS `glpi_plugin_genericobject_types`";
       $DB->query($query) or die($DB->error());
+   }
+
+
+   static function getIcon() {
+      return "fas fa-car";
+   }
+
+   /**
+    * Normalize itemtype and name for all types.
+    * This method will ensure that new normalization rules will be taken into account
+    * during migration from an old version without loosing existing data.
+    *
+    * @param Migration $migration
+    * @return void
+    */
+   private static function normalizeNamesAndItemtypes(Migration $migration) {
+      global $DB;
+      $DB->disableTableCaching();
+
+      $types_iterator = $DB->request(
+         [
+            'FROM'  => self::getTable(),
+            'ORDER' => 'name',
+         ]
+      );
+
+      foreach ($types_iterator as $type) {
+         $old_name     = $type['name'];
+         $new_name     = self::filterInput($old_name);
+         $old_itemtype = $type['itemtype'];
+         $new_itemtype = self::getClassByName($new_name);
+
+         if ($old_name == $new_name && $old_itemtype == $new_itemtype) {
+            continue;
+         }
+
+         self::updateNameAndItemtype(
+            $migration,
+            $old_name,
+            $new_name,
+            $old_itemtype,
+            $new_itemtype
+         );
+
+         $DB->update(
+            self::getTable(),
+            [
+               'name'     => $new_name,
+               'itemtype' => $new_itemtype,
+            ],
+            ['id' => $type['id']]
+         );
+
+         $DB->update(
+            self::getTable(),
+            [
+               'linked_itemtypes' => new \QueryExpression(
+                  'REPLACE('
+                  . $DB->quoteName('linked_itemtypes')
+                  . ','
+                  . $DB->quoteValue('"' . $old_itemtype .'"') // itemtype is surrounded by quotes
+                  . ','
+                  . $DB->quoteValue('"' . $new_itemtype .'"') // itemtype is surrounded by quotes
+                  . ')'
+               ),
+            ],
+            ['linked_itemtypes' => ['LIKE', '%"' . $old_itemtype . '"%']]
+         );
+
+         // Handle dropdowns related to itemtype
+         $table  = getTableForItemType($new_itemtype);
+         $fields = $DB->listFields($table);
+         foreach ($fields as $field => $options) {
+            if (preg_match("/s_id$/", $field)) {
+               $dropdown_old_table    = getTableNameForForeignKeyField($field);
+
+               if (!preg_match('/^glpi_plugin_genericobject_/', $dropdown_old_table)) {
+                  continue;
+               }
+
+               $dropdown_old_name     = getSingular(
+                  str_replace(
+                     "glpi_plugin_genericobject_",
+                     "",
+                     $dropdown_old_table
+                  )
+               );
+               $dropdown_old_itemtype = 'PluginGenericobject' . ucfirst($dropdown_old_name);
+               $dropdown_new_name     = self::filterInput($dropdown_old_name);
+               $dropdown_new_itemtype = self::getClassByName($dropdown_new_name);
+
+               if ($dropdown_old_name == $dropdown_new_name
+                   && $dropdown_old_itemtype == $dropdown_new_itemtype) {
+                  continue;
+               }
+
+               self::updateNameAndItemtype(
+                  $migration,
+                  $dropdown_old_name,
+                  $dropdown_new_name,
+                  $dropdown_old_itemtype,
+                  $dropdown_new_itemtype
+               );
+            }
+         }
+      }
+
+      ProfileRight::cleanAllPossibleRights(); // Clean all possible rights are their name may have change
+   }
+
+   /**
+    * Update itemtype and/or name for a given itemtype.
+    *
+    * @param Migration $migration
+    * @param string    $old_name      Current type name in database
+    * @param string    $new_name      New type name to use
+    * @param string    $old_itemtype  Current itemtype
+    * @param string    $new_itemtype  New itemtype to use
+    *
+    * @return void
+    */
+   private static function updateNameAndItemtype(Migration $migration, $old_name, $new_name,
+                                                 $old_itemtype, $new_itemtype) {
+
+      global $DB;
+
+      if ($old_itemtype != $new_itemtype) {
+         $migration->renameItemtype($old_itemtype, $new_itemtype);
+         $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
+      }
+
+      $destination_files = [];
+
+      $old_systemname = $old_name; // Old system name was same as name in DB
+      $new_systemname = self::getSystemName($new_name);
+      $old_fkey       = getForeignKeyFieldForItemType($old_itemtype);
+      $new_fkey       = getForeignKeyFieldForItemType($new_itemtype);
+      $old_locale_dir = GENERICOBJECT_LOCALES_PATH . '/' . $old_systemname;
+      $new_locale_dir = GENERICOBJECT_LOCALES_PATH . '/' . $new_systemname;
+
+      $destination_files = [
+         self::getCompleteClassFilename($new_name),
+         self::getCompleteItemClassFilename($new_name),
+         self::getCompleteFormFilename($new_name),
+         self::getCompleteSearchFilename($new_name),
+         self::getCompleteAjaxTabFilename($new_name),
+         self::getCompleteInjectionFilename($new_name),
+         self::getCompleteConstantFilename($new_name),
+      ];
+
+      // Rename locale folder and map files
+      if (is_dir($old_locale_dir) && $old_locale_dir != $new_locale_dir) {
+         if (rename($old_locale_dir, $new_locale_dir)) {
+            // Add all locale files to destination files
+            foreach (glob($new_locale_dir . '/*.php') as $old_filename) {
+               $destination_files[] = preg_replace(
+                  '/(.*\/)' . preg_quote($old_systemname, '/') . '([^\/]*)$/',
+                  '$1' . $new_systemname . '$2',
+                  $old_filename
+               );
+            }
+         } else {
+            $migration->displayWarning(
+               sprintf('Unable to rename "%s" locale directory to "%s"', $old_locale_dir, $new_locale_dir),
+               true
+            );
+         }
+      }
+
+      // Handle *_item class table/itemtype
+      if ($DB->tableExists(getTableForItemType($old_itemtype . '_Item'))) {
+         $migration->renameItemtype($old_itemtype . '_Item', $new_itemtype . '_Item');
+         $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
+      }
+
+      // Add all constant files as they may contains foreign keys to update
+      foreach (glob(GENERICOBJECT_FIELDS_PATH . '/*.php') as $constant_filename) {
+         $destination_files[] = $constant_filename;
+      }
+
+      // Rename files (replace "/{$old name}*" by "/{$new_system_name}*")
+      $migration->displayMessage(
+         sprintf('Rename files related to "%s" itemtype and update their content', $old_itemtype),
+         true
+      );
+      foreach ($destination_files as $new_filename) {
+         $old_filename = preg_replace(
+            '/(.*\/)' . preg_quote($new_systemname, '/') . '([^\/]*)$/',
+            '$1' . $old_systemname . '$2',
+            $new_filename
+         );
+
+         if (!file_exists($old_filename)) {
+            // Do nothing if old file does not exists
+            continue;
+         }
+
+         if ($old_filename != $new_filename) {
+            if (!rename($old_filename, $new_filename)) {
+               $migration->displayWarning(
+                  sprintf('Unable to rename "%s" file to "%s"', $old_filename, $new_filename),
+                  true
+               );
+               continue;
+            }
+         } else {
+            $migration->displayMessage(
+               sprintf('Update "%s" file content', $old_filename),
+               true
+            );
+         }
+
+         $file_contents = file_get_contents($new_filename);
+         if (!$file_contents) {
+            $migration->displayWarning(
+               sprintf('Unable to read "%s" file contents', $new_filename),
+               true
+            );
+            continue;
+         }
+
+         $replace_count = 0;
+         $old_fkey_truncated = preg_replace('/^plugin_genericobject_/', '', $old_fkey);
+         $new_fkey_truncated = preg_replace('/^plugin_genericobject_/', '', $new_fkey);
+         $file_contents = str_replace(
+            [$old_itemtype, $old_fkey, $old_fkey_truncated],
+            [$new_itemtype, $new_fkey, $new_fkey_truncated],
+            $file_contents,
+            $replace_count
+         );
+         if ($replace_count > 0 && !file_put_contents($new_filename, $file_contents)) {
+            $migration->displayWarning(
+               sprintf('Unable to update "%s" file contents', $new_filename),
+               true
+            );
+         }
+      }
+
+      // Update profile rights
+      if ($old_itemtype != $new_itemtype) {
+         $migration->addPostQuery(
+            $DB->buildUpdate(
+               ProfileRight::getTable(),
+               ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($new_itemtype)],
+               ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($old_itemtype)]
+            )
+         );
+      }
    }
 }

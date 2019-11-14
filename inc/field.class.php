@@ -282,6 +282,7 @@ class PluginGenericobjectField extends CommonDBTM {
    static function getFieldOptions($field, $itemtype = "") {
       global $GO_FIELDS;
 
+      $options = [];
       $cleaned_field = preg_replace("/^plugin_genericobject_/", '', $field);
       if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
          // This field has been dynamically defined because it's an isolated dropdown
@@ -295,7 +296,7 @@ class PluginGenericobjectField extends CommonDBTM {
          );
          $options             = $GO_FIELDS[$tmpfield];
          $options['realname'] = $tmpfield;
-      } else {
+      } else if (isset($GO_FIELDS[$cleaned_field])) {
          $options             = $GO_FIELDS[$cleaned_field];
          $options['realname'] = $cleaned_field;
       }
@@ -375,7 +376,7 @@ class PluginGenericobjectField extends CommonDBTM {
                $query.="DATE DEFAULT NULL";
                break;
             case 'datetime':
-               $query.="DATETIME DEFAULT NULL";
+               $query.="TIMESTAMP NULL DEFAULT NULL";
                break;
             case 'float' :
                $query .= "FLOAT NOT NULL DEFAULT '0'";
