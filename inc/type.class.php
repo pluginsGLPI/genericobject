@@ -256,7 +256,8 @@ class PluginGenericobjectType extends CommonDBTM {
          }
 
          $prof     = new Profile();
-         $profiles = getAllDatasFromTable('glpi_profiles');
+         $getAllFct = function_exists('getAllDataFromTable') ? 'getAllDataFromTable' : 'getAllDatasFromTable';
+         $profiles = $getAllFct('glpi_profiles');
          foreach ($profiles as $profile) {
             $helpdesk_item_types = json_decode($profile['helpdesk_item_type'], true);
             if ($helpdesk_item_types !== null) {
@@ -1608,7 +1609,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    static function getFamilyNameByItemtype($itemtype) {
-      $types = getAllDatasFromTable("glpi_plugin_genericobject_types",
+      $getAllFct = function_exists('getAllDataFromTable') ? 'getAllDataFromTable' : 'getAllDatasFromTable';
+      $types = $getAllFct("glpi_plugin_genericobject_types",
                                     ['itemtype' => $itemtype, 'is_active' => 1]);
       if (empty($types)) {
          return false;
@@ -1655,7 +1657,15 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : []), false, 'name') as $data) {
+         $getAllFct = function_exists('getAllDataFromTable') ? 'getAllDataFromTable' : 'getAllDatasFromTable';
+         $all_types = $getAllFct(
+            $table,
+            [
+               'WHERE' => !$all ? ['is_active' => self::ACTIVE] : [],
+               'ORDER' => 'name',
+            ]
+         );
+         foreach ($all_types as $data) {
             //If class is not present on the filesystem, do not list itemtype
             $mytypes[$data['itemtype']] = $data;
          }
@@ -1674,7 +1684,8 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
+         $getAllFct = function_exists('getAllDataFromTable') ? 'getAllDataFromTable' : 'getAllDatasFromTable';
+         foreach ($getAllFct($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
                $mytypes[$data['plugin_genericobject_typefamilies_id']][$data['itemtype']] = $data;

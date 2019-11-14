@@ -87,7 +87,8 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
 
 
    static function getItemtypesByFamily($families_id) {
-      return getAllDatasFromTable(
+      $getAllFct = function_exists('getAllDataFromTable') ? 'getAllDataFromTable' : 'getAllDatasFromTable';
+      return $getAllFct(
          'glpi_plugin_genericobject_types',
          [
             'plugin_genericobject_typefamilies_id' => $families_id,
