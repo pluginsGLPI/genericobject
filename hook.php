@@ -108,8 +108,8 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = []) {
 function plugin_genericobject_install() {
    global $DB;
 
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
+   include_once(GENERICOBJECT_DIR."/inc/object.class.php");
+   include_once(GENERICOBJECT_DIR."/inc/type.class.php");
 
    $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
 
@@ -123,7 +123,7 @@ function plugin_genericobject_install() {
    ] as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
-         $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
+         $dir      = Plugin::getPhpDir($plugname)."/inc/";
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
@@ -155,8 +155,8 @@ function plugin_genericobject_install() {
 function plugin_genericobject_uninstall() {
    global $DB;
 
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/object.class.php");
-   include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
+   include_once(GENERICOBJECT_DIR."/inc/object.class.php");
+   include_once(GENERICOBJECT_DIR."/inc/type.class.php");
 
    //For each type
    foreach (PluginGenericobjectType::getTypes(true) as $tmp => $value) {
@@ -174,7 +174,7 @@ function plugin_genericobject_uninstall() {
    ] as $itemtype) {
       if ($plug=isPluginItemType($itemtype)) {
          $plugname = strtolower($plug['plugin']);
-         $dir      = GLPI_ROOT . "/plugins/$plugname/inc/";
+         $dir      = Plugin::getPhpDir($plugname)."/inc/";
          $item     = strtolower($plug['class']);
          if (file_exists("$dir$item.class.php")) {
             include_once ("$dir$item.class.php");
