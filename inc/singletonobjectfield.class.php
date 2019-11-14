@@ -51,7 +51,10 @@ class PluginGenericobjectSingletonObjectField {
    public static function getInstance($itemtype, $reload = false) {
       global $DB;
       if (!isset(self::$_dbfields[$itemtype]) || $reload) {
-         self::$_dbfields[$itemtype] = $DB->list_fields(getTableForItemType($itemtype));
+         $table = getTableForItemType($itemtype);
+         self::$_dbfields[$itemtype] = method_exists($DB, 'listFields')
+            ? $DB->listFields($table)
+            : $DB->list_fields($table);
       }
       return self::$_dbfields[$itemtype];
    }
