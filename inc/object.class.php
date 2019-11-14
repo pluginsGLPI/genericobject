@@ -935,6 +935,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $option['datatype']      = 'itemlink';
                   $option['itemlink_type'] = get_called_class();
                   $option['massiveaction'] = false;
+                  // Enable autocomplete only for name, other fields may contains sensitive data
+                  $option['autocomplete']  = true;
                } else {
                   if (isset($searchoption['datatype']) && $searchoption['datatype'] == 'weblink') {
                      $option['datatype'] = 'weblink';
