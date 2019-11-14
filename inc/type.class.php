@@ -295,6 +295,7 @@ class PluginGenericobjectType extends CommonDBTM {
          'field'         => 'name',
          'name'          => __('Model'),
          'datatype'      => 'itemlink',
+         'autocomplete'  => true,
       ];
 
       $sopt[] = [
