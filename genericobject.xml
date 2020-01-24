@@ -26,7 +26,8 @@
    <versions>
       <version>
          <num>2.7.0</num>
-         <compatibility>9.4</compatibility>
+         <compatibility>~9.4.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/2.7.0/glpi-genericobject-2.7.0.tar.bz2</download_url>
       </version>
       <version>
          <num>2.6.2</num>
@@ -152,5 +153,6 @@
             <tag>zápůjčky</tag>
          </cs>
    </tags>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/credit/master/genericobject.gif</screenshot>
    <license>GPL v2+</license>
 </root>
