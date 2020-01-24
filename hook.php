@@ -216,6 +216,12 @@ function plugin_genericobject_MassiveActions($type) {
          return [];
       }
    } else {
+
+      if (strpos($type, "_Item") !== false) {
+         return ['PluginGenericobjectObject_Item'.
+         MassiveAction::CLASS_ACTION_SEPARATOR.'plugin_genericobject_purge_link' => __("Delete permanently the relation with selected elements")];
+      }
+
       return [];
    }
 }

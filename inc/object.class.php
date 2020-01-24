@@ -229,9 +229,9 @@ class PluginGenericobjectObject extends CommonDBTM {
                array_push($GO_LINKED_TYPES, $class);
             }
             $items_class = $class."_Item";
-            //if (class_exists($items_class)) {
+            if (class_exists($items_class)) {
                $items_class::registerType();
-            //}
+            }
          }
 
          if ($item->canUseProjects()) {

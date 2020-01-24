@@ -140,6 +140,9 @@ class PluginGenericobjectType extends CommonDBTM {
             case 6:
                PluginGenericobjectProfile::showForItemtype($item);
                break;
+            case 7:
+               $item->showLinkedTypesForm();
+               break;
          }
       }
       return true;
@@ -538,6 +541,7 @@ class PluginGenericobjectType extends CommonDBTM {
             "use_global_search" => __("Global search"),
             "use_projects"      => _n("Project", "Projects", 2),
             "use_network_ports" => __("Network connections", "genericobject"),
+            "use_direct_connections" => __("Connection", "genericobject"),
          ];
 
          $plugins = [
@@ -723,26 +727,28 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<div class='center'>";
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='tab_bg_1'>";
-      echo "<th colspan='2'>".__("Link to other objects", "genericobject")."</th></tr>";
+      echo "<th colspan='3'>".__("Link to other objects", "genericobject")."</th></tr>";
       echo "<tr class='tab_bg_1'>";
       echo "<td>"._n("Type", "Types", 2)."</td>";
-      echo "<td class='center'>";
-      echo "<select name='itemtypes[]' multiple size='10'>";
+      echo "<td>";
+
       $selected = [];
+      $values = [];
       if (!empty($this->fields['linked_itemtypes'])) {
          $selected = json_decode($this->fields['linked_itemtypes'], false);
       }
+
       foreach ($GO_LINKED_TYPES as $itemtype) {
          if ($itemtype == $this->fields['itemtype']) {
             continue;
          }
-         echo "<option value='$itemtype'";
-         if (in_array($itemtype, $selected)) {
-            echo " selected ";
-         }
-         echo ">".$itemtype::getTypeName()."</options>";
+         $values[$itemtype] = $itemtype::getTypeName();
       }
-      echo "</select>";
+
+      Dropdown::showFromArray('itemtypes', $values, ['values'   => $selected,
+      'multiple' => true,
+      'readonly' => 0]);
+
       echo "</td></tr>";
       echo "<input type='hidden' name='id' value='".$this->getID()."'>";
       $this->showFormButtons(['candel' => false, 'canadd' => false]);
@@ -917,7 +923,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       if ($this->canUseDirectConnections()) {
          self::addItemsTable($itemtype);
-         //self::addItemClassFile($this->fields['name'], $itemtype);
+         self::addItemClassFile($this->fields['name'], $itemtype);
       } else {
          self::deleteItemsTable($itemtype);
          self::deleteClassFile($this->fields['name']."_item");

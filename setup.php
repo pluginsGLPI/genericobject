@@ -209,8 +209,9 @@ function plugin_post_init_genericobject() {
       if (class_exists($itemtype)) {
          $itemtype::registerType();
       }
-
    }
+
+   PluginGenericobjectObject_Item::registerType();
 }
 
 /**
