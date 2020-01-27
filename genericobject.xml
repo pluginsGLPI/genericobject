@@ -153,6 +153,8 @@
             <tag>zápůjčky</tag>
          </cs>
    </tags>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/credit/master/genericobject.gif</screenshot>
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/genericobject/master/genericobject.gif</screenshot>
+   <screenshots>
    <license>GPL v2+</license>
 </root>
