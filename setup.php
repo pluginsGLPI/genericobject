@@ -34,7 +34,6 @@
  @since     2009
  ----------------------------------------------------------------------
  */
-
 define ('PLUGIN_GENERICOBJECT_VERSION', '2.8.0');
 
 // Minimal GLPI version, inclusive
@@ -122,8 +121,8 @@ function plugin_init_genericobject() {
                             "date_mod", "name", "is_helpdesk_visible", "comment",
                             "date_creation"];
 
-   $GO_LINKED_TYPES     =  ['Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
-                            'Printer', 'NetworkEquipment'];
+
+   $GO_LINKED_TYPES = $CFG_GLPI['asset_types'];
 
    $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
    $GENERICOBJECT_PDF_TYPES                         =  [];
