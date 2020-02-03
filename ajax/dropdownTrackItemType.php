@@ -36,18 +36,32 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
+if (!isset($_POST["itemtype"]) || $_POST["itemtype"] == "0") {
+   exit();
+}
 
-if(isset($_POST["itemtype"]) && $_POST["itemtype"] != "0"){
-
+if ($_POST["source"] == "0") {
    //load all  items_id already linked
+   $linkfield = getForeignKeyFieldForItemType($_POST["itemtype"]);
    $mainItemtypeLink = new $_POST['main_itemtype_link']();
-   $linked_data = $mainItemtypeLink->find(["itemtype" => $_POST["itemtype"]]);
+   $linked_data = $mainItemtypeLink->find(["items_id" => $_POST['itemtype_link_id'],
+                                          "itemtype" => $_POST["itemtype_link"]]);
+   $linked_id = [];
+   foreach ($linked_data as $key => $value) {
+      $linked_id[$key] = $value[$linkfield];
+   }
+   $_POST['used'] = $linked_id;
+   Dropdown::show($_POST["itemtype"], $_POST);
+} else {
+   //load all  items_id already linked
+   $linkfield = getForeignKeyFieldForItemType($_POST['itemtype_link']);
+   $mainItemtypeLink = new $_POST['main_itemtype_link']();
+   $linked_data = $mainItemtypeLink->find(["itemtype" => $_POST["itemtype"],
+                                           $linkfield => $_POST['itemtype_link_id']]);
    $linked_id = [];
    foreach ($linked_data as $key => $value) {
       $linked_id[$key] = $value['items_id'];
    }
    $_POST['used'] = $linked_id;
-   Dropdown::show($_POST["itemtype"],$_POST);
-}else{
-   echo "";
+   Dropdown::show($_POST["itemtype"], $_POST);
 }

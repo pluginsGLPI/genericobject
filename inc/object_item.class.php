@@ -25,8 +25,6 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-use function Docopt\get_class_name;
-
 class PluginGenericobjectObject_Item extends CommonDBChild {
 
    public $dohistory = true;
@@ -154,10 +152,14 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          $types = self::getLinkedItemTypes();
          $number = count($types);
          $mainItemtype_link = get_class($item)."_Item";
+         $itemtype = get_class($item);
+         $itemtype_id = $instID;
       } else {
          $types = [self::getItemType1()];
          $number = count($types);
          $mainItemtype_link = self::getItemType1()."_Item";
+         $itemtype = get_class($item);
+         $itemtype_id = $instID;
       }
 
       if ($canedit) {
@@ -175,10 +177,12 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
                                              'rand'       => $rand, 'display_emptychoice' => true]);
 
          $p = ['itemtype'              => '__VALUE__',
-               //'used'                => $params['used'],
                'multiple'              => false,
                'rand'                  => $rand,
+               'source'                => $source,
                'main_itemtype_link'    => $mainItemtype_link,
+               'itemtype_link'         => $itemtype,
+               'itemtype_link_id'      => $itemtype_id,
                'name'                  => 'item_to_link_id',
                'display'               => false,
                'myname'                => "add_items_id"];
@@ -191,11 +195,17 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          echo "</span>";
 
          echo "</td><td class='center' width='30%'>";
-         echo "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
-         echo "<input type='hidden' name='items_id' value='$instID'>";
-         echo "<input type='hidden' name='type' value='$source'>";
-         echo "<input type='hidden' name='itemtype_link' value='".get_called_class()."'>";
-         echo "<input type='hidden' name='itemtype' value='".get_class($item)."'>";
+
+         echo Html::input('add', ["name"   => "add",
+                                  "type"   => "submit",
+                                  "value"  => _sx('button', 'Add'),
+                                  "class"  => "submit"]);
+
+         echo Html::hidden("items_id", ["value" => $instID]);
+         echo Html::hidden("type", ["value" => $source]);
+         echo Html::hidden("itemtype_link", ["value" => get_called_class()]);
+         echo Html::hidden("itemtype", ["value" => get_class($item)]);
+
          echo "</td></tr>";
          echo "</table>";
          Html::closeForm();
@@ -356,7 +366,8 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes();
          if (get_class($item) == self::getItemType1()) {
-            $nb = countDistinctElementsInTable(getTableForItemType(self::getItemType1()), "id");
+            $fk = getForeignKeyFieldForItemType(self::getItemType1());
+            $nb = countDistinctElementsInTable(getTableForItemType(self::getItemType1()."_Item"), "id", [$fk => $item->fields['id']]);
             return [1 => __("Objects management", "genericobject").' ('.$nb.')'];
          }
 
