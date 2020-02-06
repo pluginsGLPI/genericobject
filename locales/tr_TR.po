@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015-2017
+# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-22 13:21+0000\n"
-"PO-Revision-Date: 2017-12-13 16:11+0000\n"
+"POT-Creation-Date: 2020-02-06 15:56+0000\n"
+"PO-Revision-Date: 2019-11-15 05:35+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "Nesne tipi"
 
 #: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
 #: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
-#: inc/type.class.php:289 inc/type.class.php:415 setup.php:193
+#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
 msgid "Objects management"
 msgstr "Nesne yönetimi"
 
@@ -99,68 +99,72 @@ msgstr "Tip bir harf ile başlamalıdır"
 msgid "A type already exists with the same name"
 msgstr "Aynı adlı bir tip zaten var"
 
-#: inc/type.class.php:376 inc/type.class.php:505 inc/typefamily.class.php:36
+#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
 msgid "Family of type of objects"
 msgstr "Nesnelerin aile tipi"
 
-#: inc/type.class.php:466
+#: inc/type.class.php:467
 msgid "Internal identifier"
 msgstr "İç belirteç"
 
-#: inc/type.class.php:520
+#: inc/type.class.php:521
 msgid "Behaviour"
 msgstr "Davranış"
 
-#: inc/type.class.php:539
+#: inc/type.class.php:540
 msgid "Network connections"
 msgstr "Ağ bağlantıları"
 
-#: inc/type.class.php:543
+#: inc/type.class.php:544
 msgid "injection file plugin"
 msgstr "dosya gönderme uygulama eki"
 
-#: inc/type.class.php:545
+#: inc/type.class.php:546
 msgid "geninventorynumber plugin"
 msgstr "stoknumarasiolustur uygulama eki"
 
-#: inc/type.class.php:546
+#: inc/type.class.php:547
 msgid "order plugin"
 msgstr "sıralama uygulama eki"
 
-#: inc/type.class.php:547
+#: inc/type.class.php:548
 msgid "item's uninstallation plugin"
 msgstr "ögeyi kaldırma uygulama eki"
 
-#: inc/type.class.php:548
+#: inc/type.class.php:549
 msgid "simcard plugin"
 msgstr "sim kart uygulama eki"
 
-#: inc/type.class.php:700
+#: inc/type.class.php:550
+msgid "treeview plugin"
+msgstr "ağaç görünümü uygulama eki"
+
+#: inc/type.class.php:713
 msgid "Regenerate files"
 msgstr "Dosyaları yeniden oluştur"
 
-#: inc/type.class.php:713
+#: inc/type.class.php:726
 msgid "Link to other objects"
 msgstr "Diğer nesnelere bağlantı"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2017
+#: inc/type.class.php:2039
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "%1$s sınıfı yüklenemedi."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2019
+#: inc/type.class.php:2041
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr "Veritabanınızda bu uygulama eki ve %1$s içindeki eksik dosyalar için büyük olasılıkla çöp veriler var "
 
-#: inc/object.class.php:471
+#: inc/object.class.php:526
 msgid "Object preview"
 msgstr "Nesne önizleme"
 
-#: inc/object.class.php:751
+#: inc/object.class.php:815
 msgid "You must configure rights to enable the preview"
-msgstr "Önizleyebilmek için izinleri ayarlamalısınız"
+msgstr "Ön izlemeyi görüntüleyebilmek için izinleri yapılandırmalısınız"

@@ -76,6 +76,60 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+
+   /**
+   * Display information on treeview plugin
+   *
+   * @params itemtype, id, pic, url, name
+   *
+   * @return params
+   **/
+   static function showGenericObjectTreeview($params) {
+      global $CFG_GLPI;
+
+      if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
+         $item = new $params['itemtype']();
+         if ($item->getFromDB($params['id'])) {
+            $params['name'] = $item->fields["name"];
+            $params['url'] = $CFG_GLPI['root_doc']."/plugins/genericobject/front/object.form.php".
+                        "?itemtype=".$params['itemtype']."&id=".$params['id'];
+         }
+      }
+      return $params;
+   }
+
+   /**
+   * Display node search url on treeview plugin
+   *
+   * @params itemtype, id, pic, url, name
+   *
+   * @return params
+   **/
+   static function getParentNodeSearchUrl($params) {
+
+      if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
+
+         $item = new $params['itemtype']();
+         $search = $item->getObjectSearchOptions();
+
+         //get searchoption id for location_id
+         foreach ($search as $key => $val) {
+            if (isset($val['table']) && $val['table'] === 'glpi_locations') {
+               $index= $key;
+            }
+         }
+
+         $token = Session::getNewCSRFToken();
+
+         $params['searchurl'] = $params['itemtype']::getSearchURL()."&is_deleted=0&criteria[0][field]=".$index."&criteria[0]".
+               "[searchtype]=equals&criteria[0][value]=".$params['locations_id']."&search=Rechercher&start=0&_glpi_csrf_token=$token";
+         return $params;
+
+      }
+
+      return $params;
+   }
+
    static function install() {
    }
 
@@ -160,11 +214,12 @@ class PluginGenericobjectObject extends CommonDBTM {
             if (!in_array($class, $CFG_GLPI['asset_types'])) {
                array_push($CFG_GLPI['asset_types'], $class);
             }
-            if (!in_array($class, $CFG_GLPI['globalsearch_types'])) {
-               array_push($CFG_GLPI['globalsearch_types'], $class);
-            }
+
             if (!in_array($class, $CFG_GLPI['state_types'])) {
                array_push($CFG_GLPI['state_types'], $class);
+            }
+
+            if (!in_array($class, $CFG_GLPI['globalsearch_types'])) {
                array_push($CFG_GLPI['globalsearch_types'], $class);
             }
          }
@@ -522,6 +577,11 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
+         if (isset($searchoption['input_type']) && 'emptyspace' === $searchoption['input_type']) {
+            $searchoption['name'] = "&nbsp;";
+            $description['Type'] = 'emptyspace';
+         }
+
          $this->startColumn();
          echo $searchoption['name'];
          if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
@@ -598,6 +658,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             case "text":
                echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value .
                      "</textarea>";
+               break;
+
+            case "emptyspace":
+               echo '&nbsp;';
                break;
 
             case "date":
@@ -872,6 +936,8 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $option['datatype']      = 'itemlink';
                   $option['itemlink_type'] = get_called_class();
                   $option['massiveaction'] = false;
+                  // Enable autocomplete only for name, other fields may contains sensitive data
+                  $option['autocomplete']  = true;
                } else {
                   if (isset($searchoption['datatype']) && $searchoption['datatype'] == 'weblink') {
                      $option['datatype'] = 'weblink';

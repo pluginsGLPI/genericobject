@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-22 13:21+0000\n"
+"POT-Creation-Date: 2020-02-06 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
 #: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
-#: inc/type.class.php:289 inc/type.class.php:415 setup.php:193
+#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
 msgid "Objects management"
 msgstr ""
 
@@ -98,68 +98,72 @@ msgstr ""
 msgid "A type already exists with the same name"
 msgstr ""
 
-#: inc/type.class.php:376 inc/type.class.php:505 inc/typefamily.class.php:36
+#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
 msgid "Family of type of objects"
 msgstr ""
 
-#: inc/type.class.php:466
+#: inc/type.class.php:467
 msgid "Internal identifier"
 msgstr ""
 
-#: inc/type.class.php:520
+#: inc/type.class.php:521
 msgid "Behaviour"
 msgstr ""
 
-#: inc/type.class.php:539
+#: inc/type.class.php:540
 msgid "Network connections"
 msgstr ""
 
-#: inc/type.class.php:543
+#: inc/type.class.php:544
 msgid "injection file plugin"
 msgstr ""
 
-#: inc/type.class.php:545
+#: inc/type.class.php:546
 msgid "geninventorynumber plugin"
 msgstr ""
 
-#: inc/type.class.php:546
+#: inc/type.class.php:547
 msgid "order plugin"
 msgstr ""
 
-#: inc/type.class.php:547
+#: inc/type.class.php:548
 msgid "item's uninstallation plugin"
 msgstr ""
 
-#: inc/type.class.php:548
+#: inc/type.class.php:549
 msgid "simcard plugin"
 msgstr ""
 
-#: inc/type.class.php:700
-msgid "Regenerate files"
+#: inc/type.class.php:550
+msgid "treeview plugin"
 msgstr ""
 
 #: inc/type.class.php:713
+msgid "Regenerate files"
+msgstr ""
+
+#: inc/type.class.php:726
 msgid "Link to other objects"
 msgstr ""
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2017
+#: inc/type.class.php:2039
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr ""
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2019
+#: inc/type.class.php:2041
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr ""
 
-#: inc/object.class.php:471
+#: inc/object.class.php:526
 msgid "Object preview"
 msgstr ""
 
-#: inc/object.class.php:751
+#: inc/object.class.php:815
 msgid "You must configure rights to enable the preview"
 msgstr ""

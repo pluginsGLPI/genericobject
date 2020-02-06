@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Andrei Bernardo Simoni <andrei_simoni@hotmail.com>, 2017
+# Andrei Bernardo Simoni <andrei_simoni@hotmail.com>, 2017
 # Arthur Ramos Schaefer <arthur.r.schaefer@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-22 13:21+0000\n"
-"PO-Revision-Date: 2017-12-13 13:22+0000\n"
-"Last-Translator: alexandre delaunay <delaunay.alexandre@gmail.com>\n"
+"POT-Creation-Date: 2020-02-06 15:56+0000\n"
+"PO-Revision-Date: 2019-11-08 14:59+0000\n"
+"Last-Translator: Cédric Anne\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +27,7 @@ msgstr "Tipos de objetos"
 
 #: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
 #: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
-#: inc/type.class.php:289 inc/type.class.php:415 setup.php:193
+#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
 msgid "Objects management"
 msgstr "Gerenciamento de objetos"
 
@@ -57,7 +58,7 @@ msgstr "Objetos"
 
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
-msgstr ""
+msgstr "(Sem tipos definidos ainda)"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
@@ -77,7 +78,7 @@ msgstr "Adicionar novo campo"
 
 #: inc/field.class.php:317
 msgid "Read-only field"
-msgstr ""
+msgstr "Campo apenas de leitura"
 
 #: inc/type.class.php:153
 msgid "Type name is missing"
@@ -85,7 +86,7 @@ msgstr "O nome do tipo está faltando"
 
 #: inc/type.class.php:159
 msgid "Type name must be longer"
-msgstr ""
+msgstr "Nome deve ser mais longo"
 
 #: inc/type.class.php:165
 msgid ""
@@ -100,68 +101,72 @@ msgstr "O tipo deve começar com uma letra"
 msgid "A type already exists with the same name"
 msgstr "Um tipo com o mesmo nome já existe "
 
-#: inc/type.class.php:376 inc/type.class.php:505 inc/typefamily.class.php:36
+#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
 msgid "Family of type of objects"
 msgstr "Família de tipo de objetos"
 
-#: inc/type.class.php:466
+#: inc/type.class.php:467
 msgid "Internal identifier"
 msgstr "Identificador interno"
 
-#: inc/type.class.php:520
+#: inc/type.class.php:521
 msgid "Behaviour"
 msgstr "Comportamento"
 
-#: inc/type.class.php:539
+#: inc/type.class.php:540
 msgid "Network connections"
 msgstr "Conexões de rede"
 
-#: inc/type.class.php:543
+#: inc/type.class.php:544
 msgid "injection file plugin"
 msgstr "plugin datainjection"
 
-#: inc/type.class.php:545
+#: inc/type.class.php:546
 msgid "geninventorynumber plugin"
 msgstr "plugin getinventorynumber"
 
-#: inc/type.class.php:546
+#: inc/type.class.php:547
 msgid "order plugin"
 msgstr "plugin order"
 
-#: inc/type.class.php:547
+#: inc/type.class.php:548
 msgid "item's uninstallation plugin"
 msgstr "plugin item's uninstallation"
 
-#: inc/type.class.php:548
+#: inc/type.class.php:549
 msgid "simcard plugin"
 msgstr "plugin simcard"
 
-#: inc/type.class.php:700
+#: inc/type.class.php:550
+msgid "treeview plugin"
+msgstr ""
+
+#: inc/type.class.php:713
 msgid "Regenerate files"
 msgstr "Regenerar arquivos"
 
-#: inc/type.class.php:713
+#: inc/type.class.php:726
 msgid "Link to other objects"
 msgstr "Conexão com outros objetos"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2017
+#: inc/type.class.php:2039
 #, php-format
 msgid "Unable to load the class %1$s."
-msgstr ""
+msgstr "Não consegui carregar a classe %1$s."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2019
+#: inc/type.class.php:2041
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr ""
+msgstr "Deve ter dados no lixo da tua base de dados porque estão a faltas ficheiros neste plugin %1$s"
 
-#: inc/object.class.php:471
+#: inc/object.class.php:526
 msgid "Object preview"
 msgstr "Pré-visualização do objet"
 
-#: inc/object.class.php:751
+#: inc/object.class.php:815
 msgid "You must configure rights to enable the preview"
 msgstr "Você deve configurar os direitos para habilitar pré-visualização"
