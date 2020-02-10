@@ -675,6 +675,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                   break;
 
             case "datetime":
+            case "timestamp":
                   Html::showDateTimeField(
                      $name, [
                         'value'        => $value,
@@ -1002,6 +1003,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "datetime":
+            case "timestamp":
                $option['datatype'] = 'datetime';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific

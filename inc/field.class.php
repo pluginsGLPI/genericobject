@@ -375,7 +375,7 @@ class PluginGenericobjectField extends CommonDBTM {
                $query.="DATE DEFAULT NULL";
                break;
             case 'datetime':
-               $query.="DATETIME DEFAULT NULL";
+               $query.="TIMESTAMP NULL DEFAULT NULL";
                break;
             case 'float' :
                $query .= "FLOAT NOT NULL DEFAULT '0'";

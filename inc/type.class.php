@@ -951,8 +951,8 @@ class PluginGenericobjectType extends CommonDBTM {
                   `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
                   `comment` text COLLATE utf8_unicode_ci,
                   `notepad` text COLLATE utf8_unicode_ci,
-                  `date_mod` DATETIME DEFAULT NULL,
-                  `date_creation` DATETIME DEFAULT NULL,
+                  `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                  `date_creation` TIMESTAMP NULL DEFAULT NULL,
                   PRIMARY KEY ( `id` ),
                   KEY `date_mod` (`date_mod`),
                   KEY `date_creation` (`date_creation`)
@@ -977,8 +977,8 @@ class PluginGenericobjectType extends CommonDBTM {
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."_items` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
-        `date_mod` DATETIME DEFAULT NULL,
-        `date_creation` DATETIME DEFAULT NULL,
+        `date_mod` TIMESTAMP NULL DEFAULT NULL,
+        `date_creation` TIMESTAMP NULL DEFAULT NULL,
         `$fk` int(11) NOT NULL DEFAULT '0',
         `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
         PRIMARY KEY (`id`),
@@ -1389,8 +1389,8 @@ class PluginGenericobjectType extends CommonDBTM {
                        `id` int(11) NOT NULL auto_increment,
                        `name` varchar(255) collate utf8_unicode_ci default NULL,
                        `comment` text collate utf8_unicode_ci,
-                       `date_mod` DATETIME DEFAULT NULL,
-                       `date_creation` DATETIME NOT NULL,
+                       `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                       `date_creation` TIMESTAMP NOT NULL,
                        PRIMARY KEY  (`id`),
                        KEY `date_mod` (`date_mod`),
                        KEY `date_creation` (`date_creation`),
@@ -1998,8 +1998,8 @@ class PluginGenericobjectType extends CommonDBTM {
                            `is_active` tinyint(1) NOT NULL default '0',
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
                            `comment` text NULL,
-                           `date_mod` datetime DEFAULT NULL,
-                           `date_creation` datetime DEFAULT NULL,
+                           `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                           `date_creation` TIMESTAMP NULL DEFAULT NULL,
                            `use_global_search` tinyint(1) NOT NULL default '0',
                            `use_unicity` tinyint(1) NOT NULL default '0',
                            `use_history` tinyint(1) NOT NULL default '0',
@@ -2034,10 +2034,10 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_projects", "bool");
       $migration->addField($table, "use_notepad", "bool");
       $migration->addField($table, "comment", "text");
-      if (!$migration->addField($table, "date_mod", "datetime")) {
-         $migration->changeField($table, "date_mod", "date_mod", "datetime");
+      if (!$migration->addField($table, "date_mod", "timestamp")) {
+         $migration->changeField($table, "date_mod", "date_mod", "timestamp");
       }
-      $migration->addField($table, "date_creation", "datetime");
+      $migration->addField($table, "date_creation", "timestamp");
       $migration->addField($table, "linked_itemtypes", "text");
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->addField($table, "use_plugin_simcard", "bool");
