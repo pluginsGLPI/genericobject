@@ -37,17 +37,17 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    static public $items_id_2 = 'items_id';
 
    //Get itemtype name
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       global $LANG;
       $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
-      if(preg_match("/Injection$/i",$class)) {
+      if (preg_match("/Injection$/i", $class)) {
          $class = str_replace("Injection", "", $class);
       }
       $item     = new $class();
       //Itemtype name can be contained in a specific locale field : try to load it
       PluginGenericobjectType::includeLocales($item->objecttype->fields['name']);
-      if(isset($LANG['genericobject'][$class][0])) {
+      if (isset($LANG['genericobject'][$class][0])) {
          return $LANG['genericobject'][$class][0];
       } else {
          return $item->objecttype->fields['name'];
@@ -55,11 +55,11 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    }
 
    static function canView() {
-      return Session::haveRight($this->$itemtype_1, READ);
+      return Session::haveRight(self::$itemtype_1, READ);
    }
 
    static function canCreate() {
-      return Session::haveRight($this->$itemtype_1, CREATE);
+      return Session::haveRight(self::$itemtype_1, CREATE);
    }
 
    /**
@@ -88,8 +88,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
     * @since 2.2.0
     */
    static function registerType() {
-      Plugin::registerClass(get_called_class(),
-                            array('addtabon' => self::getLinkedItemTypes()));
+      Plugin::registerClass(get_called_class(), ['addtabon' => self::getLinkedItemTypes()]);
    }
 
    static function getLinkedItemTypes() {
@@ -103,21 +102,21 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       return $classname::$itemtype_1;
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes();
          if (in_array(get_class($item), $itemtypes) || get_class($item) == self::getItemType1()) {
-            return array(1 => __("Objects management", "genericobject"));
+            return [1 => __("Objects management", "genericobject")];
          }
       }
       return '';
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       $itemtypes = self::getLinkedItemTypes();
       if (get_class($item) == self::getItemType1()) {
          self::showItemsForSource($item);
-      } elseif (in_array(get_class($item), $itemtypes)) {
+      } else if (in_array(get_class($item), $itemtypes)) {
          self::showItemsForTarget($item);
       }
       return true;

@@ -24,7 +24,7 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
- 
+
 global $GO_FIELDS;
 
 $GO_FIELDS['id']['name']          = __("ID");
@@ -60,6 +60,9 @@ $GO_FIELDS['expirationdate']['input_type'] = 'date';
 
 $GO_FIELDS['date_mod']['name']       = __("Last update");
 $GO_FIELDS['date_mod']['input_type'] = 'datetime';
+
+$GO_FIELDS['date_creation']['name']       = __('Creation date');
+$GO_FIELDS['date_creation']['input_type'] = 'datetime';
 
 $GO_FIELDS['url']['name']       = __("URL");
 $GO_FIELDS['url']['field']      = 'url';
@@ -121,7 +124,7 @@ $GO_FIELDS['users_id']['input_type'] = 'dropdown';
 
 $GO_FIELDS['groups_id']['name']       = __("Group");
 $GO_FIELDS['groups_id']['input_type'] = 'dropdown';
-$GO_FIELDS['groups_id']['condition']  = '`is_itemgroup`';
+$GO_FIELDS['groups_id']['condition']  = ['is_itemgroup' => 1];
 
 $GO_FIELDS['manufacturers_id']['name']       = __("Manufacturer");
 $GO_FIELDS['manufacturers_id']['input_type'] = 'dropdown';
@@ -140,4 +143,4 @@ $GO_FIELDS['contact_num']['input_type'] = 'text';
 
 $GO_FIELDS['groups_id_tech']['name']       = __("Group in charge of the hardware");
 $GO_FIELDS['groups_id_tech']['input_type'] = 'dropdown';
-$GO_FIELDS['groups_id_tech']['condition']  = '`is_assign`';
+$GO_FIELDS['groups_id_tech']['condition']  = ['is_assign' => 1];

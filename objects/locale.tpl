@@ -17,16 +17,12 @@
  --------------------------------------------------------------------------
  @package   genericobject
  @author    the genericobject plugin team
- @copyright Copyright (c) 2010-2011 Order plugin team
+ @copyright Copyright (c) 2010-2017 Genericobject plugin team
  @license   GPLv2+
             http://www.gnu.org/licenses/gpl.txt
- @link      https://forge.indepnet.net/projects/genericobject
+ @link      https://github.com/pluginsGLPI/genericobject
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
-
-/**
- * This file is automatically managed by genericobject plugin. Do not edit it !
- */
 
 $LANG['genericobject']['%%CLASSNAME%%'][0]="%%NAME%%";

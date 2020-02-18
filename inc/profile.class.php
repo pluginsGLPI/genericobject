@@ -29,12 +29,12 @@ class PluginGenericobjectProfile extends Profile {
 
    /* if profile deleted */
    function cleanProfiles($id) {
-      $this->deleteByCriteria(array('id' => $id));
+      $this->deleteByCriteria(['id' => $id]);
    }
-   
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
-      switch($item->getType()) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+
+      switch ($item->getType()) {
          case 'Profile':
             return self::createTabEntry(__('Objects management', 'genericobject'));
             break;
@@ -44,8 +44,8 @@ class PluginGenericobjectProfile extends Profile {
       }
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      switch($item->getType()) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
+      switch ($item->getType()) {
          case 'Profile':
             $profile = new self();
             $profile->showForm($item->getID());
@@ -55,7 +55,7 @@ class PluginGenericobjectProfile extends Profile {
             self::showForItemtype($item);
             break;
       }
-      return TRUE;
+      return true;
    }
 
    static function showForItemtype($type) {
@@ -76,24 +76,22 @@ class PluginGenericobjectProfile extends Profile {
       echo "</strong></th></tr>";
 
       echo "<tr><td class='genericobject_type_profiles'>";
-      $rights = array();
       foreach (getAllDatasFromTable(getTableForItemtype("Profile")) as $profile) {
          $prof = new Profile();
          $prof->getFromDB($profile['id']);
-         $right = self::getProfileforItemtype($profile['id'], $itemtype);
-         $label = $profile['name'];
-         $rights = array(
-            array(
-               'label' => $label,
+         $rights = [
+            [
+               'label' => $profile['name'],
                'itemtype' => $itemtype,
                'field' =>  self::getProfileNameForItemtype($itemtype),
                'html_field' => "profile_" . $profile['id'],
-            )
-         );
+            ]
+         ];
          $prof->displayRightsChoiceMatrix(
             $rights
          );
       }
+
       echo "</td></tr>";
       echo "<input type='hidden' name='itemtype' value='".$itemtype."'>";
 
@@ -105,18 +103,17 @@ class PluginGenericobjectProfile extends Profile {
          echo "</td></tr>";
       }
 
-
       echo "</table>";
       Html::closeForm();
    }
 
    static function getProfileNameForItemtype($itemtype) {
-      return preg_replace("/^glpi_/","",getTableForItemType($itemtype));
+      return preg_replace("/^glpi_/", "", getTableForItemType($itemtype));
    }
 
 
    /* profiles modification */
-   function showForm($profiles_id, $options = array()) {
+   function showForm($profiles_id, $options = []) {
       if (!Session::haveRight("profile", READ)) {
          return false;
       }
@@ -131,7 +128,6 @@ class PluginGenericobjectProfile extends Profile {
       $profile = new Profile();
       $profile->getFromDB($profiles_id);
 
-
       echo "<form action='" . Profile::getFormUrl() . "' method='post'>";
       echo "<table class='tab_cadre_fixe'>";
 
@@ -139,33 +135,33 @@ class PluginGenericobjectProfile extends Profile {
 
       $profile->displayRightsChoiceMatrix(
          $general_rights,
-         array(
+         [
             'canedit'       => $canedit,
             'default_class' => 'tab_bg_2',
             'title'         => __('General', 'genericobject')
-         )
+         ]
       );
 
       $types_rights = self::getTypesRights();
 
       $title = __('Objects', 'genericobject');
       if (count($types_rights) == 0) {
-         $title .= __(" (No types defined yet)", "genericobject");
-       }
+         $title .= ' ' . __("(No types defined yet)", "genericobject");
+      }
 
       $profile->displayRightsChoiceMatrix(
          $types_rights,
-         array(
+         [
             'canedit'       => $canedit,
             'default_class' => 'tab_bg_2',
             'title'         => $title
-         )
+         ]
       );
       $profile->showLegend();
       if ($canedit) {
          echo "<div class='center'>";
-         echo Html::hidden('id', array('value' => $profiles_id));
-         echo Html::submit(_sx('button', 'Save'), array('name' => 'update'));
+         echo Html::hidden('id', ['value' => $profiles_id]);
+         echo Html::submit(_sx('button', 'Save'), ['name' => 'update']);
          echo "</div>\n";
          Html::closeForm();
       }
@@ -181,9 +177,9 @@ class PluginGenericobjectProfile extends Profile {
 
    function getProfilesFromDB($id, $config = true) {
       global $DB;
-      $prof_datas = array ();
+      $prof_datas =  [];
       foreach (getAllDatasFromTable(getTableForItemType(__CLASS__),
-                                    "`profiles_id`='" . $id . "'") as $prof) {
+                                    ['profiles_id' => $id]) as $prof) {
          if ($prof['right'] != "" || $config) {
             $prof_datas[$prof['itemtype']]                = $prof['right'];
             $prof_datas[$prof['itemtype'].'_open_ticket'] = $prof['open_ticket'];
@@ -191,7 +187,9 @@ class PluginGenericobjectProfile extends Profile {
          }
       }
 
-      if (empty($prof_datas) && !$config) return false;
+      if (empty($prof_datas) && !$config) {
+         return false;
+      }
 
       $prof_datas['profiles_id']   = $id;
       $this->fields       = $prof_datas;
@@ -222,7 +220,6 @@ class PluginGenericobjectProfile extends Profile {
                $query.=", `open_ticket`='".$params[$profile['itemtype'].'_open_ticket']."' ";
             }
 
-
             $query.="WHERE `profiles_id`='".$params['profiles_id']."' " .
                     "AND `itemtype`='".$profile['itemtype']."'";
             $DB->query($query);
@@ -238,7 +235,7 @@ class PluginGenericobjectProfile extends Profile {
     */
    public static function createFirstAccess() {
       if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"], 'PluginGenericobjectType')) {
-         self::createAccess($_SESSION["glpiactiveprofile"]["id"],"PluginGenericobjectType",true);
+         self::createAccess($_SESSION["glpiactiveprofile"]["id"], "PluginGenericobjectType", true);
       }
    }
 
@@ -253,7 +250,7 @@ class PluginGenericobjectProfile extends Profile {
       $profile->getFromDB($profiles_id);
       $rights = ProfileRight::getProfileRights($profiles_id);
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
-      if($itemtype) {
+      if ($itemtype) {
          _log(
             "get rights on itemtype ".$itemtype." for profile ".$profile->fields['name'], ':',
             isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : "NONE"
@@ -268,80 +265,77 @@ class PluginGenericobjectProfile extends Profile {
     * @param profileID the profile ID
     * @return nothing
     */
-   public static function createAccess($profiles_id, $itemtype, $first=false) {
+   public static function createAccess($profiles_id, $itemtype, $first = false) {
 
       $rights             = getAllDatasFromTable('glpi_profiles');
       $profile_right      = new ProfileRight();
       $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
-      
+
       foreach ($rights as $right) {
          if ($right['id'] == $profiles_id) {
-            $r = ALLSTANDARDRIGHT | READNOTE | UPDATENOTE;   
+            $r = ALLSTANDARDRIGHT | READNOTE | UPDATENOTE;
          } else {
             $r = 0;
          }
-         $profile_right->updateProfileRights($right['id'], 
-                                             array($itemtype_rightname => $r));
+         $profile_right->updateProfileRights($right['id'], [$itemtype_rightname => $r]);
       }
    }
 
    public static function getGeneralRights() {
-      $rights = array();
-      $rights[] = array(
+      return [[
          'itemtype' => 'PluginGenericobjectType',
          'label'    => __("Type of objects", "genericobject"),
          'field'    => self::getProfileNameForItemtype('PluginGenericobjectType'),
-      );
-      return $rights;
+      ]];
    }
 
    public static function getTypesRights() {
-      $rights = array();
+      $rights = [];
 
       include_once(GLPI_ROOT."/plugins/genericobject/inc/type.class.php");
 
       $types = PluginGenericobjectType::getTypes(true);
-      if ( count( $types) > 0 ) {
+      if (count( $types) > 0) {
          foreach ($types as $_ => $type) {
             $itemtype   = $type['itemtype'];
             $field      = self::getProfileNameForItemtype($itemtype);
             $objecttype = new PluginGenericobjectType($itemtype);
-            $rights[]   = array(
+            $rights[]   = [
                'itemtype' => $itemtype,
                'label'    => $itemtype::getTypeName(),
                'field'    => self::getProfileNameForItemtype($itemtype)
-            );
+            ];
          }
       }
 
       return $rights;
    }
 
-   public static function installRights($first=false) {
-      $missing_rights = array();
+   public static function installRights($first = false) {
+      $missing_rights = [];
       $installed_rights = ProfileRight::getAllPossibleRights();
-      $right_names = array();
+      $right_names = [];
 
       // Add common plugin's rights
       $right_names[] = self::getProfileNameForItemtype('PluginGenericobjectType');
 
       // Add types' rights
       $types = PluginGenericobjectType::getTypes(true);
-      foreach($types as $_ => $type) {
+      foreach ($types as $_ => $type) {
          $itemtype = $type['itemtype'];
          $right_names[] = self::getProfileNameForItemtype($itemtype);
       }
 
       // Check for already defined rights
-      foreach($right_names as $right_name) {
+      foreach ($right_names as $right_name) {
          _log($right_name, isset($installed_rights[$right_name]));
-         if ( !isset($installed_rights[$right_name]) ) {
+         if (!isset($installed_rights[$right_name])) {
             $missing_rights[] = $right_name;
          }
       }
 
       //Install missing rights in profile and update the object
-      if ( count($missing_rights) > 0) {
+      if (count($missing_rights) > 0) {
          ProfileRight::addProfileRights($missing_rights);
          self::changeProfile();
       }
@@ -354,8 +348,7 @@ class PluginGenericobjectProfile extends Profile {
     * @return nothing
     */
    public static function deleteTypeFromProfile($itemtype) {
-      $rights = array();
-      $rights[] = self::getProfileNameForItemtype($itemtype);
+      $rights = [self::getProfileNameForItemtype($itemtype)];
       ProfileRight::deleteProfileRights($rights);
    }
 
@@ -370,7 +363,7 @@ class PluginGenericobjectProfile extends Profile {
          if (preg_match("/plugin_genericobject_/", $str_right)) {
             unset($_SESSION['glpiactiveprofile'][$str_right]);
             if (!empty($db_rights) && isset($db_rights[$str_right])) {
-               $_SESSION['glpiactiveprofile'][$str_right] = $db_rights[$str_right]; 
+               $_SESSION['glpiactiveprofile'][$str_right] = $db_rights[$str_right];
             }
          }
       }
@@ -383,15 +376,15 @@ class PluginGenericobjectProfile extends Profile {
       $profile      = new Profile();
 
       //Update needed
-      if (TableExists('glpi_plugin_genericobject_profiles')) {
+      if ($DB->tableExists('glpi_plugin_genericobject_profiles')) {
          foreach (getAllDatasFromTable('glpi_plugin_genericobject_profiles') as $right) {
             if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
                $newrightname = 'plugin_genericobject_'.strtolower($results[1]).'s';
-               if (!countElementsInTable('glpi_profilerights', 
-                                         "`profiles_id`='".$right['profiles_id']."' 
-                                           AND `name`='$newrightname'")) {
+               if (!countElementsInTable('glpi_profilerights',
+                                         ['profiles_id' => $right['profiles_id'],
+                                          'name' => $newrightname])) {
                   switch ($right['right']) {
-                     case NULL:
+                     case null:
                      case '':
                         $rightvalue = 0;
                         break;
@@ -403,16 +396,16 @@ class PluginGenericobjectProfile extends Profile {
                         break;
                   }
 
-                  $profileRight->add(array('profiles_id' => $right['profiles_id'], 
-                                           'name' => $newrightname, 
-                                           'rights' => $rightvalue));
+                  $profileRight->add(['profiles_id' => $right['profiles_id'],
+                                      'name'        => $newrightname,
+                                      'rights'      => $rightvalue]);
 
-                  if (!countElementsInTable('glpi_profilerights', 
-                                            "`profiles_id`='".$right['profiles_id']."' 
-                                              AND `name`='plugin_genericobject_types'")) {
-                     $profileRight->add(array('profiles_id' => $right['profiles_id'], 
-                                              'name' => 'plugin_genericobject_types', 
-                                              'rights' => 23));
+                  if (!countElementsInTable('glpi_profilerights',
+                                            ['profiles_id' => $right['profiles_id'],
+                                             'name'        => 'plugin_genericobject_types'])) {
+                     $profileRight->add(['profiles_id' => $right['profiles_id'],
+                                         'name'        => 'plugin_genericobject_types',
+                                         'rights'      => 23]);
                   }
                }
 
@@ -424,7 +417,7 @@ class PluginGenericobjectProfile extends Profile {
                         $helpdesk_item_types[] = $right['itemtype'];
                      }
                   } else {
-                     $helpdesk_item_types = array($right['itemtype']);
+                     $helpdesk_item_types = [$right['itemtype']];
                   }
 
                   $tmp['id'] = $profile->getID();
@@ -435,15 +428,14 @@ class PluginGenericobjectProfile extends Profile {
          }
          //$migration->dropTable('glpi_plugin_genericobject_profiles');
       }
-      if (!countElementsInTable('glpi_profilerights', 
-                                "`name` LIKE '%genericobject%'")) {
+      if (!countElementsInTable('glpi_profilerights', ['name' => ['LIKE', '%genericobject%']])) {
          self::createFirstAccess();
       }
    }
 
    static function uninstall() {
       global $DB;
-      $query = "DELETE FROM `glpi_profilerights` 
+      $query = "DELETE FROM `glpi_profilerights`
                 WHERE `name` LIKE '%plugin_genericobject%'";
       $DB->query($query) or die($DB->error());
    }

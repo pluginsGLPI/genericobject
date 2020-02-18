@@ -33,9 +33,13 @@ if (isset($_GET['itemtype'])
    $type = new PluginGenericobjectType();
    $type->getFromDBByType($_GET['itemtype']);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType').'?id='.$type->getID());
-} else {
+
+} else if (Session::haveRightsOr('plugin_genericobject_types', [READ, CREATE, UPDATE, PURGE])) {
    Html::header(__("Type of objects", "genericobject"), $_SERVER['PHP_SELF'], "config",
                 "PluginGenericobjectType");
    Search::Show('PluginGenericobjectType');
    Html::footer();
+
+} else {
+   Html::redirect($CFG_GLPI['root_doc']."/front/central.php");
 }

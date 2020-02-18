@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "glpi-project/tools": "^0.1"
+    },
+    "config": {
+        "platform": {
+            "php": "5.6"
+        }
+    }
+}

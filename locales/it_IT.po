@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Pierfrancesco Passerini <p.passerini@gmail.com>, 2018
+# Salvatore Russo <ilbuzzo@gmail.com>, 2016
+# Giudy <spam@habilitas.it>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI Plugin - Genericobject\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-06 15:56+0000\n"
+"PO-Revision-Date: 2019-11-08 14:59+0000\n"
+"Last-Translator: Cédric Anne\n"
+"Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/it_IT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: front/type.php:38 front/object.php:33 inc/profile.class.php:287
+#: inc/type.class.php:66
+msgid "Type of objects"
+msgstr "Tipo di oggetti"
+
+#: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
+#: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
+#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
+msgid "Objects management"
+msgstr "Gestione degli Oggetti"
+
+#: front/field.form.php:41
+msgid "Field(s) deleted successfully"
+msgstr "Campi rimossi con successo"
+
+#: front/field.form.php:51
+msgid "Field added successfully"
+msgstr "Campo aggiunto con successo"
+
+#: front/commondropdown.php:11 front/commontreedropdown.form.php:36
+#: front/commondropdown.form.php:36
+msgid "The requested dropdown does not exists"
+msgstr "Il menù a discesa richiesto non esiste"
+
+#: front/familylist.php:37 index.php:68
+msgid "Empty family"
+msgstr "Famiglia vuota"
+
+#: inc/profile.class.php:141
+msgid "General"
+msgstr "Generale"
+
+#: inc/profile.class.php:147
+msgid "Objects"
+msgstr "Oggetti"
+
+#: inc/profile.class.php:149
+msgid "(No types defined yet)"
+msgstr "(Nessun tipo ancora definito)"
+
+#: inc/field.class.php:64
+msgid "Fields associated with the object"
+msgstr "Campi associati con l'oggetto"
+
+#: inc/field.class.php:70
+msgid "Label"
+msgstr "Etichetta"
+
+#: inc/field.class.php:71
+msgid "Name in DB"
+msgstr "Nome nel DataBase"
+
+#: inc/field.class.php:126
+msgid "Add new field"
+msgstr "Aggiungi nuovo campo"
+
+#: inc/field.class.php:317
+msgid "Read-only field"
+msgstr "Campo in sola lettura"
+
+#: inc/type.class.php:153
+msgid "Type name is missing"
+msgstr "Il nome del tipo non è presente"
+
+#: inc/type.class.php:159
+msgid "Type name must be longer"
+msgstr "Il nome della tipologia deve essere più lungo"
+
+#: inc/type.class.php:165
+msgid ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr "I tipi 'field', 'object' e 'type' sono riservati. Sceglierne un altro"
+
+#: inc/type.class.php:172
+msgid "Type must start with a letter"
+msgstr "Il nome del tipo deve iniziare con una lettera"
+
+#: inc/type.class.php:179
+msgid "A type already exists with the same name"
+msgstr "Un tipo con lo stesso nome esiste già"
+
+#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
+msgid "Family of type of objects"
+msgstr "Famiglia"
+
+#: inc/type.class.php:467
+msgid "Internal identifier"
+msgstr "Identificatore interno"
+
+#: inc/type.class.php:521
+msgid "Behaviour"
+msgstr "Comportamento"
+
+#: inc/type.class.php:540
+msgid "Network connections"
+msgstr "Connessioni di rete"
+
+#: inc/type.class.php:544
+msgid "injection file plugin"
+msgstr "injection file plugin"
+
+#: inc/type.class.php:546
+msgid "geninventorynumber plugin"
+msgstr "geninventorynumber plugin"
+
+#: inc/type.class.php:547
+msgid "order plugin"
+msgstr "order plugin"
+
+#: inc/type.class.php:548
+msgid "item's uninstallation plugin"
+msgstr "item's uninstallation plugin"
+
+#: inc/type.class.php:549
+msgid "simcard plugin"
+msgstr "simcard plugin"
+
+#: inc/type.class.php:550
+msgid "treeview plugin"
+msgstr ""
+
+#: inc/type.class.php:713
+msgid "Regenerate files"
+msgstr "Rigenera file"
+
+#: inc/type.class.php:726
+msgid "Link to other objects"
+msgstr "Collega ad altri oggetti"
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2039
+#, php-format
+msgid "Unable to load the class %1$s."
+msgstr "Impossibile caricare la classe %1$s ."
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2041
+#, php-format
+msgid ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+msgstr "Per questo plugin hai, probabilmente, dei dati inutili nel tuo database e file mancanti in %1$s"
+
+#: inc/object.class.php:526
+msgid "Object preview"
+msgstr "Anteprima dell'oggetto"
+
+#: inc/object.class.php:815
+msgid "You must configure rights to enable the preview"
+msgstr "Bisogna configurare i diritti per abilitare l'anteprima"

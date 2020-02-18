@@ -40,10 +40,10 @@ class PluginGenericobjectField extends CommonDBTM {
       $object_type->getFromDB($id);
       $itemtype     = $object_type->fields['itemtype'];
       $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
-      $used_fields  = array();
+      $used_fields  = [];
 
       //Reset fields definition only to keep the itemtype ones
-      $GO_FIELDS = array();
+      $GO_FIELDS = [];
       plugin_genericobject_includeCommonFields(true);
 
       PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
@@ -75,37 +75,70 @@ class PluginGenericobjectField extends CommonDBTM {
 
       $total        = count($fields_in_db);
       $global_index = $index = 1;
+      $haveCheckbox = false;
 
       foreach ($fields_in_db as $field => $value) {
+         $readonly  = in_array($field, $GO_READONLY_FIELDS);
+         $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
+
          self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index==$total));
+
          //All backlisted fields cannot be moved, and are listed first
-         if (!in_array($field, $GO_READONLY_FIELDS)) {
+         if (!$readonly) {
             $index++;
          }
-         $table = getTableNameForForeignKeyField($field);
+
+         if (!$blacklist && !$readonly) {
+            $haveCheckbox = true;
+         }
+
+         //$table = getTableNameForForeignKeyField($field);
          $used_fields[$field] = $field;
          $global_index++;
       }
       echo "</table>";
-      Html::openArrowMassives('fieldslist', true);
-      Html::closeArrowMassives(array('delete' => __("Delete permanently")));
+      if ($haveCheckbox) {
+         echo "<table class='tab_glpi' width='950px'>";
+         echo "<tr>";
+         echo "<td><img src='".$CFG_GLPI["root_doc"]."/pics/arrow-left.png'
+                    alt=''></td>";
+         echo "<td class='center' style='white-space:nowrap;'>";
+         echo "<a onclick= \"if ( markCheckboxes('fieldslist') ) return false;\"
+                href='#'>".__('Check all')."</a></td>";
+         echo "<td>/</td>";
+         echo "<td class='center' style='white-space:nowrap;'>";
+         echo "<a onclick= \"if ( unMarkCheckboxes('fieldslist') ) return false;\"
+                href='#'>".__('Uncheck all')."</a></td>";
+         echo "<td class='left' width='80%'>";
+         echo Html::submit(__("Delete permanently"), [
+            'name' => 'delete',
+         ]);
+         echo "</td></tr>";
+         echo "</table>";
+      }
 
-      echo "<table class='tab_cadre genericobject_fields add_new'>";
-      echo "<tr class='tab_bg_1'>";
-      echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
-      echo "<td align='left' class='dropdown'>";
-      self::dropdownFields("new_field", $itemtype, $used_fields);
-      echo "</td>";
-      echo "<td>";
-      echo "<input type='submit' name='add_field' value=\"" . _sx('button','Add') . "\" class='submit'>";
-      echo "</tr>";
-      echo "</table>";
+      $dropdownFields = self::dropdownFields("new_field", $itemtype, $used_fields);
+
+      if ($dropdownFields) {
+         echo "<br>";
+         echo "<table class='tab_cadre genericobject_fields add_new'>";
+         echo "<tr class='tab_bg_1'>";
+         echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
+         echo "<td align='left' class='dropdown'>";
+         echo $dropdownFields;
+         echo "</td>";
+         echo "<td>";
+         echo "<input type='submit' name='add_field' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
+         echo "</tr>";
+         echo "</table>";
+      }
+
       Html::closeForm();
       echo "</div>";
    }
 
    /**
-   * Method to set fields as read only, when the depend on some features 
+   * Method to set fields as read only, when the depend on some features
    * that are enabled
    * @since 0.85+2.4.0
    */
@@ -113,19 +146,19 @@ class PluginGenericobjectField extends CommonDBTM {
       global $GO_READONLY_FIELDS;
 
       if ($type->canBeReserved()) {
-        $GO_READONLY_FIELDS[] = 'users_id';
-        $GO_READONLY_FIELDS[] = 'locations_id';
+         $GO_READONLY_FIELDS[] = 'users_id';
+         $GO_READONLY_FIELDS[] = 'locations_id';
       }
 
       if ($type->canUseGlobalSearch()) {
-        $GO_READONLY_FIELDS[] = 'serial';
-        $GO_READONLY_FIELDS[] = 'otherserial';
-        $GO_READONLY_FIELDS[] = 'locations_id';
-        $GO_READONLY_FIELDS[] = 'states_id';
-        $GO_READONLY_FIELDS[] = 'users_id';
-        $GO_READONLY_FIELDS[] = 'groups_id';
-        $GO_READONLY_FIELDS[] = 'manufacturers_id';
-        $GO_READONLY_FIELDS[] = 'users_id_tech';
+         $GO_READONLY_FIELDS[] = 'serial';
+         $GO_READONLY_FIELDS[] = 'otherserial';
+         $GO_READONLY_FIELDS[] = 'locations_id';
+         $GO_READONLY_FIELDS[] = 'states_id';
+         $GO_READONLY_FIELDS[] = 'users_id';
+         $GO_READONLY_FIELDS[] = 'groups_id';
+         $GO_READONLY_FIELDS[] = 'manufacturers_id';
+         $GO_READONLY_FIELDS[] = 'users_id_tech';
       }
 
    }
@@ -134,12 +167,13 @@ class PluginGenericobjectField extends CommonDBTM {
     * The name may be the same, or not depending if it's an isolated dropdown or not
     */
    static function getFieldName($field, $itemtype, $options, $remove_prefix = false) {
+      global $DB;
       $field_orig = $field;
       $field_table = null;
       $input_type = isset($options['input_type'])
          ? $options['input_type']
          : null;
-      switch($input_type) {
+      switch ($input_type) {
 
          case 'dropdown':
             $dropdown_type = isset($options['dropdown_type'])
@@ -147,26 +181,26 @@ class PluginGenericobjectField extends CommonDBTM {
                : null;
             $fk = getForeignKeyFieldForTable(getTableForItemType($itemtype));
 
-            if ( $dropdown_type == 'isolated' ) {
+            if ($dropdown_type == 'isolated') {
                if (!$remove_prefix) {
-                  $field = preg_replace("/s_id$/",$field, $fk);
+                  $field = preg_replace("/s_id$/", $field, $fk);
                } else {
-                  $fk    = preg_replace("/s_id$/","", $fk);
-                  $field = preg_replace("/".$fk."/","", $field);
+                  $fk    = preg_replace("/s_id$/", "", $fk);
+                  $field = preg_replace("/".$fk."/", "", $field);
                }
             }
             $field_table = getTableNameForForeignKeyField($field);
 
             //Prepend plugin's table prefix if this dropdown is not already handled by GLPI natively
-            if (
-               substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
+            if (substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
                and (
                   substr($field_table, strlen('glpi_'))
-                  === substr($field,  0, strlen($field) -strlen('_id'))
+                  === substr($field, 0, strlen($field) -strlen('_id'))
                )
-               and !TableExists($field_table)
+               and !$DB->tableExists($field_table)
             ) {
-               if (!$remove_prefix) { $field = 'plugin_genericobject_' . $field;}
+               if (!$remove_prefix) {
+                  $field = 'plugin_genericobject_' . $field;}
             }
             break;
 
@@ -184,28 +218,28 @@ class PluginGenericobjectField extends CommonDBTM {
     *
     * @return the dropdown random ID
     */
-   static function dropdownFields($name,$itemtype, $used = array()) {
+   static function dropdownFields($name, $itemtype, $used = []) {
       global $GO_FIELDS;
 
-      $dropdown_types = array();
+      $dropdown_types = [];
       foreach ($GO_FIELDS as $field => $values) {
          $message = "";
-         $field_options = array();
+         $field_options = [];
          $field = self::getFieldName($field, $itemtype, $values, false);
-         if(!in_array($field, $used)) {
+         if (!in_array($field, $used)) {
             if (!isset($dropdown_types[$field])) {
                //Global management :
                //meaning that a dropdown can be useful in all types (for example type, model, etc.)
                if (isset($values['input_type']) && $values['input_type'] == 'dropdown') {
                   if (isset($values['entities_id'])) {
-                    $field_options[] = __("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
+                     $field_options[] = __("Entity")." : ".Dropdown::getYesNo($values['entities_id']);
                      if ($values['entities_id']) {
                         if (isset($values['is_recursive'])) {
                            $field_options[] = __("Child entities")." : ".Dropdown::getYesNo($values['is_recursive']);
                         }
                      }
                   } else {
-                    $field_options[] = __("Entity")." : ".Dropdown::getYesNo(0);
+                     $field_options[] = __("Entity")." : ".Dropdown::getYesNo(0);
                   }
                   if (isset($values['is_tree'])) {
                      $field_options[] = __("tree structure")." : ".Dropdown::getYesNo($values['is_tree']);
@@ -219,14 +253,20 @@ class PluginGenericobjectField extends CommonDBTM {
                   //}
                }
                if (!empty($field_options)) {
-                  $message = "(".trim( implode(",",$field_options)).")";
+                  $message = "(".trim( implode(", ", $field_options)).")";
                }
             }
             $dropdown_types[$field] = $values['name']." ".$message;
          }
       }
+
+      // Don't show dropdown empty
+      if (empty($dropdown_types)) {
+         return '';
+      }
+
       ksort($dropdown_types);
-      return Dropdown::showFromArray($name, $dropdown_types);
+      return Dropdown::showFromArray($name, $dropdown_types, ['display' => false]);
    }
 
    /**
@@ -239,18 +279,18 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param $itemtype the itemtype
     * @return an array which contains the full field definition
     */
-   static function getFieldOptions($field, $itemtype="") {
+   static function getFieldOptions($field, $itemtype = "") {
       global $GO_FIELDS;
 
-      $cleaned_field = preg_replace("/^plugin_genericobject_/",'', $field);
+      $cleaned_field = preg_replace("/^plugin_genericobject_/", '', $field);
       if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
          // This field has been dynamically defined because it's an isolated dropdown
          $tmpfield = self::getFieldName(
             $field, $itemtype,
-            array(
+            [
                'dropdown_type' => 'isolated',
-               'input_type' => 'dropdown'
-            ),
+               'input_type'    => 'dropdown'
+            ],
             true
          );
          $options             = $GO_FIELDS[$tmpfield];
@@ -270,11 +310,11 @@ class PluginGenericobjectField extends CommonDBTM {
       $options  = self::getFieldOptions($field, $itemtype);
 
       echo "<tr class='tab_bg_".(($index%2)+1)."' align='center'>";
-      $sel ="";
-
       echo "<td width='10'>";
       if (!$blacklist && !$readonly) {
-         echo "<input type='checkbox' name='fields[" .$field. "]' value='1' $sel>";
+         echo "<input type='checkbox' name='fields[" .$field. "]' value='1'>";
+      } else {
+         echo "<i class='fa fa-lock' title='".__("Read-only field", 'genericobject')."'>";
       }
       echo "</td>";
       echo "<td>" . __($options['name'], 'genericobject') . "</td>";
@@ -283,20 +323,21 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td width='10'>";
       if ((!$blacklist || $readonly) && $index > 1) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
-                               array('field' => $field, 'action' => 'up', 'itemtype' => $itemtype),
-                               $CFG_GLPI["root_doc"] . "/pics/deplier_up.png");
+                              ['field' => $field, 'action' => 'up', 'itemtype' => $itemtype],
+                              $CFG_GLPI["root_doc"] . "/pics/deplier_up.png");
       }
       echo "</td>";
 
       echo "<td width='10'>";
       if ((!$blacklist || $readonly) && !$last) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
-                               array('field' => $field, 'action' => 'down', 'itemtype' => $itemtype),
-                               $CFG_GLPI["root_doc"] . "/pics/deplier_down.png");
+                              ['field' => $field, 'action' => 'down', 'itemtype' => $itemtype],
+                              $CFG_GLPI["root_doc"] . "/pics/deplier_down.png");
       }
       echo "</td>";
 
       echo "</tr>";
+
    }
 
    /**
@@ -305,12 +346,12 @@ class PluginGenericobjectField extends CommonDBTM {
     * @param field the field to delete
     * @return nothing
     */
-   public static function addNewField($table, $field, $after=false) {
+   public static function addNewField($table, $field, $after = false) {
       global $DB;
 
       _log("add", $field, "from", $table);
       $itemtype = getItemTypeForTable($table);
-      if (!FieldExists($table, $field, false)) {
+      if (!$DB->fieldExists($table, $field, false)) {
          $options  = self::getFieldOptions($field, $itemtype);
          $query = "ALTER TABLE `$table` ADD `$field` ";
          switch ($options['input_type']) {
@@ -319,6 +360,7 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'bool' :
                $query .= "TINYINT (1) NOT NULL DEFAULT '0'";
                break;
+            case 'emptyspace' :
             case 'text' :
                $query .= "VARCHAR ( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT ''";
                break;
@@ -353,9 +395,9 @@ class PluginGenericobjectField extends CommonDBTM {
 
          $table = getTableNameForForeignKeyField($field);
 
-         if ($table != '' && !TableExists($table)) {
+         if ($table != '' && !$DB->tableExists($table)) {
             //Cannot use standard methods because class doesn't exists yet !
-            $name = str_replace("glpi_plugin_genericobject_","", $table);
+            $name = str_replace("glpi_plugin_genericobject_", "", $table);
             $name = getSingular($name);
 
             $options['linked_itemtype'] = $itemtype;
@@ -366,7 +408,7 @@ class PluginGenericobjectField extends CommonDBTM {
          }
          // Invalidate menu data in current session
          unset($_SESSION['glpimenu']);
-         
+
          PluginGenericobjectSingletonObjectField::getInstance($itemtype, true);
       }
    }
@@ -384,7 +426,7 @@ class PluginGenericobjectField extends CommonDBTM {
       self::deleteDisplayPreferences($table, $field);
 
       //If field exists, drop it !
-      if (FieldExists($table, $field)) {
+      if ($DB->fieldExists($table, $field)) {
          $DB->query("ALTER TABLE `$table` DROP `$field`");
       }
 
@@ -408,11 +450,13 @@ class PluginGenericobjectField extends CommonDBTM {
       $itemtype  = getItemTypeForTable($table);
       $searchopt = Search::getCleanedOptions($itemtype);
       foreach ($searchopt as $num => $option) {
-         if ( (isset($option['field'])  && ($option['field'] == $field)) 
+         if ((isset($option['field'])  && ($option['field'] == $field))
             || (isset($option['field']) && $option['linkfield'] == $field)) {
-            $criteria = array('itemtype' => $itemtype, 'num' => $num);
-            $pref->deleteByCriteria($criteria);
-            break;  
+            $pref->deleteByCriteria([
+               'itemtype' => $itemtype,
+               'num'      => $num
+            ]);
+            break;
          }
       }
    }
@@ -422,7 +466,7 @@ class PluginGenericobjectField extends CommonDBTM {
     * @params an array which contains the itemtype, the field to move and the action (up/down)
     * @return nothing
     */
-   static function changeFieldOrder($params = array()) {
+   static function changeFieldOrder($params = []) {
       global $DB;
       $itemtype = $params['itemtype'];
       $field    = $params['field'];
@@ -458,7 +502,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
    }
 
-   public static function checkNecessaryFieldsDelete($itemtype,$field) {
+   public static function checkNecessaryFieldsDelete($itemtype, $field) {
       $type = new PluginGenericobjectType();
       $type->getFromDBByType($itemtype);
 
@@ -467,7 +511,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       /*
       if ($type->fields['use_direct_connections']) {
-         foreach(array('users_id','groups_id',' states_id','locations_id') as $tmp_field) {
+         foreach(['users_id','groups_id',' states_id','locations_id'] as $tmp_field) {
             if ($tmp_field == $field) {
                return false;
             }
