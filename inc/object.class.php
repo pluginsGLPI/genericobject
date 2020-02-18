@@ -32,6 +32,10 @@ class PluginGenericobjectObject extends CommonDBTM {
    //Internal field counter
    private $cpt = 0;
 
+   function accesObjectType() {
+      return $this->objecttype;
+   }
+
    //Get itemtype name
    static function getTypeName($nb = 0) {
       global $LANG;
@@ -229,9 +233,9 @@ class PluginGenericobjectObject extends CommonDBTM {
                array_push($GO_LINKED_TYPES, $class);
             }
             $items_class = $class."_Item";
-            //if (class_exists($items_class)) {
+            if (class_exists($items_class)) {
                $items_class::registerType();
-            //}
+            }
          }
 
          if ($item->canUseProjects()) {
@@ -370,6 +374,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          if ($this->canBeReserved()) {
             $this->addStandardTab('Reservation', $tabs, $options);
+         }
+
+         if ($this->canUseDirectConnections()) {
+            $this->addStandardTab($this->getType()."_Item", $tabs, $options);
          }
 
          if ($this->canUseHistory()) {

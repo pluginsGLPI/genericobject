@@ -146,6 +146,11 @@ msgstr ""
 msgid "Link to other objects"
 msgstr ""
 
+msgid "Linked object"
+msgstr "Linked objects"
+msgstr[0] ""
+msgstr[1] ""
+
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2039
 #, php-format
