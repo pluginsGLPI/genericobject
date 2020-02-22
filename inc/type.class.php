@@ -141,8 +141,8 @@ class PluginGenericobjectType extends CommonDBTM {
             case 6:
                PluginGenericobjectProfile::showForItemtype($item);
                break;
-	    case 7:
-	       if($item->canUseDirectConnections()) {
+            case 7:
+               if ($item->canUseDirectConnections()) {
                   $item->showLinkedTypesForm();
                }
                break;
@@ -742,7 +742,8 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td><label>"._n("Type", "Types", 2)."</label></td>";
       echo "<td class='center'>";
-/*      echo "<select name='itemtypes[]' multiple size='10'>";
+      /*
+      echo "<select name='itemtypes[]' multiple size='10'>";
       $selected = [];
       if (!empty($this->fields['linked_itemtypes'])) {
          $selected = json_decode($this->fields['linked_itemtypes'], false);
@@ -759,8 +760,8 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       echo "</select>";*/
       $selected = $this->getLinkedItemTypesAsArray();
-      $values = array();
-      $elements = array();
+      $values = [];
+      $elements = [];
       foreach ($GO_LINKED_TYPES as $itemtype) {
          if ($itemtype == $this->fields['itemtype']) {
             continue;
@@ -771,8 +772,8 @@ class PluginGenericobjectType extends CommonDBTM {
          $elements[$itemtype] = $itemtype::getTypeName();
       }
       echo "<input type='hidden' name='itemtypes[]' value=''>";
-      Dropdown::showFromArray('itemtypes', $elements, array('multiple' => true,
-                                                            'values' => $values));
+      Dropdown::showFromArray('itemtypes', $elements, ['multiple' => true,
+                                                            'values' => $values]);
       echo "</td></tr>";
       echo "<input type='hidden' name='id' value='".$this->getID()."'>";
       $this->showFormButtons(['candel' => false, 'canadd' => false]);

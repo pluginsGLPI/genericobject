@@ -67,7 +67,8 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       return true;
    }
 
-   static function canDelete() { //useless
+   static function canDelete() {
+      //useless
       //Note : can be add a right
       return true;
    }
@@ -79,18 +80,18 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       $obj_item = new $obj_itemtype();
       $itemtype = $this->fields['itemtype'];
       $obj = new $itemtype();
-      $column = str_replace('glpi_','',$obj->table.'_id');
-      $obj_item->deleteByCriteria(array(
+      $column = str_replace('glpi_', '', $obj->table.'_id');
+      $obj_item->deleteByCriteria([
                         'items_id' => $this->fields[static::$items_id_1],
                         $column => $this->fields['items_id'],
-                        'itemtype' => static::$itemtype_1)
+                        'itemtype' => static::$itemtype_1]
       );
       parent::post_purgeItem();
    }
 
-   static function getSpecificValueToDisplay($field, $values, array $options = array()) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       switch ($field) {
          // Column "Linked objects" : Display name of the object and type of object
@@ -109,21 +110,21 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       $obj = new $itemType();
       $nameMainObjectItem = $itemType."_Item";
       $mainObjectItem = new $nameMainObjectItem();
-      $column = str_replace('glpi_','',$obj->table."_id");
-      $listeId = array();
+      $column = str_replace('glpi_', '', $obj->table."_id");
+      $listeId = [];
       foreach ($mainObjectItem->find() as $record) {
          if ($record[$column] == $id) {
             $listeId[] = $record['items_id'];
          }
       }
-      $object->dropdown(array('used' => $listeId));
+      $object->dropdown(['used' => $listeId]);
    }
 
    static function getItemListForObject($itemtype, $obj_item, $idItemType) {
       $nameMainObject = $itemtype.'_item';
       $objectItem = new $nameMainObject();
       $mainObject = new $itemtype();
-      $column = str_replace('glpi_','',$mainObject->table.'_id');
+      $column = str_replace('glpi_', '', $mainObject->table.'_id');
       $resultat = $objectItem->find("`itemtype` = '".$obj_item."' and `".$column."` = $idItemType");
       foreach ($resultat as $item) {
          $obj = new $item['itemtype']();
@@ -177,15 +178,15 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          echo "<input type='hidden' name='items_id' value='$instID'>";
          //echo "<input type='hidden' name='idMainobject' value='".$item->getID()."'>";
          echo "<input type='hidden' name='mainobject' value='".$item->getType()."'>";
-         $elements = array('' => Dropdown::EMPTY_VALUE);
+         $elements = ['' => Dropdown::EMPTY_VALUE];
          foreach ($item->getLinkedItemTypesAsArray() as $itemL) {
             $object = new $itemL();
             $elements[$itemL] = $object->getTypeName();
          }
          $rand = Dropdown::showFromArray('objectToAdd', $elements);
-         $paramsselsoft = array('objectToAdd' => '__VALUE__',
+         $paramsselsoft = ['objectToAdd' => '__VALUE__',
                                 'idMainobject' => $item->getID(),
-                                'mainobject' => $item->getType());
+                                'mainobject' => $item->getType()];
          Ajax::updateItemOnSelectEvent("dropdown_objectToAdd$rand", "show_".$rand,
                                        $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
                                        $paramsselsoft);
@@ -202,7 +203,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       echo "<div class='spaced'>";
       //if ($canedit && $number) {
          Html::openMassiveActionsForm('mass'.$item->getType().'_Item'.$rand);
-         $massiveactionparams = array('container' => 'mass'.$item->getType().'_Item'.$rand);
+         $massiveactionparams = ['container' => 'mass'.$item->getType().'_Item'.$rand];
          //Note : useless ?
          $massiveactionparams['check_itemtype'] = $item->getType();
          Html::showMassiveActions($massiveactionparams);
@@ -224,7 +225,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       echo $header_begin.$header_top.$header_end;
       foreach ($item->getLinkedItemTypesAsArray() as $itemL) {
          $object = new $itemL();
-         self::getItemListForObject($item->accesObjectType()->fields['itemtype'], 
+         self::getItemListForObject($item->accesObjectType()->fields['itemtype'],
             $object->accesObjectType()->fields['itemtype'], $item->fields['id']);
       }
       //if ($number) {
@@ -245,7 +246,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
     * @since 2.2.0
     */
    static function registerType() {
-//      Plugin::registerClass(get_called_class(), ['addtabon' => self::getLinkedItemTypes()]);
+      //Plugin::registerClass(get_called_class(), ['addtabon' => self::getLinkedItemTypes()]);
    }
 
    static function getLinkedItemTypes() {
@@ -263,12 +264,12 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
       if (!$withtemplate) {
          $itemtypes = self::getLinkedItemTypes(get_class($item));
          if (in_array(get_class($item), $itemtypes) || get_class($item) == self::getItemType1()) {
-//            return [1 => __("Objects management", "genericobject")];
-            $coluimn1 = str_replace('glpi_','',$item->table.'_id');
+            //return [1 => __("Objects management", "genericobject")];
+            $coluimn1 = str_replace('glpi_', '', $item->table.'_id');
             $nb = countElementsInTable(getTableForItemType($item->getType().'_Item'),
-                     array("$coluimn1" => $item->getID()));
+                     ["$coluimn1" => $item->getID()]);
             $str = _n("Linked object", "Linked objects", $nb == 0 ? 1 : $nb, "genericobject");
-            return array(1 => self::createTabEntry($str, $nb));
+            return [1 => self::createTabEntry($str, $nb)];
          }
       }
       return '';
