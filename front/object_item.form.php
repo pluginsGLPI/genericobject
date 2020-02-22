@@ -24,7 +24,7 @@ if (! isset($_POST[$coluimn1]) || empty($_POST[$coluimn1])) {
 
    $mainObject = new $nameMainObject;
    $mainObject->getFromDB(1); //useless ?
-   $coluimn = str_replace('glpi_','',$mainObject->table.'_id');
+   $coluimn = str_replace('glpi_', '', $mainObject->table.'_id');
 
    $nameMainObject      = $nameMainObject.'_item';
    $nameObjectToAdd     = $nameObjectToAdd.'_item';
