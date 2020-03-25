@@ -110,8 +110,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
 
          $item = new $params['itemtype']();
-         $search = $item->getObjectSearchOptions();
-
+         $search = $item->rawSearchOptions();
          //get searchoption id for location_id
          foreach ($search as $key => $val) {
             if (isset($val['table']) && $val['table'] === 'glpi_locations') {
