@@ -35,15 +35,15 @@
  ----------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.8.0');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.9.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.4");
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.5");
 // Maximum GLPI version, exclusive
-define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.5");
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.6");
 
 if (!defined("GENERICOBJECT_DIR")) {
-   define("GENERICOBJECT_DIR", GLPI_ROOT . "/plugins/genericobject");
+   define("GENERICOBJECT_DIR", Plugin::getPhpDir("genericobject"));
 }
 
 if (!defined("GENERICOBJECT_DOC_DIR")) {
@@ -112,8 +112,8 @@ $go_autoloader->register();
  * @return void
  */
 function plugin_init_genericobject() {
-   global $PLUGIN_HOOKS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $LOADED_PLUGINS;
+   global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
+          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS;
 
    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment"];
 
@@ -198,7 +198,6 @@ function plugin_init_genericobject() {
 }
 
 function plugin_post_init_genericobject() {
-   global $GO_FIELDS;
    Plugin::registerClass(
       'PluginGenericobjectProfile',
       ['addtabon' => ['Profile', 'PluginGenericobjectType']]
@@ -236,51 +235,6 @@ function plugin_version_genericobject() {
    ];
 }
 
-/**
- * Check pre-requisites before install
- * OPTIONNAL, but recommanded
- *
- * @return boolean
- */
-function plugin_genericobject_check_prerequisites() {
-
-   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
-   if (!method_exists('Plugin', 'checkGlpiVersion')) {
-      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
-      $matchMinGlpiReq = version_compare($version, PLUGIN_GENERICOBJECT_MIN_GLPI, '>=');
-      $matchMaxGlpiReq = version_compare($version, PLUGIN_GENERICOBJECT_MAX_GLPI, '<');
-
-      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
-         echo vsprintf(
-            'This plugin requires GLPI >= %1$s and < %2$s.',
-            [
-               PLUGIN_GENERICOBJECT_MIN_GLPI,
-               PLUGIN_GENERICOBJECT_MAX_GLPI,
-            ]
-         );
-         return false;
-      }
-   }
-
-   return true;
-}
-
-/**
- * Check configuration process
- *
- * @param boolean $verbose Whether to display message on failure. Defaults to false
- *
- * @return boolean
- */
-function plugin_genericobject_check_config($verbose = false) {
-   if (true) { // Your configuration check
-      return true;
-   }
-   if ($verbose) {
-      echo __('Installed / not configured');
-   }
-   return false;
-}
 
 function plugin_genericobject_haveTypeRight($itemtype, $right) {
    switch ($itemtype) {
@@ -295,9 +249,9 @@ function plugin_genericobject_haveTypeRight($itemtype, $right) {
 function plugin_genericobject_includeCommonFields($force = false) {
    //Load genericobject default constants
    if (!$force) {
-      include_once (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
+      include_once (GENERICOBJECT_DIR."/fields/field.constant.php");
    } else {
-      include (GLPI_ROOT . "/plugins/genericobject/fields/field.constant.php");
+      include (GENERICOBJECT_DIR."/fields/field.constant.php");
    }
 
    //Include user constants, that must be accessible for all itemtypes

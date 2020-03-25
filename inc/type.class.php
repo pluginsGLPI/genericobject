@@ -82,7 +82,7 @@ class PluginGenericobjectType extends CommonDBTM {
                 "WHERE `itemtype`='$itemtype'";
       $result = $DB->query($query);
       if ($DB->numrows($result) > 0) {
-         $this->fields = $DB->fetch_array($result);
+         $this->fields = $DB->fetchArray($result);
       } else {
          $this->getEmpty();
       }
@@ -102,9 +102,12 @@ class PluginGenericobjectType extends CommonDBTM {
             case __CLASS__ :
                // Number of fields in database
                $itemtype = $item->fields['itemtype'];
-               $obj = new $itemtype();
-               $obj->getEmpty();
-               $nb_fields = count($obj->fields);
+               $nb_fields = 0;
+               if (class_exists($itemtype)) {
+                  $obj = new $itemtype();
+                  $obj->getEmpty();
+                  $nb_fields = count($obj->fields);
+               }
 
                $tabs =  [
                   1  => __("Main"),
@@ -256,7 +259,7 @@ class PluginGenericobjectType extends CommonDBTM {
          }
 
          $prof     = new Profile();
-         $profiles = getAllDatasFromTable('glpi_profiles');
+         $profiles = getAllDataFromTable('glpi_profiles');
          foreach ($profiles as $profile) {
             $helpdesk_item_types = json_decode($profile['helpdesk_item_type'], true);
             if ($helpdesk_item_types !== null) {
@@ -1267,7 +1270,7 @@ class PluginGenericobjectType extends CommonDBTM {
                                                'overwrite_locales'      => $overwrite_locales ]);
       }
 
-      foreach ($DB->list_fields($table) as $field => $options) {
+      foreach ($DB->listFields($table) as $field => $options) {
          if (preg_match("/s_id$/", $field)) {
             $dropdowntable = getTableNameForForeignKeyField($field);
             $dropdownclass = getItemTypeForTable($dropdowntable);
@@ -1303,7 +1306,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       ]);
       //Delete files related to dropdowns
-      foreach ($DB->list_fields($table) as $field => $options) {
+      foreach ($DB->listFields($table) as $field => $options) {
          if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
             $table = getTableNameForForeignKeyField($field);
 
@@ -1608,7 +1611,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    static function getFamilyNameByItemtype($itemtype) {
-      $types = getAllDatasFromTable("glpi_plugin_genericobject_types",
+      $types = getAllDataFromTable("glpi_plugin_genericobject_types",
                                     ['itemtype' => $itemtype, 'is_active' => 1]);
       if (empty($types)) {
          return false;
@@ -1655,7 +1658,15 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : []), false, 'name') as $data) {
+         $criteria = [
+            'ORDER' => 'name',
+         ];
+         if (!$all) {
+            $criteria['WHERE'] = [
+               'is_active' => self::ACTIVE
+            ];
+         }
+         foreach (getAllDataFromTable($table, $criteria) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             $mytypes[$data['itemtype']] = $data;
          }
@@ -1674,7 +1685,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $table = getTableForItemType(__CLASS__);
       if ($DB->tableExists($table)) {
          $mytypes = [];
-         foreach (getAllDatasFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
+         foreach (getAllDataFromTable($table, (!$all ? ['is_active' => self::ACTIVE] : [])) as $data) {
             //If class is not present on the filesystem, do not list itemtype
             if (file_exists(GENERICOBJECT_CLASS_PATH."/".$data['name'].".class.php")) {
                $mytypes[$data['plugin_genericobject_typefamilies_id']][$data['itemtype']] = $data;
