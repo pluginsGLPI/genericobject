@@ -19,7 +19,7 @@
    <homepage>https://github.com/pluginsGLPI/genericobject</homepage>
    <download>https://github.com/pluginsGLPI/genericobject/releases</download>
    <issues>https://github.com/pluginsGLPI/genericobject/issues</issues>
-   <readme>https://raw.githubusercontent.com/pluginsGLPI/genericobject/master/README.md</readme>
+   <readme>https://glpi-plugins.readthedocs.io/en/latest/genericobject/index.html</readme>
    <authors>
       <author>Walid Nouh</author>
    </authors>
