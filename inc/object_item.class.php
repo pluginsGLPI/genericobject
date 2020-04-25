@@ -180,9 +180,9 @@ class PluginGenericobjectObject_Item extends CommonDBRelation {
             $iterator = self::getTypeItems($ID, $itemtype);
 
             while ($data = $iterator->next()) {
-              $data['assoc_itemtype'] = $itemtype;
-              $datas[]           = $data;
-              $used[$itemtype][] = $data['id'];
+               $data['assoc_itemtype'] = $itemtype;
+               $datas[]           = $data;
+               $used[$itemtype][] = $data['id'];
             }
          }
       }
@@ -221,10 +221,10 @@ class PluginGenericobjectObject_Item extends CommonDBRelation {
       }
 
       if ($number) {
-        echo "<div class='spaced'>";
-        if ($canedit) {
-          Html::openMassiveActionsForm('mass'.$item->getType().'_Item'.$rand);
-         $massiveactionparams
+         echo "<div class='spaced'>";
+         if ($canedit) {
+            Html::openMassiveActionsForm('mass'.$item->getType().'_Item'.$rand);
+            $massiveactionparams
                      = ['num_displayed'
                            => min($_SESSION['glpilist_limit'], $number),
                         'specific_actions'
@@ -232,59 +232,59 @@ class PluginGenericobjectObject_Item extends CommonDBRelation {
                         'container'
                             => 'mass'.$item->getType().'_Item'.$rand];
 
-          Html::showMassiveActions($massiveactionparams);
-        }
-        echo "<table class='tab_cadre_fixehov'>";
-        $header_begin  = "<tr>";
-        $header_top    = '';
-        $header_bottom = '';
-        $header_end    = '';
+            Html::showMassiveActions($massiveactionparams);
+         }
+         echo "<table class='tab_cadre_fixehov'>";
+         $header_begin  = "<tr>";
+         $header_top    = '';
+         $header_bottom = '';
+         $header_end    = '';
 
-        if ($canedit) {
-          $header_top    .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
-          $header_top    .= "</th>";
-          $header_bottom .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
-          $header_bottom .= "</th>";
-        }
+         if ($canedit) {
+            $header_top    .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
+            $header_top    .= "</th>";
+            $header_bottom .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
+            $header_bottom .= "</th>";
+         }
 
-        $header_end .= "<th>".__('Type')."</th>";
-        $header_end .= "<th>".__('ID')."</th>";
-        $header_end .= "<th>".__('Name')."</th>";
-        echo $header_begin.$header_top.$header_end;
+         $header_end .= "<th>".__('Type')."</th>";
+         $header_end .= "<th>".__('ID')."</th>";
+         $header_end .= "<th>".__('Name')."</th>";
+         echo $header_begin.$header_top.$header_end;
 
-        foreach ($datas as $data) {
-          $linkname = $data["name"];
-          $itemtype = $data['assoc_itemtype'];
-          if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
-            $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
-          }
-          $link = $itemtype::getFormURLWithID($data["id"]);
-          $name = "<a href=\"".$link."\">".$linkname."</a>";
+         foreach ($datas as $data) {
+            $linkname = $data["name"];
+            $itemtype = $data['assoc_itemtype'];
+            if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
+               $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+            }
+            $link = $itemtype::getFormURLWithID($data["id"]);
+            $name = "<a href=\"".$link."\">".$linkname."</a>";
 
-          echo "<tr class='tab_bg_1'>";
+            echo "<tr class='tab_bg_1'>";
 
-          if ($canedit) {
-            echo "<td width='10'>";
-            Html::showMassiveActionCheckBox($item->getType().'_Item', $data["linkid"]);
-            echo "</td>";
-          }
+            if ($canedit) {
+               echo "<td width='10'>";
+               Html::showMassiveActionCheckBox($item->getType().'_Item', $data["linkid"]);
+               echo "</td>";
+            }
 
-          echo "<td class='center'>".$itemtype::getTypeName(1)."</td>";
-          echo "<td class='center'>".$data["id"]."</td>";
-          echo "<td ".
-            ((isset($data['is_deleted']) && $data['is_deleted'])?"class='tab_bg_2_2'":"").
-            ">$name</td>";
-          echo "</tr>";
-        }
+            echo "<td class='center'>".$itemtype::getTypeName(1)."</td>";
+            echo "<td class='center'>".$data["id"]."</td>";
+            echo "<td ".
+               ((isset($data['is_deleted']) && $data['is_deleted'])?"class='tab_bg_2_2'":"").
+               ">$name</td>";
+            echo "</tr>";
+         }
 
-        echo $header_begin.$header_bottom.$header_end;
-        echo "</table>";
-        if ($canedit) {
-          $massiveactionparams['ontop'] = false;
-          Html::showMassiveActions($massiveactionparams);
-          Html::closeForm();
-        }
-        echo "</div>";
+         echo $header_begin.$header_bottom.$header_end;
+         echo "</table>";
+         if ($canedit) {
+            $massiveactionparams['ontop'] = false;
+            Html::showMassiveActions($massiveactionparams);
+            Html::closeForm();
+         }
+         echo "</div>";
       }
       return true;
    }
