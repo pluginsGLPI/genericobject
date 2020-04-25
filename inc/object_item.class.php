@@ -25,7 +25,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-class PluginGenericobjectObject_Item extends CommonDBChild {
+class PluginGenericobjectObject_Item extends CommonDBRelation {
 
    public $dohistory = true;
 
@@ -164,19 +164,38 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
 
    static function showItems(CommonDBTM $item) {
       global $DB, $CFG_GLPI;
-      $instID = $item->fields['id'];
-      if (!$item->can($instID, READ)) {
+
+      $ID = $item->getID();
+      if (!$item->can($ID, READ)) {
          return false;
       }
-      if ($item->canEdit($instID)) {
+      $canedit = $item->canEdit($ID);
+      $rand    = mt_rand();
+
+      $datas = [];
+      $used  = [];
+      foreach ($item->getLinkedItemTypesAsArray() as $itemtype) {
+         $object = new $itemtype();
+         if ($object->canView()) {
+            $iterator = self::getTypeItems($ID, $itemtype);
+
+            while ($data = $iterator->next()) {
+              $data['assoc_itemtype'] = $itemtype;
+              $datas[]           = $data;
+              $used[$itemtype][] = $data['id'];
+            }
+         }
+      }
+      $number = count($datas);
+
+      if ($canedit) {
          echo "<div class='firstbloc'>";
-         echo "<form method='post' action='".Toolbox::getItemTypeFormURL("PluginGenericobjectObject_Item")."'>";
+         echo "<form method='post' action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
          echo "<div class='spaced'>";
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_1'>";
          echo "<td class='center'>".__("Select an object to link", 'genericobject')."&nbsp;&nbsp;";
-         echo "<input type='hidden' name='items_id' value='$instID'>";
-         //echo "<input type='hidden' name='idMainobject' value='".$item->getID()."'>";
+         echo "<input type='hidden' name='items_id' value='$ID'>";
          echo "<input type='hidden' name='mainobject' value='".$item->getType()."'>";
          $elements = ['' => Dropdown::EMPTY_VALUE];
          foreach ($item->getLinkedItemTypesAsArray() as $itemL) {
@@ -185,14 +204,14 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          }
          $rand = Dropdown::showFromArray('objectToAdd', $elements);
          $paramsselsoft = ['objectToAdd' => '__VALUE__',
-                                'idMainobject' => $item->getID(),
+                                'idMainobject' => $ID,
                                 'mainobject' => $item->getType()];
          Ajax::updateItemOnSelectEvent("dropdown_objectToAdd$rand", "show_".$rand,
                                        $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
                                        $paramsselsoft);
          echo "<span id='show_".$rand."'>&nbsp;</span>";
          echo "</td><td width='20%'>";
-         echo "<input type='submit' name='add' value=\""._sx('button', 'Install')."\" class='submit'>";
+         echo "<input type='submit' name='add' value=\""._sx('button', 'Connect')."\" class='submit'>";
          echo "</td>";
          echo "</tr>";
          echo "</table>";
@@ -200,43 +219,73 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
          Html::closeForm();
          echo "</div>";
       }
-      echo "<div class='spaced'>";
-      //if ($canedit && $number) {
-         Html::openMassiveActionsForm('mass'.$item->getType().'_Item'.$rand);
-         $massiveactionparams = ['container' => 'mass'.$item->getType().'_Item'.$rand];
-         //Note : useless ?
-         $massiveactionparams['check_itemtype'] = $item->getType();
-         Html::showMassiveActions($massiveactionparams);
-      //}
-      echo "<table class='tab_cadre_fixehov'>";
-      $header_begin  = "<tr>";
-      $header_top    = '';
-      $header_bottom = '';
-      $header_end    = '';
-      //if ($canedit && $number) {
-         $header_top    .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
-         $header_top    .= "</th>";
-         $header_bottom .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
-         $header_bottom .= "</th>";
-      //}
-      $header_end .= "<th>".__('Type')."</th>";
-      $header_end .= "<th>".__('ID')."</th>";
-      $header_end .= "<th>".__('Name')."</th>";
-      echo $header_begin.$header_top.$header_end;
-      foreach ($item->getLinkedItemTypesAsArray() as $itemL) {
-         $object = new $itemL();
-         self::getItemListForObject($item->accesObjectType()->fields['itemtype'],
-            $object->accesObjectType()->fields['itemtype'], $item->fields['id']);
+
+      if ($number) {
+        echo "<div class='spaced'>";
+        if ($canedit) {
+          Html::openMassiveActionsForm('mass'.$item->getType().'_Item'.$rand);
+         $massiveactionparams
+                     = ['num_displayed'
+                           => min($_SESSION['glpilist_limit'], $number),
+                        'specific_actions'
+                            => ['purge' => _x('button', 'Disconnect')],
+                        'container'
+                            => 'mass'.$item->getType().'_Item'.$rand];
+
+          Html::showMassiveActions($massiveactionparams);
+        }
+        echo "<table class='tab_cadre_fixehov'>";
+        $header_begin  = "<tr>";
+        $header_top    = '';
+        $header_bottom = '';
+        $header_end    = '';
+
+        if ($canedit) {
+          $header_top    .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
+          $header_top    .= "</th>";
+          $header_bottom .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.$item->getType().'_Item'.$rand);
+          $header_bottom .= "</th>";
+        }
+
+        $header_end .= "<th>".__('Type')."</th>";
+        $header_end .= "<th>".__('ID')."</th>";
+        $header_end .= "<th>".__('Name')."</th>";
+        echo $header_begin.$header_top.$header_end;
+
+        foreach ($datas as $data) {
+          $linkname = $data["name"];
+          $itemtype = $data['assoc_itemtype'];
+          if ($_SESSION["glpiis_ids_visible"] || empty($data["name"])) {
+            $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+          }
+          $link = $itemtype::getFormURLWithID($data["id"]);
+          $name = "<a href=\"".$link."\">".$linkname."</a>";
+
+          echo "<tr class='tab_bg_1'>";
+
+          if ($canedit) {
+            echo "<td width='10'>";
+            Html::showMassiveActionCheckBox($item->getType().'_Item', $data["linkid"]);
+            echo "</td>";
+          }
+
+          echo "<td class='center'>".$itemtype::getTypeName(1)."</td>";
+          echo "<td class='center'>".$data["id"]."</td>";
+          echo "<td ".
+            ((isset($data['is_deleted']) && $data['is_deleted'])?"class='tab_bg_2_2'":"").
+            ">$name</td>";
+          echo "</tr>";
+        }
+
+        echo $header_begin.$header_bottom.$header_end;
+        echo "</table>";
+        if ($canedit) {
+          $massiveactionparams['ontop'] = false;
+          Html::showMassiveActions($massiveactionparams);
+          Html::closeForm();
+        }
+        echo "</div>";
       }
-      //if ($number) {
-         echo $header_begin.$header_bottom.$header_end;
-      //}
-      echo "</table>";
-      //if ($canedit && $number) {
-         $massiveactionparams['ontop'] = false;
-         Html::showMassiveActions($massiveactionparams);
-         Html::closeForm();
-      //}
       return true;
    }
 
@@ -246,7 +295,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
     * @since 2.2.0
     */
    static function registerType() {
-      //Plugin::registerClass(get_called_class(), ['addtabon' => self::getLinkedItemTypes()]);
+      Plugin::registerClass(get_called_class(), ['addtabon' => self::getLinkedItemTypes()]);
    }
 
    static function getLinkedItemTypes() {
@@ -276,13 +325,6 @@ class PluginGenericobjectObject_Item extends CommonDBChild {
    }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
-      /*$itemtypes = self::getLinkedItemTypes();
-      if (get_class($item) == self::getItemType1()) {
-         self::showItemsForSource($item);
-      } else if (in_array(get_class($item), $itemtypes)) {
-         self::showItemsForTarget($item);
-      }
-      */
       if ($tabnum == 1) {
          self::showItems($item);
       }
