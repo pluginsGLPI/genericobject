@@ -120,28 +120,6 @@ class PluginGenericobjectObject_Item extends CommonDBRelation {
       $object->dropdown(['used' => $listeId]);
    }
 
-   static function getItemListForObject($itemtype, $obj_item, $idItemType) {
-      $nameMainObject = $itemtype.'_item';
-      $objectItem = new $nameMainObject();
-      $mainObject = new $itemtype();
-      $column = str_replace('glpi_', '', $mainObject->table.'_id');
-      $resultat = $objectItem->find("`itemtype` = '".$obj_item."' and `".$column."` = $idItemType");
-      foreach ($resultat as $item) {
-         $obj = new $item['itemtype']();
-         $obj->getFromDB($item['items_id']);
-         echo "<tr class='center'>";
-         //if ($canedit) {
-            echo "<td width='10'>";
-            Html::showMassiveActionCheckBox($objectItem->getType(), $item["id"]);
-            echo "</td>";
-         //}
-         echo "<td>".$obj->getTypeName()."</td>";
-         echo "<td>".$item['items_id']."</td>";
-         echo "<td>".$obj->getLink()."</td>";
-         echo "</tr>";
-      }
-   }
-
    /**
     *
     * Enter description here ...
@@ -195,21 +173,24 @@ class PluginGenericobjectObject_Item extends CommonDBRelation {
          echo "<table class='tab_cadre_fixe'>";
          echo "<tr class='tab_bg_1'>";
          echo "<td class='center'>".__("Select an object to link", 'genericobject')."&nbsp;&nbsp;";
+
+         $options               = [];
+         $options['checkright'] = true;
+         $options['name']       = 'objectToAdd';
+
+         $rand = Dropdown::showItemType($item->getLinkedItemTypesAsArray(), $options);
+         if ($rand) {
+            $paramsselsoft = ['objectToAdd' => '__VALUE__',
+                              'idMainobject' => $ID,
+                              'mainobject' => $item->getType()];
+            Ajax::updateItemOnSelectEvent("dropdown_objectToAdd$rand", "show_".$rand,
+                                           $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
+                                           $paramsselsoft);
+            echo "<span id='show_".$rand."'>&nbsp;</span>";
+         }
+
          echo "<input type='hidden' name='items_id' value='$ID'>";
          echo "<input type='hidden' name='mainobject' value='".$item->getType()."'>";
-         $elements = ['' => Dropdown::EMPTY_VALUE];
-         foreach ($item->getLinkedItemTypesAsArray() as $itemL) {
-            $object = new $itemL();
-            $elements[$itemL] = $object->getTypeName();
-         }
-         $rand = Dropdown::showFromArray('objectToAdd', $elements);
-         $paramsselsoft = ['objectToAdd' => '__VALUE__',
-                                'idMainobject' => $ID,
-                                'mainobject' => $item->getType()];
-         Ajax::updateItemOnSelectEvent("dropdown_objectToAdd$rand", "show_".$rand,
-                                       $CFG_GLPI["root_doc"]."/plugins/genericobject/ajax/dropdownByItemtype.php",
-                                       $paramsselsoft);
-         echo "<span id='show_".$rand."'>&nbsp;</span>";
          echo "</td><td width='20%'>";
          echo "<input type='submit' name='add' value=\""._sx('button', 'Connect')."\" class='submit'>";
          echo "</td>";
