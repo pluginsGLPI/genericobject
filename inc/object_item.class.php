@@ -35,6 +35,7 @@ class PluginGenericobjectObject_Item extends CommonDBRelation {
 
    static public $itemtype_2 = 'itemtype';
    static public $items_id_2 = 'items_id';
+   static public $logs_for_item_2 = false;
 
    //Get itemtype name
    static function getTypeName($nb = 0) {

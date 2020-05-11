@@ -50,16 +50,14 @@ if (! isset($_POST[$coluimn1]) || empty($_POST[$coluimn1])) {
       $values[$coluimn] = $idMainObject;
       $values['itemtype'] = $_POST['objectToAdd'];
 
-      $mainObjectItem->fields = $values;
-      $mainObjectItem->addToDB();
+      $mainObjectItem->add($values);
 
       $values = [];
       $values['items_id'] = $idMainObject;
       $values[$coluimn1] = $idObjectToAdd;
       $values['itemtype'] = $_POST['mainobject'];
 
-      $mainObjectToAddItem->fields = $values;
-      $mainObjectToAddItem->addToDB($values);
+      $mainObjectToAddItem->add($values);
    }
 }
 
