@@ -582,6 +582,11 @@ class PluginGenericobjectObject extends CommonDBTM {
             $description['Type'] = 'emptyspace';
          }
 
+         if (isset($searchoption['input_type']) && 'horizontalseparator' === $searchoption['input_type']) {
+            $this->DisplayHorizontalSeparator($searchoption['name']);
+            return;
+         }
+
          $this->startColumn();
          echo $searchoption['name'];
          if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
@@ -741,6 +746,15 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   /**
+   * Display an horizontal separator on all columns
+   **/
+
+   function DisplayHorizontalSeparator($name) {
+      $this->closeColumn();
+      echo '<tr class="tab_bg_1"><th colspan="4">'. $name."</th></tr>";
+      $this->cpt = 0;
+   }
 
    function prepareInputForAdd($input) {
 
