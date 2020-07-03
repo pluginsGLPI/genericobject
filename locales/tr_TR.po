@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-06 15:56+0000\n"
+"POT-Creation-Date: 2020-07-03 18:57+0000\n"
 "PO-Revision-Date: 2019-11-15 05:35+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
@@ -18,16 +18,25 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: front/type.php:38 front/object.php:33 inc/profile.class.php:287
+#: index.php:58 front/familylist.php:33 front/familylist.php:41
+#: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
+#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+msgid "Objects management"
+msgstr "Nesne yönetimi"
+
+#: index.php:68 front/familylist.php:37
+msgid "Empty family"
+msgstr "Aile boş"
+
+#: front/object.php:33 front/type.php:38 inc/profile.class.php:287
 #: inc/type.class.php:66
 msgid "Type of objects"
 msgstr "Nesne tipi"
 
-#: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
-#: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
-#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
-msgid "Objects management"
-msgstr "Nesne yönetimi"
+#: front/commontreedropdown.form.php:36 front/commondropdown.php:11
+#: front/commondropdown.form.php:36
+msgid "The requested dropdown does not exists"
+msgstr "İstenen açılan kutu bulunamadı"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
@@ -37,14 +46,9 @@ msgstr "Alanlar silindi"
 msgid "Field added successfully"
 msgstr "Alan eklendi"
 
-#: front/commondropdown.php:11 front/commontreedropdown.form.php:36
-#: front/commondropdown.form.php:36
-msgid "The requested dropdown does not exists"
-msgstr "İstenen açılan kutu bulunamadı"
-
-#: front/familylist.php:37 index.php:68
-msgid "Empty family"
-msgstr "Aile boş"
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+msgid "Family of type of objects"
+msgstr "Nesnelerin aile tipi"
 
 #: inc/profile.class.php:141
 msgid "General"
@@ -57,6 +61,93 @@ msgstr "Nesneler"
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
 msgstr "(Henüz bir tür tanımlanmamış)"
+
+#: inc/type.class.php:156
+msgid "Type name is missing"
+msgstr "Tip adı eksik"
+
+#: inc/type.class.php:162
+msgid "Type name must be longer"
+msgstr "Tür adı daha uzun olmalı"
+
+#: inc/type.class.php:168
+msgid ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr "field', 'object' ve 'type' tipleri ayrılmış olduğundan kullanılamaz. Lütfen başka bir tip seçin"
+
+#: inc/type.class.php:175
+msgid "Type must start with a letter"
+msgstr "Tip bir harf ile başlamalıdır"
+
+#: inc/type.class.php:182
+msgid "A type already exists with the same name"
+msgstr "Aynı adlı bir tip zaten var"
+
+#: inc/type.class.php:470
+msgid "Internal identifier"
+msgstr "İç belirteç"
+
+#: inc/type.class.php:524
+msgid "Behaviour"
+msgstr "Davranış"
+
+#: inc/type.class.php:543
+msgid "Network connections"
+msgstr "Ağ bağlantıları"
+
+#: inc/type.class.php:547
+msgid "injection file plugin"
+msgstr "dosya gönderme uygulama eki"
+
+#: inc/type.class.php:549
+msgid "geninventorynumber plugin"
+msgstr "stoknumarasiolustur uygulama eki"
+
+#: inc/type.class.php:550
+msgid "order plugin"
+msgstr "sıralama uygulama eki"
+
+#: inc/type.class.php:551
+msgid "item's uninstallation plugin"
+msgstr "ögeyi kaldırma uygulama eki"
+
+#: inc/type.class.php:552
+msgid "simcard plugin"
+msgstr "sim kart uygulama eki"
+
+#: inc/type.class.php:553
+msgid "treeview plugin"
+msgstr "ağaç görünümü uygulama eki"
+
+#: inc/type.class.php:716
+msgid "Regenerate files"
+msgstr "Dosyaları yeniden oluştur"
+
+#: inc/type.class.php:729
+msgid "Link to other objects"
+msgstr "Diğer nesnelere bağlantı"
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2070
+#, php-format
+msgid "Unable to load the class %1$s."
+msgstr "%1$s sınıfı yüklenemedi."
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2072
+#, php-format
+msgid ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+msgstr "Veritabanınızda bu uygulama eki ve %1$s içindeki eksik dosyalar için büyük olasılıkla çöp veriler var "
+
+#: inc/object.class.php:537
+msgid "Object preview"
+msgstr "Nesne önizleme"
+
+#: inc/object.class.php:801
+msgid "You must configure rights to enable the preview"
+msgstr "Ön izlemeyi görüntüleyebilmek için izinleri yapılandırmalısınız"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
@@ -74,97 +165,6 @@ msgstr "Veritabanındaki Ad"
 msgid "Add new field"
 msgstr "Alan ekle"
 
-#: inc/field.class.php:317
+#: inc/field.class.php:318
 msgid "Read-only field"
 msgstr "Salt okunur alan"
-
-#: inc/type.class.php:153
-msgid "Type name is missing"
-msgstr "Tip adı eksik"
-
-#: inc/type.class.php:159
-msgid "Type name must be longer"
-msgstr "Tür adı daha uzun olmalı"
-
-#: inc/type.class.php:165
-msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "field', 'object' ve 'type' tipleri ayrılmış olduğundan kullanılamaz. Lütfen başka bir tip seçin"
-
-#: inc/type.class.php:172
-msgid "Type must start with a letter"
-msgstr "Tip bir harf ile başlamalıdır"
-
-#: inc/type.class.php:179
-msgid "A type already exists with the same name"
-msgstr "Aynı adlı bir tip zaten var"
-
-#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
-msgid "Family of type of objects"
-msgstr "Nesnelerin aile tipi"
-
-#: inc/type.class.php:467
-msgid "Internal identifier"
-msgstr "İç belirteç"
-
-#: inc/type.class.php:521
-msgid "Behaviour"
-msgstr "Davranış"
-
-#: inc/type.class.php:540
-msgid "Network connections"
-msgstr "Ağ bağlantıları"
-
-#: inc/type.class.php:544
-msgid "injection file plugin"
-msgstr "dosya gönderme uygulama eki"
-
-#: inc/type.class.php:546
-msgid "geninventorynumber plugin"
-msgstr "stoknumarasiolustur uygulama eki"
-
-#: inc/type.class.php:547
-msgid "order plugin"
-msgstr "sıralama uygulama eki"
-
-#: inc/type.class.php:548
-msgid "item's uninstallation plugin"
-msgstr "ögeyi kaldırma uygulama eki"
-
-#: inc/type.class.php:549
-msgid "simcard plugin"
-msgstr "sim kart uygulama eki"
-
-#: inc/type.class.php:550
-msgid "treeview plugin"
-msgstr "ağaç görünümü uygulama eki"
-
-#: inc/type.class.php:713
-msgid "Regenerate files"
-msgstr "Dosyaları yeniden oluştur"
-
-#: inc/type.class.php:726
-msgid "Link to other objects"
-msgstr "Diğer nesnelere bağlantı"
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2039
-#, php-format
-msgid "Unable to load the class %1$s."
-msgstr "%1$s sınıfı yüklenemedi."
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2041
-#, php-format
-msgid ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
-msgstr "Veritabanınızda bu uygulama eki ve %1$s içindeki eksik dosyalar için büyük olasılıkla çöp veriler var "
-
-#: inc/object.class.php:526
-msgid "Object preview"
-msgstr "Nesne önizleme"
-
-#: inc/object.class.php:815
-msgid "You must configure rights to enable the preview"
-msgstr "Ön izlemeyi görüntüleyebilmek için izinleri yapılandırmalısınız"
