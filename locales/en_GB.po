@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-06 15:56+0000\n"
-"PO-Revision-Date: 2020-02-06 15:56+0000\n"
+"POT-Creation-Date: 2020-07-03 18:57+0000\n"
+"PO-Revision-Date: 2020-07-03 18:57+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -17,16 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: front/type.php:38 front/object.php:33 inc/profile.class.php:287
+#: index.php:58 front/familylist.php:33 front/familylist.php:41
+#: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
+#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+msgid "Objects management"
+msgstr "Objects management"
+
+#: index.php:68 front/familylist.php:37
+msgid "Empty family"
+msgstr "Empty family"
+
+#: front/object.php:33 front/type.php:38 inc/profile.class.php:287
 #: inc/type.class.php:66
 msgid "Type of objects"
 msgstr "Type of objects"
 
-#: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
-#: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
-#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
-msgid "Objects management"
-msgstr "Objects management"
+#: front/commontreedropdown.form.php:36 front/commondropdown.php:11
+#: front/commondropdown.form.php:36
+msgid "The requested dropdown does not exists"
+msgstr "The requested dropdown does not exists"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
@@ -36,14 +45,9 @@ msgstr "Field(s) deleted successfully"
 msgid "Field added successfully"
 msgstr "Field added successfully"
 
-#: front/commondropdown.php:11 front/commontreedropdown.form.php:36
-#: front/commondropdown.form.php:36
-msgid "The requested dropdown does not exists"
-msgstr "The requested dropdown does not exists"
-
-#: front/familylist.php:37 index.php:68
-msgid "Empty family"
-msgstr "Empty family"
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+msgid "Family of type of objects"
+msgstr "Family of type of objects"
 
 #: inc/profile.class.php:141
 msgid "General"
@@ -56,6 +60,96 @@ msgstr "Objects"
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
 msgstr "(No types defined yet)"
+
+#: inc/type.class.php:156
+msgid "Type name is missing"
+msgstr "Type name is missing"
+
+#: inc/type.class.php:162
+msgid "Type name must be longer"
+msgstr "Type name must be longer"
+
+#: inc/type.class.php:168
+msgid ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+
+#: inc/type.class.php:175
+msgid "Type must start with a letter"
+msgstr "Type must start with a letter"
+
+#: inc/type.class.php:182
+msgid "A type already exists with the same name"
+msgstr "A type already exists with the same name"
+
+#: inc/type.class.php:470
+msgid "Internal identifier"
+msgstr "Internal identifier"
+
+#: inc/type.class.php:524
+msgid "Behaviour"
+msgstr "Behaviour"
+
+#: inc/type.class.php:543
+msgid "Network connections"
+msgstr "Network connections"
+
+#: inc/type.class.php:547
+msgid "injection file plugin"
+msgstr "injection file plugin"
+
+#: inc/type.class.php:549
+msgid "geninventorynumber plugin"
+msgstr "geninventorynumber plugin"
+
+#: inc/type.class.php:550
+msgid "order plugin"
+msgstr "order plugin"
+
+#: inc/type.class.php:551
+msgid "item's uninstallation plugin"
+msgstr "item's uninstallation plugin"
+
+#: inc/type.class.php:552
+msgid "simcard plugin"
+msgstr "simcard plugin"
+
+#: inc/type.class.php:553
+msgid "treeview plugin"
+msgstr "treeview plugin"
+
+#: inc/type.class.php:716
+msgid "Regenerate files"
+msgstr "Regenerate files"
+
+#: inc/type.class.php:729
+msgid "Link to other objects"
+msgstr "Link to other objects"
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2070
+#, php-format
+msgid "Unable to load the class %1$s."
+msgstr "Unable to load the class %1$s."
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2072
+#, php-format
+msgid ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+msgstr ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+
+#: inc/object.class.php:537
+msgid "Object preview"
+msgstr "Object preview"
+
+#: inc/object.class.php:801
+msgid "You must configure rights to enable the preview"
+msgstr "You must configure rights to enable the preview"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
@@ -73,100 +167,6 @@ msgstr "Name in DB"
 msgid "Add new field"
 msgstr "Add new field"
 
-#: inc/field.class.php:317
+#: inc/field.class.php:318
 msgid "Read-only field"
 msgstr "Read-only field"
-
-#: inc/type.class.php:153
-msgid "Type name is missing"
-msgstr "Type name is missing"
-
-#: inc/type.class.php:159
-msgid "Type name must be longer"
-msgstr "Type name must be longer"
-
-#: inc/type.class.php:165
-msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
-
-#: inc/type.class.php:172
-msgid "Type must start with a letter"
-msgstr "Type must start with a letter"
-
-#: inc/type.class.php:179
-msgid "A type already exists with the same name"
-msgstr "A type already exists with the same name"
-
-#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
-msgid "Family of type of objects"
-msgstr "Family of type of objects"
-
-#: inc/type.class.php:467
-msgid "Internal identifier"
-msgstr "Internal identifier"
-
-#: inc/type.class.php:521
-msgid "Behaviour"
-msgstr "Behaviour"
-
-#: inc/type.class.php:540
-msgid "Network connections"
-msgstr "Network connections"
-
-#: inc/type.class.php:544
-msgid "injection file plugin"
-msgstr "injection file plugin"
-
-#: inc/type.class.php:546
-msgid "geninventorynumber plugin"
-msgstr "geninventorynumber plugin"
-
-#: inc/type.class.php:547
-msgid "order plugin"
-msgstr "order plugin"
-
-#: inc/type.class.php:548
-msgid "item's uninstallation plugin"
-msgstr "item's uninstallation plugin"
-
-#: inc/type.class.php:549
-msgid "simcard plugin"
-msgstr "simcard plugin"
-
-#: inc/type.class.php:550
-msgid "treeview plugin"
-msgstr "treeview plugin"
-
-#: inc/type.class.php:713
-msgid "Regenerate files"
-msgstr "Regenerate files"
-
-#: inc/type.class.php:726
-msgid "Link to other objects"
-msgstr "Link to other objects"
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2039
-#, php-format
-msgid "Unable to load the class %1$s."
-msgstr "Unable to load the class %1$s."
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2041
-#, php-format
-msgid ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
-msgstr ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
-
-#: inc/object.class.php:526
-msgid "Object preview"
-msgstr "Object preview"
-
-#: inc/object.class.php:815
-msgid "You must configure rights to enable the preview"
-msgstr "You must configure rights to enable the preview"

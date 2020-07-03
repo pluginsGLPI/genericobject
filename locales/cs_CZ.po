@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-06 15:56+0000\n"
+"POT-Creation-Date: 2020-07-03 18:57+0000\n"
 "PO-Revision-Date: 2019-11-09 06:06+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/cs_CZ/)\n"
@@ -19,16 +19,25 @@ msgstr ""
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: front/type.php:38 front/object.php:33 inc/profile.class.php:287
+#: index.php:58 front/familylist.php:33 front/familylist.php:41
+#: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
+#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+msgid "Objects management"
+msgstr "Správa objektů"
+
+#: index.php:68 front/familylist.php:37
+msgid "Empty family"
+msgstr "Prázdná rodina"
+
+#: front/object.php:33 front/type.php:38 inc/profile.class.php:287
 #: inc/type.class.php:66
 msgid "Type of objects"
 msgstr "Typ objektů"
 
-#: front/type.form.php:73 front/familylist.php:33 front/familylist.php:41
-#: index.php:58 inc/object_item.class.php:109 inc/profile.class.php:39
-#: inc/type.class.php:289 inc/type.class.php:416 setup.php:224
-msgid "Objects management"
-msgstr "Správa objektů"
+#: front/commontreedropdown.form.php:36 front/commondropdown.php:11
+#: front/commondropdown.form.php:36
+msgid "The requested dropdown does not exists"
+msgstr "Požadovaná rozbalovací nabídka neexistuje"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
@@ -38,14 +47,9 @@ msgstr "Kolonky úspěšně smazány"
 msgid "Field added successfully"
 msgstr "Kolonka úspěšně přidána"
 
-#: front/commondropdown.php:11 front/commontreedropdown.form.php:36
-#: front/commondropdown.form.php:36
-msgid "The requested dropdown does not exists"
-msgstr "Požadovaná rozbalovací nabídka neexistuje"
-
-#: front/familylist.php:37 index.php:68
-msgid "Empty family"
-msgstr "Prázdná rodina"
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+msgid "Family of type of objects"
+msgstr "Rodina typu objektů"
 
 #: inc/profile.class.php:141
 msgid "General"
@@ -58,6 +62,93 @@ msgstr "Objekty"
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
 msgstr "(Doposud nebyly určené žádné typy)"
+
+#: inc/type.class.php:156
+msgid "Type name is missing"
+msgstr "Název typu chybí"
+
+#: inc/type.class.php:162
+msgid "Type name must be longer"
+msgstr "Je třeba, aby název typu byl delší"
+
+#: inc/type.class.php:168
+msgid ""
+"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr "Typy „field“ (kolonka), „object“ (objekt) a „type“ (typ) jsou vyhrazené (už je nemůžete použít). Zvolte jiný"
+
+#: inc/type.class.php:175
+msgid "Type must start with a letter"
+msgstr "Je třeba, aby typ začínal písmenem"
+
+#: inc/type.class.php:182
+msgid "A type already exists with the same name"
+msgstr "Typ se stejným názvem už existuje"
+
+#: inc/type.class.php:470
+msgid "Internal identifier"
+msgstr "Vnitřní identifikátor"
+
+#: inc/type.class.php:524
+msgid "Behaviour"
+msgstr "Chování"
+
+#: inc/type.class.php:543
+msgid "Network connections"
+msgstr "Síťová připojení"
+
+#: inc/type.class.php:547
+msgid "injection file plugin"
+msgstr "zásuvný modul vkládání souborů"
+
+#: inc/type.class.php:549
+msgid "geninventorynumber plugin"
+msgstr "zásuvný modul vytváření inventárních čísel"
+
+#: inc/type.class.php:550
+msgid "order plugin"
+msgstr "zásuvný modul správa objednávek"
+
+#: inc/type.class.php:551
+msgid "item's uninstallation plugin"
+msgstr "zásuvný modul odinstalace položek"
+
+#: inc/type.class.php:552
+msgid "simcard plugin"
+msgstr "zásuvný modul sim karty"
+
+#: inc/type.class.php:553
+msgid "treeview plugin"
+msgstr "zásuvný modul stromového pohledu"
+
+#: inc/type.class.php:716
+msgid "Regenerate files"
+msgstr "Znovu vytvořit soubory"
+
+#: inc/type.class.php:729
+msgid "Link to other objects"
+msgstr "Propojit s ostatními objekty"
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2070
+#, php-format
+msgid "Unable to load the class %1$s."
+msgstr "Nedaří se načíst třídu %1$s."
+
+#. TRANS:  %1$s is itemtype name
+#: inc/type.class.php:2072
+#, php-format
+msgid ""
+"You probably have garbage data in your database for this plugin and missing "
+"files in %1$s"
+msgstr "Nejspíš ve své databázi máte pro tento modul v nepořádku data a chybí soubory v %1$s"
+
+#: inc/object.class.php:537
+msgid "Object preview"
+msgstr "Náhled objektu"
+
+#: inc/object.class.php:801
+msgid "You must configure rights to enable the preview"
+msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
@@ -75,97 +166,6 @@ msgstr "Název v databázi"
 msgid "Add new field"
 msgstr "Přidat novou kolonku"
 
-#: inc/field.class.php:317
+#: inc/field.class.php:318
 msgid "Read-only field"
 msgstr "Kolonka pouze pro čtení"
-
-#: inc/type.class.php:153
-msgid "Type name is missing"
-msgstr "Název typu chybí"
-
-#: inc/type.class.php:159
-msgid "Type name must be longer"
-msgstr "Je třeba, aby název typu byl delší"
-
-#: inc/type.class.php:165
-msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Typy „field“ (kolonka), „object“ (objekt) a „type“ (typ) jsou vyhrazené (už je nemůžete použít). Zvolte jiný"
-
-#: inc/type.class.php:172
-msgid "Type must start with a letter"
-msgstr "Je třeba, aby typ začínal písmenem"
-
-#: inc/type.class.php:179
-msgid "A type already exists with the same name"
-msgstr "Typ se stejným názvem už existuje"
-
-#: inc/type.class.php:377 inc/type.class.php:506 inc/typefamily.class.php:36
-msgid "Family of type of objects"
-msgstr "Rodina typu objektů"
-
-#: inc/type.class.php:467
-msgid "Internal identifier"
-msgstr "Vnitřní identifikátor"
-
-#: inc/type.class.php:521
-msgid "Behaviour"
-msgstr "Chování"
-
-#: inc/type.class.php:540
-msgid "Network connections"
-msgstr "Síťová připojení"
-
-#: inc/type.class.php:544
-msgid "injection file plugin"
-msgstr "zásuvný modul vkládání souborů"
-
-#: inc/type.class.php:546
-msgid "geninventorynumber plugin"
-msgstr "zásuvný modul vytváření inventárních čísel"
-
-#: inc/type.class.php:547
-msgid "order plugin"
-msgstr "zásuvný modul správa objednávek"
-
-#: inc/type.class.php:548
-msgid "item's uninstallation plugin"
-msgstr "zásuvný modul odinstalace položek"
-
-#: inc/type.class.php:549
-msgid "simcard plugin"
-msgstr "zásuvný modul sim karty"
-
-#: inc/type.class.php:550
-msgid "treeview plugin"
-msgstr "zásuvný modul stromového pohledu"
-
-#: inc/type.class.php:713
-msgid "Regenerate files"
-msgstr "Znovu vytvořit soubory"
-
-#: inc/type.class.php:726
-msgid "Link to other objects"
-msgstr "Propojit s ostatními objekty"
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2039
-#, php-format
-msgid "Unable to load the class %1$s."
-msgstr "Nedaří se načíst třídu %1$s."
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2041
-#, php-format
-msgid ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
-msgstr "Nejspíš ve své databázi máte pro tento modul v nepořádku data a chybí soubory v %1$s"
-
-#: inc/object.class.php:526
-msgid "Object preview"
-msgstr "Náhled objektu"
-
-#: inc/object.class.php:815
-msgid "You must configure rights to enable the preview"
-msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
