@@ -19,11 +19,21 @@
    <homepage>https://github.com/pluginsGLPI/genericobject</homepage>
    <download>https://github.com/pluginsGLPI/genericobject/releases</download>
    <issues>https://github.com/pluginsGLPI/genericobject/issues</issues>
-   <readme>https://raw.githubusercontent.com/pluginsGLPI/genericobject/master/README.md</readme>
+   <readme>https://glpi-plugins.readthedocs.io/en/latest/genericobject/index.html</readme>
    <authors>
       <author>Walid Nouh</author>
    </authors>
    <versions>
+      <version>
+         <num>2.9.0-rc2</num>
+         <compatibility>~9.5.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/2.9.0-rc2/glpi-genericobject-2.9.0-rc2.tar.bz2</download_url>
+      </version>
+      <version>
+         <num>2.9.0-rc1</num>
+         <compatibility>~9.5.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/2.9.0-rc1/glpi-genericobject-2.9.0-rc1.tar.bz2</download_url>
+      </version>
       <version>
          <num>2.8.0</num>
          <compatibility>~9.4.0</compatibility>
