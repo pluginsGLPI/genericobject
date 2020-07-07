@@ -3,135 +3,135 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2015
+# milotype <mail@milotype.de>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-03 18:57+0000\n"
-"PO-Revision-Date: 2019-11-08 14:59+0000\n"
-"Last-Translator: Cédric Anne\n"
-"Language-Team: Romanian (Romania) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ro_RO/)\n"
+"PO-Revision-Date: 2020-02-12 13:54+0000\n"
+"Last-Translator: milotype <mail@milotype.de>\n"
+"Language-Team: Croatian (Croatia) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro_RO\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+"Language: hr_HR\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
 #: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
 msgid "Objects management"
-msgstr "Managementul obiectelor"
+msgstr "Upravljanje objektima"
 
 #: index.php:68 front/familylist.php:37
 msgid "Empty family"
-msgstr "Familie vida"
+msgstr "Prazna obitelji"
 
 #: front/object.php:33 front/type.php:38 inc/profile.class.php:287
 #: inc/type.class.php:66
 msgid "Type of objects"
-msgstr "Tipul obiectelor"
+msgstr "Vrste objekata"
 
 #: front/commontreedropdown.form.php:36 front/commondropdown.php:11
 #: front/commondropdown.form.php:36
 msgid "The requested dropdown does not exists"
-msgstr "Dropdown-ul solicitat nu exista"
+msgstr "Traženi padajući popis ne postoji"
 
 #: front/field.form.php:41
 msgid "Field(s) deleted successfully"
-msgstr "Campul(urile) sterse cu succes"
+msgstr "Polja uspješno uklonjena"
 
 #: front/field.form.php:51
 msgid "Field added successfully"
-msgstr "Camp adaugat cu succes"
+msgstr "Polje uspješno dodano"
 
 #: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
 msgid "Family of type of objects"
-msgstr "Familia tipului de obiecte"
+msgstr "Obitelj vrste objekata"
 
 #: inc/profile.class.php:141
 msgid "General"
-msgstr "General"
+msgstr "Opće"
 
 #: inc/profile.class.php:147
 msgid "Objects"
-msgstr "Obiecte"
+msgstr "Objekti"
 
 #: inc/profile.class.php:149
 msgid "(No types defined yet)"
-msgstr ""
+msgstr "(Vrste još nisu određene)"
 
 #: inc/type.class.php:156
 msgid "Type name is missing"
-msgstr "Nume tip lipseste"
+msgstr "Ime vrste nedostaje"
 
 #: inc/type.class.php:162
 msgid "Type name must be longer"
-msgstr ""
+msgstr "Ime vrste mora biti duže"
 
 #: inc/type.class.php:168
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Tipurile 'camp', 'obiect', si 'tip' sunt rezervate.Va rugam alegeti altul"
+msgstr "„Polje”, „objekt” i „vrsta” su rezervirane vrste. Odaberi neku drugu"
 
 #: inc/type.class.php:175
 msgid "Type must start with a letter"
-msgstr "Tipul trebuie sa inceapa cu o litera"
+msgstr "Vrsta mora početi slovom"
 
 #: inc/type.class.php:182
 msgid "A type already exists with the same name"
-msgstr "UN tip cu acelasi nume exista deja"
+msgstr "Jedna vrsta s istim imenom već postoji"
 
 #: inc/type.class.php:470
 msgid "Internal identifier"
-msgstr "Identificator intern"
+msgstr "Interni identifikator"
 
 #: inc/type.class.php:524
 msgid "Behaviour"
-msgstr "Comportament"
+msgstr "Ponašanje"
 
 #: inc/type.class.php:543
 msgid "Network connections"
-msgstr "Conexiuni retea"
+msgstr "Mrežne veze"
 
 #: inc/type.class.php:547
 msgid "injection file plugin"
-msgstr "Plugin injectare fisiere"
+msgstr "Dodatak za umetanje podataka"
 
 #: inc/type.class.php:549
 msgid "geninventorynumber plugin"
-msgstr "geninventorynumber plugin"
+msgstr "Dodatak za generiranje inventarskog broja"
 
 #: inc/type.class.php:550
 msgid "order plugin"
-msgstr "Plugin  gestiune comenzi"
+msgstr "Dodatak za naruđbe"
 
 #: inc/type.class.php:551
 msgid "item's uninstallation plugin"
-msgstr "Plugin dezinstalare elemente"
+msgstr "Dodatak za deinstaliranje predmeta"
 
 #: inc/type.class.php:552
 msgid "simcard plugin"
-msgstr ""
+msgstr "Dodatak za SIM kartice"
 
 #: inc/type.class.php:553
 msgid "treeview plugin"
-msgstr ""
+msgstr "Dodatak za stablasti prikaz"
 
 #: inc/type.class.php:716
 msgid "Regenerate files"
-msgstr "Fisiere regenerate"
+msgstr "Ponovo generiraj datoteke"
 
 #: inc/type.class.php:729
 msgid "Link to other objects"
-msgstr "Linck catre alte obiecte"
+msgstr "Poveži s drugim objektima"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2070
 #, php-format
 msgid "Unable to load the class %1$s."
-msgstr ""
+msgstr "Nije moguće učitati klasu %1$s."
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2072
@@ -139,32 +139,32 @@ msgstr ""
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr ""
+msgstr "U bazi podataka vjerojatno imaš smeće za ovaj dodatak i nedostaju datoteke u %1$s"
 
 #: inc/object.class.php:537
 msgid "Object preview"
-msgstr "Previzualizeaza un obiect de acest tip"
+msgstr "Pregled objekta"
 
 #: inc/object.class.php:801
 msgid "You must configure rights to enable the preview"
-msgstr "Trebuie sa configurati drepturi pe acest obiect pentru a putea previzualiza"
+msgstr "Za aktiviranje pregleda moraš konfigurirati prava"
 
 #: inc/field.class.php:64
 msgid "Fields associated with the object"
-msgstr "Campuri asociate la obiect"
+msgstr "Polja povezana s objektom"
 
 #: inc/field.class.php:70
 msgid "Label"
-msgstr "Eticheta"
+msgstr "Oznaka"
 
 #: inc/field.class.php:71
 msgid "Name in DB"
-msgstr "Nume in DB"
+msgstr "Ime u bazi podataka"
 
 #: inc/field.class.php:126
 msgid "Add new field"
-msgstr "Add camp nou"
+msgstr "Dodaj novo polje"
 
 #: inc/field.class.php:318
 msgid "Read-only field"
-msgstr ""
+msgstr "Polje samo-za-čitanje"

@@ -45,8 +45,8 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
                            `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
                            `name` varchar(255) collate utf8_unicode_ci default NULL,
                            `comment` text NULL,
-                           `date_mod` DATETIME DEFAULT NULL,
-                           `date_creation` DATETIME DEFAULT NULL,
+                           `date_mod` TIMESTAMP NULL DEFAULT NULL,
+                           `date_creation` TIMESTAMP NULL DEFAULT NULL,
                            PRIMARY KEY (`id`),
                            KEY `date_mod` (`date_mod`),
                            KEY `date_creation` (`date_creation`)
@@ -87,7 +87,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
 
 
    static function getItemtypesByFamily($families_id) {
-      return getAllDatasFromTable(
+      return getAllDataFromTable(
          'glpi_plugin_genericobject_types',
          [
             'plugin_genericobject_typefamilies_id' => $families_id,

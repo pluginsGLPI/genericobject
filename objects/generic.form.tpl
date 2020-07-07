@@ -32,4 +32,4 @@
 include ("../../../inc/includes.php");
 
 $item = new %%CLASSNAME%%();
-include (GLPI_ROOT."/plugins/genericobject/front/object.form.php");
+include (GENERICOBJECT_DIR."/front/object.form.php");

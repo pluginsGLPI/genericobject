@@ -26,6 +26,7 @@
  ---------------------------------------------------------------------- */
 
 class PluginGenericobjectObject extends CommonDBTM {
+   use Glpi\Features\Clonable;
 
    protected $objecttype;
 
@@ -76,6 +77,17 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
    }
 
+   public function getCloneRelations() :array {
+      return [
+         Computer_Item::class,
+         Contract_Item::class,
+         Document_Item::class,
+         Infocom::class,
+         Item_devices::class,
+         NetworkPort::class,
+      ];
+   }
+
 
    /**
    * Display information on treeview plugin
@@ -91,7 +103,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $item = new $params['itemtype']();
          if ($item->getFromDB($params['id'])) {
             $params['name'] = $item->fields["name"];
-            $params['url'] = $CFG_GLPI['root_doc']."/plugins/genericobject/front/object.form.php".
+            $params['url'] = Plugin::getWebDir('genericobject')."/front/object.form.php".
                         "?itemtype=".$params['itemtype']."&id=".$params['id'];
          }
       }
@@ -110,8 +122,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
 
          $item = new $params['itemtype']();
-         $search = $item->getObjectSearchOptions();
-
+         $search = $item->rawSearchOptions();
          //get searchoption id for location_id
          foreach ($search as $key => $val) {
             if (isset($val['table']) && $val['table'] === 'glpi_locations') {
@@ -240,14 +251,15 @@ class PluginGenericobjectObject extends CommonDBTM {
             }
          }
 
+         $plugin_gen_path = Plugin::getPhpDir('geninventorynumber');
          if ($item->canUsePluginGeninventorynumber()) {
             if (!in_array($class, $GENINVENTORYNUMBER_TYPES)) {
-               include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
+               include_once ("$plugin_gen_path/inc/profile.class.php");
                PluginGeninventorynumberConfigField::registerNewItemType($class);
                array_push($GENINVENTORYNUMBER_TYPES, $class);
             }
          } else if ($plugin->isActivated('geninventorynumber')) {
-            include_once (GLPI_ROOT.'/plugins/geninventorynumber/inc/profile.class.php');
+            include_once ("$plugin_gen_path/inc/profile.class.php");
             PluginGeninventorynumberConfigField::unregisterNewItemType($class);
          }
       }
@@ -271,7 +283,6 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    static function getMenuIcon($itemtype) {
       global $CFG_GLPI;
-      $default_icon = "/plugins/genericobject/pics/default-icon.png";
       $itemtype_table = getTableForItemType($itemtype);
       $itemtype_shortname = preg_replace("/^glpi_plugin_genericobject_/", "", $itemtype_table);
       $itemtype_icons = glob(
@@ -287,7 +298,7 @@ class PluginGenericobjectObject extends CommonDBTM {
       if (!is_null($icon_found)) {
          $icon_path = $CFG_GLPI['root_doc'] . $icon_found;
       } else {
-         $icon_path = $CFG_GLPI['root_doc'] . $default_icon;
+         $icon_path = Plugin::getWebDir('genericobject') . "/pics/default-icon.png";
       }
       return "".
          "<img ".
@@ -675,6 +686,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                   break;
 
             case "datetime":
+            case "timestamp":
                   Html::showDateTimeField(
                      $name, [
                         'value'        => $value,
@@ -752,32 +764,6 @@ class PluginGenericobjectObject extends CommonDBTM {
       unset ($input['withtemplate']);
 
       return $input;
-   }
-
-
-   function post_addItem() {
-      global $DB;
-
-            // Manage add from template
-      if (isset($this->input["_oldID"])) {
-         // ADD Devices
-         Item_devices::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
-
-         // ADD Infocoms
-         Infocom::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
-
-         // ADD Contract
-         Contract_Item::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
-
-         // ADD Documents
-         Document_Item::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
-
-         // ADD Ports
-         NetworkPort::cloneItem($this->getType(), $this->input["_oldID"], $this->fields['id']);
-
-         // Add connected devices
-         Computer_Item::cloneComputer($this->input["_oldID"], $this->fields['id']);
-      }
    }
 
 
@@ -1002,6 +988,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "datetime":
+            case "timestamp":
                $option['datatype'] = 'datetime';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
@@ -1198,6 +1185,9 @@ class PluginGenericobjectObject extends CommonDBTM {
       foreach ($types as $type) {
 
          $itemtype = $type['itemtype'];
+         if (!class_exists($itemtype)) {
+            continue;
+         }
          $item     = new $itemtype();
 
          $itemtype_rightname = PluginGenericobjectProfile::getProfileNameForItemtype($itemtype);
@@ -1225,7 +1215,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                $name      = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id, 0, false);
                $str_name  = strtolower($name);
                $menu[$str_name]['title'] = Dropdown::getDropdownName("glpi_plugin_genericobject_typefamilies", $family_id);
-               $menu[$str_name]['page']  = '/plugins/genericobject/front/familylist.php?id='.$family_id;
+               $menu[$str_name]['page']  = '/'.Plugin::getWebDir('genericobject', false).'/front/familylist.php?id='.$family_id;
                $menu[$str_name]['options'][strtolower($itemtype)] = [
                   'title' => $type['itemtype']::getMenuName(),
                   'page'  => $itemtype::getSearchUrl(false),

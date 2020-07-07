@@ -14,7 +14,7 @@ function dropdown_getTypeName($class, $nb = 0) {
    $dropdown_type = isset($options['dropdown_type'])
       ? $options['dropdown_type']
       : null;
-   $label = $options['name'];
+   $label = $options['name'] ?? "no-name";
    if (!is_null($dropdown_type) and $dropdown_type==='isolated') {
       $linked_itemtype_object = new $instance->linked_itemtype();
       $label .= " (" . __($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
@@ -38,7 +38,7 @@ function _log() {
    if (count($trace)>0) {
       $glpi_root = str_replace( "\\", "/", GLPI_ROOT );
       $trace_file = str_replace( "\\", "/", $trace[0]['file'] );
-      $filename = preg_replace("|^".$glpi_root."/plugins/genericobject/|", "", $trace_file);
+      $filename = preg_replace("|^".$glpi_root."/".Plugin::getPhpDir('genericobject', false)."/|", "", $trace_file);
    }
    if (count($trace) > 1) {
       $caller = $trace[1];
