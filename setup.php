@@ -194,6 +194,10 @@ function plugin_init_genericobject() {
       $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
       $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
 
+      $PLUGIN_HOOKS['formcreator_get_glpi_object_types']['genericobject'] = [
+         PluginGenericobjectType::getType(),
+         'getTypesForFormcreator'
+      ];
    }
 }
 

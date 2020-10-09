@@ -1725,6 +1725,18 @@ class PluginGenericobjectType extends CommonDBTM {
       }
    }
 
+   static function getTypesForFormcreator($param) {
+      $families = PluginGenericobjectTypeFamily::getFamilies();
+      $familyFk = PluginGenericobjectTypeFamily::getForeignKeyField();
+      foreach(self::getTypes() as $type => $typeData) {
+         $familyName = isset($families[$typeData[$familyFk]])
+                       ? $families[$typeData[$familyFk]]
+                       : _n('Other', 'Others', Session::getPluralNumber(), 'genericobject');
+         $param[$familyName][$type] = $typeData['name'];
+      }
+      return $param;
+   }
+
    /**
     * Register all variables for a type
     * @param type the type's attributes
