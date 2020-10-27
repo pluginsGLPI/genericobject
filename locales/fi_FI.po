@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 18:57+0000\n"
+"POT-Creation-Date: 2020-10-27 15:13+0000\n"
 "PO-Revision-Date: 2019-11-08 14:59+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: Finnish (Finland) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/fi_FI/)\n"
@@ -141,11 +141,11 @@ msgid ""
 "files in %1$s"
 msgstr "Tietokannassa on ongelma liittyen liitännäiseen ja puuttuvia tiedostoja %1$s"
 
-#: inc/object.class.php:537
+#: inc/object.class.php:539
 msgid "Object preview"
 msgstr "Kohteen esikatselu"
 
-#: inc/object.class.php:801
+#: inc/object.class.php:803
 msgid "You must configure rights to enable the preview"
 msgstr "Oikeudet on määritettävä, jotta esikatselu voidaan ottaa käyttöön"
 

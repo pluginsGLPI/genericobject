@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 18:57+0000\n"
+"POT-Creation-Date: 2020-10-27 15:13+0000\n"
 "PO-Revision-Date: 2020-06-09 02:45+0000\n"
 "Last-Translator: Tiago Graca\n"
 "Language-Team: French (Canada) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/fr_CA/)\n"
@@ -141,11 +141,11 @@ msgid ""
 "files in %1$s"
 msgstr "Vous avez probablement d'anciennes données dans votre base de données pour ce plugin et des fichiers sont manquants dans %1$s"
 
-#: inc/object.class.php:537
+#: inc/object.class.php:539
 msgid "Object preview"
 msgstr "Prévisualisation d'un objet de ce type"
 
-#: inc/object.class.php:801
+#: inc/object.class.php:803
 msgid "You must configure rights to enable the preview"
 msgstr "Vous devez configurer les droits sur cet objet pour voir la prévisualisation"
 
