@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 18:57+0000\n"
+"POT-Creation-Date: 2020-10-27 15:13+0000\n"
 "PO-Revision-Date: 2020-02-03 04:26+0000\n"
 "Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ko_KR/)\n"
@@ -141,11 +141,11 @@ msgid ""
 "files in %1$s"
 msgstr "이 플러그인에 대한 데이터베이스 내에 개비지 데이터가 있거나 %1$s내의 파일이 누락된 것 같습니다"
 
-#: inc/object.class.php:537
+#: inc/object.class.php:539
 msgid "Object preview"
 msgstr "객체 미리보기"
 
-#: inc/object.class.php:801
+#: inc/object.class.php:803
 msgid "You must configure rights to enable the preview"
 msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
 

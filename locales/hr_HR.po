@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 18:57+0000\n"
+"POT-Creation-Date: 2020-10-27 15:13+0000\n"
 "PO-Revision-Date: 2020-02-12 13:54+0000\n"
 "Last-Translator: milotype <mail@milotype.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/hr_HR/)\n"
@@ -141,11 +141,11 @@ msgid ""
 "files in %1$s"
 msgstr "U bazi podataka vjerojatno imaš smeće za ovaj dodatak i nedostaju datoteke u %1$s"
 
-#: inc/object.class.php:537
+#: inc/object.class.php:539
 msgid "Object preview"
 msgstr "Pregled objekta"
 
-#: inc/object.class.php:801
+#: inc/object.class.php:803
 msgid "You must configure rights to enable the preview"
 msgstr "Za aktiviranje pregleda moraš konfigurirati prava"
 
