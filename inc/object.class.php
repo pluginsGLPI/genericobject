@@ -602,8 +602,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          $this->endColumn();
          $this->startColumn();
-         switch ($description['Type']) {
-            case "int(11)":
+         switch (preg_replace('/\(\d+\)$/', '', $description['Type'])) {
+            case "int":
                $fk_table = getTableNameForForeignKeyField($name);
                if ($fk_table != '') {
                   $itemtype   = getItemTypeForTable($fk_table);
@@ -653,11 +653,11 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
 
-            case "tinyint(1)":
+            case "tinyint":
                Dropdown::showYesNo($name, $value);
                break;
 
-            case "varchar(255)":
+            case "varchar":
                if (isset($searchoption['autoname']) && $searchoption['autoname']) {
                   $objectName = autoName($this->fields[$name], $name, ($template === "newcomp"),
                                          $this->getType(), $this->fields["entities_id"]);
