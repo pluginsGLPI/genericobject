@@ -46,6 +46,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $GO_FIELDS = [];
       plugin_genericobject_includeCommonFields(true);
 
+      PluginGenericobjectType::includeLocales($object_type->fields['name']);
       PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
 
       self::addReadOnlyFields($object_type);
