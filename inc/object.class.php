@@ -174,7 +174,8 @@ class PluginGenericobjectObject extends CommonDBTM {
          "reservation_types"      => $item->canBeReserved(),
          "contract_types"         => $item->canUseContracts(),
          "unicity_types"          => $item->canUseUnicity(),
-         "location_types"         => isset($fields['locations_id'])
+         "location_types"         => isset($fields['locations_id']),
+         "itemdevices_types"         => $item->canUseItemDevice()
       ]);
 
       if (plugin_genericobject_haveRight($class, READ)) {
@@ -359,6 +360,10 @@ class PluginGenericobjectObject extends CommonDBTM {
             $this->addStandardTab('NetworkPort', $tabs, $options);
          }
 
+         if ($this->canUseItemDevice()) {
+            $this->addStandardTab('Item_Devices', $tabs, $options);
+         }
+
          if ($this->canUseInfocoms()) {
             $this->addStandardTab('Infocom', $tabs, $options);
          }
@@ -495,6 +500,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function getLinkedItemTypesAsArray() {
       return $this->objecttype->getLinkedItemTypesAsArray();
+   }
+
+   function canUseItemDevice() {
+      return ($this->objecttype->canUseItemDevice());
    }
 
    function title() {

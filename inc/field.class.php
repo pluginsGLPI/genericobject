@@ -161,6 +161,9 @@ class PluginGenericobjectField extends CommonDBTM {
          $GO_READONLY_FIELDS[] = 'users_id_tech';
       }
 
+      if ($type->canUseItemDevice()) {
+         $GO_READONLY_FIELDS[] = 'locations_id';
+      }
    }
    /**
     * Get the name of the field, as defined in a constant file
