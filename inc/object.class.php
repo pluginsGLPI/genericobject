@@ -175,7 +175,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          "contract_types"         => $item->canUseContracts(),
          "unicity_types"          => $item->canUseUnicity(),
          "location_types"         => isset($fields['locations_id']),
-         "itemdevices_types"         => $item->canUseItemDevice()
+         "itemdevices_types"      => $item->canUseItemDevice()
       ]);
 
       if (plugin_genericobject_haveRight($class, READ)) {
