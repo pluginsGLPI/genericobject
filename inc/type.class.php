@@ -549,7 +549,7 @@ class PluginGenericobjectType extends CommonDBTM {
             "use_global_search" => __("Global search"),
             "use_projects"      => _n("Project", "Projects", 2),
             "use_network_ports" => __("Network connections", "genericobject"),
-            "use_itemdevices" => _n('Component', 'Components', 2),
+            "use_itemdevices"   => _n('Component', 'Components', 2),
          ];
 
          $plugins = [
