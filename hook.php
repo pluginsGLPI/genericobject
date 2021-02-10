@@ -56,7 +56,7 @@ function plugin_genericobject_getDropdown() {
 
    $plugin = new Plugin();
    if ($plugin->isActivated("genericobject")) {
-      foreach (PluginGenericobjectType::getTypes(false) as $idx => $type) {
+      foreach (PluginGenericobjectType::getTypes() as $type) {
          //_log($idx, var_export($type, true));
          $itemtype = $type['itemtype'];
          PluginGenericobjectType::registerOneType($itemtype);
