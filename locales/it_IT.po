@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-27 15:13+0000\n"
+"POT-Creation-Date: 2021-02-15 14:07+0000\n"
 "PO-Revision-Date: 2019-11-08 14:59+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/it_IT/)\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
-#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:223
 msgid "Objects management"
 msgstr "Gestione degli Oggetti"
 
@@ -48,7 +48,7 @@ msgstr "Campi rimossi con successo"
 msgid "Field added successfully"
 msgstr "Campo aggiunto con successo"
 
-#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:517
 msgid "Family of type of objects"
 msgstr "Famiglia"
 
@@ -85,88 +85,88 @@ msgstr "Il nome del tipo deve iniziare con una lettera"
 msgid "A type already exists with the same name"
 msgstr "Un tipo con lo stesso nome esiste già"
 
-#: inc/type.class.php:470
+#: inc/type.class.php:478
 msgid "Internal identifier"
 msgstr "Identificatore interno"
 
-#: inc/type.class.php:524
+#: inc/type.class.php:532
 msgid "Behaviour"
 msgstr "Comportamento"
 
-#: inc/type.class.php:543
+#: inc/type.class.php:551
 msgid "Network connections"
 msgstr "Connessioni di rete"
 
-#: inc/type.class.php:547
+#: inc/type.class.php:556
 msgid "injection file plugin"
 msgstr "injection file plugin"
 
-#: inc/type.class.php:549
+#: inc/type.class.php:558
 msgid "geninventorynumber plugin"
 msgstr "geninventorynumber plugin"
 
-#: inc/type.class.php:550
+#: inc/type.class.php:559
 msgid "order plugin"
 msgstr "order plugin"
 
-#: inc/type.class.php:551
+#: inc/type.class.php:560
 msgid "item's uninstallation plugin"
 msgstr "item's uninstallation plugin"
 
-#: inc/type.class.php:552
+#: inc/type.class.php:561
 msgid "simcard plugin"
 msgstr "simcard plugin"
 
-#: inc/type.class.php:553
+#: inc/type.class.php:562
 msgid "treeview plugin"
 msgstr ""
 
-#: inc/type.class.php:716
+#: inc/type.class.php:725
 msgid "Regenerate files"
 msgstr "Rigenera file"
 
-#: inc/type.class.php:729
+#: inc/type.class.php:738
 msgid "Link to other objects"
 msgstr "Collega ad altri oggetti"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2070
+#: inc/type.class.php:2089
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Impossibile caricare la classe %1$s ."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2072
+#: inc/type.class.php:2091
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr "Per questo plugin hai, probabilmente, dei dati inutili nel tuo database e file mancanti in %1$s"
 
-#: inc/object.class.php:539
+#: inc/object.class.php:548
 msgid "Object preview"
 msgstr "Anteprima dell'oggetto"
 
-#: inc/object.class.php:803
+#: inc/object.class.php:812
 msgid "You must configure rights to enable the preview"
 msgstr "Bisogna configurare i diritti per abilitare l'anteprima"
 
-#: inc/field.class.php:64
+#: inc/field.class.php:65
 msgid "Fields associated with the object"
 msgstr "Campi associati con l'oggetto"
 
-#: inc/field.class.php:70
+#: inc/field.class.php:71
 msgid "Label"
 msgstr "Etichetta"
 
-#: inc/field.class.php:71
+#: inc/field.class.php:72
 msgid "Name in DB"
 msgstr "Nome nel DataBase"
 
-#: inc/field.class.php:126
+#: inc/field.class.php:127
 msgid "Add new field"
 msgstr "Aggiungi nuovo campo"
 
-#: inc/field.class.php:318
+#: inc/field.class.php:322
 msgid "Read-only field"
 msgstr "Campo in sola lettura"

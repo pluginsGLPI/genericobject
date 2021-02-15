@@ -399,6 +399,14 @@ class PluginGenericobjectType extends CommonDBTM {
       ];
 
       $sopt[] = [
+         'id'            => 22,
+         'table'         => $this->getTable(),
+         'field'         => 'use_itemdevices',
+         'name'          => _sx('button', 'Use') . ' ' . _n('Component', 'Components', 2),
+         'datatype'      => 'bool',
+      ];
+
+      $sopt[] = [
          'id'            => 121,
          'table'         => $this->getTable(),
          'field'         => 'date_creation',
@@ -541,6 +549,7 @@ class PluginGenericobjectType extends CommonDBTM {
             "use_global_search" => __("Global search"),
             "use_projects"      => _n("Project", "Projects", 2),
             "use_network_ports" => __("Network connections", "genericobject"),
+            "use_itemdevices"   => _n('Component', 'Components', 2),
          ];
 
          $plugins = [
@@ -934,6 +943,11 @@ class PluginGenericobjectType extends CommonDBTM {
       if (!$this->canUsePluginDataInjection() &&
          file_exists(self::getCompleteInjectionFilename($this->fields['name']))) {
          self::deleteInjectionFile($this->fields['name']);
+      }
+
+      //Device item needs locations_id field !
+      if ($this->canUseItemDevice()) {
+         PluginGenericobjectField::addNewField($table, 'locations_id');
       }
    }
 
@@ -1875,6 +1889,9 @@ class PluginGenericobjectType extends CommonDBTM {
       return $this->fields['use_infocoms'];
    }
 
+   function canUseItemDevice() {
+      return $this->fields['use_itemdevices'];
+   }
 
    function canUseContracts() {
       return $this->fields['use_contracts'];
@@ -2029,6 +2046,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_projects` tinyint(1) NOT NULL default '0',
                            `linked_itemtypes` text NULL,
                            `plugin_genericobject_typefamilies_id` INT( 11 ) NOT NULL DEFAULT 0,
+                           `use_itemdevices` tinyint(1) NOT NULL default '0',
                            PRIMARY KEY ( `id` )
                            ) ENGINE = InnoDB COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->query($query) or die($DB->error());
@@ -2051,6 +2069,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
       $migration->addField($table, "use_plugin_simcard", "bool");
       $migration->addField($table, "use_plugin_treeview", "bool");
+      $migration->addField($table, "use_itemdevices", "bool");
       $migration->migrationOneTable($table);
 
       //Normalize names and itemtypes (prior to using them).

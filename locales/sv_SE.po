@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-27 15:13+0000\n"
+"POT-Creation-Date: 2021-02-15 14:07+0000\n"
 "PO-Revision-Date: 2019-11-08 14:59+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/sv_SE/)\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
-#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:223
 msgid "Objects management"
 msgstr "Hantera tillgångar"
 
@@ -46,7 +46,7 @@ msgstr "Fältet(en) raderades"
 msgid "Field added successfully"
 msgstr "Attribut tillagt"
 
-#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:517
 msgid "Family of type of objects"
 msgstr "Ingår i typfamilj"
 
@@ -83,88 +83,88 @@ msgstr "Typnamnet måste börja med en bokstav"
 msgid "A type already exists with the same name"
 msgstr "Typnamnet existerar redan"
 
-#: inc/type.class.php:470
+#: inc/type.class.php:478
 msgid "Internal identifier"
 msgstr "Internt namn"
 
-#: inc/type.class.php:524
+#: inc/type.class.php:532
 msgid "Behaviour"
 msgstr "Beteende"
 
-#: inc/type.class.php:543
+#: inc/type.class.php:551
 msgid "Network connections"
 msgstr "Nätverksanslutningar"
 
-#: inc/type.class.php:547
+#: inc/type.class.php:556
 msgid "injection file plugin"
 msgstr "Injection file plug-in"
 
-#: inc/type.class.php:549
+#: inc/type.class.php:558
 msgid "geninventorynumber plugin"
 msgstr "Geninventorynumber plug-in"
 
-#: inc/type.class.php:550
+#: inc/type.class.php:559
 msgid "order plugin"
 msgstr "Order plug-in"
 
-#: inc/type.class.php:551
+#: inc/type.class.php:560
 msgid "item's uninstallation plugin"
 msgstr "Item's uninstallation plug-in"
 
-#: inc/type.class.php:552
+#: inc/type.class.php:561
 msgid "simcard plugin"
 msgstr "Simcard plug-in"
 
-#: inc/type.class.php:553
+#: inc/type.class.php:562
 msgid "treeview plugin"
 msgstr ""
 
-#: inc/type.class.php:716
+#: inc/type.class.php:725
 msgid "Regenerate files"
 msgstr "Skapa filer på nytt"
 
-#: inc/type.class.php:729
+#: inc/type.class.php:738
 msgid "Link to other objects"
 msgstr "Länka till andra tillgångar"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2070
+#: inc/type.class.php:2089
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Kunde inte läsa in klass %1$s-"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2072
+#: inc/type.class.php:2091
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr "Du har troligtvis skräpdata i databasen för denna plug-in och saknar filer i %1$s"
 
-#: inc/object.class.php:539
+#: inc/object.class.php:548
 msgid "Object preview"
 msgstr "Förhandsgranska tillgång"
 
-#: inc/object.class.php:803
+#: inc/object.class.php:812
 msgid "You must configure rights to enable the preview"
 msgstr "Du måste konfigurera rättigheter för att aktivera förhandsgranskning"
 
-#: inc/field.class.php:64
+#: inc/field.class.php:65
 msgid "Fields associated with the object"
 msgstr "Fält kopplade till tillgången"
 
-#: inc/field.class.php:70
+#: inc/field.class.php:71
 msgid "Label"
 msgstr "Etikett"
 
-#: inc/field.class.php:71
+#: inc/field.class.php:72
 msgid "Name in DB"
 msgstr "Namn i DB"
 
-#: inc/field.class.php:126
+#: inc/field.class.php:127
 msgid "Add new field"
 msgstr "Lägg till nytt fält"
 
-#: inc/field.class.php:318
+#: inc/field.class.php:322
 msgid "Read-only field"
 msgstr "Skrivskyddat fält"

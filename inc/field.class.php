@@ -46,6 +46,7 @@ class PluginGenericobjectField extends CommonDBTM {
       $GO_FIELDS = [];
       plugin_genericobject_includeCommonFields(true);
 
+      PluginGenericobjectType::includeLocales($object_type->fields['name']);
       PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
 
       self::addReadOnlyFields($object_type);
@@ -161,6 +162,9 @@ class PluginGenericobjectField extends CommonDBTM {
          $GO_READONLY_FIELDS[] = 'users_id_tech';
       }
 
+      if ($type->canUseItemDevice()) {
+         $GO_READONLY_FIELDS[] = 'locations_id';
+      }
    }
    /**
     * Get the name of the field, as defined in a constant file
