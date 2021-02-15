@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-27 15:13+0000\n"
+"POT-Creation-Date: 2021-02-15 14:07+0000\n"
 "PO-Revision-Date: 2020-02-03 04:26+0000\n"
 "Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ko_KR/)\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
-#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:223
 msgid "Objects management"
 msgstr "객체 관리"
 
@@ -46,7 +46,7 @@ msgstr "항목(들) 삭제됨"
 msgid "Field added successfully"
 msgstr "항목 추가됨"
 
-#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:517
 msgid "Family of type of objects"
 msgstr "객체의 유형 집단"
 
@@ -83,88 +83,88 @@ msgstr "유형은 문자로 시작해야 합니다"
 msgid "A type already exists with the same name"
 msgstr "유형이 이미 같은 이름으로 존재합니다"
 
-#: inc/type.class.php:470
+#: inc/type.class.php:478
 msgid "Internal identifier"
 msgstr "내부 식별자"
 
-#: inc/type.class.php:524
+#: inc/type.class.php:532
 msgid "Behaviour"
 msgstr "동작"
 
-#: inc/type.class.php:543
+#: inc/type.class.php:551
 msgid "Network connections"
 msgstr "네트워크 연결"
 
-#: inc/type.class.php:547
+#: inc/type.class.php:556
 msgid "injection file plugin"
 msgstr "파일 플러그인 삽입"
 
-#: inc/type.class.php:549
+#: inc/type.class.php:558
 msgid "geninventorynumber plugin"
 msgstr "geninventorynumber 플러그인"
 
-#: inc/type.class.php:550
+#: inc/type.class.php:559
 msgid "order plugin"
 msgstr "order 플러그인"
 
-#: inc/type.class.php:551
+#: inc/type.class.php:560
 msgid "item's uninstallation plugin"
 msgstr "품목 제거 플러그인"
 
-#: inc/type.class.php:552
+#: inc/type.class.php:561
 msgid "simcard plugin"
 msgstr "simcard 플러그인"
 
-#: inc/type.class.php:553
+#: inc/type.class.php:562
 msgid "treeview plugin"
 msgstr "treeview 플러그인"
 
-#: inc/type.class.php:716
+#: inc/type.class.php:725
 msgid "Regenerate files"
 msgstr "파일 재생성"
 
-#: inc/type.class.php:729
+#: inc/type.class.php:738
 msgid "Link to other objects"
 msgstr "다른 객체들과 연결"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2070
+#: inc/type.class.php:2089
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "클래스 %1$s을 불러올 수 없습니다."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2072
+#: inc/type.class.php:2091
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr "이 플러그인에 대한 데이터베이스 내에 개비지 데이터가 있거나 %1$s내의 파일이 누락된 것 같습니다"
 
-#: inc/object.class.php:539
+#: inc/object.class.php:548
 msgid "Object preview"
 msgstr "객체 미리보기"
 
-#: inc/object.class.php:803
+#: inc/object.class.php:812
 msgid "You must configure rights to enable the preview"
 msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
 
-#: inc/field.class.php:64
+#: inc/field.class.php:65
 msgid "Fields associated with the object"
 msgstr "객체에 연관된 항목"
 
-#: inc/field.class.php:70
+#: inc/field.class.php:71
 msgid "Label"
 msgstr "라벨"
 
-#: inc/field.class.php:71
+#: inc/field.class.php:72
 msgid "Name in DB"
 msgstr "DB에서의 이름"
 
-#: inc/field.class.php:126
+#: inc/field.class.php:127
 msgid "Add new field"
 msgstr "새 항목 추가"
 
-#: inc/field.class.php:318
+#: inc/field.class.php:322
 msgid "Read-only field"
 msgstr "읽기-전용 항목"

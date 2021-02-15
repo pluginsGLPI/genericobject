@@ -1,14 +1,14 @@
 # English translations for PACKAGE package.
-# Copyright (C) 2020 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2021 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2020.
+# Automatically generated, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-27 15:13+0000\n"
-"PO-Revision-Date: 2020-10-27 15:13+0000\n"
+"POT-Creation-Date: 2021-02-15 14:07+0000\n"
+"PO-Revision-Date: 2021-02-15 14:07+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
-#: inc/type.class.php:419 inc/object_item.class.php:109 setup.php:223
+#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:223
 msgid "Objects management"
 msgstr "Objects management"
 
@@ -45,7 +45,7 @@ msgstr "Field(s) deleted successfully"
 msgid "Field added successfully"
 msgstr "Field added successfully"
 
-#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:509
+#: inc/typefamily.class.php:36 inc/type.class.php:380 inc/type.class.php:517
 msgid "Family of type of objects"
 msgstr "Family of type of objects"
 
@@ -83,58 +83,58 @@ msgstr "Type must start with a letter"
 msgid "A type already exists with the same name"
 msgstr "A type already exists with the same name"
 
-#: inc/type.class.php:470
+#: inc/type.class.php:478
 msgid "Internal identifier"
 msgstr "Internal identifier"
 
-#: inc/type.class.php:524
+#: inc/type.class.php:532
 msgid "Behaviour"
 msgstr "Behaviour"
 
-#: inc/type.class.php:543
+#: inc/type.class.php:551
 msgid "Network connections"
 msgstr "Network connections"
 
-#: inc/type.class.php:547
+#: inc/type.class.php:556
 msgid "injection file plugin"
 msgstr "injection file plugin"
 
-#: inc/type.class.php:549
+#: inc/type.class.php:558
 msgid "geninventorynumber plugin"
 msgstr "geninventorynumber plugin"
 
-#: inc/type.class.php:550
+#: inc/type.class.php:559
 msgid "order plugin"
 msgstr "order plugin"
 
-#: inc/type.class.php:551
+#: inc/type.class.php:560
 msgid "item's uninstallation plugin"
 msgstr "item's uninstallation plugin"
 
-#: inc/type.class.php:552
+#: inc/type.class.php:561
 msgid "simcard plugin"
 msgstr "simcard plugin"
 
-#: inc/type.class.php:553
+#: inc/type.class.php:562
 msgid "treeview plugin"
 msgstr "treeview plugin"
 
-#: inc/type.class.php:716
+#: inc/type.class.php:725
 msgid "Regenerate files"
 msgstr "Regenerate files"
 
-#: inc/type.class.php:729
+#: inc/type.class.php:738
 msgid "Link to other objects"
 msgstr "Link to other objects"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2070
+#: inc/type.class.php:2089
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Unable to load the class %1$s."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2072
+#: inc/type.class.php:2091
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
@@ -143,30 +143,30 @@ msgstr ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 
-#: inc/object.class.php:539
+#: inc/object.class.php:548
 msgid "Object preview"
 msgstr "Object preview"
 
-#: inc/object.class.php:803
+#: inc/object.class.php:812
 msgid "You must configure rights to enable the preview"
 msgstr "You must configure rights to enable the preview"
 
-#: inc/field.class.php:64
+#: inc/field.class.php:65
 msgid "Fields associated with the object"
 msgstr "Fields associated with the object"
 
-#: inc/field.class.php:70
+#: inc/field.class.php:71
 msgid "Label"
 msgstr "Label"
 
-#: inc/field.class.php:71
+#: inc/field.class.php:72
 msgid "Name in DB"
 msgstr "Name in DB"
 
-#: inc/field.class.php:126
+#: inc/field.class.php:127
 msgid "Add new field"
 msgstr "Add new field"
 
-#: inc/field.class.php:318
+#: inc/field.class.php:322
 msgid "Read-only field"
 msgstr "Read-only field"
