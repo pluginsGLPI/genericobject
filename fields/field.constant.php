@@ -79,6 +79,7 @@ $GO_FIELDS['types_id']['dropdown_type'] = 'isolated';
 $GO_FIELDS['models_id']['name']          = __("Model");
 $GO_FIELDS['models_id']['input_type']    = 'dropdown';
 $GO_FIELDS['models_id']['dropdown_type'] = 'isolated';
+$GO_FIELDS['models_id']['is_model']      = true;
 
 $GO_FIELDS['categories_id']['name']          = __("Category");
 $GO_FIELDS['categories_id']['input_type']    = 'dropdown';

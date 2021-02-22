@@ -827,6 +827,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $params['entities_id']     = false;
       $params['is_recursive']    = false;
       $params['is_tree']         = false;
+      $params['is_model']        = false;
       $params['linked_itemtype'] = false;
       foreach ($options as $key => $value) {
          $params[$key] = $value;
@@ -1178,13 +1179,20 @@ class PluginGenericobjectType extends CommonDBTM {
       $params['is_tree']            = false;
       $params['realname']        = false;
       $params['linked_itemtype'] = false;
+      $params['is_model']        = false;
       foreach ($options as $key => $value) {
          $params[$key] = $value;
+      }
+      $extends='Common';
+      if ($params['is_tree']) {
+         $extends='CommonTree';
+      }else if ($params['is_model']) {
+         $extends='CommonDCModel';
       }
       self::addFileFromTemplate([
          'CLASSNAME'       => self::getClassByName($name),
          'EXTENDS'         =>
-            'PluginGenericobject' . ($params['is_tree']?'CommonTree':'Common') . 'Dropdown',
+            'PluginGenericobject' . $extends . 'Dropdown',
          'FIELDNAME'       => $params['realname'],
          'LINKED_ITEMTYPE' => $params['linked_itemtype']
       ], self::CLASS_DROPDOWN_TEMPLATE, GENERICOBJECT_CLASS_PATH, self::getSystemName($name).".class");
@@ -1407,6 +1415,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $params['entities_id']  = false;
       $params['is_recursive'] = false;
       $params['is_tree']      = false;
+      $params['is_model']     = false;
       foreach ($options as $key => $value) {
          $params[$key] = $value;
       }
@@ -1441,6 +1450,10 @@ class PluginGenericobjectType extends CommonDBTM {
                                         ADD `level` int(11) NOT NULL DEFAULT '0',
                                         ADD `ancestors_cache` longtext COLLATE utf8_unicode_ci,
                                         ADD `sons_cache` longtext COLLATE utf8_unicode_ci";
+         $DB->query($query);
+      }
+      if ($params['is_model']) {
+         $query = "ALTER TABLE `$table` ADD `product_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL";
          $DB->query($query);
       }
    }
@@ -2129,6 +2142,31 @@ class PluginGenericobjectType extends CommonDBTM {
             $tmp['rank']     = $rank;
             $tmp['users_id'] = 0;
             $preference->add($tmp);
+         }
+      }
+
+      //Update models
+      plugin_genericobject_includeCommonFields(true);
+      foreach (self::getTypes(true) as $type) {
+         $table = getTableForItemType($type['itemtype']);
+         foreach ($DB->listFields($table) as $field => $options) {
+            if (preg_match("/models_id$/", $field)) {
+               $dropdowntable = getTableNameForForeignKeyField($field);
+               $dropdownclass = getItemTypeForTable($dropdowntable);
+               $fieldsdropdown=$DB->listFields($dropdowntable);
+               if (!array_key_exists('product_number', $fieldsdropdown)) {
+                  $name                       = str_replace("glpi_plugin_genericobject_", "", $dropdowntable);
+                  $name                       = getSingular($name);
+                  $params= PluginGenericobjectField::getFieldOptions('models_id', $dropdownclass);
+                  if (isset($params['dropdown_type'])
+                     and $params['dropdown_type'] === 'isolated'
+                  ) {
+                     $params['linked_itemtype'] = $type['itemtype'];
+                  }
+                  self::addNewDropdown($name, self::getClassByName($name), $params);
+               }
+               break;
+            }
          }
       }
    }
