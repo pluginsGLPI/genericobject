@@ -1186,7 +1186,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $extends='Common';
       if ($params['is_tree']) {
          $extends='CommonTree';
-      }else if ($params['is_model']) {
+      } else if ($params['is_model']) {
          $extends='CommonDCModel';
       }
       self::addFileFromTemplate([
