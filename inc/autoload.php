@@ -24,7 +24,7 @@ class PluginGenericobjectAutoloader
    }
 
    public function processClassname($classname) {
-      preg_match("/Plugin([A-Z][a-z0-9]+)([A-Z]\w+)/", $classname, $matches);
+      preg_match("/^Plugin([A-Z][a-z0-9]+)([A-Z]\w+)$/", $classname, $matches);
 
       if (count($matches) < 3) {
          return false;
@@ -54,7 +54,7 @@ class PluginGenericobjectAutoloader
          foreach ($this->paths as $path) {
             $test = $path . DIRECTORY_SEPARATOR . $filename;
             if (file_exists($test)) {
-               return include($test);
+               return include_once($test);
             }
          }
       }
