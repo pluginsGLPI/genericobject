@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-15 14:07+0000\n"
-"PO-Revision-Date: 2019-11-08 14:59+0000\n"
+"POT-Creation-Date: 2021-05-28 10:21+0000\n"
+"PO-Revision-Date: 2021-05-28 10:22+0000\n"
 "Last-Translator: Cédric Anne\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
-#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:223
+#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:227
 msgid "Objects management"
 msgstr "Gerenciamento de objetos"
 
@@ -129,14 +129,20 @@ msgstr "Regenerar arquivos"
 msgid "Link to other objects"
 msgstr "Conexão com outros objetos"
 
+#: inc/type.class.php:1734
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] ""
+msgstr[1] ""
+
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2089
+#: inc/type.class.php:2101
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Não consegui carregar a classe %1$s."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2091
+#: inc/type.class.php:2103
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "

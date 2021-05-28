@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-15 14:07+0000\n"
+"POT-Creation-Date: 2021-05-28 10:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: index.php:58 front/familylist.php:33 front/familylist.php:41
 #: front/type.form.php:73 inc/profile.class.php:39 inc/type.class.php:292
-#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:223
+#: inc/type.class.php:427 inc/object_item.class.php:109 setup.php:227
 msgid "Objects management"
 msgstr ""
 
@@ -126,14 +127,20 @@ msgstr ""
 msgid "Link to other objects"
 msgstr ""
 
+#: inc/type.class.php:1734
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] ""
+msgstr[1] ""
+
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2089
+#: inc/type.class.php:2101
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr ""
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2091
+#: inc/type.class.php:2103
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
