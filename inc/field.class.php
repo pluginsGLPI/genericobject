@@ -366,18 +366,20 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'dropdown_yesno' :
             case 'dropdown_global' :
             case 'bool' :
-               $query .= "TINYINT (1) NOT NULL DEFAULT '0'";
+               $query .= "TINYINT NOT NULL DEFAULT '0'";
                break;
             case 'emptyspace' :
             case 'text' :
-               $query .= "VARCHAR ( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT ''";
+               $query .= "VARCHAR ( 255 ) NOT NULL DEFAULT ''";
                break;
             case 'multitext' :
                $query .= "TEXT NULL";
                break;
             case 'dropdown' :
+               $query .= "INT unsigned NOT NULL DEFAULT '0'";
+               break;
             case 'integer' :
-               $query .= "INT ( 11 ) NOT NULL DEFAULT '0'";
+               $query .= "INT NOT NULL DEFAULT '0'";
                break;
             case 'date':
                $query.="DATE DEFAULT NULL";

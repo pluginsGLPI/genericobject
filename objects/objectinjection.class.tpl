@@ -36,10 +36,6 @@ if (!defined('GLPI_ROOT')) {
 class %%INJECTIONCLASS%% extends %%CLASSNAME%%
                                                 implements PluginDatainjectionInjectionInterface {
 
-   function __construct() {
-      $this->table = getTableForItemType(get_parent_class($this));
-   }
-
    static function getTable($classname = null) {
 
       $parenttype = get_parent_class();
