@@ -64,25 +64,6 @@ function plugin_genericobject_getDropdown() {
    return $dropdowns;
 }
 
-// Define dropdown relations
-function plugin_genericobject_getDatabaseRelations() {
-   $dropdowns = [];
-
-   //TODO : purt here relations
-   /*
-   $plugin = new Plugin();
-   if ($plugin->isActivated("genericobject")) {
-      foreach(getAllDatasFromTable(getTableForItemType('PluginGenericobjectType'),
-                                   "`is_active`='1'") as $itemtype) {
-         foreach(PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
-            $dropdowns[$table][] = []
-         }
-      }
-   }
-   */
-   return $dropdowns;
-}
-
 function plugin_uninstall_addUninstallTypes($uninstal_types = []) {
    foreach (PluginGenericobjectType::getTypes() as $tmp => $type) {
       if ($type["use_plugin_uninstall"]) {

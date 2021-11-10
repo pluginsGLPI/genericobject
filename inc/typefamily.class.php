@@ -42,18 +42,22 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType(__CLASS__);
       if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE `$table` (
-                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                           `name` varchar(255) collate utf8_unicode_ci default NULL,
+                           `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                           `name` varchar(255) default NULL,
                            `comment` text NULL,
                            `date_mod` TIMESTAMP NULL DEFAULT NULL,
                            `date_creation` TIMESTAMP NULL DEFAULT NULL,
                            PRIMARY KEY (`id`),
                            KEY `date_mod` (`date_mod`),
                            KEY `date_creation` (`date_creation`)
-                           ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                           ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->query($query) or die($DB->error());
       }
    }
