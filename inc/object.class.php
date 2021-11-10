@@ -185,9 +185,9 @@ class PluginGenericobjectObject extends CommonDBTM {
          //Change url for adding a new object, depending on template management activation
          if ($item->canUseTemplate()) {
             //Template management is active
-            $add_url = "/front/setup.templates.php?itemtype=$class&amp;add=1";
+            $add_url = "/front/setup.templates.php?itemtype=$class&add=1";
             $PLUGIN_HOOKS['submenu_entry']['genericobject']['options'][$class]['links']['template']
-                                                        = "/front/setup.templates.php?itemtype=$class&amp;add=0";
+                                                        = "/front/setup.templates.php?itemtype=$class&add=0";
          } else {
             //Template management is not active
             $add_url = Toolbox::getItemTypeFormURL($class, false);
@@ -514,9 +514,6 @@ class PluginGenericobjectObject extends CommonDBTM {
 
 
    function showForm($id, $options = [], $previsualisation = false) {
-      global $DB;
-
-      $display_date = (!method_exists('CommonDBTM', 'showDates'));
       if ($previsualisation) {
          $canedit = true;
          $this->getEmpty();
@@ -534,12 +531,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if (isset($options['withtemplate']) && $options['withtemplate'] == 2) {
          $template   = "newcomp";
-         $date = sprintf(__('Created on %s'), Html::convDateTime($_SESSION["glpi_currenttime"]));
       } else if (isset($options['withtemplate']) && $options['withtemplate'] == 1) {
          $template   = "newtemplate";
-         $date = sprintf(__('Created on %s'), Html::convDateTime($_SESSION["glpi_currenttime"]));
       } else {
-         $date = sprintf(__('Last update on %s'), Html::convDateTime($this->fields["date_mod"]));
          $template   = false;
       }
 
@@ -568,16 +562,6 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
       }
       $this->closeColumn();
-
-      if ($display_date && !$this->isNewID($id)) {
-         echo "<tr class='tab_bg_1'>";
-         echo "<td colspan='2' class='center'>".$date;
-         if (!$template && !empty($this->fields['template_name'])) {
-            echo "<span class='small_space'>(".__("Template name")."&nbsp;: ".
-                  $this->fields['template_name'].")</span>";
-         }
-         echo "</td></tr>";
-      }
 
       if (!$previsualisation) {
          $this->showFormButtons($options);
@@ -676,7 +660,12 @@ class PluginGenericobjectObject extends CommonDBTM {
                } else {
                    $objectName = $this->fields[$name];
                }
-               Html::autocompletionTextField($this, $name, ['value' => $objectName]);
+               echo Html::input(
+                  $name,
+                  [
+                     'value' => $objectName,
+                  ]
+               );
                break;
 
             case "longtext":
@@ -952,6 +941,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "tinyint(1)":
+            case "tinyint":
                $option['datatype'] = 'bool';
                if ($item->canUsePluginDataInjection()) {
                   //Datainjection specific
@@ -967,6 +957,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
                break;
             case "int(11)":
+            case "int":
                if ($tmp != '') {
                   $option['datatype'] = 'dropdown';
                } else {
@@ -1212,9 +1203,9 @@ class PluginGenericobjectObject extends CommonDBTM {
             $links['search'] = $itemtype::getSearchUrl(false);
 
             if ($item->canUseTemplate()) {
-               $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=0";
+               $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&add=0";
                if (Session::haveRight($itemtype_rightname, CREATE)) {
-                  $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&amp;add=1";
+                  $links['add'] = "/front/setup.templates.php?itemtype=$itemtype&add=1";
                }
             } else {
                if (Session::haveRight($itemtype_rightname, CREATE)) {

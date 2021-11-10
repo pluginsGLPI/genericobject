@@ -31,9 +31,9 @@
 define ('PLUGIN_GENERICOBJECT_VERSION', '2.11.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.5");
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "10.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.6");
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "10.0.99");
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", Plugin::getPhpDir("genericobject"));
