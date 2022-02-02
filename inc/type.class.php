@@ -967,10 +967,11 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
 
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."` (
-                  `id` INT unsigned NOT NULL AUTO_INCREMENT,
-                  `entities_id` INT NOT NULL DEFAULT '0',
+                  `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                  `entities_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
                   `name` VARCHAR( 255 ) NOT NULL DEFAULT '',
                   `comment` text,
                   `notepad` text,
@@ -998,15 +999,16 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
 
       $table = getTableForItemType($itemtype);
       $fk    = getForeignKeyFieldForTable($table);
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."_items` (
-        `id` int unsigned NOT NULL AUTO_INCREMENT,
-        `items_id` int unsigned NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
+        `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+        `items_id` int {$default_key_sign} NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
         `date_mod` TIMESTAMP NULL DEFAULT NULL,
         `date_creation` TIMESTAMP NULL DEFAULT NULL,
-        `$fk` int unsigned NOT NULL DEFAULT '0',
+        `$fk` int {$default_key_sign} NOT NULL DEFAULT '0',
         `itemtype` varchar(100) NOT NULL,
         PRIMARY KEY (`id`),
         KEY `$fk` (`$fk`),
@@ -1417,6 +1419,11 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function addDropdownTable($table, $options = []) {
       global $DB;
+
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+
       $params['entities_id']  = false;
       $params['is_recursive'] = false;
       $params['is_tree']      = false;
@@ -1425,11 +1432,8 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       if (!$DB->tableExists($table)) {
-         $default_charset = DBConnection::getDefaultCharset();
-         $default_collation = DBConnection::getDefaultCollation();
-
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-                       `id` int unsigned NOT NULL auto_increment,
+                       `id` int {$default_key_sign} NOT NULL auto_increment,
                        `name` varchar(255) default NULL,
                        `comment` text,
                        `date_mod` TIMESTAMP NULL DEFAULT NULL,
@@ -1442,7 +1446,7 @@ class PluginGenericobjectType extends CommonDBTM {
          $DB->query($query);
       }
       if ($params['entities_id']) {
-         $query = "ALTER TABLE `$table` ADD `entities_id` INT NOT NULL DEFAULT '0'";
+         $query = "ALTER TABLE `$table` ADD `entities_id` INT {$default_key_sign} NOT NULL DEFAULT '0'";
          $DB->query($query);
          if ($params['is_recursive']) {
             $query = "ALTER TABLE `$table` " .
@@ -1453,7 +1457,7 @@ class PluginGenericobjectType extends CommonDBTM {
       if ($params['is_tree']) {
          $fk    = getForeignKeyFieldForTable($table);
          $query = "ALTER TABLE `$table` ADD `completename` text,
-                                        ADD `$fk` int unsigned NOT NULL DEFAULT '0',
+                                        ADD `$fk` int {$default_key_sign} NOT NULL DEFAULT '0',
                                         ADD `level` int NOT NULL DEFAULT '0',
                                         ADD `ancestors_cache` longtext,
                                         ADD `sons_cache` longtext";
@@ -2043,14 +2047,15 @@ class PluginGenericobjectType extends CommonDBTM {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+
       $table = getTableForItemType(__CLASS__);
       if (!$DB->tableExists($table)) {
-         $default_charset = DBConnection::getDefaultCharset();
-         $default_collation = DBConnection::getDefaultCollation();
-
          $query = "CREATE TABLE `$table` (
-                           `id` INT unsigned NOT NULL AUTO_INCREMENT,
-                           `entities_id` INT NOT NULL DEFAULT 0,
+                           `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                           `entities_id` INT {$default_key_sign} NOT NULL DEFAULT 0,
                            `itemtype` varchar(255) default NULL,
                            `is_active` tinyint NOT NULL default '0',
                            `name` varchar(255) default NULL,
@@ -2076,7 +2081,7 @@ class PluginGenericobjectType extends CommonDBTM {
                            `use_menu_entry` tinyint NOT NULL default '0',
                            `use_projects` tinyint NOT NULL default '0',
                            `linked_itemtypes` text NULL,
-                           `plugin_genericobject_typefamilies_id` INT NOT NULL DEFAULT 0,
+                           `plugin_genericobject_typefamilies_id` INT {$default_key_sign} NOT NULL DEFAULT 0,
                            `use_itemdevices` tinyint NOT NULL default '0',
                            PRIMARY KEY ( `id` )
                            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
@@ -2097,7 +2102,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       $migration->addField($table, "date_creation", "timestamp");
       $migration->addField($table, "linked_itemtypes", "text");
-      $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
+      $migration->addField($table, "plugin_genericobject_typefamilies_id", "INT {$default_key_sign} NOT NULL DEFAULT 0");
       $migration->addField($table, "use_plugin_simcard", "bool");
       $migration->addField($table, "use_plugin_treeview", "bool");
       $migration->addField($table, "use_itemdevices", "bool");

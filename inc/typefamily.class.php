@@ -42,13 +42,14 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+
       $table = getTableForItemType(__CLASS__);
       if (!$DB->tableExists($table)) {
-         $default_charset = DBConnection::getDefaultCharset();
-         $default_collation = DBConnection::getDefaultCollation();
-
          $query = "CREATE TABLE `$table` (
-                           `id` INT unsigned NOT NULL AUTO_INCREMENT,
+                           `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
                            `name` varchar(255) default NULL,
                            `comment` text NULL,
                            `date_mod` TIMESTAMP NULL DEFAULT NULL,
