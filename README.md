@@ -20,7 +20,7 @@ We maintain a detailed documentation here -> [Documentation](http://glpi-plugins
 ## Contact
 
 For notices about major changes and general discussion of genericobject, subscribe to the [/r/glpi](https://www.reddit.com/r/glpi/) subreddit.
-You can also chat with us via IRC in [#glpi on freenode](http://webchat.freenode.net/?channels=glpi) or [@glpi on Telegram](https://t.me/glpien).
+You can also chat with us via [@glpi on Telegram](https://t.me/glpien).
 
 ## Professional Services
 
