@@ -1129,7 +1129,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       // KK TODO: check if MassiveAction itemtypes are concerned
       //if (in_array ($options['itemtype'], $GENINVENTORYNUMBER_TYPES)) {
-      switch ($ma->action) {
+      switch ($ma->getAction()) {
          case "plugin_genericobject_transfer" :
                Dropdown::show('Entity', ['name' => 'new_entity']);
                echo "&nbsp;<input type=\"submit\" name=\"massiveaction\" class=\"submit\" value=\"" .
