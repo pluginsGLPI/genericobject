@@ -967,7 +967,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
-      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."` (
                   `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
@@ -999,7 +999,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
-      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
       $table = getTableForItemType($itemtype);
       $fk    = getForeignKeyFieldForTable($table);
@@ -1422,7 +1422,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
-      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
       $params['entities_id']  = false;
       $params['is_recursive'] = false;
@@ -2049,7 +2049,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
       $default_charset = DBConnection::getDefaultCharset();
       $default_collation = DBConnection::getDefaultCollation();
-      $default_key_sign = method_exists('DBConnection', 'getDefaultPrimaryKeySignOption') ? DBConnection::getDefaultPrimaryKeySignOption() : '';
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
       $table = getTableForItemType(__CLASS__);
       if (!$DB->tableExists($table)) {
