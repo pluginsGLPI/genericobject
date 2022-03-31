@@ -2133,14 +2133,14 @@ class PluginGenericobjectType extends CommonDBTM {
             $query = "INSERT INTO `" . $notepad->getTable() . "`
                   (`items_id`,
                   `itemtype`,
-                  `date`,
+                  `date_creation`,
                   `date_mod`,
                   `content`
                )
                SELECT
                   `id` as `items_id`,
                   '" . $genericObjectType . "' as `itemtype`,
-                  now() as `date`,
+                  now() as `date_creation`,
                   now() as `date_mod`,
                   `notepad` as `content`
                FROM `" . $genericObjectTypeInstance->getTable() . "`
@@ -2148,7 +2148,6 @@ class PluginGenericobjectType extends CommonDBTM {
                AND notepad <> ''";
             $DB->query($query) or die($DB->error());
          }
-         $query = "UPDATE`" . $notepad->getTable() . "`";
          $migration->dropField($genericObjectTypeInstance->getTable(), "notepad");
          $migration->migrationOneTable($genericObjectTypeInstance->getTable());
       }
