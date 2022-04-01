@@ -614,7 +614,11 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
          $this->endColumn();
          $this->startColumn();
-         switch (preg_replace('/\(\d+\)$/', '', $description['Type'])) {
+
+         // Keep only main column type by removing anything that is preceded by a space (e.g. " unsigned")
+         // or a parenthesis (e.g. "(255)").
+         $column_type = preg_replace('/[ (].+$/', '', $description['Type']);
+         switch ($column_type) {
             case "int":
                $fk_table = getTableNameForForeignKeyField($name);
                if ($fk_table != '') {
@@ -710,14 +714,15 @@ class PluginGenericobjectObject extends CommonDBTM {
                   );
                   break;
 
-            default:
             case "float":
+            case 'decimal':
+               echo "<input type='number' name='$name' value='$value' step='any' />";
+               break;
+
+            default:
                   echo "<input type='text' name='$name' value='$value'>";
                   break;
 
-            case 'decimal':
-                  echo "<input type='text' name='$name' value='".Html::formatNumber($value)."'>";
-                  break;
          }
          $this->endColumn();
       }
