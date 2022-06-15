@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
@@ -78,7 +78,7 @@ msgstr "Veritabanındaki ad"
 msgid "Network connections"
 msgstr "Ağ bağlantıları"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Nesne ön izlemesi"
 
@@ -139,7 +139,7 @@ msgstr "field', 'object' ve 'type' tipleri ayrılmış olduğundan kullanılamaz
 msgid "Unable to load the class %1$s."
 msgstr "%1$s sınıfı yüklenemedi."
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "Ön izlemeyi görüntüleyebilmek için izinleri yapılandırmalısınız"
 

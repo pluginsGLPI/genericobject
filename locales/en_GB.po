@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
-"PO-Revision-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
+"PO-Revision-Date: 2022-06-15 13:16+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -77,7 +77,7 @@ msgstr "Name in DB"
 msgid "Network connections"
 msgstr "Network connections"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Object preview"
 
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Unable to load the class %1$s."
 msgstr "Unable to load the class %1$s."
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "You must configure rights to enable the preview"
 

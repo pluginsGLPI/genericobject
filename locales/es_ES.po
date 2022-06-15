@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: cbc5204086c375034e77848ef6290ebe, 2015\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/es_ES/)\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_ES\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: inc/profile.class.php:152
 msgid "(No types defined yet)"
@@ -78,7 +78,7 @@ msgstr "Nombre en base de datos"
 msgid "Network connections"
 msgstr "Conexiones de red"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Vista previa del objeto"
 
@@ -97,6 +97,7 @@ msgid "Other"
 msgid_plural "Others"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: inc/field.class.php:325
 msgid "Read-only field"
@@ -139,7 +140,7 @@ msgstr "Los nombres de tipo 'field', 'object' y 'type' son reservados. Tiene que
 msgid "Unable to load the class %1$s."
 msgstr ""
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "Tiene que configurar los permisos para acceder a la vista previa"
 

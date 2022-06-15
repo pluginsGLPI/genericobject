@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Alexey Petukhov <lexx015@gmail.com>, 2015,2021\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ru_RU/)\n"
@@ -79,7 +79,7 @@ msgstr "Имя в БД"
 msgid "Network connections"
 msgstr "Сетевые соединения"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Предпросмотр"
 
@@ -142,7 +142,7 @@ msgstr "Типы 'field', 'object' и 'type' зарезервированы. В�
 msgid "Unable to load the class %1$s."
 msgstr ""
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "Вы должны настроить права для предпросмотра"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ko_KR/)\n"
@@ -78,7 +78,7 @@ msgstr "DB에서의 이름"
 msgid "Network connections"
 msgstr "네트워크 연결"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "객체 미리보기"
 
@@ -138,7 +138,7 @@ msgstr "유형 'field', 'object' 그리고 'type'은 금지되었습니다. 다�
 msgid "Unable to load the class %1$s."
 msgstr "클래스 %1$s을 불러올 수 없습니다."
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
 

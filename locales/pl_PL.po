@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: awiamo, 2015\n"
 "Language-Team: Polish (Poland) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/pl_PL/)\n"
@@ -78,7 +78,7 @@ msgstr "Nazwa w DB"
 msgid "Network connections"
 msgstr "Połączenia sieciowe"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Podgląd obiektu"
 
@@ -141,7 +141,7 @@ msgstr ""
 msgid "Unable to load the class %1$s."
 msgstr ""
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr ""
 

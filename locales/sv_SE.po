@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: jchan <jhornqvist@gmail.com>, 2018\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/sv_SE/)\n"
@@ -78,7 +78,7 @@ msgstr "Namn i DB"
 msgid "Network connections"
 msgstr "Nätverksanslutningar"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Förhandsgranska tillgång"
 
@@ -139,7 +139,7 @@ msgstr "Typnamnen 'fält, 'objekt' och 'typ' är reserverade av systemet. Var v�
 msgid "Unable to load the class %1$s."
 msgstr "Kunde inte läsa in klass %1$s-"
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "Du måste konfigurera rättigheter för att aktivera förhandsgranskning"
 

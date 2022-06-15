@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2015\n"
 "Language-Team: Romanian (Romania) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ro_RO/)\n"
@@ -78,7 +78,7 @@ msgstr "Nume in DB"
 msgid "Network connections"
 msgstr "Conexiuni retea"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Previzualizeaza un obiect de acest tip"
 
@@ -140,7 +140,7 @@ msgstr "Tipurile 'camp', 'obiect', si 'tip' sunt rezervate.Va rugam alegeti altu
 msgid "Unable to load the class %1$s."
 msgstr ""
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "Trebuie sa configurati drepturi pe acest obiect pentru a putea previzualiza"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 12:19+0000\n"
+"POT-Creation-Date: 2022-06-15 13:16+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2018-2019\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/cs_CZ/)\n"
@@ -79,7 +79,7 @@ msgstr "Název v databázi"
 msgid "Network connections"
 msgstr "Síťová připojení"
 
-#: inc/object.class.php:541
+#: inc/object.class.php:553
 msgid "Object preview"
 msgstr "Náhled objektu"
 
@@ -142,7 +142,7 @@ msgstr "Typy „field“ (kolonka), „object“ (objekt) a „type“ (typ) jso
 msgid "Unable to load the class %1$s."
 msgstr "Nedaří se načíst třídu %1$s."
 
-#: inc/object.class.php:805
+#: inc/object.class.php:817
 msgid "You must configure rights to enable the preview"
 msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
 
