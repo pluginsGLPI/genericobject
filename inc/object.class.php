@@ -227,7 +227,7 @@ class PluginGenericobjectObject extends CommonDBTM {
             //Manage name used for sector
             //See object.form.php L101
             //it can be 'itemtype' name or 'family' name
-            if(!$name = PluginGenericobjectType::getFamilyNameByItemtype($class)){
+            if (($name = PluginGenericobjectType::getFamilyNameByItemtype($class)) === false) {
                $name = $class;
             }
             //from define.php $CFG_GLPI['javascript']['assets'] seems to be computed only once (from start)
