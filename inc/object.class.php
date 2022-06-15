@@ -223,6 +223,18 @@ class PluginGenericobjectObject extends CommonDBTM {
                array_push($ORDER_TYPES, $class);
             }
          }
+         if ($item->canBeReserved()) {
+            //Manage name used for sector
+            //See object.form.php L101
+            //it can be 'itemtype' name or 'family' name
+            if (($name = PluginGenericobjectType::getFamilyNameByItemtype($class)) === false) {
+               $name = $class;
+            }
+            //from define.php $CFG_GLPI['javascript']['assets'] seems to be computed only once (from start)
+            //need to add manually js for sector and itemtype/family
+            $CFG_GLPI['javascript']['assets'][strtolower($name)] = ['fullcalendar', 'reservations'];
+         }
+
          if ($item->canUseGlobalSearch()) {
             if (!in_array($class, $CFG_GLPI['asset_types'])) {
                array_push($CFG_GLPI['asset_types'], $class);
