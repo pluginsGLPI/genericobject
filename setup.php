@@ -255,19 +255,32 @@ function plugin_genericobject_haveTypeRight($itemtype, $right) {
 }
 
 function plugin_genericobject_includeCommonFields($force = false) {
-   //Load genericobject default constants
-   if (!$force) {
-      include_once (GENERICOBJECT_DIR."/fields/field.constant.php");
-   } else {
-      include (GENERICOBJECT_DIR."/fields/field.constant.php");
+   global $GO_FIELDS, $LANG; // Permit missing global declaration in user files
+
+   $includes = [
+       sprintf('%s/fields/field.constant.php', GENERICOBJECT_DIR), // Default common fields constants
+   ];
+
+   // User locales for common fields
+   if (
+      isset($_SESSION['glpilanguage'])
+      && file_exists($locale_file = sprintf('%s/fields.%s.php', GENERICOBJECT_LOCALES_PATH, $_SESSION['glpilanguage']))
+   ) {
+      $includes[] = $locale_file;
+   } elseif (file_exists($locale_file = sprintf('%s/fields.%s.php', GENERICOBJECT_LOCALES_PATH, 'en_GB'))) {
+      $includes[] = $locale_file;
    }
 
-   //Include user constants, that must be accessible for all itemtypes
-   if (file_exists(GENERICOBJECT_FIELDS_PATH . "/field.constant.php")) {
+   // User common fields constants
+   if (file_exists($fields_file = sprintf('%s/field.constant.php', GENERICOBJECT_FIELDS_PATH))) {
+      $includes[] = $fields_file;
+   }
+
+   foreach ($includes as $include) {
       if (!$force) {
-         include_once ( GENERICOBJECT_FIELDS_PATH . "/field.constant.php");
+         include_once($include);
       } else {
-         include ( GENERICOBJECT_FIELDS_PATH . "/field.constant.php");
+         include($include);
       }
    }
 }
