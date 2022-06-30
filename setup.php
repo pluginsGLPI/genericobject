@@ -244,6 +244,7 @@ function plugin_genericobject_haveTypeRight($itemtype, $right) {
 }
 
 function plugin_genericobject_includeCommonFields($force = false) {
+   
    //Load genericobject default constants
    if (!$force) {
       include_once (GENERICOBJECT_DIR."/fields/field.constant.php");
@@ -253,6 +254,8 @@ function plugin_genericobject_includeCommonFields($force = false) {
 
    //Include user constants, that must be accessible for all itemtypes
    if (file_exists(GENERICOBJECT_FIELDS_PATH . "/field.constant.php")) {
+      // Load locales
+      plugin_genericobject_includeCommonFieldsLocale($force);
       if (!$force) {
          include_once ( GENERICOBJECT_FIELDS_PATH . "/field.constant.php");
       } else {
@@ -260,6 +263,36 @@ function plugin_genericobject_includeCommonFields($force = false) {
       }
    }
 }
+
+
+function plugin_genericobject_includeCommonFieldsLocale($force = false) {
+   global $CFG_GLPI,$LANG;
+   //Include user constants locales accessible for all itemtypes
+
+   if (isset ($_SESSION["glpilanguage"])) {
+      $locale_common_file ='field' . '.' . $_SESSION['glpilanguage'];
+      if (file_exists( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php")) {
+         if(!$force) {
+            include_once ( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php");
+         }
+         else {
+            include ( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php");
+         }         
+      }
+   } else {
+      if (file_exists( GENERICOBJECT_LOCALES_PATH . "/field.en_GB.php")) {
+         if(!$force) {
+            include_once ( GENERICOBJECT_LOCALES_PATH . "/field.en_GB.php");
+         }
+         else {
+            include ( GENERICOBJECT_LOCALES_PATH . "/field.en_GB.php");
+         }
+      } else {
+         return false;
+      }
+   }
+}
+
 
 function plugin_genericobject_haveRight($class, $right) {
 
