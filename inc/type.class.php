@@ -1549,9 +1549,8 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function removeDataInjectionModels($itemtype) {
-      $plugin = new Plugin();
       //Delete if exists datainjection models
-      if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
+      if (Plugin::isPluginActive("datainjection")) {
          $model = new PluginDatainjectionModel();
          foreach ($model->find(['itemtype' => $itemtype]) as $data) {
             $model->delete($data);
@@ -1949,8 +1948,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function canUsePluginDataInjection() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("datainjection") || !$plugin->isActivated("datainjection")) {
+      if (!Plugin::isPluginActive("datainjection")) {
          return false;
       }
       return $this->fields['use_plugin_datainjection'];
@@ -1958,8 +1956,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUsePluginOrder() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("order") || !$plugin->isActivated("order")) {
+      if (!Plugin::isPluginActive("order")) {
          return false;
       }
       return $this->fields['use_plugin_order'];
@@ -1967,8 +1964,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUsePluginPDF() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("pdf") || !$plugin->isActivated("pdf")) {
+      if (!Plugin::isPluginActive("pdf")) {
          return false;
       }
       return $this->fields['use_plugin_pdf'];
@@ -1976,33 +1972,28 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUsePluginUninstall() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("uninstall") || !$plugin->isActivated("uninstall")) {
+      if (!Plugin::isPluginActive("uninstall")) {
          return false;
       }
       return $this->fields['use_plugin_uninstall'];
    }
 
    function canUsePluginSimcard() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("simcard") || !$plugin->isActivated("simcard")) {
+      if (!Plugin::isPluginActive("simcard")) {
          return false;
       }
       return $this->fields['use_plugin_simcard'];
    }
 
    function canUsePluginTreeview() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("treeview") || !$plugin->isActivated("treeview")) {
+      if (!Plugin::isPluginActive("treeview")) {
          return false;
       }
       return $this->fields['use_plugin_treeview'];
    }
 
    function canUsePluginGeninventoryNumber() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("geninventorynumber")
-         || !$plugin->isActivated("geninventorynumber")) {
+      if (!Plugin::isPluginActive("geninventorynumber")) {
          return false;
       }
       return $this->fields['use_plugin_geninventorynumber'];
