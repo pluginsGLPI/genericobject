@@ -120,16 +120,11 @@ function plugin_init_genericobject() {
 
    $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
    $GENERICOBJECT_PDF_TYPES                         =  [];
-   $plugin                                          = new Plugin();
 
-   if ($plugin->isInstalled("genericobject")
-      && $plugin->isActivated("genericobject")
-         && isset($_SESSION['glpiactiveprofile'])) {
+   if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
 
       //if treeview is installed
-      if ($plugin->isInstalled("treeview")
-            && $plugin->isActivated("treeview")
-               && class_exists('PluginTreeviewConfig')) {
+      if (Plugin::isPluginActive("treeview") && class_exists('PluginTreeviewConfig')) {
 
          //foreach type in genericobject
          foreach (PluginGenericobjectType::getTypes() as $itemtype => $value) {
