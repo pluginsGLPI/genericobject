@@ -367,6 +367,11 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       if (!$this->isNewItem()) {
 
+         // Register impact tab is enabled
+         if ($this->canUseImpact()) {
+            $this->addImpactTab($tabs, $options);
+         }
+
          if ($this->canUseNetworkPorts()) {
             $this->addStandardTab('NetworkPort', $tabs, $options);
          }
@@ -515,6 +520,10 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    function canUseItemDevice() {
       return ($this->objecttype->canUseItemDevice());
+   }
+
+   function canUseImpact() {
+      return ($this->objecttype->canUseImpact());
    }
 
    function title() {

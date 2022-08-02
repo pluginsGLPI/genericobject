@@ -106,7 +106,7 @@ $go_autoloader->register();
  */
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS;
+          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $CFG_GLPI;
 
    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment"];
 
@@ -186,6 +186,31 @@ function plugin_init_genericobject() {
          PluginGenericobjectType::getType(),
          'getTypesForFormcreator'
       ];
+
+      // Add icon folder
+      if (!file_exists(GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/")) {
+         mkdir(GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/");
+      }
+
+      // Enable impact analysis
+      foreach (
+         (new PluginGenericobjectType())->find([
+            'use_impact' => true,
+         ]) as $row
+      ) {
+         $CFG_GLPI['impact_asset_types'][$row['itemtype']] = PluginGenericobjectType::getImpactIconFileStoragePath(
+            $row['impact_icon'],
+            true
+         );
+
+         // Update DB conf
+         $enabled = Config::getConfigurationValue('core', Impact::CONF_ENABLED);
+         $enabled = importArrayFromDB($enabled);
+         $enabled[] = $row['itemtype'];
+         Config::setConfigurationValues('core', [
+            Impact::CONF_ENABLED => exportArrayToDB($enabled)
+         ]);
+      }
    }
 }
 
