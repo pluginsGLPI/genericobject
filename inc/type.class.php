@@ -210,10 +210,51 @@ class PluginGenericobjectType extends CommonDBTM {
          $input['impact_icon'] = $icon;
       }
 
+      // Handle use_impact
+      $input = $this->handleUseImpactUpdate($input);
+
       //If itemtype is active : register it !
       if (isset ($input["is_active"]) && $input["is_active"]) {
          self::registerOneType($this->fields['itemtype']);
       }
+      return $input;
+   }
+
+   function handleUseImpactUpdate($input) {
+      $use_impact = $input['use_impact'] ?? null;
+      unset($input['use_impact']);
+
+      // Value wasn't modified, nothing to be done
+      if ($use_impact === null) {
+         return $input;
+      }
+
+      // Impact analysis was enabled, update conf if needed
+      if ($use_impact && !Impact::isEnabled($this->fields['itemtype'])) {
+         $enabled = Config::getConfigurationValue('core', Impact::CONF_ENABLED);
+         $enabled = importArrayFromDB($enabled);
+         $enabled[] = $this->fields['itemtype'];
+         Config::setConfigurationValues('core', [
+            Impact::CONF_ENABLED => exportArrayToDB($enabled)
+         ]);
+         return $input;
+      }
+
+      // Impact analysis was disabled, update config if needed
+      if (!$use_impact && Impact::isEnabled($this->fields['itemtype'])) {
+         $enabled = Config::getConfigurationValue('core', Impact::CONF_ENABLED);
+         $enabled = importArrayFromDB($enabled);
+         $enabled = array_filter(
+            $enabled,
+            fn($i) => $i != $this->fields['itemtype']
+         );
+         Config::setConfigurationValues('core', [
+            Impact::CONF_ENABLED => exportArrayToDB($enabled)
+         ]);
+
+         return $input;
+      }
+
       return $input;
    }
 
@@ -609,6 +650,13 @@ class PluginGenericobjectType extends CommonDBTM {
                case 'use_template':
                   Html::showCheckbox(['name'    => $right,
                                       'checked' => $this->canUseTemplate()]);
+                  break;
+
+               case 'use_impact':
+                  Html::showCheckbox([
+                     'name'    => $right,
+                     'checked' => Impact::isEnabled($this->fields['itemtype'])
+                  ]);
                   break;
 
                default :
@@ -1959,7 +2007,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function canUseImpact() {
-      return $this->fields['use_impact'];
+      return Impact::isEnabled($this->fields['itemtype']);
    }
 
    function canUseContracts() {
@@ -2112,7 +2160,6 @@ class PluginGenericobjectType extends CommonDBTM {
                            `linked_itemtypes` text NULL,
                            `plugin_genericobject_typefamilies_id` INT {$default_key_sign} NOT NULL DEFAULT 0,
                            `use_itemdevices` tinyint NOT NULL default '0',
-                           `use_impact` tinyint NOT NULL default '0',
                            `impact_icon` varchar(255) default NULL,
                            PRIMARY KEY ( `id` )
                            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
@@ -2137,7 +2184,6 @@ class PluginGenericobjectType extends CommonDBTM {
       $migration->addField($table, "use_plugin_simcard", "bool");
       $migration->addField($table, "use_plugin_treeview", "bool");
       $migration->addField($table, "use_itemdevices", "bool");
-      $migration->addField($table, "use_impact", "bool");
       $migration->addField($table, "impact_icon", "string");
       $migration->migrationOneTable($table);
 

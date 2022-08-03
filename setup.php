@@ -192,24 +192,13 @@ function plugin_init_genericobject() {
          mkdir(GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/");
       }
 
-      // Enable impact analysis
-      foreach (
-         (new PluginGenericobjectType())->find([
-            'use_impact' => true,
-         ]) as $row
-      ) {
+      // Add every genericobject item's to the list of itemtypes for which the
+      // impact analysis can be enabled
+      foreach ((new PluginGenericobjectType())->find([]) as $row) {
          $CFG_GLPI['impact_asset_types'][$row['itemtype']] = PluginGenericobjectType::getImpactIconFileStoragePath(
             $row['impact_icon'],
             true
          );
-
-         // Update DB conf
-         $enabled = Config::getConfigurationValue('core', Impact::CONF_ENABLED);
-         $enabled = importArrayFromDB($enabled);
-         $enabled[] = $row['itemtype'];
-         Config::setConfigurationValues('core', [
-            Impact::CONF_ENABLED => exportArrayToDB($enabled)
-         ]);
       }
    }
 }
