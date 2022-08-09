@@ -195,10 +195,17 @@ function plugin_init_genericobject() {
       // Add every genericobject item's to the list of itemtypes for which the
       // impact analysis can be enabled
       foreach ((new PluginGenericobjectType())->find([]) as $row) {
-         $CFG_GLPI['impact_asset_types'][$row['itemtype']] = PluginGenericobjectType::getImpactIconFileStoragePath(
-            $row['impact_icon'],
-            true
-         );
+         if (empty($row['impact_icon'])) {
+            $icon = ""; // Will fallback to default impact icon
+         } else {
+            $icon = PluginGenericobjectType::getImpactIconFileStoragePath(
+               $row['impact_icon'],
+               $row['itemtype'],
+               true
+            ) ?? "";
+         }
+
+         $CFG_GLPI['impact_asset_types'][$row['itemtype']] = $icon;
       }
    }
 }

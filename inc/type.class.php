@@ -200,15 +200,8 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function prepareInputForUpdate($input) {
-      // Handle impact icon uploads
-      $icon = isset($input['_impact_icon'][0]) ? realpath($input['_impact_icon'][0])) : false;
-      if ($icon !== false && str_starts_with($icon, realpath(GLPI_TMP_DIR))) {
-         rename(
-            GLPI_TMP_DIR . "/$icon",
-            self::getImpactIconFileStoragePath($icon)
-         );
-         $input['impact_icon'] = $icon;
-      }
+      // Handle impact_icon
+      $input = $this->handleImpactIconUpdate($input);
 
       // Handle use_impact
       $input = $this->handleUseImpactUpdate($input);
@@ -217,6 +210,56 @@ class PluginGenericobjectType extends CommonDBTM {
       if (isset ($input["is_active"]) && $input["is_active"]) {
          self::registerOneType($this->fields['itemtype']);
       }
+      return $input;
+   }
+
+   function handleImpactIconUpdate($input) {
+      // Read submitted icon
+      $icon = $input['_impact_icon'][0] ?? null;
+
+      // Icon wasn't submitted, nothing more to do
+      if (empty($icon)) {
+         return $input;
+      }
+
+      // Convert to realpath
+      $icon_path = realpath(GLPI_TMP_DIR . "/$icon");
+
+      // Realpath didn't find the file, shouldn't really happenn but just in case
+      if (!$icon_path) {
+         return $input;
+      }
+
+      // File is outside of GLPI_TMP_DIR
+      if (!str_starts_with($icon_path, realpath(GLPI_TMP_DIR))) {
+         trigger_error("Trying to read forbidden file: $icon_path", E_USER_WARNING);
+         return $input;
+      }
+
+      // Reread base file name
+      $icon_filename = pathinfo($icon_path, PATHINFO_BASENAME);
+
+      // Remove previous icon if exist - WIP
+      // $existing_icon_path = self::getImpactIconFileStoragePath(
+      //    $this->fields['impact_icon'],
+      //    $this->fields['itemtype']
+      // );
+      // if ($existing_icon_path
+      //    && file_exists($existing_icon_path)
+      //    && str_starts_with(realpath($existing_icon_path), realpath(Plugin))
+      // ) {
+      //    unlink($existing_icon_path);
+      // }
+
+      // Move file and update input on success
+      $new_path = self::getImpactIconFileStoragePath(
+         $icon_filename,
+         $this->fields['itemtype']
+      );
+      if (rename($icon_path, $new_path)) {
+         $input['impact_icon'] = $icon_filename;
+      }
+
       return $input;
    }
 
@@ -2519,23 +2562,30 @@ class PluginGenericobjectType extends CommonDBTM {
     * where it should be stored
     *
     * @param string $filename
+    * @param string $itemtype Impact itemtype, needed to avoid filename colision
     * @param bool   $relative (default: false)
     *
     * @return null|string
     */
    public static function getImpactIconFileStoragePath(
-      string $filename,
-      bool $relative = false,
+      ?string $filename,
+      string $itemtype,
+      bool $relative = false
    ): ?string {
+      if (empty($filename)) {
+         return null;
+      }
+
       // Make sure $filename does not contains any directory changes like ".."
       if ($filename != pathinfo($filename)['basename']) {
          trigger_error(
-            "Trying to access protected file: $filename",
+            "Trying to access forbidden file: $filename",
             E_USER_WARNING
          );
          return null;
       }
 
+      $filename = "{$itemtype}_{$filename}";
       $path = GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/$filename";
 
       if ($relative) {
@@ -2552,7 +2602,14 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public function getImpactIconFilePath(): ?string
    {
-      $path = self::getImpactIconFileStoragePath($this->fields['impact_icon']);
+      if (empty($this->fields['impact_icon'])) {
+         return null;
+      }
+
+      $path = self::getImpactIconFileStoragePath(
+         $this->fields['impact_icon'],
+         $this->fields['itemtype']
+      );
       if (empty($path) || !file_exists($path)) {
          return null;
       }
