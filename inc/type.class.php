@@ -239,17 +239,20 @@ class PluginGenericobjectType extends CommonDBTM {
       // Reread base file name
       $icon_filename = pathinfo($icon_path, PATHINFO_BASENAME);
 
-      // Remove previous icon if exist - WIP
-      // $existing_icon_path = self::getImpactIconFileStoragePath(
-      //    $this->fields['impact_icon'],
-      //    $this->fields['itemtype']
-      // );
-      // if ($existing_icon_path
-      //    && file_exists($existing_icon_path)
-      //    && str_starts_with(realpath($existing_icon_path), realpath(Plugin))
-      // ) {
-      //    unlink($existing_icon_path);
-      // }
+      // Remove previous icon if exist
+      $existing_icon_path = self::getImpactIconFileStoragePath(
+         $this->fields['impact_icon'],
+         $this->fields['itemtype']
+      );
+      if ($existing_icon_path
+         && file_exists($existing_icon_path)
+         && str_starts_with(
+            realpath($existing_icon_path),
+            realpath(GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/")
+         )
+      ) {
+         unlink($existing_icon_path);
+      }
 
       // Move file and update input on success
       $new_path = self::getImpactIconFileStoragePath(
