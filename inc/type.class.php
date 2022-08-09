@@ -201,8 +201,8 @@ class PluginGenericobjectType extends CommonDBTM {
 
    function prepareInputForUpdate($input) {
       // Handle impact icon uploads
-      $icon = $input['_impact_icon'][0] ?? null;
-      if ($icon) {
+      $icon = isset($input['_impact_icon'][0]) ? realpath($input['_impact_icon'][0])) : false;
+      if ($icon !== false && str_starts_with($icon, realpath(GLPI_TMP_DIR))) {
          rename(
             GLPI_TMP_DIR . "/$icon",
             self::getImpactIconFileStoragePath($icon)
@@ -229,7 +229,7 @@ class PluginGenericobjectType extends CommonDBTM {
          return $input;
       }
 
-      // Impact analysis was enabled, update conf if needed
+      // Impact analysis will now be enabled, update conf if needed
       if ($use_impact && !Impact::isEnabled($this->fields['itemtype'])) {
          $enabled = Config::getConfigurationValue('core', Impact::CONF_ENABLED);
          $enabled = importArrayFromDB($enabled);
@@ -240,7 +240,7 @@ class PluginGenericobjectType extends CommonDBTM {
          return $input;
       }
 
-      // Impact analysis was disabled, update config if needed
+      // Impact analysis will now be disabled, update config if needed
       if (!$use_impact && Impact::isEnabled($this->fields['itemtype'])) {
          $enabled = Config::getConfigurationValue('core', Impact::CONF_ENABLED);
          $enabled = importArrayFromDB($enabled);
