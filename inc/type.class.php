@@ -230,6 +230,11 @@ class PluginGenericobjectType extends CommonDBTM {
          return $input;
       }
 
+      // Wrong file type, ignore
+      if (!Document::isImage($icon_path)) {
+         return $input;
+      }
+
       // File is outside of GLPI_TMP_DIR
       if (!str_starts_with($icon_path, realpath(GLPI_TMP_DIR))) {
          trigger_error("Trying to read forbidden file: $icon_path", E_USER_WARNING);

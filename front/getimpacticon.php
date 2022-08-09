@@ -53,6 +53,12 @@ if ($filepath === null) {
     die;
 }
 
+// Validate image
+if (!Document::isImage($filepath)) {
+    http_response_code(400);
+    die;
+}
+
 // Send image
 header("Content-Type: " . mime_content_type($filepath));
 readfile($filepath);
