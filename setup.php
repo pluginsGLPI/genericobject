@@ -28,12 +28,12 @@
  * -------------------------------------------------------------------------
  */
 
-define ('PLUGIN_GENERICOBJECT_VERSION', '2.11.1');
+define ('PLUGIN_GENERICOBJECT_VERSION', '2.12.1');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_GENERICOBJECT_MIN_GLPI", "9.5");
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "10.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_GENERICOBJECT_MAX_GLPI", "9.6");
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "10.0.99");
 
 if (!defined("GENERICOBJECT_DIR")) {
    define("GENERICOBJECT_DIR", Plugin::getPhpDir("genericobject"));
@@ -120,16 +120,11 @@ function plugin_init_genericobject() {
 
    $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
    $GENERICOBJECT_PDF_TYPES                         =  [];
-   $plugin                                          = new Plugin();
 
-   if ($plugin->isInstalled("genericobject")
-      && $plugin->isActivated("genericobject")
-         && isset($_SESSION['glpiactiveprofile'])) {
+   if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
 
       //if treeview is installed
-      if ($plugin->isInstalled("treeview")
-            && $plugin->isActivated("treeview")
-               && class_exists('PluginTreeviewConfig')) {
+      if (Plugin::isPluginActive("treeview") && class_exists('PluginTreeviewConfig')) {
 
          //foreach type in genericobject
          foreach (PluginGenericobjectType::getTypes() as $itemtype => $value) {

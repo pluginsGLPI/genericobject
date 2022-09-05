@@ -446,10 +446,7 @@ class PluginGenericobjectType extends CommonDBTM {
       $this->initForm($ID);
 
       $item = new self();
-      //I know this is REALLY ugly...
-      if ($ID == 0) {
-         $item->showBehaviorForm($ID);
-      }
+      $item->showBehaviorForm($ID);
 
       return true;
    }
@@ -481,7 +478,12 @@ class PluginGenericobjectType extends CommonDBTM {
       echo "<td>" . __("Internal identifier", "genericobject") . "</td>";
       echo "<td>";
       if (!$ID) {
-         Html::autocompletionTextField($this, 'name', ['value' => $this->fields["name"]]);
+         echo Html::input(
+            'name',
+            [
+               'value' => $this->fields['name'],
+            ]
+         );
       } else {
          echo "<input type='hidden' name='name' value='" . $this->fields["name"] . "'>";
          echo $this->fields["name"];
@@ -962,18 +964,23 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function addTable($itemtype) {
       global $DB;
+
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."` (
-                  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                  `entities_id` INT( 11 ) NOT NULL DEFAULT '0',
-                  `name` VARCHAR( 255 ) collate utf8_unicode_ci NOT NULL DEFAULT '',
-                  `comment` text COLLATE utf8_unicode_ci,
-                  `notepad` text COLLATE utf8_unicode_ci,
+                  `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                  `entities_id` INT {$default_key_sign} NOT NULL DEFAULT '0',
+                  `name` VARCHAR( 255 ) NOT NULL DEFAULT '',
+                  `comment` text,
+                  `notepad` text,
                   `date_mod` TIMESTAMP NULL DEFAULT NULL,
                   `date_creation` TIMESTAMP NULL DEFAULT NULL,
                   PRIMARY KEY ( `id` ),
                   KEY `date_mod` (`date_mod`),
                   KEY `date_creation` (`date_creation`)
-                  ) ENGINE = InnoDB COMMENT = '$itemtype' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
       $DB->query($query);
 
       $query = "INSERT INTO `glpi_displaypreferences` (`id`, `itemtype`, `num`, `rank`, `users_id`) " .
@@ -989,21 +996,26 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function addItemsTable($itemtype) {
       global $DB;
+
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType($itemtype);
       $fk    = getForeignKeyFieldForTable($table);
       $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType($itemtype)."_items` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
+        `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+        `items_id` int {$default_key_sign} NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (ID)',
         `date_mod` TIMESTAMP NULL DEFAULT NULL,
         `date_creation` TIMESTAMP NULL DEFAULT NULL,
-        `$fk` int(11) NOT NULL DEFAULT '0',
-        `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+        `$fk` int {$default_key_sign} NOT NULL DEFAULT '0',
+        `itemtype` varchar(100) NOT NULL,
         PRIMARY KEY (`id`),
         KEY `$fk` (`$fk`),
         KEY `date_mod` (`date_mod`),
         KEY `date_creation` (`date_creation`),
         KEY `item` (`itemtype`,`items_id`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+      ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
       $DB->query($query);
    }
 
@@ -1407,6 +1419,11 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    public static function addDropdownTable($table, $options = []) {
       global $DB;
+
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $params['entities_id']  = false;
       $params['is_recursive'] = false;
       $params['is_tree']      = false;
@@ -1416,34 +1433,34 @@ class PluginGenericobjectType extends CommonDBTM {
 
       if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-                       `id` int(11) NOT NULL auto_increment,
-                       `name` varchar(255) collate utf8_unicode_ci default NULL,
-                       `comment` text collate utf8_unicode_ci,
+                       `id` int {$default_key_sign} NOT NULL auto_increment,
+                       `name` varchar(255) default NULL,
+                       `comment` text,
                        `date_mod` TIMESTAMP NULL DEFAULT NULL,
                        `date_creation` TIMESTAMP NOT NULL,
                        PRIMARY KEY  (`id`),
                        KEY `date_mod` (`date_mod`),
                        KEY `date_creation` (`date_creation`),
                        KEY `name` (`name`)
-                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                     ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->query($query);
       }
       if ($params['entities_id']) {
-         $query = "ALTER TABLE `$table` ADD `entities_id` INT(11) NOT NULL DEFAULT '0'";
+         $query = "ALTER TABLE `$table` ADD `entities_id` INT {$default_key_sign} NOT NULL DEFAULT '0'";
          $DB->query($query);
          if ($params['is_recursive']) {
             $query = "ALTER TABLE `$table` " .
-                     "ADD `is_recursive` TINYINT(1) NOT NULL DEFAULT '0' AFTER `entities_id`";
+                     "ADD `is_recursive` TINYINT NOT NULL DEFAULT '0' AFTER `entities_id`";
             $DB->query($query);
          }
       }
       if ($params['is_tree']) {
          $fk    = getForeignKeyFieldForTable($table);
-         $query = "ALTER TABLE `$table` ADD `completename` text COLLATE utf8_unicode_ci,
-                                        ADD `$fk` int(11) NOT NULL DEFAULT '0',
-                                        ADD `level` int(11) NOT NULL DEFAULT '0',
-                                        ADD `ancestors_cache` longtext COLLATE utf8_unicode_ci,
-                                        ADD `sons_cache` longtext COLLATE utf8_unicode_ci";
+         $query = "ALTER TABLE `$table` ADD `completename` text,
+                                        ADD `$fk` int {$default_key_sign} NOT NULL DEFAULT '0',
+                                        ADD `level` int NOT NULL DEFAULT '0',
+                                        ADD `ancestors_cache` longtext,
+                                        ADD `sons_cache` longtext";
          $DB->query($query);
       }
    }
@@ -1532,9 +1549,8 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function removeDataInjectionModels($itemtype) {
-      $plugin = new Plugin();
       //Delete if exists datainjection models
-      if ($plugin->isInstalled("datainjection") && $plugin->isActivated("datainjection")) {
+      if (Plugin::isPluginActive("datainjection")) {
          $model = new PluginDatainjectionModel();
          foreach ($model->find(['itemtype' => $itemtype]) as $data) {
             $model->delete($data);
@@ -1932,8 +1948,7 @@ class PluginGenericobjectType extends CommonDBTM {
    }
 
    function canUsePluginDataInjection() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("datainjection") || !$plugin->isActivated("datainjection")) {
+      if (!Plugin::isPluginActive("datainjection")) {
          return false;
       }
       return $this->fields['use_plugin_datainjection'];
@@ -1941,8 +1956,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUsePluginOrder() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("order") || !$plugin->isActivated("order")) {
+      if (!Plugin::isPluginActive("order")) {
          return false;
       }
       return $this->fields['use_plugin_order'];
@@ -1950,8 +1964,7 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUsePluginPDF() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("pdf") || !$plugin->isActivated("pdf")) {
+      if (!Plugin::isPluginActive("pdf")) {
          return false;
       }
       return $this->fields['use_plugin_pdf'];
@@ -1959,33 +1972,28 @@ class PluginGenericobjectType extends CommonDBTM {
 
 
    function canUsePluginUninstall() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("uninstall") || !$plugin->isActivated("uninstall")) {
+      if (!Plugin::isPluginActive("uninstall")) {
          return false;
       }
       return $this->fields['use_plugin_uninstall'];
    }
 
    function canUsePluginSimcard() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("simcard") || !$plugin->isActivated("simcard")) {
+      if (!Plugin::isPluginActive("simcard")) {
          return false;
       }
       return $this->fields['use_plugin_simcard'];
    }
 
    function canUsePluginTreeview() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("treeview") || !$plugin->isActivated("treeview")) {
+      if (!Plugin::isPluginActive("treeview")) {
          return false;
       }
       return $this->fields['use_plugin_treeview'];
    }
 
    function canUsePluginGeninventoryNumber() {
-      $plugin = new Plugin();
-      if (!$plugin->isInstalled("geninventorynumber")
-         || !$plugin->isActivated("geninventorynumber")) {
+      if (!Plugin::isPluginActive("geninventorynumber")) {
          return false;
       }
       return $this->fields['use_plugin_geninventorynumber'];
@@ -2030,40 +2038,44 @@ class PluginGenericobjectType extends CommonDBTM {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       $table = getTableForItemType(__CLASS__);
       if (!$DB->tableExists($table)) {
          $query = "CREATE TABLE `$table` (
-                           `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
-                           `entities_id` INT( 11 ) NOT NULL DEFAULT 0,
-                           `itemtype` varchar(255) collate utf8_unicode_ci default NULL,
-                           `is_active` tinyint(1) NOT NULL default '0',
-                           `name` varchar(255) collate utf8_unicode_ci default NULL,
+                           `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                           `entities_id` INT {$default_key_sign} NOT NULL DEFAULT 0,
+                           `itemtype` varchar(255) default NULL,
+                           `is_active` tinyint NOT NULL default '0',
+                           `name` varchar(255) default NULL,
                            `comment` text NULL,
                            `date_mod` TIMESTAMP NULL DEFAULT NULL,
                            `date_creation` TIMESTAMP NULL DEFAULT NULL,
-                           `use_global_search` tinyint(1) NOT NULL default '0',
-                           `use_unicity` tinyint(1) NOT NULL default '0',
-                           `use_history` tinyint(1) NOT NULL default '0',
-                           `use_infocoms` tinyint(1) NOT NULL default '0',
-                           `use_contracts` tinyint(1) NOT NULL default '0',
-                           `use_documents` tinyint(1) NOT NULL default '0',
-                           `use_tickets` tinyint(1) NOT NULL default '0',
-                           `use_links` tinyint(1) NOT NULL default '0',
-                           `use_loans` tinyint(1) NOT NULL default '0',
-                           `use_network_ports` tinyint(1) NOT NULL default '0',
-                           `use_direct_connections` tinyint(1) NOT NULL default '0',
-                           `use_plugin_datainjection` tinyint(1) NOT NULL default '0',
-                           `use_plugin_pdf` tinyint(1) NOT NULL default '0',
-                           `use_plugin_order` tinyint(1) NOT NULL default '0',
-                           `use_plugin_uninstall` tinyint(1) NOT NULL default '0',
-                           `use_plugin_geninventorynumber` tinyint(1) NOT NULL default '0',
-                           `use_menu_entry` tinyint(1) NOT NULL default '0',
-                           `use_projects` tinyint(1) NOT NULL default '0',
+                           `use_global_search` tinyint NOT NULL default '0',
+                           `use_unicity` tinyint NOT NULL default '0',
+                           `use_history` tinyint NOT NULL default '0',
+                           `use_infocoms` tinyint NOT NULL default '0',
+                           `use_contracts` tinyint NOT NULL default '0',
+                           `use_documents` tinyint NOT NULL default '0',
+                           `use_tickets` tinyint NOT NULL default '0',
+                           `use_links` tinyint NOT NULL default '0',
+                           `use_loans` tinyint NOT NULL default '0',
+                           `use_network_ports` tinyint NOT NULL default '0',
+                           `use_direct_connections` tinyint NOT NULL default '0',
+                           `use_plugin_datainjection` tinyint NOT NULL default '0',
+                           `use_plugin_pdf` tinyint NOT NULL default '0',
+                           `use_plugin_order` tinyint NOT NULL default '0',
+                           `use_plugin_uninstall` tinyint NOT NULL default '0',
+                           `use_plugin_geninventorynumber` tinyint NOT NULL default '0',
+                           `use_menu_entry` tinyint NOT NULL default '0',
+                           `use_projects` tinyint NOT NULL default '0',
                            `linked_itemtypes` text NULL,
-                           `plugin_genericobject_typefamilies_id` INT( 11 ) NOT NULL DEFAULT 0,
-                           `use_itemdevices` tinyint(1) NOT NULL default '0',
+                           `plugin_genericobject_typefamilies_id` INT {$default_key_sign} NOT NULL DEFAULT 0,
+                           `use_itemdevices` tinyint NOT NULL default '0',
                            PRIMARY KEY ( `id` )
-                           ) ENGINE = InnoDB COMMENT = 'Object types definition table' DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                           ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->query($query) or die($DB->error());
       }
 
@@ -2081,7 +2093,7 @@ class PluginGenericobjectType extends CommonDBTM {
       }
       $migration->addField($table, "date_creation", "timestamp");
       $migration->addField($table, "linked_itemtypes", "text");
-      $migration->addField($table, "plugin_genericobject_typefamilies_id", "integer");
+      $migration->addField($table, "plugin_genericobject_typefamilies_id", "INT {$default_key_sign} NOT NULL DEFAULT 0");
       $migration->addField($table, "use_plugin_simcard", "bool");
       $migration->addField($table, "use_plugin_treeview", "bool");
       $migration->addField($table, "use_itemdevices", "bool");
@@ -2112,14 +2124,14 @@ class PluginGenericobjectType extends CommonDBTM {
             $query = "INSERT INTO `" . $notepad->getTable() . "`
                   (`items_id`,
                   `itemtype`,
-                  `date`,
+                  `date_creation`,
                   `date_mod`,
                   `content`
                )
                SELECT
                   `id` as `items_id`,
                   '" . $genericObjectType . "' as `itemtype`,
-                  now() as `date`,
+                  now() as `date_creation`,
                   now() as `date_mod`,
                   `notepad` as `content`
                FROM `" . $genericObjectTypeInstance->getTable() . "`
@@ -2127,7 +2139,6 @@ class PluginGenericobjectType extends CommonDBTM {
                AND notepad <> ''";
             $DB->query($query) or die($DB->error());
          }
-         $query = "UPDATE`" . $notepad->getTable() . "`";
          $migration->dropField($genericObjectTypeInstance->getTable(), "notepad");
          $migration->migrationOneTable($genericObjectTypeInstance->getTable());
       }
