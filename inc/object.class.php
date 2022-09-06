@@ -597,10 +597,9 @@ class PluginGenericobjectObject extends CommonDBTM {
 
          // Keep only main column type by removing anything that is preceded by a space (e.g. " unsigned")
          // or a parenthesis (e.g. "(255)").
-         $column_type = preg_replace('/[ (].+$/', '', $description['Type']);
+         $column_type = preg_replace('/^([a-z]+)([ (].+)*$/', '$1', $description['Type']);
          switch ($column_type) {
             case "int":
-            case "int unsigned":
                $fk_table = getTableNameForForeignKeyField($name);
                if ($fk_table != '') {
                   $itemtype   = getItemTypeForTable($fk_table);
@@ -920,9 +919,10 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
 
          //Field type
-         switch ($values['Type']) {
+         $column_type = preg_replace('/^([a-z]+)([ (].+)*$/', '$1', $values['Type']);
+         switch ($column_type) {
             default:
-            case "varchar(255)":
+            case "varchar":
                if ($field == 'name') {
                   $option['datatype']      = 'itemlink';
                   $option['itemlink_type'] = get_called_class();
@@ -942,7 +942,6 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $option['displaytype'] = 'text';
                }
                break;
-            case "tinyint(1)":
             case "tinyint":
                $option['datatype'] = 'bool';
                if ($item->canUsePluginDataInjection()) {
@@ -958,9 +957,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                   $option['displaytype'] = 'multiline_text';
                }
                break;
-            case "int(11)":
             case "int":
-            case "int unsigned":
                if ($tmp != '') {
                   $option['datatype'] = 'dropdown';
                } else {
