@@ -600,6 +600,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          $column_type = preg_replace('/[ (].+$/', '', $description['Type']);
          switch ($column_type) {
             case "int":
+            case "int unsigned":
                $fk_table = getTableNameForForeignKeyField($name);
                if ($fk_table != '') {
                   $itemtype   = getItemTypeForTable($fk_table);
@@ -959,6 +960,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                break;
             case "int(11)":
             case "int":
+            case "int unsigned":
                if ($tmp != '') {
                   $option['datatype'] = 'dropdown';
                } else {
