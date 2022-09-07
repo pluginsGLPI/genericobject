@@ -51,7 +51,7 @@ $GO_FIELDS['otherserial']['autoname']   = true;
 $GO_FIELDS['comment']['name']       = __("Comments");
 $GO_FIELDS['comment']['field']      = 'comment';
 $GO_FIELDS['comment']['input_type'] = 'multitext';
-$GO_FIELDS['gestion']['colums']     = '3'; //[CRI] : colums - Add colspan on formulary			 			   
+$GO_FIELDS['comment']['colums']     = '3'; //[CRI] : colums - Add colspan on formulary			 			   
 
 $GO_FIELDS['other']['name']         = __("Others");
 $GO_FIELDS['other']['input_type']   = 'text';
@@ -76,8 +76,6 @@ $GO_FIELDS['url']['datatype']   = 'weblink';
 $GO_FIELDS['types_id']['name']          = __("Type");
 $GO_FIELDS['types_id']['linkfield']     = 'type';
 $GO_FIELDS['types_id']['input_type']    = 'dropdown';
-// The 'isolated' dropdown type will create a isolated table for each type that will be assigned
-// with this field.
 $GO_FIELDS['types_id']['dropdown_type'] = 'isolated';
 
 $GO_FIELDS['models_id']['name']          = __("Model");
