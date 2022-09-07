@@ -51,6 +51,7 @@ $GO_FIELDS['otherserial']['autoname']   = true;
 $GO_FIELDS['comment']['name']       = __("Comments");
 $GO_FIELDS['comment']['field']      = 'comment';
 $GO_FIELDS['comment']['input_type'] = 'multitext';
+$GO_FIELDS['gestion']['colums']     = '3'; //[CRI] : colums - Add colspan on formulary			 			   
 
 $GO_FIELDS['other']['name']         = __("Others");
 $GO_FIELDS['other']['input_type']   = 'text';
@@ -147,3 +148,14 @@ $GO_FIELDS['contact_num']['input_type'] = 'text';
 $GO_FIELDS['groups_id_tech']['name']       = __("Group in charge of the hardware");
 $GO_FIELDS['groups_id_tech']['input_type'] = 'dropdown';
 $GO_FIELDS['groups_id_tech']['condition']  = ['is_assign' => 1];
+
+//*****//
+// INICIO [CRI] : section - Add section on formulary
+//*****//	
+$GO_FIELDS['section']['name']       = __("Example secction");
+$GO_FIELDS['section']['field']      = 'sectionRow';
+$GO_FIELDS['section']['input_type'] = 'sectionRow';
+$GO_FIELDS['section']['colums']     = '4'; 
+//*****//
+// FINAL [CRI] : section - Add section on formulary
+//*****//	

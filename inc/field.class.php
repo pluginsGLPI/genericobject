@@ -393,6 +393,15 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'decimal' :
                $query .= "DECIMAL(20,4) NOT NULL DEFAULT '0.0000'";
                break;
+            //*****//
+            // INICIO [CRI] : section - Add section on formulary
+            //*****//				   
+            case 'sectionRow' :
+               $query .= "VARCHAR(45) NULL DEFAULT 'Section'";
+               break;	
+            //*****//
+            // FINAL [CRI] : section - Add section on formulary
+            //*****//	               
          }
          if ($after) {
             $query.=" AFTER `$after`";

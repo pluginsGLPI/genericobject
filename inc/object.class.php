@@ -591,145 +591,218 @@ class PluginGenericobjectObject extends CommonDBTM {
 
       $searchoption  = PluginGenericobjectField::getFieldOptions($name, get_called_class());
 
+      $this->countColumns($searchoption); // [CRI] : section - Add section on formulary
+
       if (!empty($searchoption)
          && !in_array($name, self::getFieldsToHide())) {
 
-         if (isset($searchoption['input_type']) && 'emptyspace' === $searchoption['input_type']) {
-            $searchoption['name'] = "&nbsp;";
-            $description['Type'] = 'emptyspace';
-         }
+         //*****//
+         // INICIO [CRI] : section - Add section on formulary
+         //*****//	
+ 
+	      if ($this->colums["field"]=="sectionRow") { 
 
-         $this->startColumn();
-         echo $searchoption['name'];
-         if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
-            echo "*&nbsp;";
-         }
-         $this->endColumn();
-         $this->startColumn();
+            $this->startColumn();
+            echo $searchoption['name'];	
+            $this->endColumn();
 
-         // Keep only main column type by removing anything that is preceded by a space (e.g. " unsigned")
-         // or a parenthesis (e.g. "(255)").
-         $column_type = preg_replace('/[ (].+$/', '', $description['Type']);
-         switch ($column_type) {
-            case "int":
-               $fk_table = getTableNameForForeignKeyField($name);
-               if ($fk_table != '') {
-                  $itemtype   = getItemTypeForTable($fk_table);
-                  $dropdown   = new $itemtype();
-                  $parameters = ['name' => $name, 'value' => $value, 'comments' => true];
-                  if ($dropdown->isEntityAssign()) {
-                     $parameters["entity"] = $this->fields['entities_id'];
-                  }
-                  if ($dropdown->maybeRecursive()) {
-                     $parameters['entity_sons'] = true;
-                  }
-                  if (isset($searchoption['condition'])) {
-                     $parameters['condition'] = $searchoption['condition'];
-                  }
-                  if ($dropdown instanceof User) {
-                     $parameters['entity'] = $this->fields["entities_id"];
-                     $parameters['right'] = 'all';
-                     User::dropdown($parameters);
+         } else {
+         
+         //*****//
+         // FINAL [CRI] : section - Add section on formulary
+         //*****//	 
+
+            if (isset($searchoption['input_type']) && 'emptyspace' === $searchoption['input_type']) {
+               $searchoption['name'] = "&nbsp;";
+               $description['Type'] = 'emptyspace';
+            }
+
+            $this->colums["field"] = ""; //[CRI] : colums - Add colspan on formulary
+
+            $this->startColumn();
+            echo $searchoption['name'];
+            if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
+               echo "*&nbsp;";
+            }
+            $this->endColumn();
+            $this->colums["field"] = $searchoption['name']; //[CRI] : colums - Add colspan on formulary
+            $this->startColumn();
+
+            // Keep only main column type by removing anything that is preceded by a space (e.g. " unsigned")
+            // or a parenthesis (e.g. "(255)").
+            $column_type = preg_replace('/[ (].+$/', '', $description['Type']);
+            switch ($column_type) {
+               case "int":
+                  $fk_table = getTableNameForForeignKeyField($name);
+                  if ($fk_table != '') {
+                     $itemtype   = getItemTypeForTable($fk_table);
+                     $dropdown   = new $itemtype();
+                   //$parameters = ['name' => $name, 'value' => $value, 'comments' => true];
+                     $parameters = ['name' => $name, 'value' => $value, 'comments' => true, 'width' => "88%"]; //[CRI] : colums - Add colspan on formulary			 				  
+                     if ($dropdown->isEntityAssign()) {
+                        $parameters["entity"] = $this->fields['entities_id'];
+                     }
+                     if ($dropdown->maybeRecursive()) {
+                        $parameters['entity_sons'] = true;
+                     }
+                     if (isset($searchoption['condition'])) {
+                        $parameters['condition'] = $searchoption['condition'];
+                     }
+                     if ($dropdown instanceof User) {
+                        $parameters['entity'] = $this->fields["entities_id"];
+                        $parameters['right'] = 'all';
+                        User::dropdown($parameters);
+                     } else {
+                        Dropdown::show($itemtype, $parameters);
+                     }
                   } else {
-                     Dropdown::show($itemtype, $parameters);
+                     $min = $max = $step = 0;
+                     if (isset($searchoption['min'])) {
+                        $min = $searchoption['min'];
+                     } else {
+                        $min = 0;
+                     }
+                     if (isset($searchoption['max'])) {
+                        $max = $searchoption['max'];
+                     } else {
+                        $max = 100;
+                     }
+                     if (isset($searchoption['step'])) {
+                        $step = $searchoption['step'];
+                     } else {
+                        $step = 1;
+                     }
+                     Dropdown::showNumber(
+                        $name, [
+                           'value'  => $value,
+                           'min'    => $min,
+                           'max'    => $max,
+                           'step'   => $step
+                        ]
+                     );
                   }
-               } else {
-                  $min = $max = $step = 0;
-                  if (isset($searchoption['min'])) {
-                     $min = $searchoption['min'];
-                  } else {
-                     $min = 0;
-                  }
-                  if (isset($searchoption['max'])) {
-                     $max = $searchoption['max'];
-                  } else {
-                     $max = 100;
-                  }
-                  if (isset($searchoption['step'])) {
-                     $step = $searchoption['step'];
-                  } else {
-                     $step = 1;
-                  }
-                  Dropdown::showNumber(
-                     $name, [
-                        'value'  => $value,
-                        'min'    => $min,
-                        'max'    => $max,
-                        'step'   => $step
-                     ]
-                  );
-               }
-               break;
-
-            case "tinyint":
-               Dropdown::showYesNo($name, $value);
-               break;
-
-            case "varchar":
-               if (isset($searchoption['autoname']) && $searchoption['autoname']) {
-                  $objectName = autoName($this->fields[$name], $name, ($template === "newcomp"),
-                                         $this->getType(), $this->fields["entities_id"]);
-               } else {
-                   $objectName = $this->fields[$name];
-               }
-               echo Html::input(
-                  $name,
-                  [
-                     'value' => $objectName,
-                  ]
-               );
-               break;
-
-            case "longtext":
-            case "text":
-               echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value .
-                     "</textarea>";
-               break;
-
-            case "emptyspace":
-               echo '&nbsp;';
-               break;
-
-            case "date":
-                  Html::showDateField(
-                     $name, [
-                        'value'        => $value,
-                        'maybeempty'   => true,
-                        'canedit'      => true
-                     ]
-                  );
                   break;
 
-            case "datetime":
-            case "timestamp":
-                  Html::showDateTimeField(
-                     $name, [
-                        'value'        => $value,
-                        'timestep'     => true,
-                        'maybeempty'   => true
+               case "tinyint":
+                  Dropdown::showYesNo($name, $value);
+                  break;
+
+               case "varchar":
+                  if (isset($searchoption['autoname']) && $searchoption['autoname']) {
+                     $objectName = autoName($this->fields[$name], $name, ($template === "newcomp"),
+                                          $this->getType(), $this->fields["entities_id"]);
+                  } else {
+                     $objectName = $this->fields[$name];
+                  }
+                  echo Html::input(
+                     $name,
+                     [
+                        'value'  => $objectName,
+                        'option' => 'style="width:95%"', //[CRI] : colums - Add colspan on formulary
                      ]
                   );
                   break;
 
-            case "float":
-            case 'decimal':
-               echo "<input type='number' name='$name' value='$value' step='any' />";
-               break;
-
-            default:
-                  echo "<input type='text' name='$name' value='$value'>";
+               case "longtext":
+               case "text":
+                  /*
+                  echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value .
+                        "</textarea>";
+                  */
+                  echo "<textarea cols='40' style='width: 99%;' rows='4' name='" . $name . "'>" . $value . 
+                  "</textarea>"; //[CRI] : colums - Add colspan on formulary                        
                   break;
 
+               case "emptyspace":
+                  echo '&nbsp;';
+                  break;
+
+               case "date":
+                     Html::showDateField(
+                        $name, [
+                           'value'        => $value,
+                           'maybeempty'   => true,
+                           'canedit'      => true
+                        ]
+                     );
+                     break;
+
+               case "datetime":
+               case "timestamp":
+                     Html::showDateTimeField(
+                        $name, [
+                           'value'        => $value,
+                           'timestep'     => true,
+                           'maybeempty'   => true
+                        ]
+                     );
+                     break;
+
+               case "float":
+               case 'decimal':
+                  echo "<input type='number' name='$name' value='$value' step='any' />";
+                  break;
+
+               default:
+                     echo "<input type='text' name='$name' value='$value'>";
+                     break;
+
+            }
+            $this->endColumn();
          }
-         $this->endColumn();
+
       }
    }
 
-
+   /**
+   * INICIO [CRI] : Column number of the field, Check that the colum's number is not over 4
+   **/
+   function countColumns($searchoption) {
+	   
+      if (isset($searchoption["input_type"])) { 
+         $this->colums["input_type"] = $searchoption["input_type"]; 
+      } else { 
+         $this->colums["input_type"] = ""; 
+      }
+   
+      if (isset($searchoption["field"])) {
+         $this->colums["field"] = $searchoption["field"];
+      } else {
+         $this->colums["field"] = "";			 
+      }
+      
+      if ((isset($searchoption["field"])) and ($searchoption["field"]=="sectionRow")) {	
+         if (isset($searchoption["colums"])) {
+            if ($searchoption["colums"]>4) {
+               $this->colums["number"]=4; 
+            } else {
+               $this->colums["number"]=$searchoption["colums"]; 
+            }	
+         } else {
+            $this->colums["number"]=4;
+         }
+      } else {
+         
+         if (isset($searchoption["colums"])) { 
+            if ($searchoption["colums"]>3){
+               $this->colums["number"]=3; 
+            } else {
+               $this->colums["number"]=$searchoption["colums"]; 	
+            }
+         } else { 
+            $this->colums["number"]=1;  
+         } 
+      }
+    //echo $this->colums["number"]." ".$this->colums["field"]." ".$this->colums["input_type"]."<br>";
+   }
+   
+   /**
+   * FINAL [CRI] : Column number of the field, Check that the colum's number is not over 4
+   **/
 
    /**
    * Add a new column
-   **/
+   **//*
    function startColumn() {
       if ($this->cpt == 0) {
          echo "<tr class='tab_bg_1'>";
@@ -738,12 +811,68 @@ class PluginGenericobjectObject extends CommonDBTM {
       echo "<td>";
       $this->cpt++;
    }
+*/
 
+   //*****//
+   // INICIO [CRI] : Add a new column
+   //*****//	
 
+   function startColumn() {
+	  
+      $field=$this->colums["field"];
+      if (empty($field)){
+         $colums=1;
+         $top=4-($this->cpt + $this->colums["number"] + 1);
+         if ($top<0){		  
+            $top=$this->cpt-4;
+         }	  
+      } else {
+         $colums=$this->colums["number"];
+         $top=4-($this->cpt + $colums);
+      }
+          
+      if ($field=="sectionRow") { 
+         $label="th"; $style="style='border-top: 5px solid white; border-bottom: 5px solid white;'"; 
+      } else { 
+         $label="td"; $style=""; 
+      }
+      
+      if ($colums>1){ 
+        if ($this->colums["input_type"]=="dropdown")  {	$colums=1; }	 		 
+        $colspan=" colspan = '".$colums."'";	
+      } else {
+        $colspan="";		
+      }	
+       
+      if ($top<0) {		 
+        echo "<td colspan='".abs($top)."'>";
+      //echo "ff4 - (".$this->cpt." + ".$this->colums["number"]." + 1) =".$top." colums ".$colums;
+        $this->cpt=4;
+        $this->endColumn();
+        $this->startColumn();
+
+      } else {
+            
+         if ($this->cpt == 0) {
+            echo "<tr class='tab_bg_1'>";
+         }
+ 
+         echo "<$label $style $colspan>";
+
+         if ((empty($field)) and ($colums>1)){} else { 
+            $this->cpt=$this->cpt+$colums;  
+         }	  
+ 
+      }
+   }
+    
+    //*****//
+    // FINAL [CRI] : Add a new column
+    //*****//
 
    /**
    * End a column
-   **/
+   **//*
    function endColumn() {
       echo "</td>";
 
@@ -753,8 +882,37 @@ class PluginGenericobjectObject extends CommonDBTM {
       }
 
    }
+*/
 
+   //*****//
+   // INICIO [CRI] : End a column
+   //*****//
 
+   function endColumn() {
+	
+      $input_type=$this->colums["input_type"];	   
+      $field=$this->colums["field"];
+      $colums=$this->colums["number"];	
+      
+      if ($field=="sectionRow") { $label="th"; } else { $label="td"; }
+      
+         if ((!empty($field)) and ($input_type=="dropdown") and ($colums>1))  {	
+            echo "</$label><$label colspan = '2'>";
+            $this->cpt=4;
+         }
+         
+         echo "</$label>";
+   
+         if ($this->cpt == 4) {
+            echo "</tr>";
+            $this->cpt = 0;
+         }
+   
+      }
+   
+   //*****//
+   // FINAL [CRI] : End a column
+   //*****//
 
    /**
    * Close a column
