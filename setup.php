@@ -106,7 +106,7 @@ $go_autoloader->register();
  */
 function plugin_init_genericobject() {
    global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS;
+          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $CFG_GLPI;
 
    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment"];
 
@@ -186,6 +186,22 @@ function plugin_init_genericobject() {
          PluginGenericobjectType::getType(),
          'getTypesForFormcreator'
       ];
+
+      // Add every genericobject item's to the list of itemtypes for which the
+      // impact analysis can be enabled
+      foreach ((new PluginGenericobjectType())->find([]) as $row) {
+         if (empty($row['impact_icon'])) {
+            $icon = ""; // Will fallback to default impact icon
+         } else {
+            $icon = PluginGenericobjectType::getImpactIconFileStoragePath(
+               $row['impact_icon'],
+               $row['itemtype'],
+               true
+            ) ?? "";
+         }
+
+         $CFG_GLPI['impact_asset_types'][$row['itemtype']] = $icon;
+      }
    }
 }
 

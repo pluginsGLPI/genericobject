@@ -114,6 +114,12 @@ function plugin_genericobject_install() {
          or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
    }
 
+   // Add icon directory
+   $icons_dir = GLPI_PLUGIN_DOC_DIR . '/genericobject/impact_icons/';
+   if (!is_dir($icons_dir)) {
+      mkdir($icons_dir);
+   }
+
    //Init plugin & types
    plugin_init_genericobject();
 
