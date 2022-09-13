@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 13:16+0000\n"
+"POT-Creation-Date: 2022-09-13 13:58+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2015\n"
 "Language-Team: Romanian (Romania) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ro_RO/)\n"
@@ -30,15 +30,15 @@ msgstr "UN tip cu acelasi nume exista deja"
 msgid "Add new field"
 msgstr "Add camp nou"
 
-#: inc/type.class.php:537
+#: inc/type.class.php:647
 msgid "Behaviour"
 msgstr "Comportament"
 
-#: index.php:71 front/familylist.php:40
+#: front/familylist.php:40 index.php:71
 msgid "Empty family"
 msgstr "Familie vida"
 
-#: inc/typefamily.class.php:39 inc/type.class.php:383 inc/type.class.php:522
+#: inc/typefamily.class.php:39 inc/type.class.php:491 inc/type.class.php:632
 msgid "Family of type of objects"
 msgstr "Familia tipului de obiecte"
 
@@ -58,7 +58,11 @@ msgstr "Campuri asociate la obiect"
 msgid "General"
 msgstr "General"
 
-#: inc/type.class.php:478
+#: inc/type.class.php:737
+msgid "Icon (impact analysis)"
+msgstr ""
+
+#: inc/type.class.php:588
 msgid "Internal identifier"
 msgstr "Identificator intern"
 
@@ -66,7 +70,7 @@ msgstr "Identificator intern"
 msgid "Label"
 msgstr "Eticheta"
 
-#: inc/type.class.php:743
+#: inc/type.class.php:882
 msgid "Link to other objects"
 msgstr "Linck catre alte obiecte"
 
@@ -74,11 +78,11 @@ msgstr "Linck catre alte obiecte"
 msgid "Name in DB"
 msgstr "Nume in DB"
 
-#: inc/type.class.php:556
+#: inc/type.class.php:666
 msgid "Network connections"
 msgstr "Conexiuni retea"
 
-#: inc/object.class.php:553
+#: inc/object.class.php:562
 msgid "Object preview"
 msgstr "Previzualizeaza un obiect de acest tip"
 
@@ -86,13 +90,13 @@ msgstr "Previzualizeaza un obiect de acest tip"
 msgid "Objects"
 msgstr "Obiecte"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:295
-#: inc/type.class.php:430 inc/object_item.class.php:112 setup.php:220
+#: inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/familylist.php:36
+#: front/familylist.php:44 front/type.form.php:76 setup.php:231 index.php:61
 msgid "Objects management"
 msgstr "Managementul obiectelor"
 
-#: inc/type.class.php:1754
+#: inc/type.class.php:1892
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] ""
@@ -103,7 +107,7 @@ msgstr[2] ""
 msgid "Read-only field"
 msgstr ""
 
-#: inc/type.class.php:730
+#: inc/type.class.php:869
 msgid "Regenerate files"
 msgstr "Fisiere regenerate"
 
@@ -124,8 +128,8 @@ msgstr "Nume tip lipseste"
 msgid "Type name must be longer"
 msgstr ""
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Tipul obiectelor"
 
@@ -135,43 +139,43 @@ msgid ""
 msgstr "Tipurile 'camp', 'obiect', si 'tip' sunt rezervate.Va rugam alegeti altul"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2125
+#: inc/type.class.php:2261
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr ""
 
-#: inc/object.class.php:817
+#: inc/object.class.php:826
 msgid "You must configure rights to enable the preview"
 msgstr "Trebuie sa configurati drepturi pe acest obiect pentru a putea previzualiza"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2127
+#: inc/type.class.php:2263
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr ""
 
-#: inc/type.class.php:563
+#: inc/type.class.php:674
 msgid "geninventorynumber plugin"
 msgstr "geninventorynumber plugin"
 
-#: inc/type.class.php:561
+#: inc/type.class.php:672
 msgid "injection file plugin"
 msgstr "Plugin injectare fisiere"
 
-#: inc/type.class.php:565
+#: inc/type.class.php:676
 msgid "item's uninstallation plugin"
 msgstr "Plugin dezinstalare elemente"
 
-#: inc/type.class.php:564
+#: inc/type.class.php:675
 msgid "order plugin"
 msgstr "Plugin  gestiune comenzi"
 
-#: inc/type.class.php:566
+#: inc/type.class.php:677
 msgid "simcard plugin"
 msgstr ""
 
-#: inc/type.class.php:567
+#: inc/type.class.php:678
 msgid "treeview plugin"
 msgstr ""

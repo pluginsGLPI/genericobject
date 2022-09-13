@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 13:16+0000\n"
+"POT-Creation-Date: 2022-09-13 13:58+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/hr_HR/)\n"
@@ -30,15 +30,15 @@ msgstr "Jedna vrsta s istim imenom već postoji"
 msgid "Add new field"
 msgstr "Dodaj novo polje"
 
-#: inc/type.class.php:537
+#: inc/type.class.php:647
 msgid "Behaviour"
 msgstr "Ponašanje"
 
-#: index.php:71 front/familylist.php:40
+#: front/familylist.php:40 index.php:71
 msgid "Empty family"
 msgstr "Prazna obitelji"
 
-#: inc/typefamily.class.php:39 inc/type.class.php:383 inc/type.class.php:522
+#: inc/typefamily.class.php:39 inc/type.class.php:491 inc/type.class.php:632
 msgid "Family of type of objects"
 msgstr "Obitelj vrste objekata"
 
@@ -58,7 +58,11 @@ msgstr "Polja povezana s objektom"
 msgid "General"
 msgstr "Opće"
 
-#: inc/type.class.php:478
+#: inc/type.class.php:737
+msgid "Icon (impact analysis)"
+msgstr ""
+
+#: inc/type.class.php:588
 msgid "Internal identifier"
 msgstr "Interni identifikator"
 
@@ -66,7 +70,7 @@ msgstr "Interni identifikator"
 msgid "Label"
 msgstr "Oznaka"
 
-#: inc/type.class.php:743
+#: inc/type.class.php:882
 msgid "Link to other objects"
 msgstr "Poveži s drugim objektima"
 
@@ -74,11 +78,11 @@ msgstr "Poveži s drugim objektima"
 msgid "Name in DB"
 msgstr "Ime u bazi podataka"
 
-#: inc/type.class.php:556
+#: inc/type.class.php:666
 msgid "Network connections"
 msgstr "Mrežne veze"
 
-#: inc/object.class.php:553
+#: inc/object.class.php:562
 msgid "Object preview"
 msgstr "Pregled objekta"
 
@@ -86,13 +90,13 @@ msgstr "Pregled objekta"
 msgid "Objects"
 msgstr "Objekti"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:295
-#: inc/type.class.php:430 inc/object_item.class.php:112 setup.php:220
+#: inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/familylist.php:36
+#: front/familylist.php:44 front/type.form.php:76 setup.php:231 index.php:61
 msgid "Objects management"
 msgstr "Upravljanje objektima"
 
-#: inc/type.class.php:1754
+#: inc/type.class.php:1892
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] "Drugo"
@@ -103,7 +107,7 @@ msgstr[2] "Drugi"
 msgid "Read-only field"
 msgstr "Polje samo-za-čitanje"
 
-#: inc/type.class.php:730
+#: inc/type.class.php:869
 msgid "Regenerate files"
 msgstr "Ponovo generiraj datoteke"
 
@@ -124,54 +128,54 @@ msgstr "Ime vrste nedostaje"
 msgid "Type name must be longer"
 msgstr "Ime vrste mora biti duže"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Vrste objekata"
 
 #: inc/type.class.php:171
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "„Polje”, „objekt” i „vrsta” su rezervirane vrste. Odaberi neku drugu"
+msgstr "„Polje”, „objekt” i „vrsta” su rezervirane vrste. Odaberi jednu drugu"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2125
+#: inc/type.class.php:2261
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Nije moguće učitati klasu %1$s."
 
-#: inc/object.class.php:817
+#: inc/object.class.php:826
 msgid "You must configure rights to enable the preview"
 msgstr "Za aktiviranje pregleda moraš konfigurirati prava"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2127
+#: inc/type.class.php:2263
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr "U bazi podataka vjerojatno imaš smeće za ovaj dodatak i nedostaju datoteke u %1$s"
+msgstr "U bazi podataka vjerojatno imaš nepotrebne podatke za ovaj dodatak i nedostaju datoteke za %1$s"
 
-#: inc/type.class.php:563
+#: inc/type.class.php:674
 msgid "geninventorynumber plugin"
-msgstr "Dodatak za generiranje inventarskog broja"
+msgstr "dodatak za generiranje inventarskog broja"
 
-#: inc/type.class.php:561
+#: inc/type.class.php:672
 msgid "injection file plugin"
-msgstr "Dodatak za umetanje podataka"
+msgstr "dodatak za umetanje podataka"
 
-#: inc/type.class.php:565
+#: inc/type.class.php:676
 msgid "item's uninstallation plugin"
-msgstr "Dodatak za deinstaliranje predmeta"
+msgstr "dodatak za deinstaliranje predmeta"
 
-#: inc/type.class.php:564
+#: inc/type.class.php:675
 msgid "order plugin"
-msgstr "Dodatak za naruđbe"
+msgstr "dodatak za naruđbe"
 
-#: inc/type.class.php:566
+#: inc/type.class.php:677
 msgid "simcard plugin"
-msgstr "Dodatak za SIM kartice"
+msgstr "dodatak za SIM kartice"
 
-#: inc/type.class.php:567
+#: inc/type.class.php:678
 msgid "treeview plugin"
-msgstr "Dodatak za stablasti prikaz"
+msgstr "dodatak za stablasti prikaz"

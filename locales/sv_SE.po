@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 13:16+0000\n"
+"POT-Creation-Date: 2022-09-13 13:58+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: jchan <jhornqvist@gmail.com>, 2018\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/sv_SE/)\n"
@@ -30,15 +30,15 @@ msgstr "Typnamnet existerar redan"
 msgid "Add new field"
 msgstr "Lägg till nytt fält"
 
-#: inc/type.class.php:537
+#: inc/type.class.php:647
 msgid "Behaviour"
 msgstr "Beteende"
 
-#: index.php:71 front/familylist.php:40
+#: front/familylist.php:40 index.php:71
 msgid "Empty family"
 msgstr "Tom familj"
 
-#: inc/typefamily.class.php:39 inc/type.class.php:383 inc/type.class.php:522
+#: inc/typefamily.class.php:39 inc/type.class.php:491 inc/type.class.php:632
 msgid "Family of type of objects"
 msgstr "Ingår i typfamilj"
 
@@ -58,7 +58,11 @@ msgstr "Fält kopplade till tillgången"
 msgid "General"
 msgstr "Allmänt"
 
-#: inc/type.class.php:478
+#: inc/type.class.php:737
+msgid "Icon (impact analysis)"
+msgstr ""
+
+#: inc/type.class.php:588
 msgid "Internal identifier"
 msgstr "Internt namn"
 
@@ -66,7 +70,7 @@ msgstr "Internt namn"
 msgid "Label"
 msgstr "Etikett"
 
-#: inc/type.class.php:743
+#: inc/type.class.php:882
 msgid "Link to other objects"
 msgstr "Länka till andra tillgångar"
 
@@ -74,11 +78,11 @@ msgstr "Länka till andra tillgångar"
 msgid "Name in DB"
 msgstr "Namn i DB"
 
-#: inc/type.class.php:556
+#: inc/type.class.php:666
 msgid "Network connections"
 msgstr "Nätverksanslutningar"
 
-#: inc/object.class.php:553
+#: inc/object.class.php:562
 msgid "Object preview"
 msgstr "Förhandsgranska tillgång"
 
@@ -86,13 +90,13 @@ msgstr "Förhandsgranska tillgång"
 msgid "Objects"
 msgstr "Tillgångar"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:295
-#: inc/type.class.php:430 inc/object_item.class.php:112 setup.php:220
+#: inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/familylist.php:36
+#: front/familylist.php:44 front/type.form.php:76 setup.php:231 index.php:61
 msgid "Objects management"
 msgstr "Hantera tillgångar"
 
-#: inc/type.class.php:1754
+#: inc/type.class.php:1892
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] ""
@@ -102,7 +106,7 @@ msgstr[1] ""
 msgid "Read-only field"
 msgstr "Skrivskyddat fält"
 
-#: inc/type.class.php:730
+#: inc/type.class.php:869
 msgid "Regenerate files"
 msgstr "Skapa filer på nytt"
 
@@ -123,8 +127,8 @@ msgstr "Typnamn saknas"
 msgid "Type name must be longer"
 msgstr "Typnamnet måste vara längre"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Typ av tillgång"
 
@@ -134,43 +138,43 @@ msgid ""
 msgstr "Typnamnen 'fält, 'objekt' och 'typ' är reserverade av systemet. Var vänlig välj ett annat namn."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2125
+#: inc/type.class.php:2261
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Kunde inte läsa in klass %1$s-"
 
-#: inc/object.class.php:817
+#: inc/object.class.php:826
 msgid "You must configure rights to enable the preview"
 msgstr "Du måste konfigurera rättigheter för att aktivera förhandsgranskning"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2127
+#: inc/type.class.php:2263
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr "Du har troligtvis skräpdata i databasen för denna plug-in och saknar filer i %1$s"
 
-#: inc/type.class.php:563
+#: inc/type.class.php:674
 msgid "geninventorynumber plugin"
 msgstr "Geninventorynumber plug-in"
 
-#: inc/type.class.php:561
+#: inc/type.class.php:672
 msgid "injection file plugin"
 msgstr "Injection file plug-in"
 
-#: inc/type.class.php:565
+#: inc/type.class.php:676
 msgid "item's uninstallation plugin"
 msgstr "Item's uninstallation plug-in"
 
-#: inc/type.class.php:564
+#: inc/type.class.php:675
 msgid "order plugin"
 msgstr "Order plug-in"
 
-#: inc/type.class.php:566
+#: inc/type.class.php:677
 msgid "simcard plugin"
 msgstr "Simcard plug-in"
 
-#: inc/type.class.php:567
+#: inc/type.class.php:678
 msgid "treeview plugin"
 msgstr ""

@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# SeongHyeon Cho <jaymz9634@gmail.com>, 2020
+# 조성현 <jaymz9634@gmail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 13:16+0000\n"
+"POT-Creation-Date: 2022-09-13 13:58+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
-"Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>, 2020\n"
+"Last-Translator: 조성현 <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,15 +30,15 @@ msgstr "유형이 이미 같은 이름으로 존재합니다"
 msgid "Add new field"
 msgstr "새 항목 추가"
 
-#: inc/type.class.php:537
+#: inc/type.class.php:647
 msgid "Behaviour"
 msgstr "동작"
 
-#: index.php:71 front/familylist.php:40
+#: front/familylist.php:40 index.php:71
 msgid "Empty family"
 msgstr "빈 집단"
 
-#: inc/typefamily.class.php:39 inc/type.class.php:383 inc/type.class.php:522
+#: inc/typefamily.class.php:39 inc/type.class.php:491 inc/type.class.php:632
 msgid "Family of type of objects"
 msgstr "객체의 유형 집단"
 
@@ -58,7 +58,11 @@ msgstr "객체에 연관된 항목"
 msgid "General"
 msgstr "일반"
 
-#: inc/type.class.php:478
+#: inc/type.class.php:737
+msgid "Icon (impact analysis)"
+msgstr ""
+
+#: inc/type.class.php:588
 msgid "Internal identifier"
 msgstr "내부 식별자"
 
@@ -66,7 +70,7 @@ msgstr "내부 식별자"
 msgid "Label"
 msgstr "라벨"
 
-#: inc/type.class.php:743
+#: inc/type.class.php:882
 msgid "Link to other objects"
 msgstr "다른 객체들과 연결"
 
@@ -74,11 +78,11 @@ msgstr "다른 객체들과 연결"
 msgid "Name in DB"
 msgstr "DB에서의 이름"
 
-#: inc/type.class.php:556
+#: inc/type.class.php:666
 msgid "Network connections"
 msgstr "네트워크 연결"
 
-#: inc/object.class.php:553
+#: inc/object.class.php:562
 msgid "Object preview"
 msgstr "객체 미리보기"
 
@@ -86,13 +90,13 @@ msgstr "객체 미리보기"
 msgid "Objects"
 msgstr "객체"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:295
-#: inc/type.class.php:430 inc/object_item.class.php:112 setup.php:220
+#: inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/familylist.php:36
+#: front/familylist.php:44 front/type.form.php:76 setup.php:231 index.php:61
 msgid "Objects management"
 msgstr "객체 관리"
 
-#: inc/type.class.php:1754
+#: inc/type.class.php:1892
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] ""
@@ -101,7 +105,7 @@ msgstr[0] ""
 msgid "Read-only field"
 msgstr "읽기-전용 항목"
 
-#: inc/type.class.php:730
+#: inc/type.class.php:869
 msgid "Regenerate files"
 msgstr "파일 재생성"
 
@@ -122,8 +126,8 @@ msgstr "유형 이름이 누락되었습니다"
 msgid "Type name must be longer"
 msgstr "유형 이름은 더 길어야 합니다"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "객체 유형"
 
@@ -133,43 +137,43 @@ msgid ""
 msgstr "유형 'field', 'object' 그리고 'type'은 금지되었습니다. 다른 것을 선택해 주세요"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2125
+#: inc/type.class.php:2261
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "클래스 %1$s을 불러올 수 없습니다."
 
-#: inc/object.class.php:817
+#: inc/object.class.php:826
 msgid "You must configure rights to enable the preview"
 msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2127
+#: inc/type.class.php:2263
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr "이 플러그인에 대한 데이터베이스 내에 개비지 데이터가 있거나 %1$s내의 파일이 누락된 것 같습니다"
 
-#: inc/type.class.php:563
+#: inc/type.class.php:674
 msgid "geninventorynumber plugin"
 msgstr "geninventorynumber 플러그인"
 
-#: inc/type.class.php:561
+#: inc/type.class.php:672
 msgid "injection file plugin"
 msgstr "파일 플러그인 삽입"
 
-#: inc/type.class.php:565
+#: inc/type.class.php:676
 msgid "item's uninstallation plugin"
 msgstr "품목 제거 플러그인"
 
-#: inc/type.class.php:564
+#: inc/type.class.php:675
 msgid "order plugin"
 msgstr "order 플러그인"
 
-#: inc/type.class.php:566
+#: inc/type.class.php:677
 msgid "simcard plugin"
 msgstr "simcard 플러그인"
 
-#: inc/type.class.php:567
+#: inc/type.class.php:678
 msgid "treeview plugin"
 msgstr "treeview 플러그인"

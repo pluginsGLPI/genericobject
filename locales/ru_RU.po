@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 13:16+0000\n"
+"POT-Creation-Date: 2022-09-13 13:58+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Alexey Petukhov <lexx015@gmail.com>, 2015,2021\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/ru_RU/)\n"
@@ -31,15 +31,15 @@ msgstr "Тип с таким именем уже есть"
 msgid "Add new field"
 msgstr "Добавить новое поле"
 
-#: inc/type.class.php:537
+#: inc/type.class.php:647
 msgid "Behaviour"
 msgstr "Взаимодействия"
 
-#: index.php:71 front/familylist.php:40
+#: front/familylist.php:40 index.php:71
 msgid "Empty family"
 msgstr "Пустая группа"
 
-#: inc/typefamily.class.php:39 inc/type.class.php:383 inc/type.class.php:522
+#: inc/typefamily.class.php:39 inc/type.class.php:491 inc/type.class.php:632
 msgid "Family of type of objects"
 msgstr "Группа типов объектов"
 
@@ -59,7 +59,11 @@ msgstr "Поля связаны с объектом"
 msgid "General"
 msgstr ""
 
-#: inc/type.class.php:478
+#: inc/type.class.php:737
+msgid "Icon (impact analysis)"
+msgstr ""
+
+#: inc/type.class.php:588
 msgid "Internal identifier"
 msgstr "Внутренний идентификатор"
 
@@ -67,7 +71,7 @@ msgstr "Внутренний идентификатор"
 msgid "Label"
 msgstr "Наименование"
 
-#: inc/type.class.php:743
+#: inc/type.class.php:882
 msgid "Link to other objects"
 msgstr "Связать с другим объектом"
 
@@ -75,11 +79,11 @@ msgstr "Связать с другим объектом"
 msgid "Name in DB"
 msgstr "Имя в БД"
 
-#: inc/type.class.php:556
+#: inc/type.class.php:666
 msgid "Network connections"
 msgstr "Сетевые соединения"
 
-#: inc/object.class.php:553
+#: inc/object.class.php:562
 msgid "Object preview"
 msgstr "Предпросмотр"
 
@@ -87,13 +91,13 @@ msgstr "Предпросмотр"
 msgid "Objects"
 msgstr "Объекты"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:295
-#: inc/type.class.php:430 inc/object_item.class.php:112 setup.php:220
+#: inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/familylist.php:36
+#: front/familylist.php:44 front/type.form.php:76 setup.php:231 index.php:61
 msgid "Objects management"
 msgstr "Управление объектами"
 
-#: inc/type.class.php:1754
+#: inc/type.class.php:1892
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] ""
@@ -105,7 +109,7 @@ msgstr[3] ""
 msgid "Read-only field"
 msgstr "Поле только для чтения"
 
-#: inc/type.class.php:730
+#: inc/type.class.php:869
 msgid "Regenerate files"
 msgstr ""
 
@@ -126,8 +130,8 @@ msgstr "Название типа отсутствует"
 msgid "Type name must be longer"
 msgstr "Название типа должно быть длиннее"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Тип объектов"
 
@@ -137,43 +141,43 @@ msgid ""
 msgstr "Типы 'field', 'object' и 'type' зарезервированы. Выберите другие."
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2125
+#: inc/type.class.php:2261
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr ""
 
-#: inc/object.class.php:817
+#: inc/object.class.php:826
 msgid "You must configure rights to enable the preview"
 msgstr "Вы должны настроить права для предпросмотра"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2127
+#: inc/type.class.php:2263
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
 msgstr ""
 
-#: inc/type.class.php:563
+#: inc/type.class.php:674
 msgid "geninventorynumber plugin"
 msgstr ""
 
-#: inc/type.class.php:561
+#: inc/type.class.php:672
 msgid "injection file plugin"
 msgstr ""
 
-#: inc/type.class.php:565
+#: inc/type.class.php:676
 msgid "item's uninstallation plugin"
 msgstr ""
 
-#: inc/type.class.php:564
+#: inc/type.class.php:675
 msgid "order plugin"
 msgstr ""
 
-#: inc/type.class.php:566
+#: inc/type.class.php:677
 msgid "simcard plugin"
 msgstr ""
 
-#: inc/type.class.php:567
+#: inc/type.class.php:678
 msgid "treeview plugin"
 msgstr ""
