@@ -187,11 +187,6 @@ function plugin_init_genericobject() {
          'getTypesForFormcreator'
       ];
 
-      // Add icon folder
-      if (!file_exists(GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/")) {
-         mkdir(GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/");
-      }
-
       // Add every genericobject item's to the list of itemtypes for which the
       // impact analysis can be enabled
       foreach ((new PluginGenericobjectType())->find([]) as $row) {

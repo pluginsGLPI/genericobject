@@ -260,6 +260,12 @@ class PluginGenericobjectType extends CommonDBTM {
       }
 
       // Move file and update input on success
+      $icons_dir = GLPI_PLUGIN_DOC_DIR . '/genericobject/impact_icons/';
+      if (!is_dir($icons_dir) && !mkdir($icons_dir)) {
+         trigger_error(sprintf('Unable to create "%s" directory.', $icons_dir), E_USER_WARNING);
+         return $input;
+      }
+
       $new_path = self::getImpactIconFileStoragePath(
          $icon_filename,
          $this->fields['itemtype']
