@@ -260,7 +260,6 @@ function plugin_genericobject_includeCommonFields($force = false) {
 
 
 function plugin_genericobject_includeLocalesGlobalFieldsIfNeeded($force = false) {
-   global $CFG_GLPI,$LANG;
    //Include user constants locales accessible for all itemtypes
 
    if (isset ($_SESSION["glpilanguage"])) {
