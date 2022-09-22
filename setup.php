@@ -249,7 +249,7 @@ function plugin_genericobject_includeCommonFields($force = false) {
    //Include user constants, that must be accessible for all itemtypes
    if (file_exists(GENERICOBJECT_FIELDS_PATH . "/field.constant.php")) {
       // Load locales
-      plugin_genericobject_includeCommonFieldsLocale($force);
+      plugin_genericobject_includeLocalesGlobalFieldsIfNeeded($force);
       if (!$force) {
          include_once ( GENERICOBJECT_FIELDS_PATH . "/field.constant.php");
       } else {
