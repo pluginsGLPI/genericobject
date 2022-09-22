@@ -265,12 +265,12 @@ function plugin_genericobject_includeLocalesGlobalFieldsIfNeeded($force = false)
 
    if (isset ($_SESSION["glpilanguage"])) {
       $locale_global_file ='field' . '.' . $_SESSION['glpilanguage'];
-      if (file_exists( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php")) {
+      if (file_exists( GENERICOBJECT_LOCALES_PATH . "/$locale_global_file.php")) {
          if(!$force) {
-            include_once ( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php");
+            include_once ( GENERICOBJECT_LOCALES_PATH . "/$locale_global_file.php");
          }
          else {
-            include ( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php");
+            include ( GENERICOBJECT_LOCALES_PATH . "/$locale_global_file.php");
          }         
       }
    } else {
