@@ -264,7 +264,7 @@ function plugin_genericobject_includeLocalesGlobalFieldsIfNeeded($force = false)
    //Include user constants locales accessible for all itemtypes
 
    if (isset ($_SESSION["glpilanguage"])) {
-      $locale_common_file ='field' . '.' . $_SESSION['glpilanguage'];
+      $locale_global_file ='field' . '.' . $_SESSION['glpilanguage'];
       if (file_exists( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php")) {
          if(!$force) {
             include_once ( GENERICOBJECT_LOCALES_PATH . "/$locale_common_file.php");
