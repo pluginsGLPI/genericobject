@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-13 13:58+0000\n"
-"PO-Revision-Date: 2022-09-13 13:58+0000\n"
+"POT-Creation-Date: 2022-09-29 14:43+0000\n"
+"PO-Revision-Date: 2022-09-29 14:43+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -33,7 +33,7 @@ msgstr "Add new field"
 msgid "Behaviour"
 msgstr "Behaviour"
 
-#: front/familylist.php:40 index.php:71
+#: index.php:71 front/familylist.php:40
 msgid "Empty family"
 msgstr "Empty family"
 
@@ -89,9 +89,9 @@ msgstr "Object preview"
 msgid "Objects"
 msgstr "Objects"
 
-#: inc/object_item.class.php:112 inc/profile.class.php:42
-#: inc/type.class.php:403 inc/type.class.php:538 front/familylist.php:36
-#: front/familylist.php:44 front/type.form.php:76 setup.php:231 index.php:61
+#: index.php:61 front/familylist.php:36 front/familylist.php:44
+#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:403
+#: inc/type.class.php:538 inc/object_item.class.php:112 setup.php:231
 msgid "Objects management"
 msgstr "Objects management"
 
@@ -126,8 +126,8 @@ msgstr "Type name is missing"
 msgid "Type name must be longer"
 msgstr "Type name must be longer"
 
-#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
-#: front/type.php:41
+#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
+#: inc/type.class.php:69
 msgid "Type of objects"
 msgstr "Type of objects"
 
