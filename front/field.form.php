@@ -30,7 +30,7 @@
 
 include ("../../../inc/includes.php");
 if (isset ($_POST["delete"])) {
-   if (isset($_POST["fields"]) && count($_POST["fields"] > 0 )) {
+   if (isset($_POST["fields"]) && count($_POST["fields"]) > 0 ) {
       $type = new PluginGenericobjectType();
       $type->getFromDB($_POST["id"]);
       $itemtype = $type->fields['itemtype'];
