@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 14:43+0000\n"
+"POT-Creation-Date: 2022-11-16 07:46+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Arthur Schaefer <arthur.r.schaefer@gmail.com>, 2022\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/pt_BR/)\n"
@@ -93,9 +93,9 @@ msgstr "Pré-visualização do objeto"
 msgid "Objects"
 msgstr "Objetos"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:403
-#: inc/type.class.php:538 inc/object_item.class.php:112 setup.php:231
+#: index.php:61 inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/type.form.php:76
+#: front/familylist.php:36 front/familylist.php:44 setup.php:231
 msgid "Objects management"
 msgstr "Gerenciamento de objetos"
 
@@ -114,8 +114,8 @@ msgstr "Campo apenas de leitura"
 msgid "Regenerate files"
 msgstr "Regerar arquivos"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commontreedropdown.form.php:39 front/commondropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "O menu suspenso solicitado não existe"
 
@@ -131,8 +131,8 @@ msgstr "O nome do tipo está faltando"
 msgid "Type name must be longer"
 msgstr "Nome do tipo deve ser maior"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Tipos de objetos"
 

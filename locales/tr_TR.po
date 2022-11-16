@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 14:43+0000\n"
+"POT-Creation-Date: 2022-11-16 07:46+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2022\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
@@ -90,9 +90,9 @@ msgstr "Nesne ön izlemesi"
 msgid "Objects"
 msgstr "Nesneler"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:403
-#: inc/type.class.php:538 inc/object_item.class.php:112 setup.php:231
+#: index.php:61 inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/type.form.php:76
+#: front/familylist.php:36 front/familylist.php:44 setup.php:231
 msgid "Objects management"
 msgstr "Nesne yönetimi"
 
@@ -110,8 +110,8 @@ msgstr "Salt okunur alan"
 msgid "Regenerate files"
 msgstr "Dosyaları yeniden oluştur"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commontreedropdown.form.php:39 front/commondropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "İstenen açılan kutu bulunamadı"
 
@@ -127,8 +127,8 @@ msgstr "Tür adı eksik"
 msgid "Type name must be longer"
 msgstr "Tür adı daha uzun olmalı"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Nesne türü"
 

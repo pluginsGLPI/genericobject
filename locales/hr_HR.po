@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 14:43+0000\n"
+"POT-Creation-Date: 2022-11-16 07:46+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/hr_HR/)\n"
@@ -60,7 +60,7 @@ msgstr "Opće"
 
 #: inc/type.class.php:737
 msgid "Icon (impact analysis)"
-msgstr ""
+msgstr "Ikona (analiza utjecaja)"
 
 #: inc/type.class.php:588
 msgid "Internal identifier"
@@ -90,9 +90,9 @@ msgstr "Pregled objekta"
 msgid "Objects"
 msgstr "Objekti"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:403
-#: inc/type.class.php:538 inc/object_item.class.php:112 setup.php:231
+#: index.php:61 inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/type.form.php:76
+#: front/familylist.php:36 front/familylist.php:44 setup.php:231
 msgid "Objects management"
 msgstr "Upravljanje objektima"
 
@@ -111,8 +111,8 @@ msgstr "Polje samo-za-čitanje"
 msgid "Regenerate files"
 msgstr "Ponovo generiraj datoteke"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commontreedropdown.form.php:39 front/commondropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "Traženi padajući popis ne postoji"
 
@@ -128,8 +128,8 @@ msgstr "Ime vrste nedostaje"
 msgid "Type name must be longer"
 msgstr "Ime vrste mora biti duže"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Vrste objekata"
 
@@ -162,7 +162,7 @@ msgstr "dodatak za generiranje inventarskog broja"
 
 #: inc/type.class.php:672
 msgid "injection file plugin"
-msgstr "dodatak za umetanje podataka"
+msgstr "dodatak za umetanje datoteka"
 
 #: inc/type.class.php:676
 msgid "item's uninstallation plugin"
