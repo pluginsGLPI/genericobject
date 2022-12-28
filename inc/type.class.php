@@ -81,11 +81,12 @@ class PluginGenericobjectType extends CommonDBTM {
    function getFromDBByType($itemtype) {
       global $DB;
 
-      $query  = "SELECT * FROM `" . getTableForItemType(__CLASS__) . "` " .
-                "WHERE `itemtype`='$itemtype'";
-      $result = $DB->query($query);
-      if ($DB->numrows($result) > 0) {
-         $this->fields = $DB->fetchArray($result);
+      $it = $DB->request([
+         'FROM'   => getTableForItemType(__CLASS__),
+         'WHERE'  => ['itemtype' => $itemtype]
+      ]);
+      if (count($it) > 0) {
+         $this->fields = $it->current();
       } else {
          $this->getEmpty();
       }
@@ -1122,10 +1123,12 @@ class PluginGenericobjectType extends CommonDBTM {
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
       $DB->query($query);
 
-      $query = "INSERT INTO `glpi_displaypreferences` (`id`, `itemtype`, `num`, `rank`, `users_id`) " .
-               "VALUES (NULL, '$itemtype', '2', '1', '0');";
-      $DB->query($query);
-
+      $DB->insert('glpi_displaypreferences', [
+          'itemtype' => $itemtype,
+         'num'      => 2,
+         'rank'     => 1,
+         'users_id' => 0
+      ]);
    }
 
    /**
@@ -1636,14 +1639,16 @@ class PluginGenericobjectType extends CommonDBTM {
     */
    static function getNameByID($itemtype) {
       global $DB;
-      $query = "SELECT `name` FROM `".getTableForItemType(__CLASS__)."` " .
-               "WHERE `itemtype`='$itemtype'";
-      $result = $DB->query($query);
-      if ($DB->numrows($result)) {
-         return $DB->result($result, 0, "name");
-      } else {
-         return "";
+
+      $it = $DB->request([
+         'SELECT' => ['name'],
+         'FROM'   => getTableForItemType(__CLASS__),
+         'WHERE' => ['itemtype' => $itemtype]
+      ]);
+      if (count($it)) {
+         return $it->current()['name'];
       }
+      return '';
    }
 
 
@@ -1653,8 +1658,6 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function deleteTicketAssignation($itemtype) {
-      global $DB;
-
       $types = ['Item_Ticket', 'Item_Problem', 'Change_Item'];
       foreach ($types as $type) {
          $item = new $type();
@@ -1668,8 +1671,6 @@ class PluginGenericobjectType extends CommonDBTM {
     * @return nothing
     */
    public static function deleteSimcardAssignation($itemtype) {
-      global $DB;
-
       $plugin = new Plugin();
       if ($plugin->isActivated('simcard') && $plugin->isActivated('simcard')) {
          $types = ['PluginSimcardSimcard_Item'];
@@ -1753,13 +1754,13 @@ class PluginGenericobjectType extends CommonDBTM {
    static function deleteReservations($itemtype) {
       global $DB;
 
-      $reservation = new Reservation();
-      $query = "DELETE FROM
-            `glpi_reservations`
-         WHERE `reservationitems_id` in (
-            SELECT `id` from `glpi_reservationitems` WHERE `itemtype`='$itemtype'
-         )";
-      $DB->query($query);
+      $DB->delete('glpi_reservations', [
+         'reservationitems_id' => new \QuerySubQuery([
+            'SELECT' => 'id',
+            'FROM'   => 'glpi_reservationitems',
+            'WHERE'  => ['itemtype' => $itemtype]
+         ])
+      ]);
    }
 
    /**
@@ -2254,6 +2255,9 @@ class PluginGenericobjectType extends CommonDBTM {
       $allGenericObjectTypes = PluginGenericobjectType::getTypes(true);
 
       $notepad = new Notepad();
+       /**
+        * @var class-string<CommonDBTM> $genericObjectType
+        */
       foreach ($allGenericObjectTypes as $genericObjectType => $genericObjectData) {
          $itemtype = $genericObjectData['itemtype'];
          if (! class_exists($itemtype, true)) {
@@ -2265,27 +2269,31 @@ class PluginGenericobjectType extends CommonDBTM {
             die();
          }
          $genericObjectTypeInstance = new $genericObjectType();
-         if ($DB->fieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
-            $query = "INSERT INTO `" . $notepad->getTable() . "`
-                  (`items_id`,
-                  `itemtype`,
-                  `date_creation`,
-                  `date_mod`,
-                  `content`
-               )
-               SELECT
-                  `id` as `items_id`,
-                  '" . $genericObjectType . "' as `itemtype`,
-                  now() as `date_creation`,
-                  now() as `date_mod`,
-                  `notepad` as `content`
-               FROM `" . $genericObjectTypeInstance->getTable() . "`
-               WHERE notepad IS NOT NULL
-               AND notepad <> ''";
-            $DB->query($query) or die($DB->error());
+         if ($DB->fieldExists($genericObjectType::getTable(), "notepad")) {
+            $it = $DB->request([
+               'SELECT' => ['id', 'notepad'],
+               'FROM' => $genericObjectType::getTable(),
+               'WHERE' => [
+                  'notepad' => ['<>', ''],
+                  'NOT' => ['notepad' => null]
+               ]
+            ]);
+            if (count($it)) {
+                $data = $it->current();
+                $DB->insertOrDie(
+                   Notepad::getTable(),
+                   [
+                      'itemtype' => $genericObjectType,
+                      'items_id' => $data['id'],
+                      'date_mod' => $_SESSION['glpi_currenttime'],
+                      'date_creation' => $_SESSION['glpi_currenttime'],
+                      'content' => $data['notepad']
+                   ]
+                );
+            }
          }
-         $migration->dropField($genericObjectTypeInstance->getTable(), "notepad");
-         $migration->migrationOneTable($genericObjectTypeInstance->getTable());
+         $migration->dropField($genericObjectType::getTable(), "notepad");
+         $migration->migrationOneTable($genericObjectType::getTable());
       }
 
       //Displayprefs
@@ -2379,11 +2387,11 @@ class PluginGenericobjectType extends CommonDBTM {
             [
                'linked_itemtypes' => new \QueryExpression(
                   'REPLACE('
-                  . $DB->quoteName('linked_itemtypes')
+                  . $DB::quoteName('linked_itemtypes')
                   . ','
-                  . $DB->quoteValue('"' . $old_itemtype .'"') // itemtype is surrounded by quotes
+                  . $DB::quoteValue('"' . $old_itemtype .'"') // itemtype is surrounded by quotes
                   . ','
-                  . $DB->quoteValue('"' . $new_itemtype .'"') // itemtype is surrounded by quotes
+                  . $DB::quoteValue('"' . $new_itemtype .'"') // itemtype is surrounded by quotes
                   . ')'
                ),
             ],
