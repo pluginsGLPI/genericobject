@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "GLPI professional support"
+    url: "https://services.glpi-network.com"
+    about: "Get professional support from the editor and a network of local partners."
+  - name: "Find an official partner"
+    url: "https://glpi-project.org/partners/"
+    about: "Get support to deploy GLPI in a professional manner."
+  - name: "GLPI Community Forum"
+    url: "https://forum.glpi-project.org"
+    about: "Ask questions and get help from the community."
