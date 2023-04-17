@@ -102,10 +102,9 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</table>";
       if ($haveCheckbox) {
-         echo "<table class='tab_glpi' width='950px'>";
+         echo "<table class='tab_glpi' width='100%'>";
          echo "<tr>";
-         echo "<td><img src='".$CFG_GLPI["root_doc"]."/pics/arrow-left.png'
-                    alt=''></td>";
+         echo "<td><i class='ti ti-corner-left-up mt-1' style='margin-left: 4px;'></i>";
          echo "<td class='center' style='white-space:nowrap;'>";
          echo "<a onclick= \"if ( markCheckboxes('fieldslist') ) return false;\"
                 href='#'>".__('Check all')."</a></td>";
@@ -125,13 +124,13 @@ class PluginGenericobjectField extends CommonDBTM {
 
       if ($dropdownFields) {
          echo "<br>";
-         echo "<table class='tab_cadre genericobject_fields add_new'>";
+         echo "<table class='tab_cadre_fixe genericobject_fields add_new' width='100%'>";
          echo "<tr class='tab_bg_1'>";
          echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
-         echo "<td align='left' class='dropdown'>";
+         echo "<td align='left'>";
          echo $dropdownFields;
          echo "</td>";
-         echo "<td>";
+         echo "<td class='left' width='80%'>";
          echo "<input type='submit' name='add_field' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
          echo "</tr>";
          echo "</table>";
@@ -328,7 +327,7 @@ class PluginGenericobjectField extends CommonDBTM {
       echo "<td>" . __($options['name'], 'genericobject') . "</td>";
       echo "<td>" . $field . "</td>";
 
-      echo "<td width='10'>";
+      echo "<td class='left' width='30'>";
       if ((!$blacklist || $readonly) && $index > 1) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_up.png", 'up',
                               ['field' => $field, 'action' => 'up', 'itemtype' => $itemtype],
@@ -336,7 +335,7 @@ class PluginGenericobjectField extends CommonDBTM {
       }
       echo "</td>";
 
-      echo "<td width='10'>";
+      echo "<td class='left' width='30'>";
       if ((!$blacklist || $readonly) && !$last) {
          Html::showSimpleForm($target, $CFG_GLPI["root_doc"] . "/pics/deplier_down.png", 'down',
                               ['field' => $field, 'action' => 'down', 'itemtype' => $itemtype],
