@@ -10,10 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 07:46+0000\n"
+"POT-Creation-Date: 2023-04-19 14:05+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Pierfrancesco Passerini <p.passerini@gmail.com>, 2018,2021\n"
-"Language-Team: Italian (Italy) (http://www.transifex.com/teclib/glpi-project-plugin-genericobject/language/it_IT/)\n"
+"Language-Team: Italian (Italy) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +28,7 @@ msgstr "(Nessun tipo ancora definito)"
 msgid "A type already exists with the same name"
 msgstr "Un tipo con lo stesso nome esiste già"
 
-#: inc/field.class.php:130
+#: inc/field.class.php:129
 msgid "Add new field"
 msgstr "Aggiungi nuovo campo"
 
@@ -105,7 +105,7 @@ msgstr[0] "Altro"
 msgstr[1] "Altri"
 msgstr[2] "Altri"
 
-#: inc/field.class.php:325
+#: inc/field.class.php:324
 msgid "Read-only field"
 msgstr "Campo in sola lettura"
 

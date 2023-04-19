@@ -1,14 +1,14 @@
 # English translations for PACKAGE package.
-# Copyright (C) 2022 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2022.
+# Automatically generated, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 14:43+0000\n"
-"PO-Revision-Date: 2022-09-29 14:43+0000\n"
+"POT-Creation-Date: 2023-04-19 14:05+0000\n"
+"PO-Revision-Date: 2023-04-19 14:05+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -25,7 +25,7 @@ msgstr "(No types defined yet)"
 msgid "A type already exists with the same name"
 msgstr "A type already exists with the same name"
 
-#: inc/field.class.php:130
+#: inc/field.class.php:129
 msgid "Add new field"
 msgstr "Add new field"
 
@@ -89,9 +89,9 @@ msgstr "Object preview"
 msgid "Objects"
 msgstr "Objects"
 
-#: index.php:61 front/familylist.php:36 front/familylist.php:44
-#: front/type.form.php:76 inc/profile.class.php:42 inc/type.class.php:403
-#: inc/type.class.php:538 inc/object_item.class.php:112 setup.php:231
+#: index.php:61 inc/object_item.class.php:112 inc/profile.class.php:42
+#: inc/type.class.php:403 inc/type.class.php:538 front/type.form.php:76
+#: front/familylist.php:36 front/familylist.php:44 setup.php:231
 msgid "Objects management"
 msgstr "Objects management"
 
@@ -101,7 +101,7 @@ msgid_plural "Others"
 msgstr[0] "Other"
 msgstr[1] "Others"
 
-#: inc/field.class.php:325
+#: inc/field.class.php:324
 msgid "Read-only field"
 msgstr "Read-only field"
 
@@ -109,8 +109,8 @@ msgstr "Read-only field"
 msgid "Regenerate files"
 msgstr "Regenerate files"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commontreedropdown.form.php:39 front/commondropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "The requested dropdown does not exists"
 
@@ -126,8 +126,8 @@ msgstr "Type name is missing"
 msgid "Type name must be longer"
 msgstr "Type name must be longer"
 
-#: front/object.php:36 front/type.php:41 inc/profile.class.php:290
-#: inc/type.class.php:69
+#: inc/profile.class.php:290 inc/type.class.php:69 front/object.php:36
+#: front/type.php:41
 msgid "Type of objects"
 msgstr "Type of objects"
 
