@@ -84,7 +84,7 @@ class PluginGenericobjectObject extends CommonDBTM {
          Contract_Item::class,
          Document_Item::class,
          Infocom::class,
-         Item_devices::class,
+         Item_Devices::class,
          NetworkPort::class,
       ];
    }
