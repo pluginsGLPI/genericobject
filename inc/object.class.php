@@ -1222,6 +1222,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
             $links           = [];
             $links['search'] = $itemtype::getSearchUrl(false);
+            $links['lists']  = '';
 
             if ($item->canUseTemplate()) {
                $links['template'] = "/front/setup.templates.php?itemtype=$itemtype&add=0";
@@ -1245,13 +1246,15 @@ class PluginGenericobjectObject extends CommonDBTM {
                $menu[$str_name]['options'][strtolower($itemtype)] = [
                   'title' => $type['itemtype']::getMenuName(),
                   'page'  => $itemtype::getSearchUrl(false),
-                  'links' => $links
+                  'links' => $links,
+                  'lists_itemtype' => $itemtype,
                ];
             } else {
                $menu[strtolower($itemtype)]= [
                   'title' => $type['itemtype']::getMenuName(),
                   'page'  => $itemtype::getSearchUrl(false),
-                  'links' => $links
+                  'links' => $links,
+                  'lists_itemtype' => $itemtype,
                ];
             }
          }
