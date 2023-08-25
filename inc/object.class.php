@@ -1260,7 +1260,12 @@ class PluginGenericobjectObject extends CommonDBTM {
          }
       }
 
+      // Sort by menu entries name
+      uasort($menu, fn($a, $b) => $a['title'] <=> $b['title']);
+
+      // Mark as multi entries
       $menu['is_multi_entries']= true;
+
       return $menu;
    }
 
