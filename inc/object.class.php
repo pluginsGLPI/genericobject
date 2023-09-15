@@ -1235,6 +1235,7 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
             }
 
+            $menu = [];
             if ($type['plugin_genericobject_typefamilies_id'] > 0
                && (!isset($_GET['itemtype'])
                   || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {
