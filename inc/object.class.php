@@ -1208,6 +1208,7 @@ class PluginGenericobjectObject extends CommonDBTM {
 
    static function getMenuContent() {
       $types = PluginGenericobjectType::getTypes();
+      $menu = [];
       foreach ($types as $type) {
 
          $itemtype = $type['itemtype'];
@@ -1235,7 +1236,6 @@ class PluginGenericobjectObject extends CommonDBTM {
                }
             }
 
-            $menu = [];
             if ($type['plugin_genericobject_typefamilies_id'] > 0
                && (!isset($_GET['itemtype'])
                   || !preg_match("/itemtype=".$_GET['itemtype']."/", $_GET['itemtype']))) {
