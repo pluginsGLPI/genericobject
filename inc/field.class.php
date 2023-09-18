@@ -288,6 +288,9 @@ class PluginGenericobjectField extends CommonDBTM {
    static function getFieldOptions($field, $itemtype = "") {
       global $GO_FIELDS;
 
+      $GO_FIELDS = [];
+      plugin_genericobject_includeCommonFields(true);
+
       $options = [];
       $cleaned_field = preg_replace("/^plugin_genericobject_/", '', $field);
       if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
