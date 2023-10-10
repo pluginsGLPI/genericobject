@@ -75,15 +75,28 @@ class PluginGenericobjectTypeFamily extends CommonDropdown {
    static function getFamilies() {
       global $DB;
 
-      $query     = "SELECT f.id as id, f.name as name, t.itemtype as itemtype
-                    FROM glpi_plugin_genericobject_typefamilies as f
-                    LEFT JOIN glpi_plugin_genericobject_types AS t
-                       ON (f.id = t.plugin_genericobject_typefamilies_id)
-                    WHERE t.id IN (SELECT DISTINCT `id`
-                                   FROM glpi_plugin_genericobject_types
-                                   WHERE is_active=1)";
+      $it = $DB->request([
+         'SELECT' => ['f.id AS id', 'f.name AS name', 't.itemtype AS itemtype'],
+         'FROM'   => new QueryExpression('glpi_plugin_genericobject_typefamilies AS f'),
+         'LEFT JOIN' => [
+            'glpi_plugin_genericobject_types AS t' => [
+               'ON' => [
+                  'f' => 'id',
+                  't' => 'plugin_genericobject_typefamilies_id'
+               ]
+            ]
+         ],
+         'WHERE' => [
+             't.id' => new QuerySubQuery([
+                'SELECT '   => ['id'],
+                'DISTINCT'  => true,
+                'FROM'      => 'glpi_plugin_genericobject_types',
+                'WHERE'     => ['is_active' => 1]
+             ])
+         ]
+      ]);
       $families = [];
-      foreach ($DB->request($query) as $fam) {
+      foreach ($it as $fam) {
          $itemtype = $fam['itemtype'];
          if ($itemtype::canCreate()) {
             $families[$fam['id']] = $fam['name'];

@@ -206,26 +206,19 @@ class PluginGenericobjectProfile extends Profile {
       $types = PluginGenericobjectType::getTypes(true);
       if (!empty ($types)) {
          foreach ($types as $tmp => $profile) {
-            $query = "UPDATE `".getTableForItemType(__CLASS__)."` " .
-                     "SET ";
+            $right = (isset($params[$profile['itemtype']]) && $params[$profile['itemtype']] !== 'NULL') ? $params[$profile['itemtype']] : '';
 
-            if (isset($params[$profile['itemtype']]) && $params[$profile['itemtype']] == 'NULL') {
-               $query.="`right`='' ";
-            } else {
-               if (isset($params[$profile['itemtype']])) {
-                  $query.="`right`='".$params[$profile['itemtype']]."'";
-               } else {
-                  $query.="`right`=''";
-               }
+            $update_params = [
+               'right' => $right
+            ];
+            $open_ticket_key = $profile['itemtype'].'_open_ticket';
+            if (isset($params[$open_ticket_key])) {
+                $update_params['open_ticket'] = $params[$open_ticket_key];
             }
-
-            if (isset($params[$profile['itemtype'].'_open_ticket'])) {
-               $query.=", `open_ticket`='".$params[$profile['itemtype'].'_open_ticket']."' ";
-            }
-
-            $query.="WHERE `profiles_id`='".$params['profiles_id']."' " .
-                    "AND `itemtype`='".$profile['itemtype']."'";
-            $DB->query($query);
+            $DB->update(getTableForItemType(__CLASS__), $update_params, [
+               'profiles_id' => $params['profiles_id'],
+               'itemtype'    => $profile['itemtype']
+            ]);
          }
       }
    }
@@ -443,8 +436,6 @@ class PluginGenericobjectProfile extends Profile {
 
    static function uninstall() {
       global $DB;
-      $query = "DELETE FROM `glpi_profilerights`
-                WHERE `name` LIKE '%plugin_genericobject%'";
-      $DB->query($query) or die($DB->error());
+      $DB->deleteOrDie('glpi_profilerights', ['name' => ['LIKE', '%plugin_genericobject%']]);
    }
 }
