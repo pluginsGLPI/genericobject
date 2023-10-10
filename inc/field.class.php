@@ -367,6 +367,7 @@ class PluginGenericobjectField extends CommonDBTM {
             case 'bool' :
                $query .= "TINYINT NOT NULL DEFAULT '0'";
                break;
+            case 'horizontalseparator' :
             case 'emptyspace' :
             case 'text' :
                $query .= "VARCHAR ( 255 ) NOT NULL DEFAULT ''";
