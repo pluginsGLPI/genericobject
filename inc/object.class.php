@@ -861,6 +861,8 @@ class PluginGenericobjectObject extends CommonDBTM {
       // Prevent usage of reserved and blacklisted indexes
       $taken_indexes = array_merge($index_exceptions, $blacklisted_indexes);
 
+      plugin_genericobject_includeCommonFields(true);
+
       foreach (PluginGenericobjectSingletonObjectField::getInstance(get_called_class())
          as $field => $values
       ) {
