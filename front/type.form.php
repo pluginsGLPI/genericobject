@@ -28,45 +28,49 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
-if (!isset ($_GET["id"])) {
-   $_GET["id"] = '';
+if (!isset($_GET["id"])) {
+    $_GET["id"] = '';
 }
 $type        = new PluginGenericobjectType();
 $extraparams =  [];
-if (isset ($_POST["select"]) && $_POST["select"] == "all") {
-   $extraparams["selected"] = "checked";
+if (isset($_POST["select"]) && $_POST["select"] == "all") {
+    $extraparams["selected"] = "checked";
 }
 
 if (isset ($_POST["add"])) {
    //Add a new itemtype
-   $new_id = $type->add($_POST);
-   Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
-
-} else if (isset ($_POST["update"])) {
+    $new_id = $type->add($_POST);
+    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType') . "?id=$new_id");
+} else if (isset($_POST["update"])) {
    //Update an existing itemtype
-   if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
-      $_POST['linked_itemtypes'] = json_encode($_POST['itemtypes']);
-   }
-   $type->update($_POST);
-   Html::back();
-
-} else if (isset ($_POST["purge"])) {
+    if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
+        $_POST['linked_itemtypes'] = json_encode($_POST['itemtypes']);
+    }
+    $type->update($_POST);
+    Html::back();
+} else if (isset($_POST["purge"])) {
    //Delete an itemtype
-   $type->delete($_POST);
-   $type->redirectToList();
-
+    $type->delete($_POST);
+    $type->redirectToList();
 } else if (isset($_POST['regenerate'])) {
    //Regenerate files for an itemtype
-   $type->getFromDB($_POST["id"]);
-   PluginGenericobjectType::checkClassAndFilesForOneItemType($type->fields['itemtype'],
-                                                             $type->fields['name'], true);
-   Html::back();
+    $type->getFromDB($_POST["id"]);
+    PluginGenericobjectType::checkClassAndFilesForOneItemType(
+        $type->fields['itemtype'],
+        $type->fields['name'],
+        true
+    );
+    Html::back();
 }
 
-Html::header(__("Objects management", "genericobject"), $_SERVER['PHP_SELF'], "config",
-    "PluginGenericobjectType");
+Html::header(
+    __("Objects management", "genericobject"),
+    $_SERVER['PHP_SELF'],
+    "config",
+    "PluginGenericobjectType"
+);
 $type->display($_GET);
 
 Html::footer();

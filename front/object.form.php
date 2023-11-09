@@ -28,85 +28,86 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
 $itemtype = null;
 
 if (isset($_REQUEST['itemtype'])) {
+    $types = array_keys(PluginGenericobjectType::getTypes());
 
-   $types = array_keys(PluginGenericobjectType::getTypes());
+    $requested_type = $_REQUEST['itemtype'];
+    $error = [];
 
-   $requested_type = $_REQUEST['itemtype'];
-   $error = [];
+    if (!in_array($requested_type, $types)) {
+        $error[] = __('The requested type has not been defined yet!');
+        if (!PluginGenericobjectType::canCreate()) {
+            $error[] = __('Please ask your administrator to create this type of object');
+        };
+    } else if (!class_exists($requested_type)) {
+        $error[] = __('The generated files for the requested type of object are missing!');
+        $error[] = __('You might need to regenerate the files under ' . GENERICOBJECT_DOC_DIR . '.');
+    }
 
-   if (!in_array($requested_type, $types)) {
-      $error[] = __('The requested type has not been defined yet!');
-      if (!PluginGenericobjectType::canCreate()) {
-         $error[] = __('Please ask your administrator to create this type of object');
-      };
-   } else if (!class_exists($requested_type)) {
-      $error[]= __('The generated files for the requested type of object are missing!');
-      $error[]= __('You might need to regenerate the files under '.GENERICOBJECT_DOC_DIR.'.');
-   }
-
-   if (count($error) > 0) {
-      Html::header(__('Type not found!'));
-      Html::displayErrorAndDie(implode('<br/>', $error));
-
-   } else {
-      $itemtype = $requested_type;
-   }
+    if (count($error) > 0) {
+        Html::header(__('Type not found!'));
+        Html::displayErrorAndDie(implode('<br/>', $error));
+    } else {
+        $itemtype = $requested_type;
+    }
 }
 
 if (!is_null($itemtype)) {
+    if (!isset($_REQUEST['id'])) {
+        $id = -1;
+    } else {
+        $id = $_REQUEST['id'];
+    }
 
-   if (!isset($_REQUEST['id'])) {
-      $id = -1;
-   } else {
-      $id = $_REQUEST['id'];
-   }
+    if (!isset($_GET["withtemplate"])) {
+        $_GET["withtemplate"] = "";
+    }
 
-   if (!isset($_GET["withtemplate"])) {
-      $_GET["withtemplate"] = "";
-   }
+    $item = new $itemtype();
 
-   $item = new $itemtype();
+    if (isset($_POST["add"])) {
+        $item->check($id, CREATE);
+        $newID = $item->add($_POST);
 
-   if (isset ($_POST["add"])) {
-      $item->check($id, CREATE);
-      $newID = $item->add($_POST);
+        if ($_SESSION['glpibackcreated']) {
+            Html::redirect($itemtype::getFormURL() . "&id=" . $newID);
+        } else {
+            Html::back();
+        }
+    } else if (isset($_POST["update"])) {
+        $item->check($id, UPDATE);
+        $item->update($_POST);
+        Html::back();
+    } else if (isset($_POST["restore"])) {
+        $item->check($id, DELETE);
+        $item->restore($_POST);
+        Html::back();
+    } else if (isset($_POST["purge"])) {
+        $item->check($id, PURGE);
+        $item->delete($_POST, 1);
+        $item->redirectToList();
+    } else if (isset($_POST["delete"])) {
+        $item->check($id, DELETE);
+        $item->delete($_POST);
+        $item->redirectToList();
+    }
+    $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
+    Html::header(
+        $itemtype::getTypeName(),
+        $_SERVER['PHP_SELF'],
+        "assets",
+        ($menu !== false ? $menu : $itemtype),
+        strtolower($itemtype)
+    );
 
-      if ($_SESSION['glpibackcreated']) {
-         Html::redirect($itemtype::getFormURL()."&id=".$newID);
-      } else {
-         Html::back();
-      }
-   } else if (isset ($_POST["update"])) {
-      $item->check($id, UPDATE);
-      $item->update($_POST);
-      Html::back();
-   } else if (isset ($_POST["restore"])) {
-      $item->check($id, DELETE);
-      $item->restore($_POST);
-      Html::back();
-   } else if (isset($_POST["purge"])) {
-      $item->check($id, PURGE);
-      $item->delete($_POST, 1);
-      $item->redirectToList();
-   } else if (isset($_POST["delete"])) {
-      $item->check($id, DELETE);
-      $item->delete($_POST);
-      $item->redirectToList();
-   }
-   $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
-   Html::header($itemtype::getTypeName(), $_SERVER['PHP_SELF'],
-             "assets", ($menu!==false?$menu:$itemtype), strtolower($itemtype));
+    $item->display($_GET, ['withtemplate' => $_GET["withtemplate"]]);
 
-   $item->display($_GET, ['withtemplate' => $_GET["withtemplate"]]);
-
-   Html::footer();
+    Html::footer();
 } else {
-   Html::header(__('Access Denied!'));
-   Html::DisplayErrorAndDie(__("You can't access to this page directly!"));
+    Html::header(__('Access Denied!'));
+    Html::DisplayErrorAndDie(__("You can't access to this page directly!"));
 }
-
