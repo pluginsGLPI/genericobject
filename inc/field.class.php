@@ -146,7 +146,7 @@ class PluginGenericobjectField extends CommonDBTM
    * that are enabled
    * @since 0.85+2.4.0
    */
-    static function addReadOnlyFields(PluginGenericobjectType $type)
+    public static function addReadOnlyFields(PluginGenericobjectType $type)
     {
         global $GO_READONLY_FIELDS;
 
@@ -174,7 +174,7 @@ class PluginGenericobjectField extends CommonDBTM
     * Get the name of the field, as defined in a constant file
     * The name may be the same, or not depending if it's an isolated dropdown or not
     */
-    static function getFieldName($field, $itemtype, $options, $remove_prefix = false)
+    public static function getFieldName($field, $itemtype, $options, $remove_prefix = false)
     {
         global $DB;
         $field_orig = $field;
@@ -227,7 +227,7 @@ class PluginGenericobjectField extends CommonDBTM
     *
     * @return the dropdown random ID
     */
-    static function dropdownFields($name, $itemtype, $used = [])
+    public static function dropdownFields($name, $itemtype, $used = [])
     {
         global $GO_FIELDS;
 
@@ -289,7 +289,7 @@ class PluginGenericobjectField extends CommonDBTM
     * @param $itemtype the itemtype
     * @return an array which contains the full field definition
     */
-    static function getFieldOptions($field, $itemtype = "")
+    public static function getFieldOptions($field, $itemtype = "")
     {
         global $GO_FIELDS;
 
@@ -445,7 +445,7 @@ class PluginGenericobjectField extends CommonDBTM
     * @param field the field to delete
     * @return nothing
     */
-    static function deleteField($table, $field)
+    public static function deleteField($table, $field)
     {
         global $DB;
 
@@ -471,7 +471,7 @@ class PluginGenericobjectField extends CommonDBTM
         }
     }
 
-    static function deleteDisplayPreferences($table, $field)
+    public static function deleteDisplayPreferences($table, $field)
     {
 
         $pref      = new DisplayPreference();
@@ -496,7 +496,7 @@ class PluginGenericobjectField extends CommonDBTM
     * @params an array which contains the itemtype, the field to move and the action (up/down)
     * @return nothing
     */
-    static function changeFieldOrder($params = [])
+    public static function changeFieldOrder($params = [])
     {
         global $DB;
         $itemtype = $params['itemtype'];
@@ -552,11 +552,11 @@ class PluginGenericobjectField extends CommonDBTM
         return true;
     }
 
-    static function install(Migration $migration)
+    public static function install(Migration $migration)
     {
     }
 
-    static function uninstall()
+    public static function uninstall()
     {
     }
 }

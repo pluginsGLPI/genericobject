@@ -34,14 +34,14 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginGenericobjectTypeFamily extends CommonDropdown
 {
-    var $can_be_translated       = true;
+    public $can_be_translated       = true;
 
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         return __('Family of type of objects', 'genericobject');
     }
 
-    static function install(Migration $migration)
+    public static function install(Migration $migration)
     {
         global $DB;
 
@@ -65,7 +65,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         }
     }
 
-    static function uninstall()
+    public static function uninstall()
     {
         global $DB;
 
@@ -76,7 +76,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         }
     }
 
-    static function getFamilies()
+    public static function getFamilies()
     {
         global $DB;
 
@@ -98,7 +98,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
     }
 
 
-    static function getItemtypesByFamily($families_id)
+    public static function getItemtypesByFamily($families_id)
     {
         return getAllDataFromTable(
             'glpi_plugin_genericobject_types',

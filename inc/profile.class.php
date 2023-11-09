@@ -31,12 +31,12 @@
 class PluginGenericobjectProfile extends Profile
 {
    /* if profile deleted */
-    function cleanProfiles($id)
+    public function cleanProfiles($id)
     {
         $this->deleteByCriteria(['id' => $id]);
     }
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
         switch ($item->getType()) {
@@ -49,7 +49,7 @@ class PluginGenericobjectProfile extends Profile
         }
     }
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         switch ($item->getType()) {
             case 'Profile':
@@ -64,7 +64,7 @@ class PluginGenericobjectProfile extends Profile
         return true;
     }
 
-    static function showForItemtype($type)
+    public static function showForItemtype($type)
     {
         global $DB;
 
@@ -114,14 +114,14 @@ class PluginGenericobjectProfile extends Profile
         Html::closeForm();
     }
 
-    static function getProfileNameForItemtype($itemtype)
+    public static function getProfileNameForItemtype($itemtype)
     {
         return preg_replace("/^glpi_/", "", getTableForItemType($itemtype));
     }
 
 
    /* profiles modification */
-    function showForm($profiles_id, $options = [])
+    public function showForm($profiles_id, $options = [])
     {
         if (!Session::haveRight("profile", READ)) {
             return false;
@@ -177,14 +177,14 @@ class PluginGenericobjectProfile extends Profile
         echo "</div>";
     }
 
-    static function getProfileforItemtype($profiles_id, $itemtype)
+    public static function getProfileforItemtype($profiles_id, $itemtype)
     {
         $rights             = ProfileRight::getProfileRights($profiles_id);
         $itemtype_rightname = self::getProfileNameForItemtype($itemtype);
         return isset($rights[$itemtype_rightname]) ? $rights[$itemtype_rightname] : 0;
     }
 
-    function getProfilesFromDB($id, $config = true)
+    public function getProfilesFromDB($id, $config = true)
     {
         global $DB;
         $prof_datas =  [];
@@ -211,7 +211,7 @@ class PluginGenericobjectProfile extends Profile
         return true;
     }
 
-    function saveProfileToDB($params)
+    public function saveProfileToDB($params)
     {
         global $DB;
 
@@ -398,7 +398,7 @@ class PluginGenericobjectProfile extends Profile
         }
     }
 
-    static function install(Migration $migration)
+    public static function install(Migration $migration)
     {
         global $DB;
 
@@ -475,7 +475,7 @@ class PluginGenericobjectProfile extends Profile
         }
     }
 
-    static function uninstall()
+    public static function uninstall()
     {
         global $DB;
         $query = "DELETE FROM `glpi_profilerights`

@@ -37,7 +37,7 @@ class PluginGenericobjectObject extends CommonDBTM
     private $cpt = 0;
 
     //Get itemtype name
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         global $LANG;
         $class    = get_called_class();
@@ -100,8 +100,9 @@ class PluginGenericobjectObject extends CommonDBTM
      *
      * @return array
     **/
-    static function showGenericObjectTreeview($params)
+    public static function showGenericObjectTreeview($params)
     {
+        /** @var array $CFG_GLPI */
         global $CFG_GLPI;
 
         if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
@@ -121,7 +122,7 @@ class PluginGenericobjectObject extends CommonDBTM
      *
      * @return array
     **/
-    static function getParentNodeSearchUrl($params)
+    public static function getParentNodeSearchUrl($params)
     {
         if (array_key_exists($params['itemtype'], PluginGenericobjectType::getTypes())) {
             $item = new $params['itemtype']();
@@ -142,15 +143,15 @@ class PluginGenericobjectObject extends CommonDBTM
         return $params;
     }
 
-    static function install()
+    public static function install()
     {
     }
 
-    static function uninstall()
+    public static function uninstall()
     {
     }
 
-    static function registerType()
+    public static function registerType()
     {
         global $DB, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI, $GO_LINKED_TYPES, $GENINVENTORYNUMBER_TYPES;
 
@@ -286,7 +287,7 @@ class PluginGenericobjectObject extends CommonDBTM
         }
     }
 
-    static function getMenuIcon($itemtype)
+    public static function getMenuIcon($itemtype)
     {
         global $CFG_GLPI;
         $itemtype_table = getTableForItemType($itemtype);
@@ -309,7 +310,7 @@ class PluginGenericobjectObject extends CommonDBTM
         return "<img class='genericobject_menu_icon' src='" . $icon_path . "'/>";
     }
 
-    static function checkItemtypeRight($class, $right)
+    public static function checkItemtypeRight($class, $right)
     {
         if (!is_null($class) and class_exists($class)) {
             $right_name = PluginGenericobjectProfile::getProfileNameForItemtype(
@@ -320,7 +321,7 @@ class PluginGenericobjectObject extends CommonDBTM
         }
     }
 
-    static function canCreate()
+    public static function canCreate()
     {
         $class    = get_called_class();
         //Datainjection : Don't understand why I need this trick : need to be investigated !
@@ -330,31 +331,31 @@ class PluginGenericobjectObject extends CommonDBTM
         return static::checkItemtypeRight($class, CREATE);
     }
 
-    static function canView()
+    public static function canView()
     {
         $class = get_called_class();
         return static::checkItemtypeRight($class, READ);
     }
 
-    static function canUpdate()
+    public static function canUpdate()
     {
         $class = get_called_class();
         return static::checkItemtypeRight($class, UPDATE);
     }
 
-    static function canDelete()
+    public static function canDelete()
     {
         $class = get_called_class();
         return static::checkItemtypeRight($class, DELETE);
     }
 
-    static function canPurge()
+    public static function canPurge()
     {
         $class = get_called_class();
         return static::checkItemtypeRight($class, PURGE);
     }
 
-    function defineTabs($options = [])
+    public function defineTabs($options = [])
     {
         $tabs = [];
 
@@ -410,34 +411,34 @@ class PluginGenericobjectObject extends CommonDBTM
 
    //------------------------ CAN methods -------------------------------------//
 
-    function getObjectTypeName()
+    public function getObjectTypeName()
     {
         return $this->objecttype->getName();
     }
 
-    function canUseInfocoms()
+    public function canUseInfocoms()
     {
         return ($this->objecttype->canUseInfocoms() && Session::haveRight("infocom", READ));
     }
 
-    function canUseContracts()
+    public function canUseContracts()
     {
         return ($this->objecttype->canUseContracts() && Session::haveRight("contract", READ));
     }
 
 
-    function canUseTemplate()
+    public function canUseTemplate()
     {
         return $this->objecttype->canUseTemplate();
     }
 
 
-    function canUseNotepad()
+    public function canUseNotepad()
     {
         return $this->objecttype->canUseNotepad();
     }
 
-    function canUseUnicity()
+    public function canUseUnicity()
     {
        // Disable unicity feature (for GLPI 0.85 onward) : see issue #16
        // Related code : search for #16
@@ -446,25 +447,25 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    function canUseDocuments()
+    public function canUseDocuments()
     {
         return ($this->objecttype->canUseDocuments() && Session::haveRight("document", READ));
     }
 
 
-    function canUseTickets()
+    public function canUseTickets()
     {
         return ($this->objecttype->canUseTickets());
     }
 
 
-    function canUseGlobalSearch()
+    public function canUseGlobalSearch()
     {
         return ($this->objecttype->canUseGlobalSearch());
     }
 
 
-    function canBeReserved()
+    public function canBeReserved()
     {
         return (
          $this->objecttype->canBeReserved()
@@ -473,82 +474,82 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    function canUseHistory()
+    public function canUseHistory()
     {
         return ($this->objecttype->canUseHistory());
     }
 
 
-    function canUsePluginDataInjection()
+    public function canUsePluginDataInjection()
     {
         return ($this->objecttype->canUsePluginDataInjection());
     }
 
 
-    function canUsePluginPDF()
+    public function canUsePluginPDF()
     {
         return ($this->objecttype->canUsePluginPDF());
     }
 
 
-    function canUsePluginOrder()
+    public function canUsePluginOrder()
     {
         return ($this->objecttype->canUsePluginOrder());
     }
 
-    function canUsePluginGeninventorynumber()
+    public function canUsePluginGeninventorynumber()
     {
         return ($this->objecttype->canUsePluginGeninventorynumber());
     }
 
-    function canUseNetworkPorts()
+    public function canUseNetworkPorts()
     {
         return ($this->objecttype->canUseNetworkPorts());
     }
 
 
-    function canUseDirectConnections()
+    public function canUseDirectConnections()
     {
         return ($this->objecttype->canUseDirectConnections());
     }
 
-    function canUseProjects()
+    public function canUseProjects()
     {
         return ($this->objecttype->canUseProjects());
     }
 
 
-    function canUsePluginUninstall()
+    public function canUsePluginUninstall()
     {
         return ($this->objecttype->canUsePluginUninstall());
     }
 
-    function canUsePluginSimcard()
+    public function canUsePluginSimcard()
     {
         return ($this->objecttype->canUsePluginSimcard());
     }
 
-    function getLinkedItemTypesAsArray()
+    public function getLinkedItemTypesAsArray()
     {
         return $this->objecttype->getLinkedItemTypesAsArray();
     }
 
-    function canUseItemDevice()
+    public function canUseItemDevice()
     {
         return ($this->objecttype->canUseItemDevice());
     }
 
-    function canUseImpact()
+    public function canUseImpact()
     {
         return ($this->objecttype->canUseImpact());
     }
 
-    function title()
+    public function title()
     {
     }
 
 
-    function showForm($id, $options = [], $previsualisation = false)
+    public function showForm($id, $options = [], $previsualisation = false)
     {
         if ($previsualisation) {
             $canedit = true;
@@ -607,7 +608,7 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    static function getFieldsToHide()
+    public static function getFieldsToHide()
     {
         return ['id', 'is_recursive', 'is_template', 'template_name', 'is_deleted',
             'entities_id', 'notepad', 'date_mod', 'date_creation'
@@ -615,7 +616,7 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    function displayField($canedit, $name, $value, $template, $description = [])
+    public function displayField($canedit, $name, $value, $template, $description = [])
     {
         global $GO_BLACKLIST_FIELDS;
 
@@ -765,10 +766,10 @@ class PluginGenericobjectObject extends CommonDBTM
 
 
 
-   /**
-   * Add a new column
-   **/
-    function startColumn()
+    /**
+     * Add a new column
+    **/
+    public function startColumn()
     {
         if ($this->cpt == 0) {
             echo "<tr class='tab_bg_1'>";
@@ -780,10 +781,10 @@ class PluginGenericobjectObject extends CommonDBTM
 
 
 
-   /**
-   * End a column
-   **/
-    function endColumn()
+    /**
+     * End a column
+    **/
+    public function endColumn()
     {
         echo "</td>";
 
@@ -795,10 +796,10 @@ class PluginGenericobjectObject extends CommonDBTM
 
 
 
-   /**
-   * Close a column
-   **/
-    function closeColumn()
+    /**
+     * Close a column
+    **/
+    public function closeColumn()
     {
         if ($this->cpt > 0) {
             while ($this->cpt < 4) {
@@ -810,7 +811,7 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    function prepareInputForAdd($input)
+    public function prepareInputForAdd($input)
     {
 
        //Template management
@@ -824,7 +825,7 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    function cleanDBonPurge()
+    public function cleanDBonPurge()
     {
         $parameters = ['items_id' => $this->getID(), 'itemtype' => get_called_class()];
         $types      = ['Computer_Item', 'ReservationItem', 'Document_Item', 'Infocom', 'Contract_Item'];
@@ -839,11 +840,11 @@ class PluginGenericobjectObject extends CommonDBTM
         }
     }
 
-   /**
-    * Display object preview form
-    * @param type the object type
-    */
-    static function showPrevisualisationForm(PluginGenericobjectType $type)
+    /**
+     * Display object preview form
+     * @param type the object type
+     */
+    public static function showPrevisualisationForm(PluginGenericobjectType $type)
     {
         $itemtype = $type->fields['itemtype'];
         $item     = new $itemtype();
@@ -862,7 +863,7 @@ class PluginGenericobjectObject extends CommonDBTM
         }
     }
 
-    function rawSearchOptions()
+    public function rawSearchOptions()
     {
         global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
 
@@ -1080,13 +1081,13 @@ class PluginGenericobjectObject extends CommonDBTM
 
 
     //Datainjection specific methods
-    function isPrimaryType()
+    public function isPrimaryType()
     {
         return true;
     }
 
 
-    function connectedTo()
+    public function connectedTo()
     {
         return [];
     }
@@ -1100,7 +1101,7 @@ class PluginGenericobjectObject extends CommonDBTM
      * @return array
      *
     **/
-    function addOrUpdateObject($values = [], $options = [])
+    public function addOrUpdateObject($values = [], $options = [])
     {
         $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
         $lib->processAddOrUpdate();
@@ -1108,13 +1109,13 @@ class PluginGenericobjectObject extends CommonDBTM
     }
 
 
-    function getOptions($primary_type = '')
+    public function getOptions($primary_type = '')
     {
         return Search::getOptions($primary_type);
     }
 
 
-    function transfer($new_entity)
+    public function transfer($new_entity)
     {
         global $DB;
         if ($this->fields['id'] > 0 && $this->fields['entities_id'] != $new_entity) {
@@ -1183,7 +1184,7 @@ class PluginGenericobjectObject extends CommonDBTM
     *
     * @see CommonDBTM::showMassiveActionsSubForm()
    **/
-    static function showMassiveActionsSubForm(MassiveAction $ma)
+    public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
         global $GENINVENTORYNUMBER_TYPES;
 
@@ -1202,8 +1203,11 @@ class PluginGenericobjectObject extends CommonDBTM
         return true;
     }
 
-    function plugin_genericobject_MassiveActionsProcess($data)
+    // @codingStandardsIgnoreStart
+    public function plugin_genericobject_MassiveActionsProcess($data)
     {
+        // @codingStandardsIgnoreEnd
+        /** @var DBmysql $DB */
         global $DB;
 
         switch ($data['action']) {
@@ -1219,7 +1223,7 @@ class PluginGenericobjectObject extends CommonDBTM
         }
     }
 
-    static function processMassiveActionsForOneItemtype(
+    public static function processMassiveActionsForOneItemtype(
         MassiveAction $ma,
         CommonDBTM $item,
         array $ids
@@ -1249,7 +1253,7 @@ class PluginGenericobjectObject extends CommonDBTM
         $ma->results = $results;
     }
 
-    static function getMenuContent()
+    public static function getMenuContent()
     {
         $types = PluginGenericobjectType::getTypes();
         $menu = [];
