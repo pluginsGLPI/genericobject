@@ -39,15 +39,7 @@ if (isset ($_POST["select"]) && $_POST["select"] == "all") {
    $extraparams["selected"] = "checked";
 }
 
-//Change fields order
-if (isset ($_GET["action"])) {
-   $type->getFromDB($_REQUEST["id"]);
-   PluginGenericobjectType::registerOneType($type);
-   PluginGenericobjectObject::changeFieldOrder($_GET["field"], $type->fields["itemtype"],
-                                               $_GET["action"]);
-   Html::back();
-
-} else if (isset ($_POST["add"])) {
+if (isset ($_POST["add"])) {
    //Add a new itemtype
    $new_id = $type->add($_POST);
    Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType')."?id=$new_id");
