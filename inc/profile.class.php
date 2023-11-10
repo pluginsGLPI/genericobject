@@ -38,15 +38,14 @@ class PluginGenericobjectProfile extends Profile
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-
         switch ($item->getType()) {
             case 'Profile':
                 return self::createTabEntry(__('Objects management', 'genericobject'));
-            break;
             case 'PluginGenericobjectType':
                 return self::createTabEntry(_n('Profile', 'Profiles', 2));
-            break;
         }
+
+        return '';
     }
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
@@ -66,8 +65,6 @@ class PluginGenericobjectProfile extends Profile
 
     public static function showForItemtype($type)
     {
-        global $DB;
-
         if (!Session::haveRight("profile", READ)) {
             return false;
         }
@@ -127,11 +124,8 @@ class PluginGenericobjectProfile extends Profile
             return false;
         }
         $canedit = Session::haveRight("profile", UPDATE);
-       //if ($id) {
-       //   $this->getProfilesFromDB($id);
-       //}
 
-       //Ensure rights are defined in database
+        //Ensure rights are defined in database
         self::installRights();
 
         $profile = new Profile();
@@ -175,6 +169,8 @@ class PluginGenericobjectProfile extends Profile
             Html::closeForm();
         }
         echo "</div>";
+
+        return true;
     }
 
     public static function getProfileforItemtype($profiles_id, $itemtype)
@@ -186,7 +182,6 @@ class PluginGenericobjectProfile extends Profile
 
     public function getProfilesFromDB($id, $config = true)
     {
-        global $DB;
         $prof_datas =  [];
         foreach (
             getAllDataFromTable(
@@ -213,6 +208,7 @@ class PluginGenericobjectProfile extends Profile
 
     public function saveProfileToDB($params)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $types = PluginGenericobjectType::getTypes(true);
@@ -246,7 +242,7 @@ class PluginGenericobjectProfile extends Profile
    /**
     * Create rights for the current profile
     * @param profileID the profile ID
-    * @return nothing
+    * @return void
     */
     public static function createFirstAccess()
     {
@@ -281,7 +277,7 @@ class PluginGenericobjectProfile extends Profile
    /**
     * Create rights for the profile if it doesn't exists
     * @param profileID the profile ID
-    * @return nothing
+    * @return void
     */
     public static function createAccess($profiles_id, $itemtype, $first = false)
     {
@@ -372,7 +368,7 @@ class PluginGenericobjectProfile extends Profile
    /**
     * Delete type from the rights
     * @param name the name of the type
-    * @return nothing
+    * @return void
     */
     public static function deleteTypeFromProfile($itemtype)
     {
@@ -400,6 +396,7 @@ class PluginGenericobjectProfile extends Profile
 
     public static function install(Migration $migration)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $profileRight = new ProfileRight();
@@ -477,6 +474,7 @@ class PluginGenericobjectProfile extends Profile
 
     public static function uninstall()
     {
+        /** @var DBmysql $DB */
         global $DB;
         $query = "DELETE FROM `glpi_profilerights`
                 WHERE `name` LIKE '%plugin_genericobject%'";

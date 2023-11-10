@@ -37,7 +37,12 @@ class PluginGenericobjectField extends CommonDBTM
     */
     public static function showObjectFieldsForm($id)
     {
-        global $DB, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS, $GO_FIELDS, $CFG_GLPI;
+        /**
+         * @var array $GO_BLACKLIST_FIELDS
+         * @var array $GO_READONLY_FIELDS
+         * @var array $GO_FIELDS
+         */
+        global $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS, $GO_FIELDS;
 
         $url          = Toolbox::getItemTypeFormURL(__CLASS__);
         $object_type  = new PluginGenericobjectType();
@@ -148,6 +153,7 @@ class PluginGenericobjectField extends CommonDBTM
    */
     public static function addReadOnlyFields(PluginGenericobjectType $type)
     {
+        /** @var array $GO_READONLY_FIELDS */
         global $GO_READONLY_FIELDS;
 
         if ($type->canBeReserved()) {
@@ -176,6 +182,7 @@ class PluginGenericobjectField extends CommonDBTM
     */
     public static function getFieldName($field, $itemtype, $options, $remove_prefix = false)
     {
+        /** @var DBmysql $DB */
         global $DB;
         $field_orig = $field;
         $field_table = null;
@@ -229,6 +236,7 @@ class PluginGenericobjectField extends CommonDBTM
     */
     public static function dropdownFields($name, $itemtype, $used = [])
     {
+        /** @var array $GO_FIELDS */
         global $GO_FIELDS;
 
         $dropdown_types = [];
@@ -291,6 +299,7 @@ class PluginGenericobjectField extends CommonDBTM
     */
     public static function getFieldOptions($field, $itemtype = "")
     {
+        /** @var array $GO_FIELDS */
         global $GO_FIELDS;
 
         $options = [];
@@ -317,7 +326,12 @@ class PluginGenericobjectField extends CommonDBTM
 
     public static function displayFieldDefinition($target, $itemtype, $field, $index, $last = false)
     {
-        global $GO_FIELDS, $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS;
+        /**
+         * @var array $CFG_GLPI
+         * @var array $GO_BLACKLIST_FIELDS
+         * @var array $GO_READONLY_FIELDS
+         */
+        global $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS;
 
         $readonly  = in_array($field, $GO_READONLY_FIELDS);
         $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
@@ -365,10 +379,11 @@ class PluginGenericobjectField extends CommonDBTM
     * Add a new field in DB
     * @param table the table
     * @param field the field to delete
-    * @return nothing
+    * @return void
     */
     public static function addNewField($table, $field, $after = false)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         _log("add", $field, "from", $table);
@@ -443,10 +458,11 @@ class PluginGenericobjectField extends CommonDBTM
     * Delete a field in DB
     * @param table the table
     * @param field the field to delete
-    * @return nothing
+    * @return void
     */
     public static function deleteField($table, $field)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
        //Remove field from displaypreferences
@@ -494,10 +510,11 @@ class PluginGenericobjectField extends CommonDBTM
    /**
     * Change field order in DB
     * @params an array which contains the itemtype, the field to move and the action (up/down)
-    * @return nothing
+    * @return void
     */
     public static function changeFieldOrder($params = [])
     {
+        /** @var DBmysql $DB */
         global $DB;
         $itemtype = $params['itemtype'];
         $field    = $params['field'];

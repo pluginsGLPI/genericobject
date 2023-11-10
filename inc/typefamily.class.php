@@ -43,6 +43,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
 
     public static function install(Migration $migration)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset = DBConnection::getDefaultCharset();
@@ -67,6 +68,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
 
     public static function uninstall()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $table = getTableForItemType(__CLASS__);
@@ -78,6 +80,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
 
     public static function getFamilies()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $query     = "SELECT f.id as id, f.name as name, t.itemtype as itemtype

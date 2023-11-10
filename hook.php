@@ -85,8 +85,6 @@ function plugin_uninstall_addUninstallTypes($uninstal_types = [])
  */
 function plugin_genericobject_install()
 {
-    global $DB;
-
     include_once(GENERICOBJECT_DIR . "/inc/object.class.php");
     include_once(GENERICOBJECT_DIR . "/inc/type.class.php");
 
@@ -141,6 +139,7 @@ function plugin_genericobject_install()
  */
 function plugin_genericobject_uninstall()
 {
+    /** @var DBmysql $DB */
     global $DB;
 
     include_once(GENERICOBJECT_DIR . "/inc/object.class.php");
@@ -187,6 +186,7 @@ function plugin_genericobject_uninstall()
 
 function plugin_datainjection_populate_genericobject()
 {
+    /** @var array $INJECTABLE_TYPES */
     global $INJECTABLE_TYPES;
     $type = new PluginGenericobjectType();
     foreach ($type->find(['use_plugin_datainjection' => 1, 'is_active' => 1]) as $data) {

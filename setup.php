@@ -106,6 +106,14 @@ $go_autoloader->register();
  */
 function plugin_init_genericobject()
 {
+    /**
+     * @var array $PLUGIN_HOOKS
+     * @var array $GO_BLACKLIST_FIELDS
+     * @var array $GENERICOBJECT_PDF_TYPES
+     * @var array $GO_LINKED_TYPES
+     * @var array $GO_READONLY_FIELDS
+     * @var array $CFG_GLPI
+     */
     global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $CFG_GLPI;
 
@@ -257,8 +265,6 @@ function plugin_genericobject_haveTypeRight($itemtype, $right)
 
 function plugin_genericobject_includeCommonFields($force = false)
 {
-    global $GO_FIELDS, $LANG; // Permit missing global declaration in user files
-
     $includes = [
         sprintf('%s/fields/field.constant.php', GENERICOBJECT_DIR), // Default common fields constants
     ];

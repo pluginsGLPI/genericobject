@@ -52,6 +52,7 @@ class PluginGenericobjectSingletonObjectField
     */
     public static function getInstance($itemtype, $reload = false)
     {
+        /** @var DBmysql $DB */
         global $DB;
         if (!isset(self::$_dbfields[$itemtype]) || $reload) {
             self::$_dbfields[$itemtype] = $DB->listFields(getTableForItemType($itemtype));

@@ -39,6 +39,7 @@ class PluginGenericobjectObject extends CommonDBTM
     //Get itemtype name
     public static function getTypeName($nb = 0)
     {
+        /** @var array $LANG */
         global $LANG;
         $class    = get_called_class();
       //Datainjection : Don't understand why I need this trick : need to be investigated !
@@ -153,7 +154,15 @@ class PluginGenericobjectObject extends CommonDBTM
 
     public static function registerType()
     {
-        global $DB, $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI, $GO_LINKED_TYPES, $GENINVENTORYNUMBER_TYPES;
+        /**
+         * @var array $PLUGIN_HOOKS
+         * @var array $UNINSTALL_TYPES
+         * @var array $ORDER_TYPES
+         * @var array $CFG_GLPI
+         * @var array $GO_LINKED_TYPES
+         * @var array $GENINVENTORYNUMBER_TYPES
+         */
+        global $PLUGIN_HOOKS, $UNINSTALL_TYPES, $ORDER_TYPES, $CFG_GLPI, $GO_LINKED_TYPES, $GENINVENTORYNUMBER_TYPES;
 
         $class  = get_called_class();
         $item   = new $class();
@@ -211,6 +220,7 @@ class PluginGenericobjectObject extends CommonDBTM
             }
             if ($item->canUsePluginSimcard()) {
                 if ($plugin->isActivated('simcard') && $plugin->isActivated('simcard')) {
+                    //@phpstan-ignore-next-line
                     PluginSimcardSimcard_Item::registerItemtype($class);
                 }
             }
@@ -263,11 +273,13 @@ class PluginGenericobjectObject extends CommonDBTM
             if ($item->canUsePluginGeninventorynumber()) {
                 if (!in_array($class, $GENINVENTORYNUMBER_TYPES)) {
                     include_once("$plugin_gen_path/inc/profile.class.php");
+                    //@phpstan-ignore-next-line
                     PluginGeninventorynumberConfigField::registerNewItemType($class);
                     array_push($GENINVENTORYNUMBER_TYPES, $class);
                 }
             } else if ($plugin->isActivated('geninventorynumber')) {
                 include_once("$plugin_gen_path/inc/profile.class.php");
+                //@phpstan-ignore-next-line
                 PluginGeninventorynumberConfigField::unregisterNewItemType($class);
             }
         }
@@ -289,6 +301,7 @@ class PluginGenericobjectObject extends CommonDBTM
 
     public static function getMenuIcon($itemtype)
     {
+        /** @var array $CFG_GLPI */
         global $CFG_GLPI;
         $itemtype_table = getTableForItemType($itemtype);
         $itemtype_shortname = preg_replace("/^glpi_plugin_genericobject_/", "", $itemtype_table);
@@ -605,6 +618,8 @@ class PluginGenericobjectObject extends CommonDBTM
             echo "</table></div>";
             Html::closeForm();
         }
+
+        return true;
     }
 
 
@@ -618,8 +633,6 @@ class PluginGenericobjectObject extends CommonDBTM
 
     public function displayField($canedit, $name, $value, $template, $description = [])
     {
-        global $GO_BLACKLIST_FIELDS;
-
         $searchoption  = PluginGenericobjectField::getFieldOptions($name, get_called_class());
 
         if (
@@ -865,8 +878,6 @@ class PluginGenericobjectObject extends CommonDBTM
 
     public function rawSearchOptions()
     {
-        global $DB, $GO_FIELDS, $GO_BLACKLIST_FIELDS;
-
         $datainjection_blacklisted = ['id', 'date_mod', 'entities_id', 'date_creation'];
         $index_exceptions = ['name' => 1, 'id' => 2, 'comment' => 16, 'date_mod' => 19,
             'entities_id' => 80, 'is_recursive' => 86, 'notepad' => 90,
@@ -1103,6 +1114,7 @@ class PluginGenericobjectObject extends CommonDBTM
     **/
     public function addOrUpdateObject($values = [], $options = [])
     {
+        //@phpstan-ignore-next-line
         $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
         $lib->processAddOrUpdate();
         return $lib->getInjectionResults();
@@ -1117,7 +1129,6 @@ class PluginGenericobjectObject extends CommonDBTM
 
     public function transfer($new_entity)
     {
-        global $DB;
         if ($this->fields['id'] > 0 && $this->fields['entities_id'] != $new_entity) {
            //Update entity for this object
             $tmp['id']          = $this->fields['id'];
@@ -1186,8 +1197,6 @@ class PluginGenericobjectObject extends CommonDBTM
    **/
     public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
-        global $GENINVENTORYNUMBER_TYPES;
-
        // KK TODO: check if MassiveAction itemtypes are concerned
        //if (in_array ($options['itemtype'], $GENINVENTORYNUMBER_TYPES)) {
         switch ($ma->getAction()) {

@@ -44,6 +44,7 @@ class PluginGenericobjectObject_Item extends CommonDBChild
     //Get itemtype name
     public static function getTypeName($nb = 0)
     {
+        /** @var array $LANG */
         global $LANG;
         $class    = get_called_class();
        //Datainjection : Don't understand why I need this trick : need to be investigated !

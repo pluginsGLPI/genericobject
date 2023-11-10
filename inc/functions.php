@@ -36,7 +36,6 @@
  */
 function dropdown_getTypeName($class, $nb = 0)
 {
-    global $GO_FIELDS;
     $fk = getForeignKeyFieldForTable(getTableForItemType($class));
     $instance = new $class();
     $options = PluginGenericobjectField::getFieldOptions($fk, $instance->linked_itemtype);
@@ -54,6 +53,7 @@ function dropdown_getTypeName($class, $nb = 0)
         return $class;
     }
 }
+/** @var array $LOG_FILTER */
 global $LOG_FILTER;
 $LOG_FILTER = [];
 /*
@@ -63,6 +63,7 @@ $LOG_FILTER = [];
  */
 function _log()
 {
+    /** @var array $LOG_FILTER */
     global $LOG_FILTER;
     $trace = debug_backtrace();
     if (count($trace) > 0) {
