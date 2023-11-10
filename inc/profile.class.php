@@ -418,7 +418,8 @@ class PluginGenericobjectProfile extends Profile
                         switch ($right['right']) {
                             case null:
                             case '':
-                                   $rightvalue = 0;
+                            default:
+                                $rightvalue = 0;
                                 break;
                             case 'r':
                                 $rightvalue = READ;

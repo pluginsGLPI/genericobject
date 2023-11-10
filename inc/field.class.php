@@ -295,7 +295,7 @@ class PluginGenericobjectField extends CommonDBTM
     *
     * @param $field the current field
     * @param $itemtype the itemtype
-    * @return an array which contains the full field definition
+    * @return array which contains the full field definition
     */
     public static function getFieldOptions($field, $itemtype = "")
     {

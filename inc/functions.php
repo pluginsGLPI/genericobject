@@ -66,6 +66,7 @@ function _log()
     /** @var array $LOG_FILTER */
     global $LOG_FILTER;
     $trace = debug_backtrace();
+    $filename = "";
     if (count($trace) > 0) {
         $glpi_root = str_replace("\\", "/", GLPI_ROOT);
         $trace_file = str_replace("\\", "/", $trace[0]['file']);

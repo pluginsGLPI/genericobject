@@ -48,5 +48,7 @@ if (
     Search::Show('PluginGenericobjectType');
     Html::footer();
 } else {
+    /** @var array $CFG_GLPI */
+    global $CFG_GLPI;
     Html::redirect($CFG_GLPI['root_doc'] . "/front/central.php");
 }
