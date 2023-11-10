@@ -333,7 +333,7 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
     // @codingStandardsIgnoreStart
-    public function post_updateItem($history = 1)
+    public function post_updateItem($history = true)
     {
         // @codingStandardsIgnoreEnd
        //Check if some fields need to be added, because of GLPI framework
@@ -557,7 +557,7 @@ class PluginGenericobjectType extends CommonDBTM
    /**
     * Define name of type to display in menu
     *
-    * @return type name
+    * @return string type name
     */
     public static function getMenuName()
     {
@@ -953,9 +953,9 @@ class PluginGenericobjectType extends CommonDBTM
     * Create an object, it's table, files and rights
     *
     * @since 2.1.5
-    * @param name object short name
-    * @param itemtype object class name
-    * @param options create options :
+    * @param string $name object short name
+    * @param string $itemtype object class name
+    * @param array $options create options :
     *    - add_table : add the object table (default is no)
     *    - create_default_profile : add default right (default is no) for current user profile
     *    - add_injection_file : add file to integrate itemtype into the datainjection plugin
@@ -1265,7 +1265,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete an used form file
-    * @param name the name of the object type
+    * @param string $name the name of the object type
     * @return void
     */
     public static function deleteFormFile($name)
@@ -1288,7 +1288,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete an used class file
-    * @param name the name of the object type
+    * @param string $name the name of the object type
     * @return void
     */
     public static function deleteClassFile($name)
@@ -1438,9 +1438,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Write on the the class file for the new object type
-    * @param name the name of the object type
-    * @param classname the name of the new object
-    * @param itemtype the object device type
+    * @param string $name the name of the object type
+    * @param string $classname the name of the new object
     * @return void
     */
     public static function addClassFile($name, $classname)
@@ -1455,9 +1454,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Write on the the _Item class file for the new object type
-    * @param name the name of the object type
-    * @param classname the name of the new object
-    * @param itemtype the object device type
+    * @param string $name the name of the object type
+    * @param string $classname the name of the new object
     * @return void
     */
     public static function addItemClassFile($name, $classname)
@@ -1476,9 +1474,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Write on the the form file for the new object type
-    * @param name the name of the object type
-    * @param classname the name of the new object
-    * @param itemtype the object device type
+    * @param string $name the name of the object type
+    * @param string $classname the name of the new object
     * @return void
     */
     public static function addFormFile($name, $classname)
@@ -1494,9 +1491,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Write on the the form file for the new object type
-    * @param name the name of the object type
-    * @param classname the name of the new object
-    * @param itemtype the object device type
+    * @param string $name the name of the object type
+    * @param string $classname the name of the new object
     * @return void
     */
     public static function addSearchFile($name, $classname)
@@ -1546,9 +1542,10 @@ class PluginGenericobjectType extends CommonDBTM
     *
     * Create or overwrite files for an itemtype
     * @since 2.2.0
-    * @param $itemtype the itemtype to check
-    * @param $name type's short name
-    * @param $overwrite force to overwrite existing files
+    * @param string $itemtype the itemtype to check
+    * @param string $name type's short name
+    * @param boolean $overwrite force to overwrite existing files
+    * @param boolean $overwrite_locales force to overwrite existing locales
     * @return void
     */
     public static function checkClassAndFilesForOneItemType($itemtype, $name, $overwrite = false, $overwrite_locales = true)
@@ -1592,7 +1589,7 @@ class PluginGenericobjectType extends CommonDBTM
     *
     * Delete all files and classes for an itemtype (including dropdowns)
     * @since 2.2.0
-    * @param unknown_type $name file name
+    * @param string $name file name
     */
     public static function deleteItemTypeFilesAndClasses($name, $table, $itemtype)
     {
@@ -1632,7 +1629,7 @@ class PluginGenericobjectType extends CommonDBTM
     * Delete all files for an itemtype
     *
     * @since 2.2.0
-    * @param name class file name
+    * @param string $name class file name
     */
     public static function deleteFilesAndClassesForOneItemtype($name)
     {
@@ -1662,10 +1659,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Add a new dropdown table
-    * @param table the table name
-    * @param entity_assign can the dropdown be assigned to an entity
-    * @param recursive can the dropdown be recursive
-    * @param tree can the dropdown be a tree dropdown
+    * @param string $table the table name
+    * @param array $options
     * @return void
     */
     public static function addDropdownTable($table, $options = [])
@@ -1721,7 +1716,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete object type table + entries in glpi_display
-    * @name object type's name
+    * @name string $itemtype object type's name
     * @return void
     */
     public static function deleteTable($itemtype)
@@ -1737,7 +1732,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete object _items table
-    * @name object type's name
+    * @name string $itemtype object type's name
     * @return void
     */
     public static function deleteItemsTable($itemtype)
@@ -1749,7 +1744,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Get object name by ID
-    * @param ID the internal ID
+    * @param string $itemtype
     * @return string the name associated with the ID
     */
     public static function getNameByID($itemtype)
@@ -1769,7 +1764,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete all tickets for an itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteTicketAssignation($itemtype)
@@ -1783,7 +1778,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete all simcards for an itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteSimcardAssignation($itemtype)
@@ -1803,7 +1798,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Remove datainjection models for an itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function removeDataInjectionModels($itemtype)
@@ -1821,7 +1816,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete all loans associated with a itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteLoans($itemtype)
@@ -1835,7 +1830,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete all loans associated with a itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteUnicity($itemtype)
@@ -1847,7 +1842,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete all notes associated with a itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteNotepad($itemtype)
@@ -1859,7 +1854,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete network ports for an itemtype
-    * @param the itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteNetworking($itemtype)
@@ -1872,7 +1867,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete reservations for an itemtype
-    * @param $itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteReservations($itemtype)
@@ -1880,7 +1875,6 @@ class PluginGenericobjectType extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
 
-        $reservation = new Reservation();
         $query = "DELETE FROM
             `glpi_reservations`
          WHERE `reservationitems_id` in (
@@ -1891,7 +1885,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Delete reservations for an itemtype
-    * @param $itemtype
+    * @param string $itemtype
     * @return void
     */
     public static function deleteReservationItems($itemtype)
@@ -1902,8 +1896,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Filter values inserted by users : remove accented chars
-    * @param value the value to be filtered
-    * @return the filtered value
+    * @param string $value the value to be filtered
+    * @return string the filtered value
     */
     public static function filterInput($value)
     {
@@ -1942,8 +1936,8 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Get the object class, by giving the name
-    * @param name the object's internal identifier
-    * @return the class associated with the object
+    * @param string $name the object's internal identifier
+    * @return string the class associated with the object
     */
     public static function getClassByName($name)
     {
@@ -2036,7 +2030,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Register all variables for a type
-    * @param type the type's attributes
+    * @param string $itemtype the type's attributes
     * @return void
     */
     public static function registerOneType($itemtype)
@@ -2099,7 +2093,7 @@ class PluginGenericobjectType extends CommonDBTM
 
    /**
     * Get all dropdown fields associated with an itemtype
-    * @param itemtype the itemtype
+    * @param string $itemtype the itemtype
     * @return array or fields that represents the dropdown tables
     */
     public static function getDropdownForItemtype($itemtype)
@@ -2704,8 +2698,7 @@ class PluginGenericobjectType extends CommonDBTM
 
        // Rename files (replace "/{$old name}*" by "/{$new_system_name}*")
         $migration->displayMessage(
-            sprintf('Rename files related to "%s" itemtype and update their content', $old_itemtype),
-            true
+            sprintf('Rename files related to "%s" itemtype and update their content', $old_itemtype)
         );
         foreach ($destination_files as $new_filename) {
             $old_filename = preg_replace(
@@ -2730,7 +2723,6 @@ class PluginGenericobjectType extends CommonDBTM
             } else {
                 $migration->displayMessage(
                     sprintf('Update "%s" file content', $old_filename),
-                    true
                 );
             }
 

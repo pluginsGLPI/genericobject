@@ -856,7 +856,7 @@ class PluginGenericobjectObject extends CommonDBTM
 
     /**
      * Display object preview form
-     * @param type the object type
+     * @param PluginGenericobjectType $type the object type
      */
     public static function showPrevisualisationForm(PluginGenericobjectType $type)
     {
@@ -1108,8 +1108,8 @@ class PluginGenericobjectObject extends CommonDBTM
     /**
      * Standard method to add an object into glpi
      *
-     * @param values fields to add into glpi
-     * @param options options used during creation
+     * @param array $values fields to add into glpi
+     * @param array $options options used during creation
      * @return array
      *
     **/

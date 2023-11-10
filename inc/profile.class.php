@@ -241,7 +241,6 @@ class PluginGenericobjectProfile extends Profile
 
    /**
     * Create rights for the current profile
-    * @param profileID the profile ID
     * @return void
     */
     public static function createFirstAccess()
@@ -253,9 +252,9 @@ class PluginGenericobjectProfile extends Profile
 
    /**
     * Check if rights for a profile still exists
-    * @param profiles_id the profile ID
-    * @param itemtype name of the type
-    * @return true if exists, no if not
+    * @param int $profiles_id the profile ID
+    * @param string $itemtype name of the type
+    * @return bool
     */
     public static function profileExists($profiles_id, $itemtype = false)
     {
@@ -276,7 +275,9 @@ class PluginGenericobjectProfile extends Profile
 
    /**
     * Create rights for the profile if it doesn't exists
-    * @param profileID the profile ID
+    * @param int $profiles_id the profile ID
+    * @param string $itemtype
+    * @param bool $first
     * @return void
     */
     public static function createAccess($profiles_id, $itemtype, $first = false)
@@ -367,7 +368,7 @@ class PluginGenericobjectProfile extends Profile
 
    /**
     * Delete type from the rights
-    * @param name the name of the type
+    * @param string $itemtype the name of the type
     * @return void
     */
     public static function deleteTypeFromProfile($itemtype)

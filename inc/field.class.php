@@ -228,11 +228,11 @@ class PluginGenericobjectField extends CommonDBTM
     *
     * Display a dropdown with all available fields for an itemtype
     * @since
-    * @param $name the dropdown name
-    * @param $itemtype the itemtype
-    * @param $used an array which contains all fields already added
+    * @param string $name the dropdown name
+    * @param string $itemtype the itemtype
+    * @param array $used an array which contains all fields already added
     *
-    * @return the dropdown random ID
+    * @return int the dropdown random ID
     */
     public static function dropdownFields($name, $itemtype, $used = [])
     {
@@ -377,8 +377,8 @@ class PluginGenericobjectField extends CommonDBTM
 
    /**
     * Add a new field in DB
-    * @param table the table
-    * @param field the field to delete
+    * @param string $table the table
+    * @param string $field the field to delete
     * @return void
     */
     public static function addNewField($table, $field, $after = false)
@@ -456,8 +456,8 @@ class PluginGenericobjectField extends CommonDBTM
 
    /**
     * Delete a field in DB
-    * @param table the table
-    * @param field the field to delete
+    * @param string $table the table
+    * @param string $field the field to delete
     * @return void
     */
     public static function deleteField($table, $field)
