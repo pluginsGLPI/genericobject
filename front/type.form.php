@@ -39,7 +39,7 @@ if (isset($_POST["select"]) && $_POST["select"] == "all") {
     $extraparams["selected"] = "checked";
 }
 
-if (isset ($_POST["add"])) {
+if (isset($_POST["add"])) {
    //Add a new itemtype
     $new_id = $type->add($_POST);
     Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType') . "?id=$new_id");
