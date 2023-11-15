@@ -28,7 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 Session::checkRight("profile", UPDATE);
 
 _log($_POST);
@@ -36,19 +36,19 @@ $prof = new Profile();
 
 /* save profile */
 if (isset($_POST['update_all_rights']) && isset($_POST['itemtype'])) {
-   $profiles = [];
-   foreach ($_POST as $key => $val) {
-      if (preg_match("/^profile_/", $key)) {
-         $id = preg_replace("/^profile_/", "", $key);
-         $profiles[$id] = [
-            "id" => $id,
-            "_".PluginGenericobjectProfile::getProfileNameForItemtype($_POST['itemtype']) => $val
-         ];
-      }
-   }
-   _log($profiles);
-   foreach ($profiles as $profile_id => $input) {
-      $prof->update($input);
-   }
+    $profiles = [];
+    foreach ($_POST as $key => $val) {
+        if (preg_match("/^profile_/", $key)) {
+            $id = preg_replace("/^profile_/", "", $key);
+            $profiles[$id] = [
+                "id" => $id,
+                "_" . PluginGenericobjectProfile::getProfileNameForItemtype($_POST['itemtype']) => $val
+            ];
+        }
+    }
+    _log($profiles);
+    foreach ($profiles as $profile_id => $input) {
+        $prof->update($input);
+    }
 }
 Html::redirect($_SERVER['HTTP_REFERER']);

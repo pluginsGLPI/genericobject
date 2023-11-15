@@ -28,7 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
 // Read itemtype
 $itemtype = $_GET['itemtype'] ?? null;

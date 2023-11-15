@@ -28,15 +28,19 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
 if (isset($_GET['itemtype'])) {
-   Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($_GET['itemtype']), READ);
-   $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
-   Html::header(__("Type of objects", "genericobject"),
-                $_SERVER['PHP_SELF'], "assets", ($menu!==false?$menu:strtolower($_GET['itemtype'])), strtolower($_GET['itemtype']));
-   Search::Show($_GET['itemtype']);
-
+    Session::checkRight(PluginGenericobjectProfile::getProfileNameForItemtype($_GET['itemtype']), READ);
+    $menu = PluginGenericobjectType::getFamilyNameByItemtype($_GET['itemtype']);
+    Html::header(
+        __("Type of objects", "genericobject"),
+        $_SERVER['PHP_SELF'],
+        "assets",
+        ($menu !== false ? $menu : strtolower($_GET['itemtype'])),
+        strtolower($_GET['itemtype'])
+    );
+    Search::Show($_GET['itemtype']);
 }
 
 Html::footer();

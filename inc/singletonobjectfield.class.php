@@ -33,12 +33,13 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
+    die("Sorry. You can't access directly to this file");
 }
 
-class PluginGenericobjectSingletonObjectField {
+class PluginGenericobjectSingletonObjectField
+{
    /// Items list
-   static $_dbfields = [];
+    public static $_dbfields = [];
 
    /**
     * Singleton to store DB fields definition
@@ -49,12 +50,13 @@ class PluginGenericobjectSingletonObjectField {
     *
     * @return an array which contains DB fields definition
     */
-   public static function getInstance($itemtype, $reload = false) {
-      global $DB;
-      if (!isset(self::$_dbfields[$itemtype]) || $reload) {
-         self::$_dbfields[$itemtype] = $DB->listFields(getTableForItemType($itemtype));
-      }
-      return self::$_dbfields[$itemtype];
-   }
+    public static function getInstance($itemtype, $reload = false)
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+        if (!isset(self::$_dbfields[$itemtype]) || $reload) {
+            self::$_dbfields[$itemtype] = $DB->listFields(getTableForItemType($itemtype));
+        }
+        return self::$_dbfields[$itemtype];
+    }
 }
-
