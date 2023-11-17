@@ -101,15 +101,15 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
     }
 
 
-   static function getItemtypesByFamily($families_id) 
-   {
-      return getAllDataFromTable(
-         'glpi_plugin_genericobject_types',
-         [
-            'plugin_genericobject_typefamilies_id' => $families_id,
-            'is_active' => 1
+    static function getItemtypesByFamily($families_id) 
+    {
+       return getAllDataFromTable(
+          'glpi_plugin_genericobject_types',
+          [
+             'plugin_genericobject_typefamilies_id' => $families_id,
+             'is_active' => 1
 
-         ] + ['ORDER' => 'name']
-      );
-   }
+          ] + ['ORDER' => 'name']
+       );
+    }
 }
