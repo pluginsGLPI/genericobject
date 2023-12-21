@@ -2793,11 +2793,8 @@ class PluginGenericobjectType extends CommonDBTM
         }
 
         $filename = "{$itemtype}_{$filename}";
-        $path = GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/$filename";
-
-        if ($relative) {
-            $path = str_replace(GLPI_ROOT."/", "", $path);
-        }
+        // use pluginimage.send.php to serve the file
+        $path = "front/pluginimage.send.php?plugin=genericobject&folder=impact_icons&name=" . $filename;
 
         return $path;
     }
