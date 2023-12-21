@@ -2796,7 +2796,7 @@ class PluginGenericobjectType extends CommonDBTM
         $path = GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/$filename";
 
         if ($relative) {
-            $path = str_replace(GLPI_ROOT, "", $path);
+            $path = str_replace(GLPI_ROOT."/", "", $path);
         }
 
         return $path;
