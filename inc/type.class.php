@@ -2793,8 +2793,11 @@ class PluginGenericobjectType extends CommonDBTM
         }
 
         $filename = "{$itemtype}_{$filename}";
-        // use pluginimage.send.php to serve the file
-        $path = "front/pluginimage.send.php?plugin=genericobject&folder=impact_icons&name=" . $filename;
+        $path = GLPI_PLUGIN_DOC_DIR . "/genericobject/impact_icons/$filename";
+
+        if ($relative) {
+            $path = str_replace(GLPI_ROOT, "", $path);
+        }
 
         return $path;
     }
@@ -2826,13 +2829,13 @@ class PluginGenericobjectType extends CommonDBTM
     *
     * @return null|string
     */
-    public function getImpactIconUrl(): ?string
+    public function getImpactIconUrl($full = true): ?string
     {
        // Check that the file exist
         if (!$this->getImpactIconFilePath()) {
             return null;
         }
 
-        return Plugin::getWebDir('genericobject') . "/front/getimpacticon.php?itemtype=" . $this->fields['itemtype'];
+        return Plugin::getWebDir('genericobject', $full) . "/front/getimpacticon.php?itemtype=" . $this->fields['itemtype'];
     }
 }
