@@ -201,11 +201,9 @@ function plugin_init_genericobject()
             if (empty($row['impact_icon'])) {
                 $icon = ""; // Will fallback to default impact icon
             } else {
-                $icon = PluginGenericobjectType::getImpactIconFileStoragePath(
-                    $row['impact_icon'],
-                    $row['itemtype'],
-                    true
-                ) ?? "";
+                $obj = new PluginGenericobjectType();
+                $obj->getFromDB($row['id']);
+                $icon = $obj->getImpactIconUrl(false) ?? "";
             }
 
             $CFG_GLPI['impact_asset_types'][$row['itemtype']] = $icon;

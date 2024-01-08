@@ -2829,13 +2829,13 @@ class PluginGenericobjectType extends CommonDBTM
     *
     * @return null|string
     */
-    public function getImpactIconUrl(): ?string
+    public function getImpactIconUrl($full = true): ?string
     {
        // Check that the file exist
         if (!$this->getImpactIconFilePath()) {
             return null;
         }
 
-        return Plugin::getWebDir('genericobject') . "/front/getimpacticon.php?itemtype=" . $this->fields['itemtype'];
+        return Plugin::getWebDir('genericobject', $full) . "/front/getimpacticon.php?itemtype=" . $this->fields['itemtype'];
     }
 }
