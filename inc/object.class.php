@@ -650,7 +650,7 @@ class PluginGenericobjectObject extends CommonDBTM
 
            // Keep only main column type by removing anything that is preceded by a space (e.g. " unsigned")
            // or a parenthesis (e.g. "(255)").
-            echo '<div class="col-xxl-7  field-container">';
+            echo '<div class="col-xxl-7 text-start field-container">';
             $column_type = preg_replace('/^([a-z]+)([ (].+)*$/', '$1', $description['Type']);
             switch ($column_type) {
                 case "int":
