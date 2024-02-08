@@ -3,7 +3,7 @@
    <name>Generic Objects Management</name>
    <key>genericobject</key>
    <state>stable</state>
-   <logo>https://raw.githubusercontent.com/pluginsGLPI/genericobject/master/genericobject.png</logo>
+   <logo>https://raw.githubusercontent.com/pluginsGLPI/genericobject/main/genericobject.png</logo>
    <description>
       <short>
          <fr><![CDATA[Faites l'inventaire de nouveaux types d'objets]]></fr>
@@ -254,7 +254,7 @@
          </cs>
    </tags>
    <screenshots>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/genericobject/master/genericobject.gif</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/genericobject/main/genericobject.gif</screenshot>
    </screenshots>
    <license>GPL v2+</license>
 </root>
