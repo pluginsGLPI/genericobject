@@ -646,15 +646,11 @@ class PluginGenericobjectObject extends CommonDBTM
             }
 
             $this->startColumn();
-            echo $searchoption['name'];
-            if (isset($searchoption['autoname']) && $searchoption['autoname'] && $template) {
-                echo "*&nbsp;";
-            }
-            $this->endColumn();
-            $this->startColumn();
+            echo '<label class="col-form-label col-xxl-5 text-xxl-end">' . $searchoption['name'] . '</label>';
 
            // Keep only main column type by removing anything that is preceded by a space (e.g. " unsigned")
            // or a parenthesis (e.g. "(255)").
+            echo '<div class="col-xxl-7 text-start field-container">';
             $column_type = preg_replace('/^([a-z]+)([ (].+)*$/', '$1', $description['Type']);
             switch ($column_type) {
                 case "int":
@@ -774,6 +770,7 @@ class PluginGenericobjectObject extends CommonDBTM
                     echo "<input type='text' name='$name' value='$value'>";
                     break;
             }
+            echo '</div>';
             $this->endColumn();
         }
     }
@@ -786,10 +783,14 @@ class PluginGenericobjectObject extends CommonDBTM
     public function startColumn()
     {
         if ($this->cpt == 0) {
-            echo "<tr class='tab_bg_1'>";
+            echo '<div class="card-body d-flex flex-wrap">';
+            echo '<div class="col-12 col-xxl-12 flex-column">';
+            echo '<div class="d-flex flex-row flex-wrap flex-xl-nowrap">';
+            echo '<div class="row flex-row align-items-start flex-grow-1">';
+            echo '<div class="row flex-row">';
         }
+        echo '<div class="form-field row col-12 col-sm-6  mb-2">';
 
-        echo "<td>";
         $this->cpt++;
     }
 
@@ -800,12 +801,7 @@ class PluginGenericobjectObject extends CommonDBTM
     **/
     public function endColumn()
     {
-        echo "</td>";
-
-        if ($this->cpt == 4) {
-            echo "</tr>";
-            $this->cpt = 0;
-        }
+        echo "</div>";
     }
 
 
@@ -816,11 +812,7 @@ class PluginGenericobjectObject extends CommonDBTM
     public function closeColumn()
     {
         if ($this->cpt > 0) {
-            while ($this->cpt < 4) {
-                echo "<td></td>";
-                $this->cpt++;
-            }
-            echo "</tr>";
+            echo "</div></div></div></div></div>";
         }
     }
 
