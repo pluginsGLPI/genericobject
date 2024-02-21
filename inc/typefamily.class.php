@@ -108,7 +108,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
             [
                 'plugin_genericobject_typefamilies_id' => $families_id,
                 'is_active' => 1
-            ]
+            ] + ['ORDER' => 'name']
         );
     }
 }
