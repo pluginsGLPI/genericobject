@@ -33,11 +33,11 @@ class %%CLASSNAME%% extends PluginGenericobjectObject {
    static $rightname = '';
 
    static function getFormURL($full=true) {
-      return Toolbox::getItemTypeFormURL( class::parent , $full) .
+      return Toolbox::getItemTypeFormURL( parent::class , $full) .
       "?itemtype=".get_called_class();
    }
    static function getSearchURL($full=true) {
-      return Toolbox::getItemTypeSearchURL( class::parent , $full) .
+      return Toolbox::getItemTypeSearchURL( parent::class , $full) .
       "?itemtype=".get_called_class();
 
    }
