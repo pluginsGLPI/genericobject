@@ -25,6 +25,11 @@
    </authors>
    <versions>
       <version>
+         <num>2.14.9</num>
+         <compatibility>~10.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/2.14.9/glpi-genericobject-2.14.9.tar.bz2</download_url>
+      </version>
+      <version>
          <num>2.14.8</num>
          <compatibility>~10.0.0</compatibility>
          <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/2.14.8/glpi-genericobject-2.14.8.tar.bz2</download_url>
