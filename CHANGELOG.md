@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.14.9] - 2024-04-02
 
+### Added
+
+- PHP 8.3 compatibilty (```get_parent_class()```).
+
 ### Fixed
 
-- PHP 8.3 compatibilty (```get_parent_class()```)
+- Fix input alignment to match GLPI style.
+- Fix ```impact``` icon for generic object.
