@@ -24,5 +24,6 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
+global $LANG;
 
 $LANG['genericobject']['%%CLASSNAME%%'][0]="%%NAME%%";
