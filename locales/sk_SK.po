@@ -3,148 +3,151 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020
+# feonsu <feonsu@gmail.com>, 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-06 13:00+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
-"Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
-"Language-Team: Korean (Korea) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/ko_KR/)\n"
+"Last-Translator: feonsu <feonsu@gmail.com>, 2023\n"
+"Language-Team: Slovak (Slovakia) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/sk_SK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko_KR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: sk_SK\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
 #: inc/profile.class.php:152
 msgid "(No types defined yet)"
-msgstr "(아직 정의된 유형 없음)"
+msgstr "(Zatiaľ neboli definované žiadne typy)"
 
 #: inc/type.class.php:195
 msgid "A type already exists with the same name"
-msgstr "유형이 이미 같은 이름으로 존재합니다"
+msgstr "Typ s rovnakým názvom už existuje"
 
 #: inc/field.class.php:135
 msgid "Add new field"
-msgstr "새 항목 추가"
+msgstr "Pridať nové pole"
 
 #: inc/type.class.php:676
 msgid "Behaviour"
-msgstr "동작"
+msgstr "Chovanie"
 
 #: index.php:74 front/familylist.php:44
 msgid "Empty family"
-msgstr "빈 집단"
+msgstr "Prázdna rodina"
 
 #: inc/typefamily.class.php:41 inc/type.class.php:516 inc/type.class.php:661
 msgid "Family of type of objects"
-msgstr "객체의 유형 집단"
+msgstr "Rodina typov objektov"
 
 #: front/field.form.php:56
 msgid "Field added successfully"
-msgstr "항목 추가됨"
+msgstr "Pole bolo úspešne pridané"
 
 #: front/field.form.php:46
 msgid "Field(s) deleted successfully"
-msgstr "항목(들) 삭제됨"
+msgstr "Pole bolo úspešne vymazané"
 
 #: inc/field.class.php:74
 msgid "Fields associated with the object"
-msgstr "객체에 연관된 항목"
+msgstr "Polia priradené k objektu"
 
 #: inc/profile.class.php:144
 msgid "General"
-msgstr "일반"
+msgstr "Všeobecné"
 
 #: inc/type.class.php:771
 msgid "Icon (impact analysis)"
-msgstr ""
+msgstr "Ikona (analýza dopadov)"
 
 #: inc/type.class.php:617
 msgid "Internal identifier"
-msgstr "내부 식별자"
+msgstr "Interný identifikátor"
 
 #: inc/field.class.php:80
 msgid "Label"
-msgstr "라벨"
+msgstr "Popisok"
 
 #: inc/type.class.php:925
 msgid "Link to other objects"
-msgstr "다른 객체들과 연결"
+msgstr "Prepojenie na ostatné objekty"
 
 #: inc/field.class.php:81
 msgid "Name in DB"
-msgstr "DB에서의 이름"
+msgstr "Názov v databáze"
 
 #: inc/type.class.php:695
 msgid "Network connections"
-msgstr "네트워크 연결"
+msgstr "Sieťové pripojenia"
 
 #: inc/object.class.php:596
 msgid "Object preview"
-msgstr "객체 미리보기"
+msgstr "Náhľad objektu"
 
 #: inc/profile.class.php:150
 msgid "Objects"
-msgstr "객체"
+msgstr "Objekty"
 
 #: index.php:62 inc/object_item.class.php:122 inc/type.class.php:428
 #: inc/type.class.php:564 inc/profile.class.php:43 setup.php:238
 #: front/type.form.php:69 front/familylist.php:37 front/familylist.php:49
 msgid "Objects management"
-msgstr "객체 관리"
+msgstr "Správa objektov"
 
 #: inc/type.class.php:2025
 msgid "Other"
 msgid_plural "Others"
-msgstr[0] ""
+msgstr[0] "Ostatný"
+msgstr[1] "Ostatné"
+msgstr[2] "Ostatné"
+msgstr[3] "Ostatné"
 
 #: inc/field.class.php:345
 msgid "Read-only field"
-msgstr "읽기-전용 항목"
+msgstr "Pole iba na čítanie"
 
 #: inc/type.class.php:910
 msgid "Regenerate files"
-msgstr "파일 재생성"
+msgstr "Znova generovať súbory"
 
 #: front/commontreedropdown.form.php:39 front/commondropdown.php:39
 #: front/commondropdown.form.php:39
 msgid "The requested dropdown does not exists"
-msgstr "요청된 드롭다운은 존재하지 않습니다"
+msgstr "Požadovaná rozbaľovacia ponuka neexistuje"
 
 #: inc/type.class.php:188
 msgid "Type must start with a letter"
-msgstr "유형은 문자로 시작해야 합니다"
+msgstr "Typ musí začínať písmenom"
 
 #: inc/type.class.php:167
 msgid "Type name is missing"
-msgstr "유형 이름이 누락되었습니다"
+msgstr "Názov typu chýba"
 
 #: inc/type.class.php:173
 msgid "Type name must be longer"
-msgstr "유형 이름은 더 길어야 합니다"
+msgstr "Názov typ musí byť dlhší"
 
 #: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
 #: front/type.php:43
 msgid "Type of objects"
-msgstr "객체 유형"
+msgstr "Typy objektov"
 
 #: inc/type.class.php:180
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "유형 'field', 'object' 그리고 'type'은 금지되었습니다. 다른 것을 선택해 주세요"
+msgstr "Typy 'field', 'object' a 'type' sú rezervované. Vyberte iný."
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2439
 #, php-format
 msgid "Unable to load the class %1$s."
-msgstr "클래스 %1$s을 불러올 수 없습니다."
+msgstr "Nepodarilo sa načítať triedu %1$s."
 
 #: inc/object.class.php:866
 msgid "You must configure rights to enable the preview"
-msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
+msgstr "Na zapnutie náhľadu musíte nakonfigurovať oprávnenia"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2441
@@ -152,28 +155,28 @@ msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr "이 플러그인에 대한 데이터베이스 내에 개비지 데이터가 있거나 %1$s내의 파일이 누락된 것 같습니다"
+msgstr "Pravdepodobne máte vo svojej databáze pre tento plugin chybné dáta a chýbajúce súbory v %1$s"
 
 #: inc/type.class.php:703
 msgid "geninventorynumber plugin"
-msgstr "geninventorynumber 플러그인"
+msgstr "geninventorynumber plugin"
 
 #: inc/type.class.php:701
 msgid "injection file plugin"
-msgstr "파일 플러그인 삽입"
+msgstr "datainjection plugin"
 
 #: inc/type.class.php:705
 msgid "item's uninstallation plugin"
-msgstr "품목 제거 플러그인"
+msgstr "uninstall plugin"
 
 #: inc/type.class.php:704
 msgid "order plugin"
-msgstr "order 플러그인"
+msgstr "order plugin"
 
 #: inc/type.class.php:706
 msgid "simcard plugin"
-msgstr "simcard 플러그인"
+msgstr "simcard plugin"
 
 #: inc/type.class.php:707
 msgid "treeview plugin"
-msgstr "treeview 플러그인"
+msgstr "treeview plugin"
