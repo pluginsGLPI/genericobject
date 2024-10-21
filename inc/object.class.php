@@ -247,10 +247,6 @@ class PluginGenericobjectObject extends CommonDBTM
                     array_push($CFG_GLPI['asset_types'], $class);
                 }
 
-                if (!in_array($class, $CFG_GLPI['state_types'])) {
-                    array_push($CFG_GLPI['state_types'], $class);
-                }
-
                 if (!in_array($class, $CFG_GLPI['globalsearch_types'])) {
                     array_push($CFG_GLPI['globalsearch_types'], $class);
                 }
