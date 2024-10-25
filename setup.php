@@ -117,12 +117,12 @@ function plugin_init_genericobject()
     global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
           $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $CFG_GLPI;
 
-    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment"];
+    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment", "ticket_tco"];
 
     $GO_BLACKLIST_FIELDS =  ["itemtype", "table", "is_deleted", "id", "entities_id",
         "is_recursive", "is_template", "notepad", "template_name",
         "date_mod", "name", "is_helpdesk_visible", "comment",
-        "date_creation"
+        "date_creation", "ticket_tco"
     ];
 
     $GO_LINKED_TYPES     =  ['Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',

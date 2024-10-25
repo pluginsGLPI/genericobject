@@ -116,6 +116,9 @@ $GO_FIELDS['is_global']['massiveaction'] = false;
 $GO_FIELDS['is_helpdesk_visible']['name']       = __("Associable to a ticket");
 $GO_FIELDS['is_helpdesk_visible']['input_type'] = 'bool';
 
+$GO_FIELDS['ticket_tco']['name']       = __("TCO");
+$GO_FIELDS['ticket_tco']['input_type'] = 'decimal';
+
 $GO_FIELDS['locations_id']['name']       = __("Item location");
 $GO_FIELDS['locations_id']['input_type'] = 'dropdown';
 
