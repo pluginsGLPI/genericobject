@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+-  Hide `items` without proper user access rights in the family list.
+
 ## [2.14.10] - 2024-09-06
 
 ### Fixed
