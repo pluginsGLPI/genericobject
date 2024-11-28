@@ -58,10 +58,10 @@ if (!isset($_GET['id']) || !$family->getFromDB($_GET['id'])) {
     foreach ($types as $type) {
         $itemtype = $type['itemtype'];
         if (Session::haveRight(PluginGenericobjectProfile::getProfileNameForItemtype($itemtype), READ)) {
-                echo "<tr class='tab_bg_1'><td align='center'>";
-                echo "<a href='" . $itemtype::getSearchURL() . "'>";
-                echo $itemtype::getTypeName();
-                echo "</a></td></tr>";
+            echo "<tr class='tab_bg_1'><td align='center'>";
+            echo "<a href='" . $itemtype::getSearchURL() . "'>";
+            echo $itemtype::getTypeName();
+            echo "</a></td></tr>";
         }
     }
     echo "</table>";
