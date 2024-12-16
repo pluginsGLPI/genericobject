@@ -203,7 +203,7 @@ class PluginGenericobjectObject extends CommonDBTM
             "itemdevicegraphiccard_types"   => $item->canUseItemDevice(),
             "itemdevicemotherboard_types"   => $item->canUseItemDevice(),
             "itemdevicecamera_types"        => $item->canUseItemDevice(),
-       ]);
+        ]);
 
         if (plugin_genericobject_haveRight($class, READ)) {
             //Change url for adding a new object, depending on template management activation
