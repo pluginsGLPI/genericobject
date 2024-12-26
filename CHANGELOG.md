@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Fix: The costs associated with an item updates the TCO calculation
 - Fix `Use Components` to display all components
 
 ### Fixed
