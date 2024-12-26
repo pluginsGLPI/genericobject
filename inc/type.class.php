@@ -1102,7 +1102,6 @@ class PluginGenericobjectType extends CommonDBTM
            //TODO rename is_helpdesk_visible into is_helpdeskvisible
             PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'comment');
             PluginGenericobjectField::addNewField($table, 'ticket_tco');
-
         } else {
             PluginGenericobjectField::deleteField($table, 'is_helpdesk_visible');
         }
