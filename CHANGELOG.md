@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Fix: The costs associated with an item updates the TCO calculation
+- The `TCO` (Total Cost of Ownership) is now correctly updated based on the costs associated with an item.
 - Fix `Use Components` to display all components
 
 ### Fixed
