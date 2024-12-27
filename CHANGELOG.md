@@ -12,10 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix `Use Components` to display all components
-
-### Fixed
-
--  Hide `items` without proper user access rights in the family list.
+- Hide `items` without proper user access rights in the family list.
 
 ## [2.14.10] - 2024-09-06
 
