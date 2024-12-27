@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.14.11] - 2024-12-17
+
 ### Fixed
 
 - Fix `Use Components` to display all components
