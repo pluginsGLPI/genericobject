@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 13:00+0000\n"
+"POT-Creation-Date: 2024-12-17 01:52+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/ko_KR/)\n"
@@ -34,7 +34,7 @@ msgstr "새 항목 추가"
 msgid "Behaviour"
 msgstr "동작"
 
-#: index.php:74 front/familylist.php:44
+#: front/familylist.php:44 index.php:74
 msgid "Empty family"
 msgstr "빈 집단"
 
@@ -82,7 +82,7 @@ msgstr "DB에서의 이름"
 msgid "Network connections"
 msgstr "네트워크 연결"
 
-#: inc/object.class.php:596
+#: inc/object.class.php:607
 msgid "Object preview"
 msgstr "객체 미리보기"
 
@@ -90,9 +90,9 @@ msgstr "객체 미리보기"
 msgid "Objects"
 msgstr "객체"
 
-#: index.php:62 inc/object_item.class.php:122 inc/type.class.php:428
-#: inc/type.class.php:564 inc/profile.class.php:43 setup.php:238
-#: front/type.form.php:69 front/familylist.php:37 front/familylist.php:49
+#: setup.php:238 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
+#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
 msgid "Objects management"
 msgstr "객체 관리"
 
@@ -109,8 +109,8 @@ msgstr "읽기-전용 항목"
 msgid "Regenerate files"
 msgstr "파일 재생성"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "요청된 드롭다운은 존재하지 않습니다"
 
@@ -126,8 +126,8 @@ msgstr "유형 이름이 누락되었습니다"
 msgid "Type name must be longer"
 msgstr "유형 이름은 더 길어야 합니다"
 
-#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
-#: front/type.php:43
+#: front/object.php:37 front/type.php:43 inc/type.class.php:72
+#: inc/profile.class.php:304
 msgid "Type of objects"
 msgstr "객체 유형"
 
@@ -142,7 +142,7 @@ msgstr "유형 'field', 'object' 그리고 'type'은 금지되었습니다. 다�
 msgid "Unable to load the class %1$s."
 msgstr "클래스 %1$s을 불러올 수 없습니다."
 
-#: inc/object.class.php:866
+#: inc/object.class.php:877
 msgid "You must configure rights to enable the preview"
 msgstr "미리보기 활성화에 대한 권한을 구성해야 합니다"
 
