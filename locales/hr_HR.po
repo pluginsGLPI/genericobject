@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 13:00+0000\n"
+"POT-Creation-Date: 2024-12-17 01:52+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2020,2022\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/hr_HR/)\n"
@@ -34,7 +34,7 @@ msgstr "Dodaj novo polje"
 msgid "Behaviour"
 msgstr "Ponašanje"
 
-#: index.php:74 front/familylist.php:44
+#: front/familylist.php:44 index.php:74
 msgid "Empty family"
 msgstr "Prazna obitelji"
 
@@ -82,7 +82,7 @@ msgstr "Ime u bazi podataka"
 msgid "Network connections"
 msgstr "Mrežne veze"
 
-#: inc/object.class.php:596
+#: inc/object.class.php:607
 msgid "Object preview"
 msgstr "Pregled objekta"
 
@@ -90,9 +90,9 @@ msgstr "Pregled objekta"
 msgid "Objects"
 msgstr "Objekti"
 
-#: index.php:62 inc/object_item.class.php:122 inc/type.class.php:428
-#: inc/type.class.php:564 inc/profile.class.php:43 setup.php:238
-#: front/type.form.php:69 front/familylist.php:37 front/familylist.php:49
+#: setup.php:238 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
+#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
 msgid "Objects management"
 msgstr "Upravljanje objektima"
 
@@ -111,8 +111,8 @@ msgstr "Polje samo-za-čitanje"
 msgid "Regenerate files"
 msgstr "Ponovo generiraj datoteke"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "Traženi padajući popis ne postoji"
 
@@ -128,8 +128,8 @@ msgstr "Ime vrste nedostaje"
 msgid "Type name must be longer"
 msgstr "Ime vrste mora biti duže"
 
-#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
-#: front/type.php:43
+#: front/object.php:37 front/type.php:43 inc/type.class.php:72
+#: inc/profile.class.php:304
 msgid "Type of objects"
 msgstr "Vrste objekata"
 
@@ -144,7 +144,7 @@ msgstr "„Polje”, „objekt” i „vrsta” su rezervirane vrste. Odaberi je
 msgid "Unable to load the class %1$s."
 msgstr "Nije moguće učitati klasu %1$s."
 
-#: inc/object.class.php:866
+#: inc/object.class.php:877
 msgid "You must configure rights to enable the preview"
 msgstr "Za aktiviranje pregleda moraš konfigurirati prava"
 
