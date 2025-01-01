@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 13:00+0000\n"
+"POT-Creation-Date: 2024-12-17 01:52+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2022,2024\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/cs_CZ/)\n"
@@ -36,7 +36,7 @@ msgstr "Přidat novou kolonku"
 msgid "Behaviour"
 msgstr "Chování"
 
-#: index.php:74 front/familylist.php:44
+#: front/familylist.php:44 index.php:74
 msgid "Empty family"
 msgstr "Prázdná rodina"
 
@@ -84,7 +84,7 @@ msgstr "Název v databázi"
 msgid "Network connections"
 msgstr "Síťová připojení"
 
-#: inc/object.class.php:596
+#: inc/object.class.php:607
 msgid "Object preview"
 msgstr "Náhled objektu"
 
@@ -92,9 +92,9 @@ msgstr "Náhled objektu"
 msgid "Objects"
 msgstr "Objekty"
 
-#: index.php:62 inc/object_item.class.php:122 inc/type.class.php:428
-#: inc/type.class.php:564 inc/profile.class.php:43 setup.php:238
-#: front/type.form.php:69 front/familylist.php:37 front/familylist.php:49
+#: setup.php:238 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
+#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
 msgid "Objects management"
 msgstr "Správa objektů"
 
@@ -114,8 +114,8 @@ msgstr "Kolonka pouze pro čtení"
 msgid "Regenerate files"
 msgstr "Znovu vytvořit soubory"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "Požadovaná rozbalovací nabídka neexistuje"
 
@@ -131,8 +131,8 @@ msgstr "Název typu chybí"
 msgid "Type name must be longer"
 msgstr "Je třeba, aby název typu byl delší"
 
-#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
-#: front/type.php:43
+#: front/object.php:37 front/type.php:43 inc/type.class.php:72
+#: inc/profile.class.php:304
 msgid "Type of objects"
 msgstr "Typ objektů"
 
@@ -147,7 +147,7 @@ msgstr "Typy „field“ (kolonka), „object“ (objekt) a „type“ (typ) jso
 msgid "Unable to load the class %1$s."
 msgstr "Nedaří se načíst třídu %1$s."
 
-#: inc/object.class.php:866
+#: inc/object.class.php:877
 msgid "You must configure rights to enable the preview"
 msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
 
