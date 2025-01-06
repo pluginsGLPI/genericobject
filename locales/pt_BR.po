@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-06 13:00+0000\n"
+"POT-Creation-Date: 2024-12-17 01:52+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Matheus Rafael, 2023\n"
 "Language-Team: Portuguese (Brazil) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/pt_BR/)\n"
@@ -38,7 +38,7 @@ msgstr "Adicionar novo campo"
 msgid "Behaviour"
 msgstr "Comportamento"
 
-#: index.php:74 front/familylist.php:44
+#: front/familylist.php:44 index.php:74
 msgid "Empty family"
 msgstr "Família vazia"
 
@@ -86,7 +86,7 @@ msgstr "Nome no banco de dados"
 msgid "Network connections"
 msgstr "Conexões de rede"
 
-#: inc/object.class.php:596
+#: inc/object.class.php:607
 msgid "Object preview"
 msgstr "Pré-visualização do objeto"
 
@@ -94,9 +94,9 @@ msgstr "Pré-visualização do objeto"
 msgid "Objects"
 msgstr "Objetos"
 
-#: index.php:62 inc/object_item.class.php:122 inc/type.class.php:428
-#: inc/type.class.php:564 inc/profile.class.php:43 setup.php:238
-#: front/type.form.php:69 front/familylist.php:37 front/familylist.php:49
+#: setup.php:238 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
+#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
 msgid "Objects management"
 msgstr "Gerenciamento de objetos"
 
@@ -115,8 +115,8 @@ msgstr "Campo apenas de leitura"
 msgid "Regenerate files"
 msgstr "Regerar arquivos"
 
-#: front/commontreedropdown.form.php:39 front/commondropdown.php:39
-#: front/commondropdown.form.php:39
+#: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
+#: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
 msgstr "O menu suspenso solicitado não existe"
 
@@ -132,8 +132,8 @@ msgstr "O nome do tipo está faltando"
 msgid "Type name must be longer"
 msgstr "Nome do tipo deve ser maior"
 
-#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
-#: front/type.php:43
+#: front/object.php:37 front/type.php:43 inc/type.class.php:72
+#: inc/profile.class.php:304
 msgid "Type of objects"
 msgstr "Tipos de objetos"
 
@@ -148,7 +148,7 @@ msgstr "Tipos 'campo', 'objeto' e 'tipo' estão reservados. Por favor escolha ou
 msgid "Unable to load the class %1$s."
 msgstr "Não consegui carregar a classe %1$s."
 
-#: inc/object.class.php:866
+#: inc/object.class.php:877
 msgid "You must configure rights to enable the preview"
 msgstr "Você deve configurar os direitos para habilitar pré-visualização"
 
