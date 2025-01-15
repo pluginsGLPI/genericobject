@@ -2486,6 +2486,13 @@ class PluginGenericobjectType extends CommonDBTM
                 $preference->add($tmp);
             }
         }
+
+        $types = new self();
+        $object_use_infocoms = $types->getFromDBByCrit(['use_infocoms' => 1]);
+        foreach ($object_use_infocoms as $object) {
+            $object_table = $object->getTable();
+            $migration->addField($object_table, "ticket_tco", "decimal");
+        }
     }
 
 
