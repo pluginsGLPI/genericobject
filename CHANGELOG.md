@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- The `TCO` (Total Cost of Ownership) is now correctly updated based on the costs associated with an item.
 - Fix `Use Components` to display all components
 - Hide `items` without proper user access rights in the family list.
 
