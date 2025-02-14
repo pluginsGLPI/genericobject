@@ -218,10 +218,14 @@ function plugin_post_init_genericobject()
         ['addtabon' => ['Profile', 'PluginGenericobjectType']]
     );
 
+
     foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
         $itemtype = $objecttype['itemtype'];
         if (class_exists($itemtype)) {
-            $itemtype::registerType();
+            if (!isset($_SESSION['glpi_plugin']['genericobject']['registeredtype'][$itemtype])) {
+                $_SESSION['glpi_plugin']['genericobject']['registeredtype'][$itemtype] = $itemtype;
+                $itemtype::registerType();
+            }
         }
     }
 }
