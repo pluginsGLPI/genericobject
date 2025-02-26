@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Improve global performance when using many genericobject
+
 ## [2.14.10] - 2024-09-06
 
 ### Fixed
