@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Improve global performance when using many genericobject
+- The `TCO` (Total Cost of Ownership) is now correctly updated based on the costs associated with an item.
 
 ## [2.14.11] - 2024-12-27
 
