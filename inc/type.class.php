@@ -1101,6 +1101,7 @@ class PluginGenericobjectType extends CommonDBTM
         if ($this->canUseTickets()) {
            //TODO rename is_helpdesk_visible into is_helpdeskvisible
             PluginGenericobjectField::addNewField($table, 'is_helpdesk_visible', 'comment');
+            PluginGenericobjectField::addNewField($table, 'ticket_tco');
         } else {
             PluginGenericobjectField::deleteField($table, 'is_helpdesk_visible');
         }
@@ -2484,6 +2485,14 @@ class PluginGenericobjectType extends CommonDBTM
                 $tmp['users_id'] = 0;
                 $preference->add($tmp);
             }
+        }
+
+        $types = new self();
+        $object_use_infocoms = $types->find(['use_infocoms' => 1]);
+        foreach ($object_use_infocoms as $object) {
+            $object_table = $object['itemtype']::getTable();
+            $migration->addField($object_table, "ticket_tco", "decimal");
+            $migration->migrationOneTable($object_table);
         }
     }
 
