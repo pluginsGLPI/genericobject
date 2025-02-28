@@ -222,10 +222,7 @@ function plugin_post_init_genericobject()
     foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
         $itemtype = $objecttype['itemtype'];
         if (class_exists($itemtype)) {
-            if (!isset($_SESSION['glpi_plugin']['genericobject']['registeredtype'][$itemtype])) {
-                $_SESSION['glpi_plugin']['genericobject']['registeredtype'][$itemtype] = $itemtype;
-                $itemtype::registerType();
-            }
+            $itemtype::registerType();
         }
     }
 }

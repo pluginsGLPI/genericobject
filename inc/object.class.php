@@ -170,6 +170,17 @@ class PluginGenericobjectObject extends CommonDBTM
         $fields = PluginGenericobjectSingletonObjectField::getInstance($class);
         $plugin = new Plugin();
 
+        if (isset($_SESSION['glpi_plugin']['genericobject']['registeredtype'][$class])) {
+            // register the itemtype in the reservation types if needed
+            // because $CFG_GLPI['reservation_types'] is reset
+            if ($item->canBeReserved()) {
+                $CFG_GLPI['reservation_types'][$class] = $class;
+            }
+            return;
+        } else {
+            $_SESSION['glpi_plugin']['genericobject']['registeredtype'][$class] = $class;
+        }
+
         PluginGenericobjectType::includeLocales($item->getObjectTypeName());
         PluginGenericobjectType::includeConstants($item->getObjectTypeName());
 
