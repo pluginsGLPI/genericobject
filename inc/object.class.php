@@ -649,7 +649,7 @@ class PluginGenericobjectObject extends CommonDBTM
     public static function getFieldsToHide()
     {
         return ['id', 'is_recursive', 'is_template', 'template_name', 'is_deleted',
-            'entities_id', 'notepad', 'date_mod', 'date_creation'
+            'entities_id', 'notepad', 'date_mod', 'date_creation', 'ticket_tco'
         ];
     }
 
