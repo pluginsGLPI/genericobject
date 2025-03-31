@@ -171,10 +171,35 @@ class PluginGenericobjectObject extends CommonDBTM
         $plugin = new Plugin();
 
         if (isset($_SESSION['glpi_plugin']['genericobject']['registeredtype'][$class])) {
-            // register the itemtype in the reservation types if needed
-            // because $CFG_GLPI['reservation_types'] is reset
+            // register the itemtype  if needed
+            // because some of $CFG_GLPI['xxxxxxxxxxx_types'] are reset at each reload
             if ($item->canBeReserved()) {
                 $CFG_GLPI['reservation_types'][$class] = $class;
+            }
+
+            if ($item->canUseNetworkPorts()) {
+                $CFG_GLPI['networkport_types'][$class] = $class;
+            }
+
+            if ($item->canUseItemDevice()) {
+                $CFG_GLPI['itemdevices_types'][$class]              = $class;
+                $CFG_GLPI['itemdevicepowersupply_types'][$class]    = $class;
+                $CFG_GLPI['itemdevicememory_types'][$class]         = $class;
+                $CFG_GLPI['itemdevicenetworkcard_types'][$class]    = $class;
+                $CFG_GLPI['itemdeviceharddrive_types'][$class]      = $class;
+                $CFG_GLPI['itemdevicebattery_types'][$class]        = $class;
+                $CFG_GLPI['itemdevicefirmware_types'][$class]       = $class;
+                $CFG_GLPI['itemdevicesimcard_types'][$class]        = $class;
+                $CFG_GLPI['itemdevicegeneric_types'][$class]        = $class;
+                $CFG_GLPI['itemdevicepci_types'][$class]            = $class;
+                $CFG_GLPI['itemdevicesensor_types'][$class]         = $class;
+                $CFG_GLPI['itemdeviceprocessor_types'][$class]      = $class;
+                $CFG_GLPI['itemdevicesoundcard_types'][$class]      = $class;
+                $CFG_GLPI['itemdevicegraphiccard_types'][$class]    = $class;
+                $CFG_GLPI['itemdevicemotherboard_types'][$class]    = $class;
+                $CFG_GLPI['itemdevicecamera_types'][$class]         = $class;
+                $CFG_GLPI['itemdevicedrive_types'][$class]          = $class;
+                $CFG_GLPI['itemdevicecontrol_types'][$class]        = $class;
             }
             return;
         } else {
@@ -214,6 +239,8 @@ class PluginGenericobjectObject extends CommonDBTM
             "itemdevicegraphiccard_types"   => $item->canUseItemDevice(),
             "itemdevicemotherboard_types"   => $item->canUseItemDevice(),
             "itemdevicecamera_types"        => $item->canUseItemDevice(),
+            "itemdevicedrive_types"         => $item->canUseItemDevice(),
+            "itemdevicecontrol_types"       => $item->canUseItemDevice(),
         ]);
 
         if (plugin_genericobject_haveRight($class, READ)) {
