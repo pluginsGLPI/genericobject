@@ -201,6 +201,8 @@ class PluginGenericobjectObject extends CommonDBTM
                 $CFG_GLPI['itemdevicedrive_types'][$class]          = $class;
                 $CFG_GLPI['itemdevicecontrol_types'][$class]        = $class;
             }
+            $CFG_GLPI['linkgroup_tech_types'][$class] = $class;
+            $CFG_GLPI['linkuser_types'][$class]       = $class;
             return;
         } else {
             $_SESSION['glpi_plugin']['genericobject']['registeredtype'][$class] = $class;
