@@ -181,6 +181,10 @@ class PluginGenericobjectObject extends CommonDBTM
                 $CFG_GLPI['networkport_types'][$class] = $class;
             }
 
+            if ($item->canUseTickets()) {
+                $CFG_GLPI['ticket_types'][$class] = $class;
+            }
+
             if ($item->canUseItemDevice()) {
                 $CFG_GLPI['itemdevices_types'][$class]              = $class;
                 $CFG_GLPI['itemdevicepowersupply_types'][$class]    = $class;
