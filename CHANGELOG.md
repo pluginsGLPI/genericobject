@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Fix `Used Items` user tab
+
 ## [2.14.12] - 2024-04-11
 
 ### Fixed
