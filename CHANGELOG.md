@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Revert
+
+- Improve global performance when using many genericobject
+
+
 ## [2.14.12] - 2024-04-11
 
 ### Fixed
