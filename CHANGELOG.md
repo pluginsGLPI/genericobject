@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.14.13] - 2025-04-22
+
+### Fixed
+
+- Reverted performance optimization for GenericObject (#417) due to issues with object registration and broken options.
+
+
 ## [2.14.12] - 2024-04-11
 
 ### Fixed
