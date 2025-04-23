@@ -173,7 +173,7 @@ class PluginGenericobjectObject extends CommonDBTM
         PluginGenericobjectType::includeLocales($item->getObjectTypeName());
         PluginGenericobjectType::includeConstants($item->getObjectTypeName());
 
-        Plugin::registerClass($class, [
+        $options = [
             "document_types"                => $item->canUseDocuments(),
             "helpdesk_visible_types"        => $item->canUseTickets(),
             "linkgroup_types"               => isset($fields["groups_id"]),
@@ -203,9 +203,18 @@ class PluginGenericobjectObject extends CommonDBTM
             "itemdevicegraphiccard_types"   => $item->canUseItemDevice(),
             "itemdevicemotherboard_types"   => $item->canUseItemDevice(),
             "itemdevicecamera_types"        => $item->canUseItemDevice(),
-            "itemdevicedrive_types"         => $item->canUseItemDevice(),
-            "itemdevicecontrol_types"       => $item->canUseItemDevice(),
-        ]);
+
+        ];
+
+        $glpiVersion = new Plugin();
+        $glpiVersion = $glpiVersion->getGlpiVersion();
+
+        if (version_compare($glpiVersion, "10.0.19", '>=')) {
+            $options["itemdevicedrive_types"] = $item->canUseItemDevice();
+            $options["itemdevicecontrol_types"] = $item->canUseItemDevice();
+        }
+
+        Plugin::registerClass($class, $options);
 
         if (plugin_genericobject_haveRight($class, READ)) {
             //Change url for adding a new object, depending on template management activation
