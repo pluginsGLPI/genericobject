@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.14.13] - 2025-04-22
+## [2.14.14] - 2025-04-23
 
 ### Fixed
 
 - Prevent PHP warning about unknown option `itemdevicedrive_types` and `itemdevicecontrol_types` when registering type
+
+## [2.14.13] - 2025-04-22
 
 ### Fixed
 
