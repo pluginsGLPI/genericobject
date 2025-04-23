@@ -11,8 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Reverted performance optimization for GenericObject (#417) due to issues with object registration and broken options.
+- Prevent PHP warning about unknown option `itemdevicedrive_types` and `itemdevicecontrol_types` when registering type
 
+### Fixed
+
+- Reverted performance optimization for GenericObject (#417) due to issues with object registration and broken options.
 
 ## [2.14.12] - 2024-04-11
 
