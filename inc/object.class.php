@@ -752,7 +752,8 @@ class PluginGenericobjectObject extends CommonDBTM
 
                 case "longtext":
                 case "text":
-                    echo "<textarea cols='40' rows='4' name='" . $name . "'>" . $value .
+                case "mediumtext":
+                    echo "<textarea cols='40' rows='4' class='form-control' name='" . $name . "'>" . $value .
                      "</textarea>";
                     break;
 
@@ -1035,6 +1036,7 @@ class PluginGenericobjectObject extends CommonDBTM
                     break;
                 case "text":
                 case "longtext":
+                case "mediumtext":
                     $option['datatype'] = 'text';
                     if ($item->canUsePluginDataInjection()) {
                        //Datainjection specific
