@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-17 01:52+0000\n"
+"POT-Creation-Date: 2025-05-19 02:06+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Cédric Anne, 2018,2023\n"
 "Language-Team: French (France) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/fr_FR/)\n"
@@ -43,7 +43,7 @@ msgstr "Comportement"
 msgid "Empty family"
 msgstr "Famille vide"
 
-#: inc/typefamily.class.php:41 inc/type.class.php:516 inc/type.class.php:661
+#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
 msgid "Family of type of objects"
 msgstr "Famille"
 
@@ -87,7 +87,7 @@ msgstr "Nom en base de données"
 msgid "Network connections"
 msgstr "Connexions réseaux"
 
-#: inc/object.class.php:607
+#: inc/object.class.php:618
 msgid "Object preview"
 msgstr "Prévisualisation d'un objet de ce type"
 
@@ -95,13 +95,13 @@ msgstr "Prévisualisation d'un objet de ce type"
 msgid "Objects"
 msgstr "Objets"
 
-#: setup.php:238 front/type.form.php:69 front/familylist.php:37
-#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
-#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
+#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
+#: inc/profile.class.php:43 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 index.php:62 setup.php:239
 msgid "Objects management"
 msgstr "Gestion d'objets"
 
-#: inc/type.class.php:2025
+#: inc/type.class.php:2026
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] "Autre"
@@ -133,8 +133,8 @@ msgstr "Nom du type manquant"
 msgid "Type name must be longer"
 msgstr "Le nom du type doit être plus long"
 
-#: front/object.php:37 front/type.php:43 inc/type.class.php:72
-#: inc/profile.class.php:304
+#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
+#: front/type.php:43
 msgid "Type of objects"
 msgstr "Types d'objets"
 
@@ -144,17 +144,17 @@ msgid ""
 msgstr "Les types 'field', 'object' et 'type' sont réservés. Veuillez en choisir un autre"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2439
+#: inc/type.class.php:2440
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Impossible de charger la classe %1$s"
 
-#: inc/object.class.php:877
+#: inc/object.class.php:889
 msgid "You must configure rights to enable the preview"
 msgstr "Vous devez configurer les droits sur cet objet pour voir la prévisualisation"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2441
+#: inc/type.class.php:2442
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "

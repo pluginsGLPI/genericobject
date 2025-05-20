@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-17 01:52+0000\n"
+"POT-Creation-Date: 2025-05-19 02:06+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2022,2024\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/cs_CZ/)\n"
@@ -40,7 +40,7 @@ msgstr "Chování"
 msgid "Empty family"
 msgstr "Prázdná rodina"
 
-#: inc/typefamily.class.php:41 inc/type.class.php:516 inc/type.class.php:661
+#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
 msgid "Family of type of objects"
 msgstr "Rodina typu objektů"
 
@@ -84,7 +84,7 @@ msgstr "Název v databázi"
 msgid "Network connections"
 msgstr "Síťová připojení"
 
-#: inc/object.class.php:607
+#: inc/object.class.php:618
 msgid "Object preview"
 msgstr "Náhled objektu"
 
@@ -92,13 +92,13 @@ msgstr "Náhled objektu"
 msgid "Objects"
 msgstr "Objekty"
 
-#: setup.php:238 front/type.form.php:69 front/familylist.php:37
-#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
-#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
+#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
+#: inc/profile.class.php:43 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 index.php:62 setup.php:239
 msgid "Objects management"
 msgstr "Správa objektů"
 
-#: inc/type.class.php:2025
+#: inc/type.class.php:2026
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] "Ostatní"
@@ -131,8 +131,8 @@ msgstr "Název typu chybí"
 msgid "Type name must be longer"
 msgstr "Je třeba, aby název typu byl delší"
 
-#: front/object.php:37 front/type.php:43 inc/type.class.php:72
-#: inc/profile.class.php:304
+#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
+#: front/type.php:43
 msgid "Type of objects"
 msgstr "Typ objektů"
 
@@ -142,17 +142,17 @@ msgid ""
 msgstr "Typy „field“ (kolonka), „object“ (objekt) a „type“ (typ) jsou vyhrazené (už je nemůžete použít). Zvolte jiný"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2439
+#: inc/type.class.php:2440
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Nedaří se načíst třídu %1$s."
 
-#: inc/object.class.php:877
+#: inc/object.class.php:889
 msgid "You must configure rights to enable the preview"
 msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2441
+#: inc/type.class.php:2442
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
