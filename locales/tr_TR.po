@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 01:46+0000\n"
+"POT-Creation-Date: 2025-05-19 02:06+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2024\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
@@ -38,7 +38,7 @@ msgstr "Davranış"
 msgid "Empty family"
 msgstr "Aile boş"
 
-#: inc/typefamily.class.php:41 inc/type.class.php:516 inc/type.class.php:661
+#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
 msgid "Family of type of objects"
 msgstr "Nesnelerin aile türü"
 
@@ -82,7 +82,7 @@ msgstr "Veri tabanındaki ad"
 msgid "Network connections"
 msgstr "Ağ bağlantıları"
 
-#: inc/object.class.php:607
+#: inc/object.class.php:618
 msgid "Object preview"
 msgstr "Nesne ön izlemesi"
 
@@ -90,13 +90,13 @@ msgstr "Nesne ön izlemesi"
 msgid "Objects"
 msgstr "Nesneler"
 
-#: setup.php:238 front/type.form.php:69 front/familylist.php:37
-#: front/familylist.php:49 inc/type.class.php:428 inc/type.class.php:564
-#: inc/object_item.class.php:122 inc/profile.class.php:43 index.php:62
+#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
+#: inc/profile.class.php:43 front/type.form.php:69 front/familylist.php:37
+#: front/familylist.php:49 index.php:62 setup.php:239
 msgid "Objects management"
 msgstr "Nesne yönetimi"
 
-#: inc/type.class.php:2025
+#: inc/type.class.php:2026
 msgid "Other"
 msgid_plural "Others"
 msgstr[0] "Diğer"
@@ -127,8 +127,8 @@ msgstr "Tür adı eksik"
 msgid "Type name must be longer"
 msgstr "Tür adı daha uzun olmalı"
 
-#: front/object.php:37 front/type.php:43 inc/type.class.php:72
-#: inc/profile.class.php:304
+#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
+#: front/type.php:43
 msgid "Type of objects"
 msgstr "Nesne türü"
 
@@ -138,17 +138,17 @@ msgid ""
 msgstr "field', 'object' ve 'type' tipleri ayrılmış olduğundan kullanılamaz. Lütfen başka bir tür seçin"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2439
+#: inc/type.class.php:2440
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "%1$s sınıfı yüklenemedi."
 
-#: inc/object.class.php:877
+#: inc/object.class.php:889
 msgid "You must configure rights to enable the preview"
 msgstr "Ön izlemeyi görüntüleyebilmek için izinleri yapılandırmalısınız"
 
 #. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2441
+#: inc/type.class.php:2442
 #, php-format
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "

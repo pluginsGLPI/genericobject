@@ -1,57 +1,58 @@
-# English translations for PACKAGE package.
-# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2025.
-#
+# 
+# Translators:
+# Nuria Costa <nuria.costa@uvic.cat>, 2025
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-20 02:01+0000\n"
-"PO-Revision-Date: 2025-05-20 02:01+0000\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"Language: en_GB\n"
+"PO-Revision-Date: 2015-07-23 09:47+0000\n"
+"Last-Translator: Nuria Costa <nuria.costa@uvic.cat>, 2025\n"
+"Language-Team: Catalan (Spain) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/ca_ES/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: inc/profile.class.php:152
 msgid "(No types defined yet)"
-msgstr "(No types defined yet)"
+msgstr "(Encara no s'han definit tipus)"
 
 #: inc/type.class.php:195
 msgid "A type already exists with the same name"
-msgstr "A type already exists with the same name"
+msgstr "Ja existeix un tipus amb el mateix nom"
 
 #: inc/field.class.php:135
 msgid "Add new field"
-msgstr "Add new field"
+msgstr "Afegeix un camp nou"
 
 #: inc/type.class.php:676
 msgid "Behaviour"
-msgstr "Behaviour"
+msgstr "Comportament"
 
 #: front/familylist.php:44 index.php:74
 msgid "Empty family"
-msgstr "Empty family"
+msgstr "Família buida"
 
 #: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
 msgid "Family of type of objects"
-msgstr "Family of type of objects"
+msgstr "Família del tipus d'objecte"
 
 #: front/field.form.php:56
 msgid "Field added successfully"
-msgstr "Field added successfully"
+msgstr "Camp afegit correctament"
 
 #: front/field.form.php:46
 msgid "Field(s) deleted successfully"
-msgstr "Field(s) deleted successfully"
+msgstr "Camp(s) eliminat(s) correctament"
 
 #: inc/field.class.php:74
 msgid "Fields associated with the object"
-msgstr "Fields associated with the object"
+msgstr "Camps associats a l'objecte"
 
 #: inc/profile.class.php:144
 msgid "General"
@@ -59,93 +60,92 @@ msgstr "General"
 
 #: inc/type.class.php:771
 msgid "Icon (impact analysis)"
-msgstr "Icon (impact analysis)"
+msgstr "Icona (anàlisi impacte)"
 
 #: inc/type.class.php:617
 msgid "Internal identifier"
-msgstr "Internal identifier"
+msgstr "Identificador intern"
 
 #: inc/field.class.php:80
 msgid "Label"
-msgstr "Label"
+msgstr "Etiqueta"
 
 #: inc/type.class.php:925
 msgid "Link to other objects"
-msgstr "Link to other objects"
+msgstr "Enllaç a altres objectes"
 
 #: inc/field.class.php:81
 msgid "Name in DB"
-msgstr "Name in DB"
+msgstr "Nom a la BD"
 
 #: inc/type.class.php:695
 msgid "Network connections"
-msgstr "Network connections"
+msgstr "Connexions de xarxa"
 
 #: inc/object.class.php:618
 msgid "Object preview"
-msgstr "Object preview"
+msgstr "Vista prèvia de l'objecte"
 
 #: inc/profile.class.php:150
 msgid "Objects"
-msgstr "Objects"
+msgstr "Objectes"
 
 #: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
 #: inc/profile.class.php:43 front/type.form.php:69 front/familylist.php:37
 #: front/familylist.php:49 index.php:62 setup.php:239
 msgid "Objects management"
-msgstr "Objects management"
+msgstr "Gestió d'objectes"
 
 #: inc/type.class.php:2026
 msgid "Other"
 msgid_plural "Others"
-msgstr[0] "Other"
-msgstr[1] "Others"
+msgstr[0] "Altres"
+msgstr[1] "Altres"
 
 #: inc/field.class.php:345
 msgid "Read-only field"
-msgstr "Read-only field"
+msgstr "Camp només de lectura"
 
 #: inc/type.class.php:910
 msgid "Regenerate files"
-msgstr "Regenerate files"
+msgstr "Regenera fitxers"
 
 #: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
 #: front/commondropdown.php:39
 msgid "The requested dropdown does not exists"
-msgstr "The requested dropdown does not exists"
+msgstr "El menú desplegable sol·licitat no existeix"
 
 #: inc/type.class.php:188
 msgid "Type must start with a letter"
-msgstr "Type must start with a letter"
+msgstr "El tipus ha de començar amb una lletra"
 
 #: inc/type.class.php:167
 msgid "Type name is missing"
-msgstr "Type name is missing"
+msgstr "Falta el nom del tipus"
 
 #: inc/type.class.php:173
 msgid "Type name must be longer"
-msgstr "Type name must be longer"
+msgstr "El nom del tipus ha de ser més llarg"
 
 #: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
 #: front/type.php:43
 msgid "Type of objects"
-msgstr "Type of objects"
+msgstr "Tipus d'objectes"
 
 #: inc/type.class.php:180
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+msgstr "Els tipus 'camp', 'objecte' i 'tipus' estan reservats. Tria'n un altre."
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2440
 #, php-format
 msgid "Unable to load the class %1$s."
-msgstr "Unable to load the class %1$s."
+msgstr "No es pot carregar la classe %1$s."
 
 #: inc/object.class.php:889
 msgid "You must configure rights to enable the preview"
-msgstr "You must configure rights to enable the preview"
+msgstr "Has de configurar els drets per habilitar la vista prèvia"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2442
@@ -153,30 +153,28 @@ msgstr "You must configure rights to enable the preview"
 msgid ""
 "You probably have garbage data in your database for this plugin and missing "
 "files in %1$s"
-msgstr ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
+msgstr "Probablement  hi ha dades innecessàries a la base de dades per a aquest connector i fitxers que falten a %1$s"
 
 #: inc/type.class.php:703
 msgid "geninventorynumber plugin"
-msgstr "geninventorynumber plugin"
+msgstr "Connector Geninventorynumber"
 
 #: inc/type.class.php:701
 msgid "injection file plugin"
-msgstr "injection file plugin"
+msgstr "Connector Injection File"
 
 #: inc/type.class.php:705
 msgid "item's uninstallation plugin"
-msgstr "item's uninstallation plugin"
+msgstr "connector de desinstal·lació de l'element"
 
 #: inc/type.class.php:704
 msgid "order plugin"
-msgstr "order plugin"
+msgstr "Connector Order"
 
 #: inc/type.class.php:706
 msgid "simcard plugin"
-msgstr "simcard plugin"
+msgstr "Connector Simcard"
 
 #: inc/type.class.php:707
 msgid "treeview plugin"
-msgstr "treeview plugin"
+msgstr "Connector Treeview"
