@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-19 02:06+0000\n"
+"POT-Creation-Date: 2025-06-11 02:04+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2022,2024\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/cs_CZ/)\n"
@@ -20,108 +20,66 @@ msgstr ""
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: inc/profile.class.php:152
-msgid "(No types defined yet)"
-msgstr "(Doposud nebyly určené žádné typy)"
+#: index.php:62 front/familylist.php:37 front/familylist.php:49
+#: front/type.form.php:69 inc/profile.class.php:43
+#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
+#: setup.php:239
+msgid "Objects management"
+msgstr "Správa objektů"
 
-#: inc/type.class.php:195
-msgid "A type already exists with the same name"
-msgstr "Typ se stejným názvem už existuje"
-
-#: inc/field.class.php:135
-msgid "Add new field"
-msgstr "Přidat novou kolonku"
-
-#: inc/type.class.php:676
-msgid "Behaviour"
-msgstr "Chování"
-
-#: front/familylist.php:44 index.php:74
+#: index.php:74 front/familylist.php:44
 msgid "Empty family"
 msgstr "Prázdná rodina"
 
-#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Rodina typu objektů"
-
-#: front/field.form.php:56
-msgid "Field added successfully"
-msgstr "Kolonka úspěšně přidána"
+#: front/commondropdown.php:39 front/commontreedropdown.form.php:39
+#: front/commondropdown.form.php:39
+msgid "The requested dropdown does not exists"
+msgstr "Požadovaná rozbalovací nabídka neexistuje"
 
 #: front/field.form.php:46
 msgid "Field(s) deleted successfully"
 msgstr "Pole úspěšně smazána"
 
-#: inc/field.class.php:74
-msgid "Fields associated with the object"
-msgstr "Kolonky přiřazené k objektu"
+#: front/field.form.php:56
+msgid "Field added successfully"
+msgstr "Kolonka úspěšně přidána"
+
+#: front/object.php:37 front/type.php:43 inc/profile.class.php:304
+#: inc/type.class.php:72
+msgid "Type of objects"
+msgstr "Typ objektů"
 
 #: inc/profile.class.php:144
 msgid "General"
 msgstr "Obecné"
 
-#: inc/type.class.php:771
-msgid "Icon (impact analysis)"
-msgstr "Ikona (analýza dopadu)"
+#: inc/profile.class.php:150
+msgid "Objects"
+msgstr "Objekty"
 
-#: inc/type.class.php:617
-msgid "Internal identifier"
-msgstr "Vnitřní identifikátor"
+#: inc/profile.class.php:152
+msgid "(No types defined yet)"
+msgstr "(Doposud nebyly určené žádné typy)"
+
+#: inc/field.class.php:74
+msgid "Fields associated with the object"
+msgstr "Kolonky přiřazené k objektu"
 
 #: inc/field.class.php:80
 msgid "Label"
 msgstr "Štítek"
 
-#: inc/type.class.php:925
-msgid "Link to other objects"
-msgstr "Propojit s ostatními objekty"
-
 #: inc/field.class.php:81
 msgid "Name in DB"
 msgstr "Název v databázi"
 
-#: inc/type.class.php:695
-msgid "Network connections"
-msgstr "Síťová připojení"
-
-#: inc/object.class.php:618
-msgid "Object preview"
-msgstr "Náhled objektu"
-
-#: inc/profile.class.php:150
-msgid "Objects"
-msgstr "Objekty"
-
-#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
-#: inc/profile.class.php:43 front/type.form.php:69 front/familylist.php:37
-#: front/familylist.php:49 index.php:62 setup.php:239
-msgid "Objects management"
-msgstr "Správa objektů"
-
-#: inc/type.class.php:2026
-msgid "Other"
-msgid_plural "Others"
-msgstr[0] "Ostatní"
-msgstr[1] "Ostatních"
-msgstr[2] "Ostatních"
-msgstr[3] "Ostatní"
+#: inc/field.class.php:135
+msgid "Add new field"
+msgstr "Přidat novou kolonku"
 
 #: inc/field.class.php:345
 msgid "Read-only field"
 msgstr "Kolonka pouze pro čtení"
-
-#: inc/type.class.php:910
-msgid "Regenerate files"
-msgstr "Znovu vytvořit soubory"
-
-#: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
-#: front/commondropdown.php:39
-msgid "The requested dropdown does not exists"
-msgstr "Požadovaná rozbalovací nabídka neexistuje"
-
-#: inc/type.class.php:188
-msgid "Type must start with a letter"
-msgstr "Je třeba, aby typ začínal písmenem"
 
 #: inc/type.class.php:167
 msgid "Type name is missing"
@@ -131,25 +89,84 @@ msgstr "Název typu chybí"
 msgid "Type name must be longer"
 msgstr "Je třeba, aby název typu byl delší"
 
-#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
-#: front/type.php:43
-msgid "Type of objects"
-msgstr "Typ objektů"
-
 #: inc/type.class.php:180
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
 msgstr "Typy „field“ (kolonka), „object“ (objekt) a „type“ (typ) jsou vyhrazené (už je nemůžete použít). Zvolte jiný"
+
+#: inc/type.class.php:188
+msgid "Type must start with a letter"
+msgstr "Je třeba, aby typ začínal písmenem"
+
+#: inc/type.class.php:195
+msgid "A type already exists with the same name"
+msgstr "Typ se stejným názvem už existuje"
+
+#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Rodina typu objektů"
+
+#: inc/type.class.php:617
+msgid "Internal identifier"
+msgstr "Vnitřní identifikátor"
+
+#: inc/type.class.php:676
+msgid "Behaviour"
+msgstr "Chování"
+
+#: inc/type.class.php:695
+msgid "Network connections"
+msgstr "Síťová připojení"
+
+#: inc/type.class.php:701
+msgid "injection file plugin"
+msgstr "zásuvný modul vkládání souborů"
+
+#: inc/type.class.php:703
+msgid "geninventorynumber plugin"
+msgstr "zásuvný modul vytváření inventárních čísel"
+
+#: inc/type.class.php:704
+msgid "order plugin"
+msgstr "zásuvný modul správa objednávek"
+
+#: inc/type.class.php:705
+msgid "item's uninstallation plugin"
+msgstr "zásuvný modul odinstalace položek"
+
+#: inc/type.class.php:706
+msgid "simcard plugin"
+msgstr "zásuvný modul sim karty"
+
+#: inc/type.class.php:707
+msgid "treeview plugin"
+msgstr "zásuvný modul stromového pohledu"
+
+#: inc/type.class.php:771
+msgid "Icon (impact analysis)"
+msgstr "Ikona (analýza dopadu)"
+
+#: inc/type.class.php:910
+msgid "Regenerate files"
+msgstr "Znovu vytvořit soubory"
+
+#: inc/type.class.php:925
+msgid "Link to other objects"
+msgstr "Propojit s ostatními objekty"
+
+#: inc/type.class.php:2026
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] "Ostatní"
+msgstr[1] "Ostatních"
+msgstr[2] "Ostatních"
+msgstr[3] "Ostatní"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2440
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Nedaří se načíst třídu %1$s."
-
-#: inc/object.class.php:889
-msgid "You must configure rights to enable the preview"
-msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2442
@@ -159,26 +176,10 @@ msgid ""
 "files in %1$s"
 msgstr "Nejspíš ve své databázi máte pro tento modul v nepořádku data a chybí soubory v %1$s"
 
-#: inc/type.class.php:703
-msgid "geninventorynumber plugin"
-msgstr "zásuvný modul vytváření inventárních čísel"
+#: inc/object.class.php:618
+msgid "Object preview"
+msgstr "Náhled objektu"
 
-#: inc/type.class.php:701
-msgid "injection file plugin"
-msgstr "zásuvný modul vkládání souborů"
-
-#: inc/type.class.php:705
-msgid "item's uninstallation plugin"
-msgstr "zásuvný modul odinstalace položek"
-
-#: inc/type.class.php:704
-msgid "order plugin"
-msgstr "zásuvný modul správa objednávek"
-
-#: inc/type.class.php:706
-msgid "simcard plugin"
-msgstr "zásuvný modul sim karty"
-
-#: inc/type.class.php:707
-msgid "treeview plugin"
-msgstr "zásuvný modul stromového pohledu"
+#: inc/object.class.php:889
+msgid "You must configure rights to enable the preview"
+msgstr "Pro zapnutí náhledu je třeba nastavit oprávnění"
