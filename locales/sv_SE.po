@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-19 02:06+0000\n"
+"POT-Creation-Date: 2025-06-11 02:04+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: jchan <jhornqvist@gmail.com>, 2018\n"
 "Language-Team: Swedish (Sweden) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/sv_SE/)\n"
@@ -18,106 +18,66 @@ msgstr ""
 "Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: inc/profile.class.php:152
-msgid "(No types defined yet)"
-msgstr "(Inga typer har skapats ännu)"
+#: index.php:62 front/familylist.php:37 front/familylist.php:49
+#: front/type.form.php:69 inc/profile.class.php:43
+#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
+#: setup.php:239
+msgid "Objects management"
+msgstr "Hantera tillgångar"
 
-#: inc/type.class.php:195
-msgid "A type already exists with the same name"
-msgstr "Typnamnet existerar redan"
-
-#: inc/field.class.php:135
-msgid "Add new field"
-msgstr "Lägg till nytt fält"
-
-#: inc/type.class.php:676
-msgid "Behaviour"
-msgstr "Beteende"
-
-#: front/familylist.php:44 index.php:74
+#: index.php:74 front/familylist.php:44
 msgid "Empty family"
 msgstr "Tom familj"
 
-#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Ingår i typfamilj"
-
-#: front/field.form.php:56
-msgid "Field added successfully"
-msgstr "Attribut tillagt"
+#: front/commondropdown.php:39 front/commontreedropdown.form.php:39
+#: front/commondropdown.form.php:39
+msgid "The requested dropdown does not exists"
+msgstr "Den begärda rullmenyn saknas"
 
 #: front/field.form.php:46
 msgid "Field(s) deleted successfully"
 msgstr "Fältet(en) raderades"
 
-#: inc/field.class.php:74
-msgid "Fields associated with the object"
-msgstr "Fält kopplade till tillgången"
+#: front/field.form.php:56
+msgid "Field added successfully"
+msgstr "Attribut tillagt"
+
+#: front/object.php:37 front/type.php:43 inc/profile.class.php:304
+#: inc/type.class.php:72
+msgid "Type of objects"
+msgstr "Typ av tillgång"
 
 #: inc/profile.class.php:144
 msgid "General"
 msgstr "Allmänt"
 
-#: inc/type.class.php:771
-msgid "Icon (impact analysis)"
-msgstr ""
+#: inc/profile.class.php:150
+msgid "Objects"
+msgstr "Tillgångar"
 
-#: inc/type.class.php:617
-msgid "Internal identifier"
-msgstr "Internt namn"
+#: inc/profile.class.php:152
+msgid "(No types defined yet)"
+msgstr "(Inga typer har skapats ännu)"
+
+#: inc/field.class.php:74
+msgid "Fields associated with the object"
+msgstr "Fält kopplade till tillgången"
 
 #: inc/field.class.php:80
 msgid "Label"
 msgstr "Etikett"
 
-#: inc/type.class.php:925
-msgid "Link to other objects"
-msgstr "Länka till andra tillgångar"
-
 #: inc/field.class.php:81
 msgid "Name in DB"
 msgstr "Namn i DB"
 
-#: inc/type.class.php:695
-msgid "Network connections"
-msgstr "Nätverksanslutningar"
-
-#: inc/object.class.php:618
-msgid "Object preview"
-msgstr "Förhandsgranska tillgång"
-
-#: inc/profile.class.php:150
-msgid "Objects"
-msgstr "Tillgångar"
-
-#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
-#: inc/profile.class.php:43 front/type.form.php:69 front/familylist.php:37
-#: front/familylist.php:49 index.php:62 setup.php:239
-msgid "Objects management"
-msgstr "Hantera tillgångar"
-
-#: inc/type.class.php:2026
-msgid "Other"
-msgid_plural "Others"
-msgstr[0] ""
-msgstr[1] ""
+#: inc/field.class.php:135
+msgid "Add new field"
+msgstr "Lägg till nytt fält"
 
 #: inc/field.class.php:345
 msgid "Read-only field"
 msgstr "Skrivskyddat fält"
-
-#: inc/type.class.php:910
-msgid "Regenerate files"
-msgstr "Skapa filer på nytt"
-
-#: front/commondropdown.form.php:39 front/commontreedropdown.form.php:39
-#: front/commondropdown.php:39
-msgid "The requested dropdown does not exists"
-msgstr "Den begärda rullmenyn saknas"
-
-#: inc/type.class.php:188
-msgid "Type must start with a letter"
-msgstr "Typnamnet måste börja med en bokstav"
 
 #: inc/type.class.php:167
 msgid "Type name is missing"
@@ -127,25 +87,82 @@ msgstr "Typnamn saknas"
 msgid "Type name must be longer"
 msgstr "Typnamnet måste vara längre"
 
-#: inc/type.class.php:72 inc/profile.class.php:304 front/object.php:37
-#: front/type.php:43
-msgid "Type of objects"
-msgstr "Typ av tillgång"
-
 #: inc/type.class.php:180
 msgid ""
 "Types 'field', 'object' and 'type' are reserved. Please choose another one"
 msgstr "Typnamnen 'fält, 'objekt' och 'typ' är reserverade av systemet. Var vänlig välj ett annat namn."
+
+#: inc/type.class.php:188
+msgid "Type must start with a letter"
+msgstr "Typnamnet måste börja med en bokstav"
+
+#: inc/type.class.php:195
+msgid "A type already exists with the same name"
+msgstr "Typnamnet existerar redan"
+
+#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Ingår i typfamilj"
+
+#: inc/type.class.php:617
+msgid "Internal identifier"
+msgstr "Internt namn"
+
+#: inc/type.class.php:676
+msgid "Behaviour"
+msgstr "Beteende"
+
+#: inc/type.class.php:695
+msgid "Network connections"
+msgstr "Nätverksanslutningar"
+
+#: inc/type.class.php:701
+msgid "injection file plugin"
+msgstr "Injection file plug-in"
+
+#: inc/type.class.php:703
+msgid "geninventorynumber plugin"
+msgstr "Geninventorynumber plug-in"
+
+#: inc/type.class.php:704
+msgid "order plugin"
+msgstr "Order plug-in"
+
+#: inc/type.class.php:705
+msgid "item's uninstallation plugin"
+msgstr "Item's uninstallation plug-in"
+
+#: inc/type.class.php:706
+msgid "simcard plugin"
+msgstr "Simcard plug-in"
+
+#: inc/type.class.php:707
+msgid "treeview plugin"
+msgstr ""
+
+#: inc/type.class.php:771
+msgid "Icon (impact analysis)"
+msgstr ""
+
+#: inc/type.class.php:910
+msgid "Regenerate files"
+msgstr "Skapa filer på nytt"
+
+#: inc/type.class.php:925
+msgid "Link to other objects"
+msgstr "Länka till andra tillgångar"
+
+#: inc/type.class.php:2026
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] ""
+msgstr[1] ""
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2440
 #, php-format
 msgid "Unable to load the class %1$s."
 msgstr "Kunde inte läsa in klass %1$s-"
-
-#: inc/object.class.php:889
-msgid "You must configure rights to enable the preview"
-msgstr "Du måste konfigurera rättigheter för att aktivera förhandsgranskning"
 
 #. TRANS:  %1$s is itemtype name
 #: inc/type.class.php:2442
@@ -155,26 +172,10 @@ msgid ""
 "files in %1$s"
 msgstr "Du har troligtvis skräpdata i databasen för denna plug-in och saknar filer i %1$s"
 
-#: inc/type.class.php:703
-msgid "geninventorynumber plugin"
-msgstr "Geninventorynumber plug-in"
+#: inc/object.class.php:618
+msgid "Object preview"
+msgstr "Förhandsgranska tillgång"
 
-#: inc/type.class.php:701
-msgid "injection file plugin"
-msgstr "Injection file plug-in"
-
-#: inc/type.class.php:705
-msgid "item's uninstallation plugin"
-msgstr "Item's uninstallation plug-in"
-
-#: inc/type.class.php:704
-msgid "order plugin"
-msgstr "Order plug-in"
-
-#: inc/type.class.php:706
-msgid "simcard plugin"
-msgstr "Simcard plug-in"
-
-#: inc/type.class.php:707
-msgid "treeview plugin"
-msgstr ""
+#: inc/object.class.php:889
+msgid "You must configure rights to enable the preview"
+msgstr "Du måste konfigurera rättigheter för att aktivera förhandsgranskning"
