@@ -15,5 +15,7 @@ parameters:
         - ../../src
     stubFiles:
         - ../../stubs/glpi_constants.php
+    ignoreErrors:
+        - '#Call to .* on an unknown class PluginFields*#'
 rules:
     - GlpiProject\Tools\PHPStan\Rules\GlobalVarTypeRule
