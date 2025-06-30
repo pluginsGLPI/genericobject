@@ -212,3 +212,18 @@ function plugin_genericobject_MassiveActions($type)
         return [];
     }
 }
+
+function plugin_genericobject_MassiveActionsFieldsDisplay($options = [])
+{
+    if (!Plugin::isPluginActive('fields')) {
+        return false;
+    }
+
+    $itemtypes = PluginFieldsContainer::getEntries('all');
+
+    if (in_array($options['itemtype'], $itemtypes)) {
+        return PluginFieldsField::showSingle($options['itemtype'], $options['options'], true);
+    }
+
+    return false;
+}
