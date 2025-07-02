@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Fix massive actions compatibility with Fields plugin
+
 ## [2.14.14] - 2025-04-23
 
 ### Fixed
