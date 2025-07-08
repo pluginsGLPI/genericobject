@@ -135,7 +135,7 @@ $GO_FIELDS['groups_id']['condition']  = ['is_itemgroup' => 1];
 $GO_FIELDS['manufacturers_id']['name']       = __("Manufacturer");
 $GO_FIELDS['manufacturers_id']['input_type'] = 'dropdown';
 
-$GO_FIELDS['users_id_tech']['name']       = __("Technician in charge of the hardware");
+$GO_FIELDS['users_id_tech']['name']       = __("Technician in charge");
 $GO_FIELDS['users_id_tech']['input_type'] = 'dropdown';
 
 $GO_FIELDS['domains_id']['name']       = __("Domain");
@@ -147,6 +147,6 @@ $GO_FIELDS['contact']['input_type'] = 'text';
 $GO_FIELDS['contact_num']['name']       = __("Alternate username number");
 $GO_FIELDS['contact_num']['input_type'] = 'text';
 
-$GO_FIELDS['groups_id_tech']['name']       = __("Group in charge of the hardware");
+$GO_FIELDS['groups_id_tech']['name']       = __("Group in charge");
 $GO_FIELDS['groups_id_tech']['input_type'] = 'dropdown';
 $GO_FIELDS['groups_id_tech']['condition']  = ['is_assign' => 1];
