@@ -28,25 +28,9 @@
  * -------------------------------------------------------------------------
  */
 
-function plugin_genericobject_AssignToTicket($types)
-{
-    foreach (PluginGenericobjectType::getTypes() as $tmp => $value) {
-        $itemtype = $value['itemtype'];
-        if ($value['use_tickets']) {
-            if (class_exists($itemtype)) {
-                $types[$itemtype] = $itemtype::getTypeName();
-            } else {
-                $types[$itemtype] = $itemtype;
-            }
-        }
-    }
-    return $types;
-}
-
 // Define Dropdown tables to be manage in GLPI :
 function plugin_genericobject_getDropdown()
 {
-
     $dropdowns = ['PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2)];
 
     $plugin = new Plugin();
@@ -93,8 +77,6 @@ function plugin_genericobject_install()
     foreach (
         [
             'PluginGenericobjectField',
-            'PluginGenericobjectCommonDropdown',
-            'PluginGenericobjectCommonTreeDropdown',
             'PluginGenericobjectProfile',
             'PluginGenericobjectType',
             'PluginGenericobjectTypeFamily'
@@ -184,54 +166,3 @@ function plugin_genericobject_uninstall()
     return true;
 }
 
-function plugin_datainjection_populate_genericobject()
-{
-    /** @var array $INJECTABLE_TYPES */
-    global $INJECTABLE_TYPES;
-    $type = new PluginGenericobjectType();
-    foreach ($type->find(['use_plugin_datainjection' => 1, 'is_active' => 1]) as $data) {
-        if (class_exists($data ['itemtype'] . "Injection")) {
-            $INJECTABLE_TYPES[$data ['itemtype'] . "Injection"] = 'genericobject';
-        }
-    }
-}
-
-function plugin_genericobject_MassiveActions($type)
-{
-    $types = PluginGenericobjectType::getTypes();
-    if (isset($types[$type])) {
-        $objecttype = PluginGenericobjectType::getInstance($type);
-        if ($objecttype->isTransferable()) {
-            return ['PluginGenericobjectObject' .
-            MassiveAction::CLASS_ACTION_SEPARATOR . 'plugin_genericobject_transfer' => __("Transfer")
-            ];
-        } else {
-            return [];
-        }
-    } else {
-        return [];
-    }
-}
-
-function plugin_genericobject_MassiveActionsFieldsDisplay($options = [])
-{
-    if (!Plugin::isPluginActive('fields')) {
-        return false;
-    }
-
-    if (!class_exists('PluginFieldsContainer') || !method_exists('PluginFieldsContainer', 'getEntries')) {
-        return false;
-    }
-
-    if (!class_exists('PluginFieldsField') || !method_exists('PluginFieldsField', 'showSingle')) {
-        return false;
-    }
-
-    $itemtypes = PluginFieldsContainer::getEntries('all');
-
-    if (in_array($options['itemtype'], $itemtypes)) {
-        return PluginFieldsField::showSingle($options['itemtype'], $options['options'], true);
-    }
-
-    return false;
-}

@@ -31,122 +31,6 @@
 class PluginGenericobjectField extends CommonDBTM
 {
    /**
-    *
-    * Displat all fields present in DB for an itemtype
-    * @param $id the itemtype's id
-    */
-    public static function showObjectFieldsForm($id)
-    {
-        /**
-         * @var array $GO_BLACKLIST_FIELDS
-         * @var array $GO_READONLY_FIELDS
-         * @var array $GO_FIELDS
-         */
-        global $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS, $GO_FIELDS;
-
-        $url          = Toolbox::getItemTypeFormURL(__CLASS__);
-        $object_type  = new PluginGenericobjectType();
-        $object_type->getFromDB($id);
-        $itemtype     = $object_type->fields['itemtype'];
-        $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
-        $used_fields  = [];
-
-       //Reset fields definition only to keep the itemtype ones
-        $GO_FIELDS = [];
-        plugin_genericobject_includeCommonFields(true);
-
-        PluginGenericobjectType::includeLocales($object_type->fields['name']);
-        PluginGenericobjectType::includeConstants($object_type->fields['name'], true);
-
-        self::addReadOnlyFields($object_type);
-
-        foreach ($GO_BLACKLIST_FIELDS as $autofield) {
-            if (!in_array($autofield, $used_fields)) {
-                $used_fields[$autofield] = $autofield;
-            }
-        }
-
-        echo "<div class='center'>";
-        echo "<form id='fieldslist' method='POST' action='$url'>";
-        echo "<table class='tab_cadre_fixe' >";
-        echo "<input type='hidden' name='id' value='$id'>";
-        echo "<tr class='tab_bg_1'><th colspan='7'>";
-        echo __("Fields associated with the object", "genericobject") . " : ";
-        echo $itemtype::getTypeName();
-        echo "</th></tr>";
-
-        echo "<tr class='tab_bg_1'>";
-        echo "<th width='10'></th>";
-        echo "<th>" . __("Label", "genericobject") . "</th>";
-        echo "<th>" . __("Name in DB", "genericobject") . "</th>";
-        echo "<th width='10'></th>";
-        echo "<th width='10'></th>";
-        echo "</tr>";
-
-        $total        = count($fields_in_db);
-        $global_index = $index = 1;
-        $haveCheckbox = false;
-
-        foreach ($fields_in_db as $field => $value) {
-            $readonly  = in_array($field, $GO_READONLY_FIELDS);
-            $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
-
-            self::displayFieldDefinition($url, $itemtype, $field, $index, ($global_index == $total));
-
-           //All backlisted fields cannot be moved, and are listed first
-            if (!$readonly) {
-                $index++;
-            }
-
-            if (!$blacklist && !$readonly) {
-                $haveCheckbox = true;
-            }
-
-           //$table = getTableNameForForeignKeyField($field);
-            $used_fields[$field] = $field;
-            $global_index++;
-        }
-        echo "</table>";
-        if ($haveCheckbox) {
-            echo "<table class='tab_glpi' width='100%'>";
-            echo "<tr>";
-            echo "<td><i class='ti ti-corner-left-up mt-1' style='margin-left: 4px;'></i>";
-            echo "<td class='center' style='white-space:nowrap;'>";
-            echo "<a onclick= \"if ( markCheckboxes('fieldslist') ) return false;\"
-                href='#'>" . __('Check all') . "</a></td>";
-            echo "<td>/</td>";
-            echo "<td class='center' style='white-space:nowrap;'>";
-            echo "<a onclick= \"if ( unMarkCheckboxes('fieldslist') ) return false;\"
-                href='#'>" . __('Uncheck all') . "</a></td>";
-            echo "<td class='left' width='80%'>";
-            echo Html::submit(__("Delete permanently"), [
-                'name' => 'delete',
-            ]);
-            echo "</td></tr>";
-            echo "</table>";
-        }
-
-        $dropdownFields = self::dropdownFields("new_field", $itemtype, $used_fields);
-
-        if ($dropdownFields) {
-            echo "<br>";
-            echo "<table class='tab_cadre_fixe genericobject_fields add_new' width='100%'>";
-            echo "<tr class='tab_bg_1'>";
-            echo "<td class='label'>" . __("Add new field", "genericobject") . "</td>";
-            echo "<td align='left'>";
-            echo $dropdownFields;
-            echo "</td>";
-            echo "<td class='left' width='80%'>";
-            echo "<input type='submit' name='add_field' value=\"" . _sx('button', 'Add') . "\" class='submit'>";
-            echo "</tr>";
-            echo "</table>";
-        }
-
-        Html::closeForm();
-        echo "</div>";
-    }
-
-   /**
    * Method to set fields as read only, when the depend on some features
    * that are enabled
    * @since 0.85+2.4.0
@@ -324,57 +208,6 @@ class PluginGenericobjectField extends CommonDBTM
         return $options;
     }
 
-    public static function displayFieldDefinition($target, $itemtype, $field, $index, $last = false)
-    {
-        /**
-         * @var array $CFG_GLPI
-         * @var array $GO_BLACKLIST_FIELDS
-         * @var array $GO_READONLY_FIELDS
-         */
-        global $CFG_GLPI, $GO_BLACKLIST_FIELDS, $GO_READONLY_FIELDS;
-
-        $readonly  = in_array($field, $GO_READONLY_FIELDS);
-        $blacklist = in_array($field, $GO_BLACKLIST_FIELDS);
-        $options  = self::getFieldOptions($field, $itemtype);
-
-        echo "<tr class='tab_bg_" . (($index % 2) + 1) . "' align='center'>";
-        echo "<td width='10'>";
-        if (!$blacklist && !$readonly) {
-            echo "<input type='checkbox' name='fields[" . $field . "]' value='1'>";
-        } else {
-            echo "<i class='fa fa-lock' title='" . __("Read-only field", 'genericobject') . "'>";
-        }
-        echo "</td>";
-        echo "<td>" . __($options['name'], 'genericobject') . "</td>";
-        echo "<td>" . $field . "</td>";
-
-        echo "<td class='left' width='30'>";
-        if ((!$blacklist || $readonly) && $index > 1) {
-            Html::showSimpleForm(
-                $target,
-                $CFG_GLPI["root_doc"] . "/pics/deplier_up.png",
-                'up',
-                ['field' => $field, 'action' => 'up', 'itemtype' => $itemtype],
-                $CFG_GLPI["root_doc"] . "/pics/deplier_up.png"
-            );
-        }
-        echo "</td>";
-
-        echo "<td class='left' width='30'>";
-        if ((!$blacklist || $readonly) && !$last) {
-            Html::showSimpleForm(
-                $target,
-                $CFG_GLPI["root_doc"] . "/pics/deplier_down.png",
-                'down',
-                ['field' => $field, 'action' => 'down', 'itemtype' => $itemtype],
-                $CFG_GLPI["root_doc"] . "/pics/deplier_down.png"
-            );
-        }
-        echo "</td>";
-
-        echo "</tr>";
-    }
-
    /**
     * Add a new field in DB
     * @param string $table the table
@@ -484,26 +317,6 @@ class PluginGenericobjectField extends CommonDBTM
             PluginGenericobjectType::deleteClassFile($name);
             PluginGenericobjectType::deleteFormFile($name);
             PluginGenericobjectType::deletesearchFile($name);
-        }
-    }
-
-    public static function deleteDisplayPreferences($table, $field)
-    {
-
-        $pref      = new DisplayPreference();
-        $itemtype  = getItemTypeForTable($table);
-        $searchopt = Search::getCleanedOptions($itemtype);
-        foreach ($searchopt as $num => $option) {
-            if (
-                (isset($option['field'])  && ($option['field'] == $field))
-                || (isset($option['field']) && $option['linkfield'] == $field)
-            ) {
-                $pref->deleteByCriteria([
-                    'itemtype' => $itemtype,
-                    'num'      => $num
-                ]);
-                break;
-            }
         }
     }
 

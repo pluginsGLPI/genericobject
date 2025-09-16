@@ -36,141 +36,9 @@ class PluginGenericobjectProfile extends Profile
         $this->deleteByCriteria(['id' => $id]);
     }
 
-    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
-    {
-        switch ($item->getType()) {
-            case 'Profile':
-                return self::createTabEntry(__('Objects management', 'genericobject'));
-            case 'PluginGenericobjectType':
-                return self::createTabEntry(_n('Profile', 'Profiles', 2));
-        }
-
-        return '';
-    }
-
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
-    {
-        switch ($item->getType()) {
-            case 'Profile':
-                $profile = new self();
-                $profile->showForm($item->getID());
-                break;
-            case 'PluginGenericobjectType':
-                _log($item);
-                self::showForItemtype($item);
-                break;
-        }
-        return true;
-    }
-
-    public static function showForItemtype($type)
-    {
-        if (!Session::haveRight("profile", READ)) {
-            return false;
-        }
-        self::installRights();
-        $canedit = Session::haveRight("profile", UPDATE);
-
-        echo "<form action='" . self::getFormUrl() . "' method='post'>";
-        echo "<table class='tab_cadre_fixe'>";
-        $itemtype = $type->fields['itemtype'];
-        echo "<tr><th colspan='2' align='center'><strong>";
-        echo __("Rights assignment") . ":&nbsp;";
-        echo $itemtype::getTypeName();
-        echo "</strong></th></tr>";
-
-        echo "<tr><td class='genericobject_type_profiles'>";
-        foreach (getAllDataFromTable(getTableForItemtype("Profile")) as $profile) {
-            $prof = new Profile();
-            $prof->getFromDB($profile['id']);
-            $rights = [
-                [
-                    'label' => $profile['name'],
-                    'itemtype' => $itemtype,
-                    'field' =>  self::getProfileNameForItemtype($itemtype),
-                    'html_field' => "profile_" . $profile['id'],
-                ]
-            ];
-            $prof->displayRightsChoiceMatrix(
-                $rights
-            );
-        }
-
-        echo "</td></tr>";
-        echo "<input type='hidden' name='itemtype' value='" . $itemtype . "'>";
-
-        if ($canedit) {
-            echo "<tr class='tab_bg_1'>";
-            echo "<td align='center' colspan='2'>";
-            echo "<input type='submit' name='update_all_rights' value=\"" .
-            _sx('button', 'Post') . "\" class='submit'>";
-            echo "</td></tr>";
-        }
-
-        echo "</table>";
-        Html::closeForm();
-    }
-
     public static function getProfileNameForItemtype($itemtype)
     {
         return preg_replace("/^glpi_/", "", getTableForItemType($itemtype));
-    }
-
-
-   /* profiles modification */
-    public function showForm($profiles_id, $options = [])
-    {
-        if (!Session::haveRight("profile", READ)) {
-            return false;
-        }
-        $canedit = Session::haveRight("profile", UPDATE);
-
-        //Ensure rights are defined in database
-        self::installRights();
-
-        $profile = new Profile();
-        $profile->getFromDB($profiles_id);
-
-        echo "<form action='" . Profile::getFormUrl() . "' method='post'>";
-        echo "<table class='tab_cadre_fixe'>";
-
-        $general_rights = self::getGeneralRights();
-
-        $profile->displayRightsChoiceMatrix(
-            $general_rights,
-            [
-                'canedit'       => $canedit,
-                'default_class' => 'tab_bg_2',
-                'title'         => __('General', 'genericobject')
-            ]
-        );
-
-        $types_rights = self::getTypesRights();
-
-        $title = __('Objects', 'genericobject');
-        if (count($types_rights) == 0) {
-            $title .= ' ' . __("(No types defined yet)", "genericobject");
-        }
-
-        $profile->displayRightsChoiceMatrix(
-            $types_rights,
-            [
-                'canedit'       => $canedit,
-                'default_class' => 'tab_bg_2',
-                'title'         => $title
-            ]
-        );
-        $profile->showLegend();
-        if ($canedit) {
-            echo "<div class='center'>";
-            echo Html::hidden('id', ['value' => $profiles_id]);
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update']);
-            echo "</div>\n";
-            Html::closeForm();
-        }
-        echo "</div>";
-
-        return true;
     }
 
     public static function getProfileforItemtype($profiles_id, $itemtype)
@@ -243,7 +111,7 @@ class PluginGenericobjectProfile extends Profile
     * Create rights for the current profile
     * @return void
     */
-    public static function createFirstAccess()
+    public static function createFirstAccess() 
     {
         if (!self::profileExists($_SESSION["glpiactiveprofile"]["id"], 'PluginGenericobjectType')) {
             self::createAccess($_SESSION["glpiactiveprofile"]["id"], "PluginGenericobjectType", true);

@@ -28,12 +28,12 @@
  * -------------------------------------------------------------------------
  */
 
-define('PLUGIN_GENERICOBJECT_VERSION', '2.14.14');
+define('PLUGIN_GENERICOBJECT_VERSION', '3.0.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_GENERICOBJECT_MIN_GLPI", "10.0.0");
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "11.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_GENERICOBJECT_MAX_GLPI", "10.0.99");
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "11.0.99");
 
 if (!defined("GENERICOBJECT_DIR")) {
     define("GENERICOBJECT_DIR", Plugin::getPhpDir("genericobject"));
@@ -144,18 +144,6 @@ function plugin_init_genericobject()
                    //register class
                     PluginTreeviewConfig::registerType($itemtype);
                     $PLUGIN_HOOKS['treeview'][$itemtype] = Plugin::getWebDir('genericobject') . '/pics/default-icon16.png';
-
-                   //add hook for overload item show form url
-                    $PLUGIN_HOOKS['treeview_params']['genericobject'] = [
-                        'PluginGenericobjectObject',
-                        'showGenericObjectTreeview'
-                    ];
-
-                   //add hook for overload search form url of itemtype
-                    $PLUGIN_HOOKS['treeview_search_url_parent_node']['genericobject'] = [
-                        'PluginGenericobjectObject',
-                        'getParentNodeSearchUrl'
-                    ];
                 }
             }
         }
@@ -166,34 +154,13 @@ function plugin_init_genericobject()
         ];
 
         plugin_genericobject_includeCommonFields();
-        $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
-
-       // add css styles
-        $PLUGIN_HOOKS['add_css']['genericobject'] = [
-            "css/styles.css"
-        ];
-
-       // Display a menu entry ?
-        $PLUGIN_HOOKS['menu_toadd']['genericobject'] = [
-            'config' => 'PluginGenericobjectType',
-            'assets' => 'PluginGenericobjectObject'
-        ];
 
        // Config page
         if (Session::haveRight('config', READ)) {
-            $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
+            $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/eol_info.php';
         }
 
-        $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
-        $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
-
         $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
-        $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
-
-        $PLUGIN_HOOKS['formcreator_get_glpi_object_types']['genericobject'] = [
-            PluginGenericobjectType::getType(),
-            'getTypesForFormcreator'
-        ];
 
        // Add every genericobject item's to the list of itemtypes for which the
        // impact analysis can be enabled
@@ -236,7 +203,7 @@ function plugin_post_init_genericobject()
 function plugin_version_genericobject()
 {
     return [
-        'name'           => __("Objects management", "genericobject"),
+        'name'           => __("Objects management (Migration Only)", "genericobject"),
         'version'        => PLUGIN_GENERICOBJECT_VERSION,
         'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
         'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
@@ -249,17 +216,6 @@ function plugin_version_genericobject()
             ]
         ]
     ];
-}
-
-
-function plugin_genericobject_haveTypeRight($itemtype, $right)
-{
-    switch ($itemtype) {
-        case 'PluginGenericobjectType':
-            return Session::haveRight("config", $right);
-        default:
-            return Session::haveRight($itemtype, $right);
-    }
 }
 
 function plugin_genericobject_includeCommonFields($force = false)
