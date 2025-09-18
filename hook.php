@@ -28,38 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-// Define Dropdown tables to be manage in GLPI :
-function plugin_genericobject_getDropdown()
-{
-    $dropdowns = ['PluginGenericobjectTypeFamily' => PluginGenericobjectTypeFamily::getTypeName(2)];
-
-    $plugin = new Plugin();
-    if ($plugin->isActivated("genericobject")) {
-        foreach (PluginGenericobjectType::getTypes() as $type) {
-           //_log($idx, var_export($type, true));
-            $itemtype = $type['itemtype'];
-            PluginGenericobjectType::registerOneType($itemtype);
-            foreach (PluginGenericobjectType::getDropdownForItemtype($itemtype) as $table) {
-                $dropdown_itemtype = getItemTypeForTable($table);
-                if (class_exists($dropdown_itemtype)) {
-                    $dropdowns[$dropdown_itemtype] = $dropdown_itemtype::getTypeName();
-                }
-            }
-        }
-    }
-    return $dropdowns;
-}
-
-function plugin_uninstall_addUninstallTypes($uninstal_types = [])
-{
-    foreach (PluginGenericobjectType::getTypes() as $tmp => $type) {
-        if ($type["use_plugin_uninstall"]) {
-            $uninstal_types[] = $type["itemtype"];
-        }
-    }
-    return $uninstal_types;
-}
-
 //----------------------- INSTALL / UNINSTALL FUNCTION -------------------------------//
 
 /**
@@ -109,8 +77,6 @@ function plugin_genericobject_install()
    //Init plugin & types
     plugin_init_genericobject();
 
-   //Init profiles
-    PluginGenericobjectProfile::changeProfile();
     return true;
 }
 

@@ -133,63 +133,10 @@ function plugin_init_genericobject()
     $GENERICOBJECT_PDF_TYPES                         =  [];
 
     if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
-       //if treeview is installed
-        if (Plugin::isPluginActive("treeview") && class_exists('PluginTreeviewConfig')) {
-           //foreach type in genericobject
-            foreach (PluginGenericobjectType::getTypes() as $itemtype => $value) {
-                //check if location_id field exist
-                $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
-                $objecttype = PluginGenericobjectType::getInstance($itemtype);
-                if (isset($fields_in_db['locations_id']) && $objecttype->canUsePluginTreeview()) {
-                   //register class
-                    PluginTreeviewConfig::registerType($itemtype);
-                    $PLUGIN_HOOKS['treeview'][$itemtype] = Plugin::getWebDir('genericobject') . '/pics/default-icon16.png';
-                }
-            }
-        }
-
-        $PLUGIN_HOOKS['change_profile']['genericobject'] = [
-            'PluginGenericobjectProfile',
-            'changeProfile'
-        ];
-
-        plugin_genericobject_includeCommonFields();
 
        // Config page
         if (Session::haveRight('config', READ)) {
             $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/eol_info.php';
-        }
-
-        $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
-
-       // Add every genericobject item's to the list of itemtypes for which the
-       // impact analysis can be enabled
-        foreach ((new PluginGenericobjectType())->find([]) as $row) {
-            if (empty($row['impact_icon'])) {
-                $icon = ""; // Will fallback to default impact icon
-            } else {
-                $obj = new PluginGenericobjectType();
-                $obj->getFromDB($row['id']);
-                $icon = $obj->getImpactIconUrl(false) ?? "";
-            }
-
-            $CFG_GLPI['impact_asset_types'][$row['itemtype']] = $icon;
-        }
-    }
-}
-
-function plugin_post_init_genericobject()
-{
-    Plugin::registerClass(
-        'PluginGenericobjectProfile',
-        ['addtabon' => ['Profile', 'PluginGenericobjectType']]
-    );
-
-
-    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
-        $itemtype = $objecttype['itemtype'];
-        if (class_exists($itemtype)) {
-            $itemtype::registerType();
         }
     }
 }
@@ -218,39 +165,3 @@ function plugin_version_genericobject()
     ];
 }
 
-function plugin_genericobject_includeCommonFields($force = false)
-{
-    $includes = [
-        sprintf('%s/fields/field.constant.php', GENERICOBJECT_DIR), // Default common fields constants
-    ];
-
-   // User locales for common fields
-    if (
-        isset($_SESSION['glpilanguage'])
-        && file_exists($locale_file = sprintf('%s/fields.%s.php', GENERICOBJECT_LOCALES_PATH, $_SESSION['glpilanguage']))
-    ) {
-        $includes[] = $locale_file;
-    } elseif (file_exists($locale_file = sprintf('%s/fields.%s.php', GENERICOBJECT_LOCALES_PATH, 'en_GB'))) {
-        $includes[] = $locale_file;
-    }
-
-   // User common fields constants
-    if (file_exists($fields_file = sprintf('%s/field.constant.php', GENERICOBJECT_FIELDS_PATH))) {
-        $includes[] = $fields_file;
-    }
-
-    foreach ($includes as $include) {
-        if (!$force) {
-            include_once($include);
-        } else {
-            include($include);
-        }
-    }
-}
-
-function plugin_genericobject_haveRight($class, $right)
-{
-
-    $right_name = PluginGenericobjectProfile::getProfileNameForItemtype($class);
-    return Session::haveRight($right_name, $right);
-}

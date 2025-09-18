@@ -28,66 +28,17 @@
  * -------------------------------------------------------------------------
  */
 
-define('GLPI_ROOT', '../..');
-include(GLPI_ROOT . "/inc/includes.php");
+include('../../inc/includes.php');
 
-if (isset($_GET['itemtypes_id']) && $_GET['itemtypes_id'] != '') {
-    $type = new PluginGenericobjectType();
-    $type->getFromDB($_GET['itemtypes_id']);
-    Html::redirect(Toolbox::getItemTypeSearchURL($type->fields['itemtype']));
-} else {
-    $types = PluginGenericobjectType::getTypesByFamily();
-    foreach ($types as $family => $typeData) {
-        foreach ($typeData as $ID => $value) {
-            if (!Session::haveRight($value['itemtype'], READ)) {
-                unset($types[$family][$ID]);
-            }
-        }
-    }
+// Check if user has admin rights
+Session::checkRight('config', UPDATE);
 
-   //There's only one family
-    if (count($types) == 1) {
-       //There's only one itemtype ? If yes, then automatically
-       //redirect to the search engine
-        if (key($types) == null) {
-            $mytypes = $types;
-            $tmp = array_pop($mytypes);
-            if (count($tmp) == 1) {
-                Html::redirect(Toolbox::getItemTypeSearchURL(key($tmp)));
-            }
-        }
-    }
+// Show EOL message
+$message = sprintf(
+   __('GenericObject v%s is End-of-Life. All form functionality is now available in GLPI 11 core. Check migration status or use native forms.', 'genericobject'),
+   PLUGIN_GENERICOBJECT_VERSION
+);
+Session::addMessageAfterRedirect($message, true, WARNING);
 
-    Html::header(
-        __("Objects management", "genericobject"),
-        $_SERVER['PHP_SELF'],
-        "plugins",
-        "genericobject"
-    );
-
-    foreach ($types as $family => $typeData) {
-        $PluginGenericobjectTypefamily = new PluginGenericobjectTypefamily();
-        $PluginGenericobjectTypefamily->getFromDB($family);
-
-        echo "<table class='tab_cadre_fixe'>";
-        if ($family == 0) {
-            echo "<tr class='tab_bg_2'><th>" . __("Empty family", "genericobject") . "</th></tr>";
-        } else {
-            echo "<tr class='tab_bg_2'><th>" . $PluginGenericobjectTypefamily->getField("name") . "</th></tr>";
-        }
-        if (!count($types)) {
-            echo "<tr class='tab_bg_1'><td align='center'>" . __("No item to display") . "</td></tr>";
-        } else {
-            foreach ($typeData as $ID => $value) {
-                echo "<tr class='tab_bg_1'><td align='center'>";
-                echo "<a href='" . Toolbox::getItemTypeSearchURL($value['itemtype']) . "'>";
-                $itemtype = $value['itemtype'];
-                echo $itemtype::getTypeName();
-                echo "</a></td></tr>";
-            }
-        }
-        echo "</table>";
-    }
-
-    Html::footer();
-}
+// Redirect to migration status page
+Html::redirect($CFG_GLPI['root_doc'] . '/plugins/genericobject/front/migration_status.php');
