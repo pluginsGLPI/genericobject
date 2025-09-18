@@ -17,7 +17,7 @@ Session::checkRight('config', UPDATE);
 /** @var \DBmysql $DB */
 global $DB;
 
-// Collect basic statistics - simple and reliable
+// Get all GenericObject types
 $genericobject_types = [];
 if ($DB->tableExists(PluginGenericobjectType::getTable())) {
     $query = [
@@ -31,6 +31,7 @@ if ($DB->tableExists(PluginGenericobjectType::getTable())) {
 
 }
 
+// Get all custom asset definitions
 $customassets = [];
 if ($DB->tableExists(AssetDefinition::getTable())) {
     $query = [

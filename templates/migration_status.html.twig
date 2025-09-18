@@ -116,7 +116,12 @@
                                             {{ customassets[genericobject_type.name].items }}
                                         </span>
                                     </div>
-                                    <div class="mt-auto d-flex justify-content-end">
+                                    <div class="mt-auto d-flex justify-content-end gap-2">
+                                        <a href="{{ CFG_GLPI.root_doc }}/front/asset/asset.php?class={{ customassets[genericobject_type.name].system_name }}"
+                                        class="btn btn-outline-primary">
+                                            <i class="ti ti-list me-2"></i>
+                                            {{ __('View Items', 'genericobject') }}
+                                        </a>
                                         <a href="{{ CFG_GLPI.root_doc }}/front/asset/assetdefinition.form.php?id={{ customassets[genericobject_type.name].id }}"
                                         class="btn btn-outline-success">
                                             <i class="ti ti-eye me-2"></i>
@@ -132,7 +137,11 @@
                                         <strong>{{ __('Items Migrated:', 'genericobject') }}</strong>
                                         <span class="badge glpi-badge">0</span>
                                     </div>
-                                    <div class="mt-auto d-flex justify-content-end">
+                                    <div class="mt-auto d-flex justify-content-end gap-2">
+                                        <button class="btn btn-outline-primary" disabled>
+                                            <i class="ti ti-list me-2"></i>
+                                            {{ __('View Items', 'genericobject') }}
+                                        </button>
                                         <button class="btn btn-outline-secondary" disabled>
                                             <i class="ti ti-eye me-2"></i>
                                             {{ __('View Asset', 'genericobject') }}
