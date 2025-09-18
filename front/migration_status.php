@@ -8,8 +8,6 @@
  * ---------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
-
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Asset\AssetDefinition;
 

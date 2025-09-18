@@ -121,8 +121,6 @@ class PluginGenericobjectProfile extends Profile
     {
         /** @var DBmysql $DB */
         global $DB;
-        $query = "DELETE FROM `glpi_profilerights`
-                WHERE `name` LIKE '%plugin_genericobject%'";
-        $DB->query($query) or die($DB->error());
+        $DB->dropTable('glpi_profilerights');
     }
 }

@@ -28,8 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../inc/includes.php');
-
 // Check if user has admin rights
 Session::checkRight('config', UPDATE);
 

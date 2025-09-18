@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\DBAL\QueryExpression;
+
 class PluginGenericobjectType extends CommonDBTM
 {
     const INACTIVE = 0;
@@ -226,7 +228,7 @@ class PluginGenericobjectType extends CommonDBTM
 
                 if ($table != getTableForItemType("PluginGenericobjectTypeFamily")) {
                     self::deleteFilesAndClassesForOneItemtype(getSingular($results[1]));
-                    $DB->query("DROP TABLE IF EXISTS `$table`");
+                    $DB->dropTable($table, true);
                 }
             }
         }
@@ -286,7 +288,7 @@ class PluginGenericobjectType extends CommonDBTM
         _log($itemtype);
         $preferences = new DisplayPreference();
         $preferences->deleteByCriteria(["itemtype" => $itemtype]);
-        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType($itemtype) . "`");
+        $DB->dropTable(getTableForItemType($itemtype), true);
     }
 
 
@@ -299,7 +301,7 @@ class PluginGenericobjectType extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType($itemtype) . "_items`");
+        $DB->dropTable(getTableForItemType($itemtype) . "_items", true);
     }
 
    /**
@@ -420,7 +422,12 @@ class PluginGenericobjectType extends CommonDBTM
          WHERE `reservationitems_id` in (
             SELECT `id` from `glpi_reservationitems` WHERE `itemtype`='$itemtype'
          )";
-        $DB->query($query);
+        $reservation = new Reservation();
+        $reservation_item = new ReservationItem();
+        $reservation_items = $reservation_item->find(['itemtype' => $itemtype]);
+        foreach ($reservation_items as $data) {
+            $reservation->deleteByCriteria(['reservationitems_id' => $data['id']]);
+        }
     }
 
    /**
@@ -557,7 +564,7 @@ class PluginGenericobjectType extends CommonDBTM
                            `impact_icon` varchar(255) default NULL,
                            PRIMARY KEY ( `id` )
                            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->query($query) or die($DB->error());
+            $DB->doQuery($query);
         }
 
         $migration->addField($table, "use_network_ports", "bool");
@@ -607,7 +614,7 @@ class PluginGenericobjectType extends CommonDBTM
                FROM `" . $genericObjectTypeInstance->getTable() . "`
                WHERE notepad IS NOT NULL
                AND notepad <> ''";
-                $DB->query($query) or die($DB->error());
+                $DB->doQuery($query);
             }
             $migration->dropField($genericObjectTypeInstance->getTable(), "notepad");
             $migration->migrationOneTable($genericObjectTypeInstance->getTable());
@@ -659,8 +666,7 @@ class PluginGenericobjectType extends CommonDBTM
         }
 
        //Delete table
-        $query = "DROP TABLE IF EXISTS `glpi_plugin_genericobject_types`";
-        $DB->query($query) or die($DB->error());
+        $DB->dropTable('glpi_plugin_genericobject_types', true);
     }
 
 
@@ -720,7 +726,7 @@ class PluginGenericobjectType extends CommonDBTM
             $DB->update(
                 self::getTable(),
                 [
-                    'linked_itemtypes' => new \QueryExpression(
+                    'linked_itemtypes' => new QueryExpression(
                         'REPLACE('
                         . $DB->quoteName('linked_itemtypes')
                         . ','

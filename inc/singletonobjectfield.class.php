@@ -33,7 +33,7 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
+    throw new \RuntimeException('Direct access to this file is not allowed');
 }
 
 class PluginGenericobjectSingletonObjectField

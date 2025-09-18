@@ -29,7 +29,7 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
+    throw new \RuntimeException('Direct access to this file is not allowed');
 }
 
 class PluginGenericobjectTypeFamily extends CommonDropdown
@@ -62,7 +62,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
                            KEY `date_mod` (`date_mod`),
                            KEY `date_creation` (`date_creation`)
                            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->doQuery($query) or die($DB->error());
+            $DB->doQuery($query);
         }
     }
 
@@ -72,9 +72,6 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         global $DB;
 
         $table = getTableForItemType(__CLASS__);
-        if ($DB->tableExists($table)) {
-            $query = "DROP TABLE IF EXISTS `$table`";
-            $DB->doQuery($query) or die($DB->error());
-        }
+        $DB->dropTable($table, true);
     }
 }

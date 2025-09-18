@@ -63,18 +63,13 @@ function plugin_genericobject_install()
         }
     }
 
-    if (!is_dir(GENERICOBJECT_CLASS_PATH)) {
-        @ mkdir(GENERICOBJECT_CLASS_PATH, 0755, true)
-         or die("Can't create folder " . GENERICOBJECT_CLASS_PATH);
-    }
-
    // Add icon directory
     $icons_dir = GLPI_PLUGIN_DOC_DIR . '/genericobject/impact_icons/';
     if (!is_dir($icons_dir)) {
         mkdir($icons_dir);
     }
 
-   //Init plugin & types
+   //Init plugin
     plugin_init_genericobject();
 
     return true;
@@ -123,7 +118,9 @@ function plugin_genericobject_uninstall()
    // Delete all models of datainjection about genericobject
     $table_datainjection_model = 'glpi_plugin_datainjection_models';
     if ($DB->tableExists($table_datainjection_model)) {
-        $DB->query("DELETE FROM $table_datainjection_model WHERE itemtype LIKE 'PluginGenericobject%'");
+        $DB->delete($table_datainjection_model, [
+            'itemtype' => ['LIKE', 'PluginGenericobject%']
+        ]);
     }
 
    // Invalidate menu data in current session

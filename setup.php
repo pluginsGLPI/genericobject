@@ -114,23 +114,9 @@ function plugin_init_genericobject()
      * @var array $GO_READONLY_FIELDS
      * @var array $CFG_GLPI
      */
-    global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $CFG_GLPI;
-
-    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment", "ticket_tco"];
-
-    $GO_BLACKLIST_FIELDS =  ["itemtype", "table", "is_deleted", "id", "entities_id",
-        "is_recursive", "is_template", "notepad", "template_name",
-        "date_mod", "name", "is_helpdesk_visible", "comment",
-        "date_creation", "ticket_tco"
-    ];
-
-    $GO_LINKED_TYPES     =  ['Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
-        'Printer', 'NetworkEquipment'
-    ];
+    global $PLUGIN_HOOKS;
 
     $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
-    $GENERICOBJECT_PDF_TYPES                         =  [];
 
     if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
 
