@@ -33,9 +33,6 @@ class PluginGenericobjectObject extends CommonDBTM
 
     protected $objecttype;
 
-    //Internal field counter
-    private $cpt = 0;
-
     public function getCloneRelations(): array
     {
         return [];

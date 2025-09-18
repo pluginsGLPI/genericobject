@@ -108,11 +108,6 @@ function plugin_init_genericobject()
 {
     /**
      * @var array $PLUGIN_HOOKS
-     * @var array $GO_BLACKLIST_FIELDS
-     * @var array $GENERICOBJECT_PDF_TYPES
-     * @var array $GO_LINKED_TYPES
-     * @var array $GO_READONLY_FIELDS
-     * @var array $CFG_GLPI
      */
     global $PLUGIN_HOOKS;
 

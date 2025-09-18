@@ -346,9 +346,9 @@ class PluginGenericobjectType extends CommonDBTM
     public static function removeDataInjectionModels($itemtype)
     {
        //Delete if exists datainjection models
-        if (Plugin::isPluginActive("datainjection")) {
-            //@phpstan-ignore-next-line
-            $model = new PluginDatainjectionModel();
+        if (Plugin::isPluginActive("datainjection") && class_exists('PluginDatainjectionModel')) {
+            /** @var CommonDBTM $model */
+            $model = new PluginDatainjectionModel(); // @phpstan-ignore-line
             foreach ($model->find(['itemtype' => $itemtype]) as $data) {
                 $model->delete($data);
             }
@@ -596,7 +596,12 @@ class PluginGenericobjectType extends CommonDBTM
 
         $notepad = new Notepad();
         foreach ($allGenericObjectTypes as $genericObjectType => $genericObjectData) {
-            $genericObjectTypeInstance = new $genericObjectType();
+            if (!class_exists($genericObjectType, true)) {
+                // Skip missing classes during migration
+                continue;
+            }
+            /** @var CommonDBTM $genericObjectTypeInstance */
+            $genericObjectTypeInstance = new $genericObjectType(); // @phpstan-ignore-line
             if ($DB->fieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
                 $query = "INSERT INTO `" . $notepad->getTable() . "`
                   (`items_id`,
@@ -658,7 +663,7 @@ class PluginGenericobjectType extends CommonDBTM
        //Delete references to PluginGenericobjectType in the following tables
         self::deleteItemtypeReferencesInGLPI(__CLASS__);
 
-        foreach ($DB->request("glpi_plugin_genericobject_types") as $type) {
+        foreach ($DB->request(['FROM' => 'glpi_plugin_genericobject_types']) as $type) {
            //Delete references to PluginGenericobjectType in the following tables
             self::deleteItemtypeReferencesInGLPI($type['itemtype']);
            //Dropd files and classes
@@ -839,9 +844,8 @@ class PluginGenericobjectType extends CommonDBTM
                     );
                 }
             } else {
-                $migration->displayWarning(
+                $migration->displayMessage(
                     sprintf('Unable to rename "%s" locale directory to "%s"', $old_locale_dir, $new_locale_dir),
-                    true
                 );
             }
         }
@@ -875,9 +879,8 @@ class PluginGenericobjectType extends CommonDBTM
 
             if ($old_filename != $new_filename) {
                 if (!rename($old_filename, $new_filename)) {
-                    $migration->displayWarning(
+                    $migration->displayMessage(
                         sprintf('Unable to rename "%s" file to "%s"', $old_filename, $new_filename),
-                        true
                     );
                     continue;
                 }
@@ -889,9 +892,8 @@ class PluginGenericobjectType extends CommonDBTM
 
             $file_contents = file_get_contents($new_filename);
             if (!$file_contents) {
-                $migration->displayWarning(
+                $migration->displayMessage(
                     sprintf('Unable to read "%s" file contents', $new_filename),
-                    true
                 );
                 continue;
             }
@@ -906,9 +908,8 @@ class PluginGenericobjectType extends CommonDBTM
                 $replace_count
             );
             if ($replace_count > 0 && !file_put_contents($new_filename, $file_contents)) {
-                 $migration->displayWarning(
+                 $migration->displayMessage(
                      sprintf('Unable to update "%s" file contents', $new_filename),
-                     true
                  );
             }
         }

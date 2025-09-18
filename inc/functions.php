@@ -36,15 +36,30 @@
  */
 function dropdown_getTypeName($class, $nb = 0)
 {
+    if (!class_exists($class, true)) {
+        return $class;
+    }
+
     $fk = getForeignKeyFieldForTable(getTableForItemType($class));
-    $instance = new $class();
-    $options = PluginGenericobjectField::getFieldOptions($fk, $instance->linked_itemtype);
+    /** @var CommonDBTM $instance */
+    $instance = new $class(); // @phpstan-ignore-line
+
+    $linked_itemtype = null;
+    if (property_exists($instance, 'linked_itemtype')) {
+        $linked_itemtype = $instance->linked_itemtype;
+    }
+
+    $options = PluginGenericobjectField::getFieldOptions($fk, $linked_itemtype);
     $dropdown_type = isset($options['dropdown_type'])
       ? $options['dropdown_type']
       : null;
     $label = $options['name'] ?? "no-name";
-    if (!is_null($dropdown_type) and $dropdown_type === 'isolated') {
-        $linked_itemtype_object = new $instance->linked_itemtype();
+    if (!is_null($dropdown_type) and $dropdown_type === 'isolated' and !is_null($linked_itemtype)) {
+        if (!class_exists($linked_itemtype, true)) {
+            return $label;
+        }
+        /** @var CommonDBTM $linked_itemtype_object */
+        $linked_itemtype_object = new $linked_itemtype(); // @phpstan-ignore-line
         $label .= " (" . __($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
     }
     if ($label != '') {
