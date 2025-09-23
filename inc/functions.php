@@ -42,7 +42,7 @@ function dropdown_getTypeName($class, $nb = 0)
 
     $fk = getForeignKeyFieldForTable(getTableForItemType($class));
     /** @var CommonDBTM $instance */
-    $instance = new $class(); // @phpstan-ignore-line
+    $instance = new $class();
 
     $linked_itemtype = null;
     if (property_exists($instance, 'linked_itemtype')) {
@@ -50,16 +50,15 @@ function dropdown_getTypeName($class, $nb = 0)
     }
 
     $options = PluginGenericobjectField::getFieldOptions($fk, $linked_itemtype);
-    $dropdown_type = isset($options['dropdown_type'])
-      ? $options['dropdown_type']
-      : null;
+    $dropdown_type = $options['dropdown_type']
+      ?? null;
     $label = $options['name'] ?? "no-name";
     if (!is_null($dropdown_type) and $dropdown_type === 'isolated' and !is_null($linked_itemtype)) {
         if (!class_exists($linked_itemtype, true)) {
             return $label;
         }
         /** @var CommonDBTM $linked_itemtype_object */
-        $linked_itemtype_object = new $linked_itemtype(); // @phpstan-ignore-line
+        $linked_itemtype_object = new $linked_itemtype();
         $label .= " (" . __($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
     }
     if ($label != '') {
@@ -138,9 +137,9 @@ function _format_trace($bt, $args)
     foreach ($args as $arg) {
         if (is_array($arg) || is_object($arg)) {
             $msg .= " " . str_replace("\n", "\n  ", print_r($arg, true));
-        } else if (is_null($arg)) {
+        } elseif (is_null($arg)) {
             $msg .= 'NULL ';
-        } else if (is_bool($arg)) {
+        } elseif (is_bool($arg)) {
             $msg .= ($arg ? 'true' : 'false') . ' ';
         } else {
             $msg .= $arg . ' ';

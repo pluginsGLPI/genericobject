@@ -32,25 +32,25 @@ use Glpi\DBAL\QueryExpression;
 
 class PluginGenericobjectType extends CommonDBTM
 {
-    const INACTIVE = 0;
-    const ACTIVE   = 1;
+    public const INACTIVE = 0;
+    public const ACTIVE   = 1;
 
-    const DRAFT     = 0;
-    const PUBLISHED = 1;
+    public const DRAFT     = 0;
+    public const PUBLISHED = 1;
 
-    const CLASS_TEMPLATE              = "/objects/generic.class.tpl";
-    const FORM_TEMPLATE               = "/objects/generic.form.tpl";
-    const CLASS_DROPDOWN_TEMPLATE     = "/objects/generic.dropdown.class.tpl";
-    const FRONTFORM_DROPDOWN_TEMPLATE = "/objects/front.form.tpl";
-    const FRONT_DROPDOWN_TEMPLATE     = "/objects/front.tpl";
-    const SEARCH_TEMPLATE             = "/objects/front.tpl";
-    const AJAX_DROPDOWN_TEMPLATE      = "/objects/dropdown.tabs.tpl";
-    const AJAX_TEMPLATE               = "/objects/ajax.tabs.tpl";
-    const LOCALE_TEMPLATE             = "/objects/locale.tpl";
-    const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
-    const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
+    public const CLASS_TEMPLATE              = "/objects/generic.class.tpl";
+    public const FORM_TEMPLATE               = "/objects/generic.form.tpl";
+    public const CLASS_DROPDOWN_TEMPLATE     = "/objects/generic.dropdown.class.tpl";
+    public const FRONTFORM_DROPDOWN_TEMPLATE = "/objects/front.form.tpl";
+    public const FRONT_DROPDOWN_TEMPLATE     = "/objects/front.tpl";
+    public const SEARCH_TEMPLATE             = "/objects/front.tpl";
+    public const AJAX_DROPDOWN_TEMPLATE      = "/objects/dropdown.tabs.tpl";
+    public const AJAX_TEMPLATE               = "/objects/ajax.tabs.tpl";
+    public const LOCALE_TEMPLATE             = "/objects/locale.tpl";
+    public const OBJECTINJECTION_TEMPLATE    = "/objects/objectinjection.class.tpl";
+    public const OBJECTITEM_TEMPLATE         = "/objects/object_item.class.tpl";
 
-    const CAN_OPEN_TICKET             = 1024;
+    public const CAN_OPEN_TICKET             = 1024;
 
     public $dohistory                 = true;
 
@@ -95,7 +95,7 @@ class PluginGenericobjectType extends CommonDBTM
         ];
         $result = $DB->request($query);
         if ($result->numrows() > 0) {
-            foreach($result as $field) {
+            foreach ($result as $field) {
                 $this->fields = $field;
             }
         } else {
@@ -103,7 +103,7 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   //-------------------------------- FILE DELETION ----------------------------//
+    //-------------------------------- FILE DELETION ----------------------------//
     public static function deleteFile($filename)
     {
         if (file_exists($filename)) {
@@ -154,11 +154,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete an used form file
-    * @param string $name the name of the object type
-    * @return void
-    */
+    /**
+     * Delete an used form file
+     * @param string $name the name of the object type
+     * @return void
+     */
     public static function deleteFormFile($name)
     {
         self::deleteFile(self::getCompleteFormFilename($name));
@@ -177,11 +177,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete an used class file
-    * @param string $name the name of the object type
-    * @return void
-    */
+    /**
+     * Delete an used class file
+     * @param string $name the name of the object type
+     * @return void
+     */
     public static function deleteClassFile($name)
     {
         self::deleteFile(self::getCompleteClassFilename($name));
@@ -204,12 +204,12 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   /**
-    *
-    * Delete all files and classes for an itemtype (including dropdowns)
-    * @since 2.2.0
-    * @param string $name file name
-    */
+    /**
+     *
+     * Delete all files and classes for an itemtype (including dropdowns)
+     * @since 2.2.0
+     * @param string $name file name
+     */
     public static function deleteItemTypeFilesAndClasses($name, $table, $itemtype)
     {
         /** @var DBmysql $DB */
@@ -221,7 +221,7 @@ class PluginGenericobjectType extends CommonDBTM
             "itemtype" => $itemtype,
 
         ]);
-       //Delete files related to dropdowns
+        //Delete files related to dropdowns
         foreach ($DB->listFields($table) as $field => $options) {
             if (preg_match("/plugin_genericobject_(.*)_id/", $field, $results)) {
                 $table = getTableNameForForeignKeyField($field);
@@ -233,40 +233,40 @@ class PluginGenericobjectType extends CommonDBTM
             }
         }
 
-       //Delete reference in various GLPI core tables
+        //Delete reference in various GLPI core tables
         self::deleteItemtypeReferencesInGLPI($itemtype);
 
-       //Delete itemtype files
+        //Delete itemtype files
         self::deleteFilesAndClassesForOneItemtype($name);
 
-       //Drop itemtype table
+        //Drop itemtype table
         self::deleteItemsTable($itemtype);
         self::deleteTable($itemtype);
     }
 
-   /**
-    * Delete all files for an itemtype
-    *
-    * @since 2.2.0
-    * @param string $name class file name
-    */
+    /**
+     * Delete all files for an itemtype
+     *
+     * @since 2.2.0
+     * @param string $name class file name
+     */
     public static function deleteFilesAndClassesForOneItemtype($name)
     {
-       //This is for compatibility with older versions of GLPI
-       //(where ajax files were used for tabs display, which is not the case anymore with GLPI 0.83+)
+        //This is for compatibility with older versions of GLPI
+        //(where ajax files were used for tabs display, which is not the case anymore with GLPI 0.83+)
         self::deleteAjaxFile($name);
-       //Delete itemtype class
+        //Delete itemtype class
         self::deleteClassFile($name);
-       //Delete forms
+        //Delete forms
         self::deleteSearchFile($name);
         self::deleteFormFile($name);
-       //Delete datainjection compatiblity file
+        //Delete datainjection compatiblity file
         self::deleteInjectionFile($name);
     }
 
     public static function deleteItemtypeReferencesInGLPI($itemtype)
     {
-       //Delete references to PluginGenericobjectType in the following tables
+        //Delete references to PluginGenericobjectType in the following tables
         $itemtypes =  ["Contract_Item", "DisplayPreference", "Document_Item", "SavedSearch", "Log"];
         foreach ($itemtypes as $type) {
             $item     = new $type();
@@ -274,13 +274,13 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   //-------------------- ADD / DELETE TABLES ----------------------------------//
+    //-------------------- ADD / DELETE TABLES ----------------------------------//
 
-   /**
-    * Delete object type table + entries in glpi_display
-    * @name string $itemtype object type's name
-    * @return void
-    */
+    /**
+     * Delete object type table + entries in glpi_display
+     * @name string $itemtype object type's name
+     * @return void
+     */
     public static function deleteTable($itemtype)
     {
         /** @var DBmysql $DB */
@@ -292,11 +292,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete object _items table
-    * @name string $itemtype object type's name
-    * @return void
-    */
+    /**
+     * Delete object _items table
+     * @name string $itemtype object type's name
+     * @return void
+     */
     public static function deleteItemsTable($itemtype)
     {
         /** @var DBmysql $DB */
@@ -304,11 +304,11 @@ class PluginGenericobjectType extends CommonDBTM
         $DB->dropTable(getTableForItemType($itemtype) . "_items", true);
     }
 
-   /**
-    * Delete all tickets for an itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete all tickets for an itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteTicketAssignation($itemtype)
     {
         $types = ['Item_Ticket', 'Item_Problem', 'Change_Item'];
@@ -318,11 +318,11 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   /**
-    * Delete all simcards for an itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete all simcards for an itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteSimcardAssignation($itemtype)
     {
         $plugin = new Plugin();
@@ -332,20 +332,20 @@ class PluginGenericobjectType extends CommonDBTM
                 //@phpstan-ignore-next-line
                 $item = new $type();
                 $item->deleteByCriteria([
-                    'itemtype' => $itemtype
+                    'itemtype' => $itemtype,
                 ]);
             }
         }
     }
 
-   /**
-    * Remove datainjection models for an itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Remove datainjection models for an itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function removeDataInjectionModels($itemtype)
     {
-       //Delete if exists datainjection models
+        //Delete if exists datainjection models
         if (Plugin::isPluginActive("datainjection") && class_exists('PluginDatainjectionModel')) {
             /** @var CommonDBTM $model */
             $model = new PluginDatainjectionModel(); // @phpstan-ignore-line
@@ -356,11 +356,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete all loans associated with a itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete all loans associated with a itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteLoans($itemtype)
     {
         $reservation_item = new ReservationItem();
@@ -370,11 +370,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete all loans associated with a itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete all loans associated with a itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteUnicity($itemtype)
     {
         $unicity = new FieldUnicity();
@@ -382,11 +382,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete all notes associated with a itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete all notes associated with a itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteNotepad($itemtype)
     {
         $notepad = new Notepad();
@@ -394,11 +394,11 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Delete network ports for an itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete network ports for an itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteNetworking($itemtype)
     {
         $networkport = new NetworkPort();
@@ -407,11 +407,11 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   /**
-    * Delete reservations for an itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete reservations for an itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteReservations($itemtype)
     {
         /** @var DBmysql $DB */
@@ -430,26 +430,26 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   /**
-    * Delete reservations for an itemtype
-    * @param string $itemtype
-    * @return void
-    */
+    /**
+     * Delete reservations for an itemtype
+     * @param string $itemtype
+     * @return void
+     */
     public static function deleteReservationItems($itemtype)
     {
         $reservationItem = new ReservationItem();
         $reservationItem->deleteByCriteria(['itemtype' => $itemtype], true);
     }
 
-   /**
-    * Filter values inserted by users : remove accented chars
-    * @param string $value the value to be filtered
-    * @return string the filtered value
-    */
+    /**
+     * Filter values inserted by users : remove accented chars
+     * @param string $value the value to be filtered
+     * @return string the filtered value
+     */
     public static function filterInput($value)
     {
         $value = strtolower($value);
-       //Itemtype must always be singular, otherwise it breaks when using GLPI's framework
+        //Itemtype must always be singular, otherwise it breaks when using GLPI's framework
         $value = getSingular($value);
 
         $search  = explode(",", "ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
@@ -461,19 +461,19 @@ class PluginGenericobjectType extends CommonDBTM
     }
 
 
-   /**
-    * Get the object system name (for files and itemtype), by giving the name
-    *
-    * @param string $name
-    *
-    * @return string
-    */
+    /**
+     * Get the object system name (for files and itemtype), by giving the name
+     *
+     * @param string $name
+     *
+     * @return string
+     */
     public static function getSystemName($name)
     {
-       // Force filtering of name (will have no effect if already done).
+        // Force filtering of name (will have no effect if already done).
         $name = self::filterInput($name);
 
-       // Replace numbers by letters
+        // Replace numbers by letters
         return str_replace(
             ['0',    '1',   '2',   '3',     '4',    '5',    '6',   '7',     '8',     '9'],
             ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
@@ -481,19 +481,19 @@ class PluginGenericobjectType extends CommonDBTM
         );
     }
 
-   /**
-    * Get the object class, by giving the name
-    * @param string $name the object's internal identifier
-    * @return string the class associated with the object
-    */
+    /**
+     * Get the object class, by giving the name
+     * @param string $name the object's internal identifier
+     * @return string the class associated with the object
+     */
     public static function getClassByName($name)
     {
         return 'PluginGenericobject' . ucfirst(self::getSystemName($name));
     }
 
-   /**
-    * Get all types of active&published objects
-    */
+    /**
+     * Get all types of active&published objects
+     */
     public static function getTypes($all = false)
     {
         /** @var DBmysql $DB */
@@ -509,8 +509,8 @@ class PluginGenericobjectType extends CommonDBTM
                 ]
             );
             foreach ($all_types as $data) {
-                 //If class is not present on the filesystem, do not list itemtype
-                 $mytypes[$data['itemtype']] = $data;
+                //If class is not present on the filesystem, do not list itemtype
+                $mytypes[$data['itemtype']] = $data;
             }
             return $mytypes;
         } else {
@@ -518,7 +518,7 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
-   //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//
+    //------------------------------- INSTALL / UNINSTALL METHODS -------------------------//
 
     public static function install(Migration $migration)
     {
@@ -588,10 +588,10 @@ class PluginGenericobjectType extends CommonDBTM
         $migration->addField($table, "impact_icon", "string");
         $migration->migrationOneTable($table);
 
-       //Normalize names and itemtypes (prior to using them).
+        //Normalize names and itemtypes (prior to using them).
         self::normalizeNamesAndItemtypes($migration);
 
-       // Migrate notepad data
+        // Migrate notepad data
         $allGenericObjectTypes = PluginGenericobjectType::getTypes(true);
 
         $notepad = new Notepad();
@@ -601,7 +601,7 @@ class PluginGenericobjectType extends CommonDBTM
                 continue;
             }
             /** @var CommonDBTM $genericObjectTypeInstance */
-            $genericObjectTypeInstance = new $genericObjectType(); // @phpstan-ignore-line
+            $genericObjectTypeInstance = new $genericObjectType();
             if ($DB->fieldExists($genericObjectTypeInstance->getTable(), "notepad")) {
                 $query = "INSERT INTO `" . $notepad->getTable() . "`
                   (`items_id`,
@@ -625,9 +625,9 @@ class PluginGenericobjectType extends CommonDBTM
             $migration->migrationOneTable($genericObjectTypeInstance->getTable());
         }
 
-       //Displayprefs
+        //Displayprefs
         $prefs = [10 => 6, 9 => 5, 8 => 4, 7 => 3, 6 => 2, 2 => 1, 4 => 1, 11 => 7,  12 => 8,
-            14 => 10, 15 => 11
+            14 => 10, 15 => 11,
         ];
         foreach ($prefs as $num => $rank) {
             if (
@@ -660,17 +660,17 @@ class PluginGenericobjectType extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
 
-       //Delete references to PluginGenericobjectType in the following tables
+        //Delete references to PluginGenericobjectType in the following tables
         self::deleteItemtypeReferencesInGLPI(__CLASS__);
 
         foreach ($DB->request(['FROM' => 'glpi_plugin_genericobject_types']) as $type) {
-           //Delete references to PluginGenericobjectType in the following tables
+            //Delete references to PluginGenericobjectType in the following tables
             self::deleteItemtypeReferencesInGLPI($type['itemtype']);
-           //Dropd files and classes
+            //Dropd files and classes
             self::deleteItemTypeFilesAndClasses($type['name'], getTableForItemType($type['itemtype']), $type['itemtype']);
         }
 
-       //Delete table
+        //Delete table
         $DB->dropTable('glpi_plugin_genericobject_types', true);
     }
 
@@ -680,14 +680,14 @@ class PluginGenericobjectType extends CommonDBTM
         return "fas fa-car";
     }
 
-   /**
-    * Normalize itemtype and name for all types.
-    * This method will ensure that new normalization rules will be taken into account
-    * during migration from an old version without loosing existing data.
-    *
-    * @param Migration $migration
-    * @return void
-    */
+    /**
+     * Normalize itemtype and name for all types.
+     * This method will ensure that new normalization rules will be taken into account
+     * during migration from an old version without loosing existing data.
+     *
+     * @param Migration $migration
+     * @return void
+     */
     private static function normalizeNamesAndItemtypes(Migration $migration)
     {
         /** @var DBmysql $DB */
@@ -744,7 +744,7 @@ class PluginGenericobjectType extends CommonDBTM
                 ['linked_itemtypes' => ['LIKE', '%"' . $old_itemtype . '"%']]
             );
 
-           // Handle dropdowns related to itemtype
+            // Handle dropdowns related to itemtype
             $table  = getTableForItemType($new_itemtype);
             $fields = $DB->listFields($table);
             foreach ($fields as $field => $options) {
@@ -770,7 +770,7 @@ class PluginGenericobjectType extends CommonDBTM
                         $dropdown_old_name == $dropdown_new_name
                         && $dropdown_old_itemtype == $dropdown_new_itemtype
                     ) {
-                            continue;
+                        continue;
                     }
 
                     self::updateNameAndItemtype(
@@ -787,17 +787,17 @@ class PluginGenericobjectType extends CommonDBTM
         ProfileRight::cleanAllPossibleRights(); // Clean all possible rights are their name may have change
     }
 
-   /**
-    * Update itemtype and/or name for a given itemtype.
-    *
-    * @param Migration $migration
-    * @param string    $old_name      Current type name in database
-    * @param string    $new_name      New type name to use
-    * @param string    $old_itemtype  Current itemtype
-    * @param string    $new_itemtype  New itemtype to use
-    *
-    * @return void
-    */
+    /**
+     * Update itemtype and/or name for a given itemtype.
+     *
+     * @param Migration $migration
+     * @param string    $old_name      Current type name in database
+     * @param string    $new_name      New type name to use
+     * @param string    $old_itemtype  Current itemtype
+     * @param string    $new_itemtype  New itemtype to use
+     *
+     * @return void
+     */
     private static function updateNameAndItemtype(
         Migration $migration,
         $old_name,
@@ -832,10 +832,10 @@ class PluginGenericobjectType extends CommonDBTM
             self::getCompleteConstantFilename($new_name),
         ];
 
-       // Rename locale folder and map files
+        // Rename locale folder and map files
         if (is_dir($old_locale_dir) && $old_locale_dir != $new_locale_dir) {
             if (rename($old_locale_dir, $new_locale_dir)) {
-               // Add all locale files to destination files
+                // Add all locale files to destination files
                 foreach (glob($new_locale_dir . '/*.php') as $old_filename) {
                     $destination_files[] = preg_replace(
                         '/(.*\/)' . preg_quote($old_systemname, '/') . '([^\/]*)$/',
@@ -850,18 +850,18 @@ class PluginGenericobjectType extends CommonDBTM
             }
         }
 
-       // Handle *_item class table/itemtype
+        // Handle *_item class table/itemtype
         if ($DB->tableExists(getTableForItemType($old_itemtype . '_Item'))) {
             $migration->renameItemtype($old_itemtype . '_Item', $new_itemtype . '_Item');
             $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
         }
 
-       // Add all constant files as they may contains foreign keys to update
+        // Add all constant files as they may contains foreign keys to update
         foreach (glob(GENERICOBJECT_FIELDS_PATH . '/*.php') as $constant_filename) {
             $destination_files[] = $constant_filename;
         }
 
-       // Rename files (replace "/{$old name}*" by "/{$new_system_name}*")
+        // Rename files (replace "/{$old name}*" by "/{$new_system_name}*")
         $migration->displayMessage(
             sprintf('Rename files related to "%s" itemtype and update their content', $old_itemtype)
         );
@@ -873,8 +873,8 @@ class PluginGenericobjectType extends CommonDBTM
             );
 
             if (!file_exists($old_filename)) {
-                 // Do nothing if old file does not exists
-                 continue;
+                // Do nothing if old file does not exists
+                continue;
             }
 
             if ($old_filename != $new_filename) {
@@ -908,13 +908,13 @@ class PluginGenericobjectType extends CommonDBTM
                 $replace_count
             );
             if ($replace_count > 0 && !file_put_contents($new_filename, $file_contents)) {
-                 $migration->displayMessage(
-                     sprintf('Unable to update "%s" file contents', $new_filename),
-                 );
+                $migration->displayMessage(
+                    sprintf('Unable to update "%s" file contents', $new_filename),
+                );
             }
         }
 
-       // Update profile rights
+        // Update profile rights
         if ($old_itemtype != $new_itemtype) {
             $migration->addPostQuery(
                 $DB->buildUpdate(

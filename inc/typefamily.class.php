@@ -29,7 +29,7 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-    throw new \RuntimeException('Direct access to this file is not allowed');
+    throw new RuntimeException('Direct access to this file is not allowed');
 }
 
 class PluginGenericobjectTypeFamily extends CommonDropdown

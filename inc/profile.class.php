@@ -30,7 +30,7 @@
 
 class PluginGenericobjectProfile extends Profile
 {
-   /* if profile deleted */
+    /* if profile deleted */
     public function cleanProfiles($id)
     {
         $this->deleteByCriteria(['id' => $id]);
@@ -49,7 +49,7 @@ class PluginGenericobjectProfile extends Profile
         $profileRight = new ProfileRight();
         $profile      = new Profile();
 
-       //Update needed
+        //Update needed
         if ($DB->tableExists('glpi_plugin_genericobject_profiles')) {
             foreach (getAllDataFromTable('glpi_plugin_genericobject_profiles') as $right) {
                 if (preg_match("/PluginGenericobject(.*)/", $right['itemtype'], $results)) {
@@ -58,7 +58,7 @@ class PluginGenericobjectProfile extends Profile
                         !countElementsInTable(
                             'glpi_profilerights',
                             ['profiles_id' => $right['profiles_id'],
-                                'name' => $newrightname
+                                'name' => $newrightname,
                             ]
                         )
                     ) {
@@ -78,20 +78,20 @@ class PluginGenericobjectProfile extends Profile
 
                         $profileRight->add(['profiles_id' => $right['profiles_id'],
                             'name'        => $newrightname,
-                            'rights'      => $rightvalue
+                            'rights'      => $rightvalue,
                         ]);
 
                         if (
                             !countElementsInTable(
                                 'glpi_profilerights',
                                 ['profiles_id' => $right['profiles_id'],
-                                    'name'        => 'plugin_genericobject_types'
+                                    'name'        => 'plugin_genericobject_types',
                                 ]
                             )
                         ) {
                             $profileRight->add(['profiles_id' => $right['profiles_id'],
                                 'name'        => 'plugin_genericobject_types',
-                                'rights'      => 23
+                                'rights'      => 23,
                             ]);
                         }
                     }
@@ -104,7 +104,7 @@ class PluginGenericobjectProfile extends Profile
                                 $helpdesk_item_types[] = $right['itemtype'];
                             }
                         } else {
-                             $helpdesk_item_types = [$right['itemtype']];
+                            $helpdesk_item_types = [$right['itemtype']];
                         }
 
                         $tmp['id'] = $profile->getID();
@@ -113,7 +113,7 @@ class PluginGenericobjectProfile extends Profile
                     }
                 }
             }
-           //$migration->dropTable('glpi_plugin_genericobject_profiles');
+            //$migration->dropTable('glpi_plugin_genericobject_profiles');
         }
     }
 

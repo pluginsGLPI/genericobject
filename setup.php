@@ -94,7 +94,7 @@ if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
 }
 
 $go_autoloader = new PluginGenericobjectAutoloader([
-    GENERICOBJECT_CLASS_PATH
+    GENERICOBJECT_CLASS_PATH,
 ]);
 $go_autoloader->register();
 
@@ -115,7 +115,7 @@ function plugin_init_genericobject()
 
     if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
 
-       // Config page
+        // Config page
         if (Session::haveRight('config', READ)) {
             $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/eol_info.php';
         }
@@ -141,8 +141,7 @@ function plugin_version_genericobject()
                 'min' => PLUGIN_GENERICOBJECT_MIN_GLPI,
                 'max' => PLUGIN_GENERICOBJECT_MAX_GLPI,
                 'dev' => true, //Required to allow 9.2-dev
-            ]
-        ]
+            ],
+        ],
     ];
 }
-

@@ -47,7 +47,7 @@ function plugin_genericobject_install()
             'PluginGenericobjectField',
             'PluginGenericobjectProfile',
             'PluginGenericobjectType',
-            'PluginGenericobjectTypeFamily'
+            'PluginGenericobjectTypeFamily',
         ] as $itemtype
     ) {
         if ($plug = isPluginItemType($itemtype)) {
@@ -63,13 +63,13 @@ function plugin_genericobject_install()
         }
     }
 
-   // Add icon directory
+    // Add icon directory
     $icons_dir = GLPI_PLUGIN_DOC_DIR . '/genericobject/impact_icons/';
     if (!is_dir($icons_dir)) {
         mkdir($icons_dir);
     }
 
-   //Init plugin
+    //Init plugin
     plugin_init_genericobject();
 
     return true;
@@ -88,7 +88,7 @@ function plugin_genericobject_uninstall()
     include_once(GENERICOBJECT_DIR . "/inc/object.class.php");
     include_once(GENERICOBJECT_DIR . "/inc/type.class.php");
 
-   //For each type
+    //For each type
     foreach (PluginGenericobjectType::getTypes(true) as $tmp => $value) {
         $itemtype = $value['itemtype'];
         if (class_exists($itemtype)) {
@@ -101,7 +101,7 @@ function plugin_genericobject_uninstall()
             'PluginGenericobjectType',
             'PluginGenericobjectProfile',
             'PluginGenericobjectField',
-            'PluginGenericobjectTypeFamily'
+            'PluginGenericobjectTypeFamily',
         ] as $itemtype
     ) {
         if ($plug = isPluginItemType($itemtype)) {
@@ -115,17 +115,16 @@ function plugin_genericobject_uninstall()
         }
     }
 
-   // Delete all models of datainjection about genericobject
+    // Delete all models of datainjection about genericobject
     $table_datainjection_model = 'glpi_plugin_datainjection_models';
     if ($DB->tableExists($table_datainjection_model)) {
         $DB->delete($table_datainjection_model, [
-            'itemtype' => ['LIKE', 'PluginGenericobject%']
+            'itemtype' => ['LIKE', 'PluginGenericobject%'],
         ]);
     }
 
-   // Invalidate menu data in current session
+    // Invalidate menu data in current session
     unset($_SESSION['glpimenu']);
 
     return true;
 }
-

@@ -30,24 +30,22 @@
 
 class PluginGenericobjectField extends CommonDBTM
 {
-   /**
-    * Get the name of the field, as defined in a constant file
-    * The name may be the same, or not depending if it's an isolated dropdown or not
-    */
+    /**
+     * Get the name of the field, as defined in a constant file
+     * The name may be the same, or not depending if it's an isolated dropdown or not
+     */
     public static function getFieldName($field, $itemtype, $options, $remove_prefix = false)
     {
         /** @var DBmysql $DB */
         global $DB;
         $field_orig = $field;
         $field_table = null;
-        $input_type = isset($options['input_type'])
-         ? $options['input_type']
-         : null;
+        $input_type = $options['input_type']
+         ?? null;
         switch ($input_type) {
             case 'dropdown':
-                $dropdown_type = isset($options['dropdown_type'])
-                 ? $options['dropdown_type']
-                 : null;
+                $dropdown_type = $options['dropdown_type']
+                 ?? null;
                 $fk = getForeignKeyFieldForTable(getTableForItemType($itemtype));
 
                 if ($dropdown_type == 'isolated') {
@@ -64,8 +62,8 @@ class PluginGenericobjectField extends CommonDBTM
                 if (
                     substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
                     and (
-                    substr($field_table, strlen('glpi_'))
-                    === substr($field, 0, strlen($field) - strlen('_id'))
+                        substr($field_table, strlen('glpi_'))
+                        === substr($field, 0, strlen($field) - strlen('_id'))
                     )
                     and !$DB->tableExists($field_table)
                 ) {
@@ -78,16 +76,16 @@ class PluginGenericobjectField extends CommonDBTM
         return $field;
     }
 
-   /**
-    *
-    * Get field's options defined in constant files.
-    * If this field has not been defined, it means that this field has been defined globally and
-    * must be dynamically created.
-    *
-    * @param $field the current field
-    * @param $itemtype the itemtype
-    * @return array which contains the full field definition
-    */
+    /**
+     *
+     * Get field's options defined in constant files.
+     * If this field has not been defined, it means that this field has been defined globally and
+     * must be dynamically created.
+     *
+     * @param $field the current field
+     * @param $itemtype the itemtype
+     * @return array which contains the full field definition
+     */
     public static function getFieldOptions($field, $itemtype = "")
     {
         /** @var array $GO_FIELDS */
@@ -96,30 +94,26 @@ class PluginGenericobjectField extends CommonDBTM
         $options = [];
         $cleaned_field = preg_replace("/^plugin_genericobject_/", '', $field);
         if (!isset($GO_FIELDS[$cleaned_field]) && !empty($itemtype)) {
-           // This field has been dynamically defined because it's an isolated dropdown
+            // This field has been dynamically defined because it's an isolated dropdown
             $tmpfield = self::getFieldName(
                 $field,
                 $itemtype,
                 [
                     'dropdown_type' => 'isolated',
-                    'input_type'    => 'dropdown'
+                    'input_type'    => 'dropdown',
                 ],
                 true
             );
             $options             = $GO_FIELDS[$tmpfield];
             $options['realname'] = $tmpfield;
-        } else if (isset($GO_FIELDS[$cleaned_field])) {
+        } elseif (isset($GO_FIELDS[$cleaned_field])) {
             $options             = $GO_FIELDS[$cleaned_field];
             $options['realname'] = $cleaned_field;
         }
         return $options;
     }
 
-    public static function install(Migration $migration)
-    {
-    }
+    public static function install(Migration $migration) {}
 
-    public static function uninstall()
-    {
-    }
+    public static function uninstall() {}
 }

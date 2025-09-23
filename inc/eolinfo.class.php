@@ -1,30 +1,48 @@
 <?php
 
 /**
- * ---------------------------------------------------------------------
- * Formcreator v3.0.0 - End of Life Information
- * ---------------------------------------------------------------------
- * This class provides information about the EOL status and migration
- * options for Formcreator.
- * ---------------------------------------------------------------------
+ * -------------------------------------------------------------------------
+ * GenericObject plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of GenericObject.
+ *
+ * GenericObject is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GenericObject is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GenericObject. If not, see <http://www.gnu.org/licenses/>.
+ * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2009-2023 by GenericObject plugin team.
+ * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ * @link      https://github.com/pluginsGLPI/genericobject
+ * -------------------------------------------------------------------------
  */
 
 use Glpi\Application\View\TemplateRenderer;
 
 /**
- * Class to display End of Life information for Formcreator
+ * Class to display End of Life information for GenericObject
  */
 class PluginGenericobjectEOLInfo extends CommonGLPI
 {
-
-    static public $rightname = 'config';
+    public static $rightname = 'config';
 
     /**
      * Get menu name
      *
      * @return string
      */
-    static function getMenuName()
+    public static function getMenuName()
     {
         return __('GenericObject EOL Info', 'genericobject');
     }
@@ -34,7 +52,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      *
      * @return array
      */
-    static function getMenuContent()
+    public static function getMenuContent()
     {
         $menu = [];
 
@@ -53,7 +71,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      *
      * @return bool
      */
-    static function canView(): bool
+    public static function canView(): bool
     {
         return Session::haveRight('config', READ);
     }
@@ -64,7 +82,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      * @param int $nb
      * @return string
      */
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         return __('GenericObject End of Life Information', 'genericobject');
     }
@@ -74,7 +92,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      *
      * @return void
      */
-    function showForm()
+    public function showForm()
     {
         /** @var array $CFG_GLPI */
         global $CFG_GLPI;
@@ -90,7 +108,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      *
      * @return void
      */
-    static function displayCentralEOLWarning()
+    public static function displayCentralEOLWarning()
     {
         /** @var array $CFG_GLPI */
         global $CFG_GLPI;
