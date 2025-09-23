@@ -33,19 +33,19 @@ class PluginGenericobjectCommonDropdown extends CommonDropdown
     //Get itemtype name
     public static function getTypeName($nb = 0)
     {
-        $class = get_called_class();
+        $class = static::class;
         return dropdown_getTypeName($class, $nb);
     }
 
     public static function getFormURL($full = true)
     {
-        return Toolbox::getItemTypeFormURL(get_parent_class(get_called_class()), $full) .
-         "?itemtype=" . get_called_class();
+        return Toolbox::getItemTypeFormURL(get_parent_class(static::class), $full) .
+         "?itemtype=" . static::class;
     }
 
     public static function getSearchURL($full = true)
     {
-        return Toolbox::getItemTypeSearchURL(get_parent_class(get_called_class()), $full) .
-         "?itemtype=" . get_called_class();
+        return Toolbox::getItemTypeSearchURL(get_parent_class(static::class), $full) .
+         "?itemtype=" . static::class;
     }
 }

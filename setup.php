@@ -113,12 +113,10 @@ function plugin_init_genericobject()
 
     $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
 
-    if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
+    // Config page
+    if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile']) && Session::haveRight('config', READ)) {
 
-        // Config page
-        if (Session::haveRight('config', READ)) {
-            $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/eol_info.php';
-        }
+        $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/eol_info.php';
     }
 }
 

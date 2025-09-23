@@ -50,7 +50,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         if (!$DB->tableExists($table)) {
             $query = "CREATE TABLE `$table` (
                            `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
@@ -71,7 +71,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         /** @var DBmysql $DB */
         global $DB;
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         $DB->dropTable($table, true);
     }
 }

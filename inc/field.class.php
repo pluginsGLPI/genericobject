@@ -38,7 +38,6 @@ class PluginGenericobjectField extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        $field_orig = $field;
         $field_table = null;
         $input_type = $options['input_type']
          ?? null;
@@ -60,16 +59,9 @@ class PluginGenericobjectField extends CommonDBTM
 
                 //Prepend plugin's table prefix if this dropdown is not already handled by GLPI natively
                 if (
-                    substr($field, 0, strlen('plugin_genericobject')) !== 'plugin_genericobject'
-                    and (
-                        substr($field_table, strlen('glpi_'))
-                        === substr($field, 0, strlen($field) - strlen('_id'))
-                    )
-                    and !$DB->tableExists($field_table)
+                    (!str_starts_with($field, 'plugin_genericobject') && substr($field_table, strlen('glpi_')) === substr($field, 0, strlen($field) - strlen('_id')) && !$DB->tableExists($field_table)) && !$remove_prefix
                 ) {
-                    if (!$remove_prefix) {
-                        $field = 'plugin_genericobject_' . $field;
-                    }
+                    $field = 'plugin_genericobject_' . $field;
                 }
                 break;
         }

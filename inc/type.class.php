@@ -90,7 +90,7 @@ class PluginGenericobjectType extends CommonDBTM
         global $DB;
 
         $query  = [
-            'FROM' => getTableForItemType(__CLASS__),
+            'FROM' => getTableForItemType(self::class),
             'WHERE' => ['itemtype' => $itemtype],
         ];
         $result = $DB->request($query);
@@ -416,12 +416,6 @@ class PluginGenericobjectType extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-
-        $query = "DELETE FROM
-            `glpi_reservations`
-         WHERE `reservationitems_id` in (
-            SELECT `id` from `glpi_reservationitems` WHERE `itemtype`='$itemtype'
-         )";
         $reservation = new Reservation();
         $reservation_item = new ReservationItem();
         $reservation_items = $reservation_item->find(['itemtype' => $itemtype]);
@@ -498,7 +492,7 @@ class PluginGenericobjectType extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         if ($DB->tableExists($table)) {
             $mytypes = [];
             $all_types = getAllDataFromTable(
@@ -529,7 +523,7 @@ class PluginGenericobjectType extends CommonDBTM
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         if (!$DB->tableExists($table)) {
             $query = "CREATE TABLE `$table` (
                            `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
@@ -633,11 +627,11 @@ class PluginGenericobjectType extends CommonDBTM
             if (
                 !countElementsInTable(
                     "glpi_displaypreferences",
-                    ['itemtype' => __CLASS__, 'num' => $num, 'users_id' => 0],
+                    ['itemtype' => self::class, 'num' => $num, 'users_id' => 0],
                 )
             ) {
                 $preference      = new DisplayPreference();
-                $tmp['itemtype'] = __CLASS__;
+                $tmp['itemtype'] = self::class;
                 $tmp['num']      = $num;
                 $tmp['rank']     = $rank;
                 $tmp['users_id'] = 0;
@@ -661,7 +655,7 @@ class PluginGenericobjectType extends CommonDBTM
         global $DB;
 
         //Delete references to PluginGenericobjectType in the following tables
-        self::deleteItemtypeReferencesInGLPI(__CLASS__);
+        self::deleteItemtypeReferencesInGLPI(self::class);
 
         foreach ($DB->request(['FROM' => 'glpi_plugin_genericobject_types']) as $type) {
             //Delete references to PluginGenericobjectType in the following tables

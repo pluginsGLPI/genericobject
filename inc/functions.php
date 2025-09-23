@@ -53,7 +53,7 @@ function dropdown_getTypeName($class, $nb = 0)
     $dropdown_type = $options['dropdown_type']
       ?? null;
     $label = $options['name'] ?? "no-name";
-    if (!is_null($dropdown_type) and $dropdown_type === 'isolated' and !is_null($linked_itemtype)) {
+    if (!is_null($dropdown_type) && $dropdown_type === 'isolated' && !is_null($linked_itemtype)) {
         if (!class_exists($linked_itemtype, true)) {
             return $label;
         }
@@ -86,18 +86,12 @@ function _log()
         $trace_file = str_replace("\\", "/", $trace[0]['file']);
         $filename = preg_replace("|^" . $glpi_root . "/" . Plugin::getPhpDir('genericobject', false) . "/|", "", $trace_file);
     }
-    if (count($trace) > 1) {
-        $caller = $trace[1];
-    } else {
-        $caller = null;
-    }
+    $caller = count($trace) > 1 ? $trace[1] : null;
     $msg = _format_trace($trace, func_get_args());
     $msg .= "\n";
     $show_log = false;
     if (
-        !is_null($caller) and
-        isset($caller['class']) and
-        in_array($caller['class'], $LOG_FILTER)
+        !is_null($caller) && isset($caller['class']) && in_array($caller['class'], $LOG_FILTER)
     ) {
         $callee = array_shift($trace);
         $show_log = true;
