@@ -56,7 +56,7 @@
                             <div>
                                 <h5 class="alert-heading mb-2">{{ __('Important Notice', 'genericobject') }}</h5>
                                 <p class="mb-0">
-                                    {{ __("GenericObject v%s has reached End of Life (EOL). This version only provides migration assistance to help you switch to GLPI 11's asset definition", 'formcreator')|format(plugin_version) }}
+                                    {{ __("GenericObject v%s has reached End of Life (EOL). This version only provides migration assistance to help you switch to GLPI 11's asset definition", 'genericobject')|format(plugin_version) }}
                                 </p>
                             </div>
                         </div>
@@ -130,10 +130,10 @@
                     {# Action buttons #}
                     <div class="border-top pt-4">
                         <div class="d-flex flex-wrap justify-content-center gap-3">
-                            <a href="{{ plugin_web_dir }}/front/migration_status.php" 
+                            <a href="{{ plugin_web_dir }}/front/migration_status.php"
                                class="btn btn-primary px-4">
                                 <i class="ti ti-arrows-exchange me-2"></i>
-                                {{ __('View Migration Status', 'formcreator') }}
+                                {{ __('View Migration Status', 'genericobject') }}
                             </a>
                         </div>
                     </div>

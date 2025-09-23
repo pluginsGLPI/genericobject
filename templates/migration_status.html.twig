@@ -26,8 +26,6 @@
  # -------------------------------------------------------------------------
  #}
 
-{% import 'components/form/fields_macros.html.twig' as fields %}
-
 {# Page Header #}
 <div class="d-flex align-items-center mb-4">
     <div class="me-3">
@@ -84,7 +82,7 @@
                 <div class="d-flex flex-wrap justify-content-start gap-3">
                     {% for key, genericobject_type in paginated_types %}
                         <div class="card shadow-sm mb-2 d-flex flex-column h-100" style="flex: 0 0 calc(33.333% - 1rem);">
-                            <div class="card-header d-flex align-items-center 
+                            <div class="card-header d-flex align-items-center
                                         {% if customassets[genericobject_type.name] %}
                                             bg-success bg-opacity-10 text-success
                                         {% else %}
@@ -148,7 +146,6 @@
                         </div>
                     {% endfor %}
                 </div>
-                
                 {# Display pagination controls at the bottom #}
                 {{ include('components/pager.html.twig', {
                     'count': total_count,

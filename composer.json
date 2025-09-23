@@ -11,5 +11,10 @@
             "php": "8.2.99"
         },
         "sort-packages": true
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Glpi\\Tools\\": "../../tools/src/"
+        }
     }
 }
