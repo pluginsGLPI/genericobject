@@ -69,7 +69,7 @@ if ($DB->tableExists(AssetDefinition::getTable())) {
 }
 
 // Display GLPI header
-Html::header(__('GenericObject Migration Status', 'genericobject'), '', "tools", "migration");
+Html::header(__s('GenericObject Migration Status', 'genericobject'), '', "tools", "migration");
 
 // Render the template content
 TemplateRenderer::getInstance()->display('@genericobject/migration_status.html.twig', [

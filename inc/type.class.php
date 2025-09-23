@@ -71,7 +71,7 @@ class PluginGenericobjectType extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return __("Type of objects", "genericobject");
+        return __s("Type of objects", "genericobject");
     }
 
     public static function &getInstance($itemtype, $refresh = false)

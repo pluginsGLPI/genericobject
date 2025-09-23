@@ -44,7 +44,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      */
     public static function getMenuName()
     {
-        return __('GenericObject EOL Info', 'genericobject');
+        return __s('GenericObject EOL Info', 'genericobject');
     }
 
     /**
@@ -84,7 +84,7 @@ class PluginGenericobjectEOLInfo extends CommonGLPI
      */
     public static function getTypeName($nb = 0)
     {
-        return __('GenericObject End of Life Information', 'genericobject');
+        return __s('GenericObject End of Life Information', 'genericobject');
     }
 
     /**

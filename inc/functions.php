@@ -59,7 +59,7 @@ function dropdown_getTypeName($class, $nb = 0)
         }
         /** @var CommonDBTM $linked_itemtype_object */
         $linked_itemtype_object = new $linked_itemtype();
-        $label .= " (" . __($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
+        $label .= " (" . __s($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
     }
     if ($label != '') {
         return $label;

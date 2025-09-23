@@ -38,7 +38,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
 
     public static function getTypeName($nb = 0)
     {
-        return __('Family of type of objects', 'genericobject');
+        return __s('Family of type of objects', 'genericobject');
     }
 
     public static function install(Migration $migration)
