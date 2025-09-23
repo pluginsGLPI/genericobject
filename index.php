@@ -34,7 +34,7 @@ Session::checkRight('config', UPDATE);
 // Show EOL message
 $message = sprintf(
     __('GenericObject v%s is End-of-Life. All form functionality is now available in GLPI 11 core. Check migration status or use native forms.', 'genericobject'),
-    PLUGIN_GENERICOBJECT_VERSION
+    PLUGIN_GENERICOBJECT_VERSION,
 );
 Session::addMessageAfterRedirect($message, true, WARNING);
 

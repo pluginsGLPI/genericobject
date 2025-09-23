@@ -59,7 +59,7 @@ class PluginGenericobjectProfile extends Profile
                             'glpi_profilerights',
                             ['profiles_id' => $right['profiles_id'],
                                 'name' => $newrightname,
-                            ]
+                            ],
                         )
                     ) {
                         switch ($right['right']) {
@@ -86,7 +86,7 @@ class PluginGenericobjectProfile extends Profile
                                 'glpi_profilerights',
                                 ['profiles_id' => $right['profiles_id'],
                                     'name'        => 'plugin_genericobject_types',
-                                ]
+                                ],
                             )
                         ) {
                             $profileRight->add(['profiles_id' => $right['profiles_id'],

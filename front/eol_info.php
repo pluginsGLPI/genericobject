@@ -38,7 +38,7 @@ Html::header(
     __('Genericobject End of Life Information', 'genericobject'),
     $_SERVER['PHP_SELF'],
     'tools',
-    'PluginGenericobjectEOLInfo'
+    'PluginGenericobjectEOLInfo',
 );
 
 $eolInfo = new PluginGenericobjectEOLInfo();

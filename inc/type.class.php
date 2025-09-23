@@ -477,7 +477,7 @@ class PluginGenericobjectType extends CommonDBTM
         return str_replace(
             ['0',    '1',   '2',   '3',     '4',    '5',    '6',   '7',     '8',     '9'],
             ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
-            $name
+            $name,
         );
     }
 
@@ -506,7 +506,7 @@ class PluginGenericobjectType extends CommonDBTM
                 [
                     'WHERE' => !$all ? ['is_active' => self::ACTIVE] : [],
                     'ORDER' => 'name',
-                ]
+                ],
             );
             foreach ($all_types as $data) {
                 //If class is not present on the filesystem, do not list itemtype
@@ -633,7 +633,7 @@ class PluginGenericobjectType extends CommonDBTM
             if (
                 !countElementsInTable(
                     "glpi_displaypreferences",
-                    ['itemtype' => __CLASS__, 'num' => $num, 'users_id' => 0]
+                    ['itemtype' => __CLASS__, 'num' => $num, 'users_id' => 0],
                 )
             ) {
                 $preference      = new DisplayPreference();
@@ -698,7 +698,7 @@ class PluginGenericobjectType extends CommonDBTM
             [
                 'FROM'  => self::getTable(),
                 'ORDER' => 'name',
-            ]
+            ],
         );
 
         foreach ($types_iterator as $type) {
@@ -716,7 +716,7 @@ class PluginGenericobjectType extends CommonDBTM
                 $old_name,
                 $new_name,
                 $old_itemtype,
-                $new_itemtype
+                $new_itemtype,
             );
 
             $DB->update(
@@ -725,7 +725,7 @@ class PluginGenericobjectType extends CommonDBTM
                     'name'     => $new_name,
                     'itemtype' => $new_itemtype,
                 ],
-                ['id' => $type['id']]
+                ['id' => $type['id']],
             );
 
             $DB->update(
@@ -738,10 +738,10 @@ class PluginGenericobjectType extends CommonDBTM
                         . $DB->quoteValue('"' . $old_itemtype . '"') // itemtype is surrounded by quotes
                         . ','
                         . $DB->quoteValue('"' . $new_itemtype . '"') // itemtype is surrounded by quotes
-                        . ')'
+                        . ')',
                     ),
                 ],
-                ['linked_itemtypes' => ['LIKE', '%"' . $old_itemtype . '"%']]
+                ['linked_itemtypes' => ['LIKE', '%"' . $old_itemtype . '"%']],
             );
 
             // Handle dropdowns related to itemtype
@@ -759,8 +759,8 @@ class PluginGenericobjectType extends CommonDBTM
                         str_replace(
                             "glpi_plugin_genericobject_",
                             "",
-                            $dropdown_old_table
-                        )
+                            $dropdown_old_table,
+                        ),
                     );
                     $dropdown_old_itemtype = 'PluginGenericobject' . ucfirst($dropdown_old_name);
                     $dropdown_new_name     = self::filterInput($dropdown_old_name);
@@ -778,7 +778,7 @@ class PluginGenericobjectType extends CommonDBTM
                         $dropdown_old_name,
                         $dropdown_new_name,
                         $dropdown_old_itemtype,
-                        $dropdown_new_itemtype
+                        $dropdown_new_itemtype,
                     );
                 }
             }
@@ -840,7 +840,7 @@ class PluginGenericobjectType extends CommonDBTM
                     $destination_files[] = preg_replace(
                         '/(.*\/)' . preg_quote($old_systemname, '/') . '([^\/]*)$/',
                         '$1' . $new_systemname . '$2',
-                        $old_filename
+                        $old_filename,
                     );
                 }
             } else {
@@ -863,13 +863,13 @@ class PluginGenericobjectType extends CommonDBTM
 
         // Rename files (replace "/{$old name}*" by "/{$new_system_name}*")
         $migration->displayMessage(
-            sprintf('Rename files related to "%s" itemtype and update their content', $old_itemtype)
+            sprintf('Rename files related to "%s" itemtype and update their content', $old_itemtype),
         );
         foreach ($destination_files as $new_filename) {
             $old_filename = preg_replace(
                 '/(.*\/)' . preg_quote($new_systemname, '/') . '([^\/]*)$/',
                 '$1' . $old_systemname . '$2',
-                $new_filename
+                $new_filename,
             );
 
             if (!file_exists($old_filename)) {
@@ -905,7 +905,7 @@ class PluginGenericobjectType extends CommonDBTM
                 [$old_itemtype, $old_fkey, $old_fkey_truncated],
                 [$new_itemtype, $new_fkey, $new_fkey_truncated],
                 $file_contents,
-                $replace_count
+                $replace_count,
             );
             if ($replace_count > 0 && !file_put_contents($new_filename, $file_contents)) {
                 $migration->displayMessage(
@@ -920,8 +920,8 @@ class PluginGenericobjectType extends CommonDBTM
                 $DB->buildUpdate(
                     ProfileRight::getTable(),
                     ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($new_itemtype)],
-                    ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($old_itemtype)]
-                )
+                    ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($old_itemtype)],
+                ),
             );
         }
     }

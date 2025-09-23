@@ -102,7 +102,7 @@ class PluginGenericobjectField extends CommonDBTM
                     'dropdown_type' => 'isolated',
                     'input_type'    => 'dropdown',
                 ],
-                true
+                true,
             );
             $options             = $GO_FIELDS[$tmpfield];
             $options['realname'] = $tmpfield;
