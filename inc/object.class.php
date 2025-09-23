@@ -1,7 +1,5 @@
 <?php
 
-use Glpi\Features\Clonable;
-
 /**
  * -------------------------------------------------------------------------
  * GenericObject plugin for GLPI
@@ -29,6 +27,9 @@ use Glpi\Features\Clonable;
  * @link      https://github.com/pluginsGLPI/genericobject
  * -------------------------------------------------------------------------
  */
+
+use Glpi\Features\Clonable;
+
 class PluginGenericobjectObject extends CommonDBTM
 {
     use Clonable;
