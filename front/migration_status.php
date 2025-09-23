@@ -48,7 +48,6 @@ if ($DB->tableExists(PluginGenericobjectType::getTable())) {
     foreach ($request as $data) {
         $genericobject_types[$data['name']] = $data;
     }
-
 }
 
 // Get all custom asset definitions
@@ -60,11 +59,9 @@ if ($DB->tableExists(AssetDefinition::getTable())) {
     ];
     $request = $DB->request($query);
     foreach ($request as $data) {
+        // If genericobject asset is migrated to native custom asset, count linked items
         $customassets[$data['system_name']] = $data;
-        $customassets[$data['system_name']]['items'] = 0;
-        if ($DB->tableExists('glpi_forms_forms')) {
-            $customassets[$data['system_name']]['items'] = countElementsInTable('glpi_assets_assets', ['assets_assetdefinitions_id' => $data['id']]);
-        }
+        $customassets[$data['system_name']]['items'] = countElementsInTable('glpi_assets_assets', ['assets_assetdefinitions_id' => $data['id']]);
     }
 }
 
