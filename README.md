@@ -11,13 +11,13 @@
 
 **GenericObject 3.0.0 is a migration-only plugin designed exclusively for GLPI 11.0+**
 
-Transition plugin marking the end of life of `genericobject`.
+Plugin marking the end of life of `genericobject`.
 It updates database tables and data to the final version, required before the automatic migration of forms into GLPI 11 core.
 ⚠️ This plugin must be installed in production only to perform the update, and then uninstalled once the operation is complete.
 
-### Purpose of this transitional version
+### Purpose of this version
 
-This version serves as a migration facilitator and acts as a transitional plugin. Its main objectives are:
+This version serves as a migration facilitator. Its main objectives are:
 Update database tables and data to prepare their final state for GLPI 11.
 Ensure the necessary compatibility for the automatic migration of objects and forms to the GLPI 11 core.
 

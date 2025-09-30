@@ -6,18 +6,18 @@
    <logo>https://raw.githubusercontent.com/pluginsGLPI/genericobject/main/genericobject.png</logo>
    <description>
       <short>
-         <fr>Plugin de transition marquant la fin de vie du plugin Genericobject.
-             Il met à jour les tables et les données de la base vers la version finale, étape nécessaire avant la migration automatique des formulaires vers les assets personnalisés de GLPI 11.
+         <fr>Plugin marquant la fin de vie du plugin Genericobject.
+             Il met à jour les tables et les données de la base vers la version finale, prérequis avant la migration automatique des formulaires vers les assets personnalisés de GLPI 11.
              ⚠️ Ce plugin doit être installé uniquement en production pour effectuer la mise à jour, puis désinstallé une fois l’opération terminée.</fr>
-         <en>Transition plugin marking the end of life of Genericobject plugin.
-             It updates database tables and data to the final version, required before the automatic migration of forms into GLPI 11 custom assets.
+         <en>Plugin marking the end of life of Genericobject plugin.
+             It updates database tables and data to the final version, prerequisites before the automatic migration of forms into GLPI 11 custom assets.
              ⚠️ This plugin must be installed in production only to perform the update, and then uninstalled once the operation is complete.</en>
       </short>
       <long>
 	      <fr>
 Genericobject 3.0.0 - Plugin de migration uniquement (Fin de vie)
 
-Si vous prévoyez de migrer votre instance GLPI vers la version 11 et que vous n’avez pas installé la dernière version 2.14.14 sur votre instance GLPI 10.0.x, une version transitoire spécifique compatible avec GLPI 11 est disponible.
+Si vous prévoyez de migrer votre instance GLPI vers la version 11 et que vous n’avez pas installé la dernière version 2.14.14 sur votre instance GLPI 10.0.x, une version spécifique compatible avec GLPI 11 est disponible.
 
 ⚠️ Attention : La version finale 3.0.0 est une version EOL (fin de vie). Elle ne reçoit plus de mises à jour fonctionnelles ni de correctifs de sécurité.
 
@@ -36,7 +36,7 @@ Cette version fournit uniquement un support pour la migration. Pour les fonction
          <en>
 Genericobject 3.0.0 - Migration Only Plugin (End of Life)
 
-If you plan to migrate your GLPI instance to version 11 and have not installed the latest 2.14.14 version on your GLPI 10.0.x instance, a specific transitional version compatible with GLPI 11 is available.
+If you plan to migrate your GLPI instance to version 11 and have not installed the latest 2.14.14 version on your GLPI 10.0.x instance, a specific version compatible with GLPI 11 is available.
 
 ⚠️ Warning: The final 3.0.0 version is an EOL (End of Life) release. It no longer receives functional updates or security fixes.
 
