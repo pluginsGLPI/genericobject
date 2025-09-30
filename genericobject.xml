@@ -17,40 +17,38 @@
 	      <fr>
 Genericobject 3.0.0 - Plugin de migration uniquement (Fin de vie)
 
-Si vous prévoyez de migrer votre instance GLPI vers la version 11 et que vous n’avez pas installé la dernière version 2.14.14 sur votre instance GLPI 10.0.x, une version spécifique compatible avec GLPI 11 est disponible.
+Si vous prévoyez de migrer votre instance GLPI vers la version 11 et que vous n'avez pas installé la version 2.14.14 sur votre instance GLPI 10.0.x, une version spécifique compatible avec GLPI 11 est disponible.
 
-⚠️ Attention : La version finale 3.0.0 est une version EOL (fin de vie). Elle ne reçoit plus de mises à jour fonctionnelles ni de correctifs de sécurité.
+⚠️ Attention : la version finale 3.0.0 est une version EOL (fin de vie). Elle ne bénéficie plus de mises à jour fonctionnelles ni de correctifs de sécurité.
 
-Instructions d'utilisation
+Instructions d'utilisation :
 --------------------------
 1. Après la migration vers GLPI 11, installez cette version finale (3.0.0).
-2. Lancez l’opération de migration des données en utilisant la commande suivante :
-    - `php bin/console migration:genericobject_plugin_to_core`
-3. ⚠️ Attention : Si vous avez ajouté des champs supplémentaires à vos éléments GenericObject en utilisant le plugin Fields, vous devez mettre à jour le plugin vers la version compatible GLPI 11 (1.22.0).
-Cette version inclut une méthode de migration dédiée pour associer correctement ces champs au système CustomAsset de GLPI, sur lequel ils reposaient auparavant.
-4. Désinstallez le plugin genericobject après la migration, une fois que toutes les données ont été intégrées et vérifiées dans le cœur de GLPI 11.
+2. Lancez l'opération de migration des données à l'aide de la commande suivante :
+    - « `php bin/console migration:genericobject_plugin_to_core` ».
+3. Attention : si vous avez ajouté des champs supplémentaires à vos éléments GenericObject en utilisant le plugin Fields, vous devez mettre à jour ce dernier vers la version compatible avec GLPI 11 (1.22.0).
+Cette version inclut en effet une méthode de migration dédiée permettant d'associer correctement ces champs au système CustomAsset de GLPI, sur lequel ils reposaient auparavant.
+4. Désinstallez le plugin GenericObject une fois que toutes les données ont été intégrées et vérifiées dans le cœur de GLPI 11.
 
-Cette version fournit uniquement un support pour la migration. Pour les fonctionnalités des assets personnalisés, utilisez les assets personnalisés natifs de GLPI 11.
-
+Cette version ne fournit qu'un support pour la migration. Pour les fonctionnalités relatives aux actifs personnalisés, utilisez les actifs personnalisés natifs de GLPI 11.
          </fr>
          <en>
-Genericobject 3.0.0 - Migration Only Plugin (End of Life)
+Genericobject 3.0.0 - Migration Plugin Only (End of Life)
 
-If you plan to migrate your GLPI instance to version 11 and have not installed the latest 2.14.14 version on your GLPI 10.0.x instance, a specific version compatible with GLPI 11 is available.
+If you plan to migrate your GLPI instance to version 11 and have not installed version 2.14.14 on your GLPI 10.0.x instance, a specific version compatible with GLPI 11 is available.
 
-⚠️ Warning: The final 3.0.0 version is an EOL (End of Life) release. It no longer receives functional updates or security fixes.
+⚠️ Warning: the final version 3.0.0 is an EOL (End of Life) release. It no longer receives functional updates or security patches.
 
-Usage instructions
-------------------
+Usage Instructions:
+--------------------------
 1. After migrating to GLPI 11, install this final version (3.0.0).
 2. Run the data migration operation using the following command:
-    - `php bin/console migration:genericobject_plugin_to_core`
-3. ⚠️ Warning: If you have added additional fields to your GenericObject items using the Fields plugin, you should update the plugin to the GLPI 11–compatible version (1.22.0).
-This version includes a dedicated migration method to properly associate these fields with GLPI’s CustomAsset system, which previously relied on.
-4. Uninstall the `genericobject` plugin after the migration, once all data has been fully integrated and verified within the GLPI 11 core.
+    - "`php bin/console migration:genericobject_plugin_to_core`".
+3. Warning: if you have added extra fields to your GenericObject items using the Fields plugin, you must update it to the version compatible with GLPI 11 (1.22.0).  
+This version indeed includes a dedicated migration method to correctly associate these fields with GLPI's CustomAsset system, which they previously relied on.
+4. Uninstall the GenericObject plugin once all data has been integrated and verified within the core of GLPI 11.
 
-This version provides migration support only. For custom assets functionality, use GLPI 11's native custom assets.
-
+This version provides support for migration only. For features related to custom assets, use GLPI 11's native custom assets.
          </en>
       </long>
    </description>
