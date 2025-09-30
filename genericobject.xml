@@ -1,19 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-   <name>Generic Objects Management</name>
+   <name>Generic Objects End-of-Life Updater</name>
    <key>genericobject</key>
    <state>stable</state>
    <logo>https://raw.githubusercontent.com/pluginsGLPI/genericobject/main/genericobject.png</logo>
    <description>
       <short>
-         <fr><![CDATA[Faites l'inventaire de nouveaux types d'objets]]></fr>
-         <en><![CDATA[Do the inventory of new, non-native object types]]></en>
-	 <cs><![CDATA[Inventarizace nových, nenativních typů objektů]]></cs>
+         <fr>Plugin marquant la fin de vie du plugin Genericobject.
+             Il met à jour les tables et les données de la base vers la version finale, prérequis avant la migration automatique des formulaires vers les assets personnalisés de GLPI 11.
+             ⚠️ Ce plugin doit être installé uniquement en production pour effectuer la mise à jour, puis désinstallé une fois l’opération terminée.</fr>
+         <en>Plugin marking the end of life of Genericobject plugin.
+             It updates database tables and data to the final version, prerequisites before the automatic migration of forms into GLPI 11 custom assets.
+             ⚠️ This plugin must be installed in production only to perform the update, and then uninstalled once the operation is complete.</en>
       </short>
       <long>
-	 <fr><![CDATA[Ce plugin vous permet de faire l'inventaire de nouveaux types d'objets génériques, sans avoir à programmer. Generic Objects vous permet de créer ces nouveaux types, les champs disponibles pour ces types. Il est intégré à GLPi dans ses fonctionnalités mère (Helpdesk, réservation, gabarits, etc.). Generic Objects est compatible avec le plugin File Injection permettant l'injection des données.]]></fr>
-         <en><![CDATA[This plugin allows you to do the inventory of new item types without having to code, it allows you to create those new item types, it allows type creation, manages available fields. Has full integration with the software (Helpdesk, loans, templates, etc.) It has support and connectivity for and with the File Injection plugin]]></en>
-	 <cs><![CDATA[Tento zásuvný modul umožňuje inventarizovat nové typy položek, aniž by bylo třeba programovat. Umožňuje vytvářet tyto nové typy položek, typů a spravovat kolonky, které budou k dispozici. Je plně začleněný do software (Služba podpory, zápůjčky, šablony, atd.) Má podporu a propojení pro a se zásuvným modulem Vkládání dat ze souboru]]></cs>
+	      <fr>
+Genericobject 3.0.0 - Plugin de migration uniquement (Fin de vie)
+
+Si vous prévoyez de migrer votre instance GLPI vers la version 11 et que vous n'avez pas installé la version 2.14.14 sur votre instance GLPI 10.0.x, une version spécifique compatible avec GLPI 11 est disponible.
+
+⚠️ Attention : la version finale 3.0.0 est une version EOL (fin de vie). Elle ne bénéficie plus de mises à jour fonctionnelles ni de correctifs de sécurité.
+
+Instructions d'utilisation :
+--------------------------
+1. Après la migration vers GLPI 11, installez cette version finale (3.0.0).
+2. Lancez l'opération de migration des données à l'aide de la commande suivante :
+    - « `php bin/console migration:genericobject_plugin_to_core` ».
+3. Attention : si vous avez ajouté des champs supplémentaires à vos éléments GenericObject en utilisant le plugin Fields, vous devez mettre à jour ce dernier vers la version compatible avec GLPI 11 (1.22.0).
+Cette version inclut en effet une méthode de migration dédiée permettant d'associer correctement ces champs au système CustomAsset de GLPI, sur lequel ils reposaient auparavant.
+4. Désinstallez le plugin GenericObject une fois que toutes les données ont été intégrées et vérifiées dans le cœur de GLPI 11.
+
+Cette version ne fournit qu'un support pour la migration. Pour les fonctionnalités relatives aux actifs personnalisés, utilisez les actifs personnalisés natifs de GLPI 11.
+         </fr>
+         <en>
+Genericobject 3.0.0 - Migration Plugin Only (End of Life)
+
+If you plan to migrate your GLPI instance to version 11 and have not installed version 2.14.14 on your GLPI 10.0.x instance, a specific version compatible with GLPI 11 is available.
+
+⚠️ Warning: the final version 3.0.0 is an EOL (End of Life) release. It no longer receives functional updates or security patches.
+
+Usage Instructions:
+--------------------------
+1. After migrating to GLPI 11, install this final version (3.0.0).
+2. Run the data migration operation using the following command:
+    - "`php bin/console migration:genericobject_plugin_to_core`".
+3. Warning: if you have added extra fields to your GenericObject items using the Fields plugin, you must update it to the version compatible with GLPI 11 (1.22.0).  
+This version indeed includes a dedicated migration method to correctly associate these fields with GLPI's CustomAsset system, which they previously relied on.
+4. Uninstall the GenericObject plugin once all data has been integrated and verified within the core of GLPI 11.
+
+This version provides support for migration only. For features related to custom assets, use GLPI 11's native custom assets.
+         </en>
       </long>
    </description>
    <homepage>https://github.com/pluginsGLPI/genericobject</homepage>
@@ -24,6 +60,11 @@
       <author>Walid Nouh</author>
    </authors>
    <versions>
+      <version>
+         <num>3.0.0</num>
+         <compatibility>~11.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/3.0.0/glpi-genericobject-3.0.0.tar.bz2</download_url>
+      </version>
       <version>
          <num>2.14.14</num>
          <compatibility>~10.0.0</compatibility>

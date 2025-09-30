@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.0.0 (Migration Only)] - 2025-30-09
+## [3.0.0 End-of-Life Updater] - 2025-30-09
 
-- GLPI 11 compatibility
+- End-of-Life Support and Compatibility with GLPI 11
 
 ## [2.14.14] - 2025-04-23
 

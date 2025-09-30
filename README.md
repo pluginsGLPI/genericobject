@@ -7,10 +7,30 @@
 [![GitHub release](https://img.shields.io/github/release/pluginsGLPI/genericobject.svg)](https://github.com/pluginsGLPI/genericobject/releases)
 [![GitHub build](https://travis-ci.org/pluginsGLPI/genericobject.svg?)](https://travis-ci.org/pluginsGLPI/genericobject/)
 
-![Screenshot](./genericobject.gif "genericobject")
+## ⚠️ IMPORTANT NOTICE - END OF LIFE
 
+**GenericObject 3.0.0 is a migration-only plugin designed exclusively for GLPI 11.0+**
 
-The genericobject plugin allows to extends GLPi to manage new types of objects.
+Plugin marking the end of life of `genericobject`.
+It updates database tables and data to the final version, required before the automatic migration of forms into GLPI 11 core.
+⚠️ This plugin must be installed in production only to perform the update, and then uninstalled once the operation is complete.
+
+### Purpose of this version
+
+This version serves as a migration facilitator. Its main objectives are:
+Update database tables and data to prepare their final state for GLPI 11.
+Ensure the necessary compatibility for the automatic migration of objects and forms to the GLPI 11 core.
+
+Usage Instructions:
+--------------------------
+1. After migrating to GLPI 11, install this final version (3.0.0).
+2. Run the data migration operation using the following command:
+    - "`php bin/console migration:genericobject_plugin_to_core`".
+3. Warning: if you have added extra fields to your `GenericObject` items using the `Fields` plugin, you must update it to the version compatible with GLPI 11 (1.22.0).
+This version indeed includes a dedicated migration method to correctly associate these fields with GLPI's `CustomAsset` system, which they previously relied on.
+4. Uninstall the `GenericObject` plugin once all data has been integrated and verified within the core of GLPI 11.
+
+This version provides support for migration only. For features related to custom assets, use GLPI 11's native custom assets.
 
 
 ## Documentation
