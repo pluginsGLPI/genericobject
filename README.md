@@ -23,12 +23,12 @@ Ensure the necessary compatibility for the automatic migration of objects and fo
 
 ### Usage instructions
 
-* After migrating to GLPI 11, install this final version (3.0.0).
-* Run the data migration operation using the following command:
+1. After migrating to GLPI 11, install this final version (3.0.0).
+2. Run the data migration operation using the following command:
     * `php bin/console migration:genericobject_plugin_to_core`
-* ⚠️ Warning: If you have added additional fields to your GenericObject items using the Fields plugin, you should update the plugin to the GLPI 11–compatible version (1.22.0).
+3. ⚠️ Warning: If you have added additional fields to your GenericObject items using the Fields plugin, you should update the plugin to the GLPI 11–compatible version (1.22.0).
 This version includes a dedicated migration method to properly associate these fields with GLPI’s CustomAsset system, which previously relied on GenericObject.
-* Uninstall the `genericobject` plugin after the migration, once all data has been fully integrated and verified within the GLPI 11 core.
+4. Uninstall the `genericobject` plugin after the migration, once all data has been fully integrated and verified within the GLPI 11 core.
 
 
 ## Documentation
