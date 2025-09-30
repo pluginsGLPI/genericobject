@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.0.0 (Migration Only)] - 2025-30-09
 
-- Fix massive actions compatibility with Fields plugin
+- GLPI 11 compatibility
 
 ## [2.14.14] - 2025-04-23
 
