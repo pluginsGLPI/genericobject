@@ -21,14 +21,16 @@ This version serves as a migration facilitator. Its main objectives are:
 Update database tables and data to prepare their final state for GLPI 11.
 Ensure the necessary compatibility for the automatic migration of objects and forms to the GLPI 11 core.
 
-### Usage instructions
-
+Usage Instructions:
+--------------------------
 1. After migrating to GLPI 11, install this final version (3.0.0).
 2. Run the data migration operation using the following command:
-    * `php bin/console migration:genericobject_plugin_to_core`
-3. ⚠️ Warning: If you have added additional `fields` to your `GenericObject` items using the `Fields` plugin, you should update the plugin to the GLPI 11–compatible version (1.22.0).
-This version includes a dedicated migration method to properly associate these fields with GLPI’s `CustomAsset` system, which previously relied on `GenericObject`.
-4. Uninstall the `genericobject` plugin after the migration, once all data has been fully integrated and verified within the GLPI 11 core.
+    - "`php bin/console migration:genericobject_plugin_to_core`".
+3. Warning: if you have added extra fields to your `GenericObject` items using the `Fields` plugin, you must update it to the version compatible with GLPI 11 (1.22.0).
+This version indeed includes a dedicated migration method to correctly associate these fields with GLPI's `CustomAsset` system, which they previously relied on.
+4. Uninstall the `GenericObject` plugin once all data has been integrated and verified within the core of GLPI 11.
+
+This version provides support for migration only. For features related to custom assets, use GLPI 11's native custom assets.
 
 
 ## Documentation
