@@ -28,16 +28,20 @@
  * -------------------------------------------------------------------------
  */
 
-include("../../../inc/includes.php");
+// Check if user has admin rights
+Session::checkRight('config', READ);
 
-if (isset($_REQUEST['itemtype'])) {
-    $itemtype = $_REQUEST['itemtype'];
-    if (class_exists($itemtype)) {
-        $dropdown = new $itemtype();
-        include(GLPI_ROOT . "/front/dropdown.common.form.php");
-    } else {
-        Html::displayErrorAndDie(__('The requested dropdown does not exists', 'genericobject'));
-    }
-} else {
-    Html::displayErrorAndDie(__('Not Found!'));
-}
+/** @var array $CFG_GLPI */
+global $CFG_GLPI;
+
+Html::header(
+    __s('Genericobject End of Life Information', 'genericobject'),
+    $_SERVER['PHP_SELF'],
+    'tools',
+    'PluginGenericobjectEOLInfo',
+);
+
+$eolInfo = new PluginGenericobjectEOLInfo();
+$eolInfo->showForm();
+
+Html::footer();

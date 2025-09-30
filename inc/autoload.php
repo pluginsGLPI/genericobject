@@ -41,8 +41,8 @@ class PluginGenericobjectAutoloader
 
     public function setOptions($options)
     {
-        if (!is_array($options) && !($options instanceof \Traversable)) {
-            throw new \InvalidArgumentException();
+        if (!is_array($options) && !($options instanceof Traversable)) {
+            throw new InvalidArgumentException();
         }
 
         foreach ($options as $path) {
@@ -79,11 +79,11 @@ class PluginGenericobjectAutoloader
             $filename = implode(".", [
                 $class_name,
                 "class",
-                "php"
+                "php",
             ]);
 
             foreach ($this->paths as $path) {
-                 $test = $path . DIRECTORY_SEPARATOR . $filename;
+                $test = $path . DIRECTORY_SEPARATOR . $filename;
                 if (file_exists($test)) {
                     return include_once($test);
                 }

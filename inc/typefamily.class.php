@@ -29,7 +29,7 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
+    throw new RuntimeException('Direct access to this file is not allowed');
 }
 
 class PluginGenericobjectTypeFamily extends CommonDropdown
@@ -38,7 +38,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
 
     public static function getTypeName($nb = 0)
     {
-        return __('Family of type of objects', 'genericobject');
+        return __s('Family of type of objects', 'genericobject');
     }
 
     public static function install(Migration $migration)
@@ -50,7 +50,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         if (!$DB->tableExists($table)) {
             $query = "CREATE TABLE `$table` (
                            `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
@@ -62,7 +62,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
                            KEY `date_mod` (`date_mod`),
                            KEY `date_creation` (`date_creation`)
                            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->query($query) or die($DB->error());
+            $DB->doQuery($query);
         }
     }
 
@@ -71,44 +71,7 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         /** @var DBmysql $DB */
         global $DB;
 
-        $table = getTableForItemType(__CLASS__);
-        if ($DB->tableExists($table)) {
-            $query = "DROP TABLE IF EXISTS `$table`";
-            $DB->query($query) or die($DB->error());
-        }
-    }
-
-    public static function getFamilies()
-    {
-        /** @var DBmysql $DB */
-        global $DB;
-
-        $query     = "SELECT f.id as id, f.name as name, t.itemtype as itemtype
-                    FROM glpi_plugin_genericobject_typefamilies as f
-                    LEFT JOIN glpi_plugin_genericobject_types AS t
-                       ON (f.id = t.plugin_genericobject_typefamilies_id)
-                    WHERE t.id IN (SELECT DISTINCT `id`
-                                   FROM glpi_plugin_genericobject_types
-                                   WHERE is_active=1)";
-        $families = [];
-        foreach ($DB->request($query) as $fam) {
-            $itemtype = $fam['itemtype'];
-            if ($itemtype::canCreate()) {
-                $families[$fam['id']] = $fam['name'];
-            }
-        }
-        return $families;
-    }
-
-
-    public static function getItemtypesByFamily($families_id)
-    {
-        return getAllDataFromTable(
-            'glpi_plugin_genericobject_types',
-            [
-                'plugin_genericobject_typefamilies_id' => $families_id,
-                'is_active' => 1
-            ] + ['ORDER' => 'name']
-        );
+        $table = getTableForItemType(self::class);
+        $DB->dropTable($table, true);
     }
 }

@@ -1,0 +1,299 @@
+{#
+ # -------------------------------------------------------------------------
+ # GenericObject plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of GenericObject.
+ #
+ # GenericObject is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # GenericObject is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with GenericObject. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2009-2023 by GenericObject plugin team.
+ # @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://github.com/pluginsGLPI/genericobject
+ # -------------------------------------------------------------------------
+ #}
+
+{# Page Header #}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3">
+        <i class="ti ti-arrows-exchange fa-2x text-primary"></i>
+    </div>
+    <div>
+        <h1 class="mb-0">{{ __('GenericObject Migration Status', 'genericobject') }}</h1>
+        <p class="text-muted mb-0">{{ __('End of Life migration tool for GLPI 11', 'genericobject') }}</p>
+    </div>
+</div>
+<div class="row">
+    <div
+        class="col-12">
+        {# EOL Warning Banner #}
+        <div class="alert alert-warning border-start border-warning border-2 mb-4">
+            <div class="d-flex align-items-start">
+                <i class="ti ti-alert-triangle text-warning me-3 mt-1 fa-lg"></i>
+                <div>
+                    <h5 class="alert-heading mb-2">{{ __('End of Life Notice', 'genericobject') }}</h5>
+                    <p class="mb-0">
+                        {{ __('GenericObject v3.0.0 is an End-of-Life version. All custom asset creation functionality has been moved to GLPI 11 native asset definition.', 'genericobject') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {# Migration Status Card #}
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h3 class="card-title mb-0">
+                    <i class="ti ti-chart-line me-2"></i>
+                    {{ __('Migration Status', 'genericobject') }}
+                </h3>
+            </div>
+            <div class="card-body">
+                {# Set pagination variables #}
+                {% set start = _get.start|default(0) %}
+                {% set limit = _get.limit|default(user_pref('list_limit')) %}
+                {% set total_count = genericobject_types|length %}
+
+                {# Calculate pagination #}
+                {% set paginated_types = genericobject_types|slice(start, limit) %}
+
+                {# Display pagination controls at the top #}
+                {{ include('components/pager.html.twig', {
+                    'count': total_count,
+                    'start': start,
+                    'limit': limit,
+                    'href': 'migration_status.php',
+                    'short_display': true,
+                    'no_limit_display': false
+                }) }}
+
+                <div class="d-flex flex-wrap justify-content-start gap-3">
+                    {% for key, genericobject_type in paginated_types %}
+                        <div class="card shadow-sm mb-2 d-flex flex-column h-100" style="flex: 0 0 calc(33.333% - 1rem);">
+                            <div class="card-header d-flex align-items-center
+                                        {% if customassets[genericobject_type.name] %}
+                                            bg-success bg-opacity-10 text-success
+                                        {% else %}
+                                            bg-danger bg-opacity-10 text-danger
+                                        {% endif %}">
+                                {% if customassets[genericobject_type.name] and customassets[genericobject_type.name].icon %}
+                                    <i class="{{ customassets[genericobject_type.name].icon }} fa-lg me-2"></i>
+                                {% else %}
+                                    <i class="ti ti-box fa-lg me-2"></i>
+                                {% endif %}
+                                <h3 class="card-title mb-0">
+                                    {{ genericobject_type.name }}
+                                </h3>
+                            </div>
+
+                            <div class="card-body d-flex flex-column">
+                                {% if customassets[genericobject_type.name] %}
+                                    <div class="mb-2">
+                                        <i class="ti ti-check text-success me-2"></i>
+                                        <span class="text-success fw-bold">{{ __('Migrated', 'genericobject') }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>{{ __('Items Migrated:', 'genericobject') }}</strong>
+                                        <span class="badge glpi-badge">
+                                            {{ customassets[genericobject_type.name].items }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-auto d-flex justify-content-end gap-2">
+                                        <a href="{{ CFG_GLPI.root_doc }}/front/asset/asset.php?class={{ customassets[genericobject_type.name].system_name }}"
+                                        class="btn btn-outline-primary">
+                                            <i class="ti ti-list me-2"></i>
+                                            {{ __('View Items', 'genericobject') }}
+                                        </a>
+                                        <a href="{{ CFG_GLPI.root_doc }}/front/asset/assetdefinition.form.php?id={{ customassets[genericobject_type.name].id }}"
+                                        class="btn btn-outline-success">
+                                            <i class="ti ti-eye me-2"></i>
+                                            {{ __('View Asset', 'genericobject') }}
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="mb-2">
+                                        <i class="ti ti-x text-danger me-2"></i>
+                                        <span class="text-danger fw-bold">{{ __('Not Migrated', 'genericobject') }}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>{{ __('Items Migrated:', 'genericobject') }}</strong>
+                                        <span class="badge glpi-badge">0</span>
+                                    </div>
+                                    <div class="mt-auto d-flex justify-content-end gap-2">
+                                        <button class="btn btn-outline-primary" disabled>
+                                            <i class="ti ti-list me-2"></i>
+                                            {{ __('View Items', 'genericobject') }}
+                                        </button>
+                                        <button class="btn btn-outline-secondary" disabled>
+                                            <i class="ti ti-eye me-2"></i>
+                                            {{ __('View Asset', 'genericobject') }}
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {# Display pagination controls at the bottom #}
+                {{ include('components/pager.html.twig', {
+                    'count': total_count,
+                    'start': start,
+                    'limit': limit,
+                    'href': 'migration_status.php',
+                    'short_display': false,
+                    'no_limit_display': false
+                }) }}
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">
+                    <i class="ti ti-terminal-2 me-2"></i>
+                    {{ __('How to Migrate', 'genericobject') }}
+                </h3>
+            </div>
+                <div class="card-body">
+                    <div class="alert alert-warning border-start border-warning border-2 mb-4">
+                        <div class="d-flex align-items-start">
+                            <i class="ti ti-terminal-2 text-warning me-3 mt-1"></i>
+                            <div>
+                                <p class="alert-heading mb-2">{{ __('Command Line Migration Required', 'genericobject') }}</p>
+                                <p class="mb-2">
+                                    {{ __('For optimal performance and reliability, the migration must be performed using the command line:', 'genericobject') }}
+                                </p>
+                                <div class="bg-light border border-secondary rounded p-3 position-relative mt-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <code id="codeBlock" class="mb-0 flex-grow-1 bg-transparent">php bin/console migration:genericobject_plugin_to_core</code>
+                                        <button class="btn btn-sm btn-outline-secondary ms-3 copy-btn" onclick="copyCode()" title="{{ __('Copy command', 'genericobject') }}">
+                                            <i class="ti ti-clipboard"></i>
+                                            {{ __('Copy') }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="text-muted mt-2 d-block">
+                                    {{ __('Run this command from your GLPI root directory', 'genericobject') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info border-start border-info border-2">
+                        <div class="d-flex align-items-start">
+                            <i class="ti ti-info-circle me-3 mt-1"></i>
+                            <div>
+                                <p class="alert-heading mb-2">{{ __('Migration Process', 'genericobject') }}</p>
+                                <ul class="mb-2 ps-3">
+                                    <li>{{ __('Generic objects will be converted into custom assets', 'genericobject') }}</li>
+                                    <li>{{ __('Types will be retained.', 'genericobject') }}</li>
+                                    <li>{{ __('Asset data will not be lost', 'genericobject') }}</li>
+                                </ul>
+                                <div class="border-top pt-2 mt-2">
+                                    <small class="text-muted">
+                                        <i class="ti ti-alert-circle me-1"></i>
+                                        {{ __('Note: Migration status detection is based on data presence and may not be 100% accurate. Please verify manually after running the migration command.', 'genericobject') }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        {# Next Steps Card #}
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h3 class="card-title mb-0">
+                    <i class="ti ti-list-check me-2"></i>
+                    {{ __('Next Steps', 'genericobject') }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="d-flex align-items-start col-md-6">
+                        <i class="ti ti-arrow-right text-primary me-2"></i>
+                        <div>
+                            <p class="fw-bold mb-2">{{ __('After Migration', 'genericobject') }}</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="ti ti-chevron-right text-primary me-2"></i>
+                                    {{ __('Review converted assets in GLPI 11', 'genericobject') }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="ti ti-chevron-right text-primary me-2"></i>
+                                    {{ __('Test asset access permissions', 'genericobject') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start col-md-6">
+                        <i class="ti ti-arrow-right text-success me-2"></i>
+                        <div>
+                            <p class="fw-bold mb-2">{{ __('Recommendations', 'genericobject') }}</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="ti ti-chevron-right text-success me-2"></i>
+                                    {{ __('Train users on GLPI 11 native custom assets', 'genericobject') }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="ti ti-chevron-right text-success me-2"></i>
+                                    {{ __('Update internal documentation', 'genericobject') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    pre {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+</style>
+<script>
+    function copyCode() {
+        const codeBlock = document.getElementById('codeBlock');
+        const textArea = document.createElement('textarea');
+        textArea.value = codeBlock.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        const copyBtn = document.querySelector('.copy-btn');
+        copyBtn.innerHTML = '<i class="ti ti-check"></i> {{ __("Copied") }} !';
+        copyBtn.classList.remove('btn-outline-secondary');
+        copyBtn.classList.add('btn-success');
+
+        setTimeout(() => {
+            copyBtn.innerHTML = '<i class="ti ti-clipboard"></i> {{ __("Copy") }}';
+            copyBtn.classList.remove('btn-success');
+            copyBtn.classList.add('btn-outline-secondary');
+        }, 2000);
+    }
+</script>

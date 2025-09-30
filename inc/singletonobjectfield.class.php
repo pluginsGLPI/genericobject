@@ -33,23 +33,23 @@
 // Purpose of file:
 // ----------------------------------------------------------------------
 if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
+    throw new RuntimeException('Direct access to this file is not allowed');
 }
 
 class PluginGenericobjectSingletonObjectField
 {
-   /// Items list
+    /// Items list
     public static $_dbfields = [];
 
-   /**
-    * Singleton to store DB fields definition
-    *
-    * @since 2.1.0
-    * @param itemtype itemtype to query
-    * @param reload reload db fields configuration from DB
-    *
-    * @return an array which contains DB fields definition
-    */
+    /**
+     * Singleton to store DB fields definition
+     *
+     * @since 2.1.0
+     * @param string $itemtype itemtype to query
+     * @param bool $reload reload db fields configuration from DB
+     *
+     * @return array an array which contains DB fields definition
+     */
     public static function getInstance($itemtype, $reload = false)
     {
         /** @var DBmysql $DB */

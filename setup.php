@@ -28,12 +28,12 @@
  * -------------------------------------------------------------------------
  */
 
-define('PLUGIN_GENERICOBJECT_VERSION', '2.14.14');
+define('PLUGIN_GENERICOBJECT_VERSION', '3.0.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_GENERICOBJECT_MIN_GLPI", "10.0.0");
+define("PLUGIN_GENERICOBJECT_MIN_GLPI", "11.0.0");
 // Maximum GLPI version, exclusive
-define("PLUGIN_GENERICOBJECT_MAX_GLPI", "10.0.99");
+define("PLUGIN_GENERICOBJECT_MAX_GLPI", "11.0.99");
 
 if (!defined("GENERICOBJECT_DIR")) {
     define("GENERICOBJECT_DIR", Plugin::getPhpDir("genericobject"));
@@ -94,7 +94,7 @@ if (file_exists(GENERICOBJECT_DIR . "/log_filter.settings.php")) {
 }
 
 $go_autoloader = new PluginGenericobjectAutoloader([
-    GENERICOBJECT_CLASS_PATH
+    GENERICOBJECT_CLASS_PATH,
 ]);
 $go_autoloader->register();
 
@@ -108,122 +108,15 @@ function plugin_init_genericobject()
 {
     /**
      * @var array $PLUGIN_HOOKS
-     * @var array $GO_BLACKLIST_FIELDS
-     * @var array $GENERICOBJECT_PDF_TYPES
-     * @var array $GO_LINKED_TYPES
-     * @var array $GO_READONLY_FIELDS
-     * @var array $CFG_GLPI
      */
-    global $PLUGIN_HOOKS, $GO_BLACKLIST_FIELDS,
-          $GENERICOBJECT_PDF_TYPES, $GO_LINKED_TYPES, $GO_READONLY_FIELDS, $CFG_GLPI;
-
-    $GO_READONLY_FIELDS  =  ["is_helpdesk_visible", "comment", "ticket_tco"];
-
-    $GO_BLACKLIST_FIELDS =  ["itemtype", "table", "is_deleted", "id", "entities_id",
-        "is_recursive", "is_template", "notepad", "template_name",
-        "date_mod", "name", "is_helpdesk_visible", "comment",
-        "date_creation", "ticket_tco"
-    ];
-
-    $GO_LINKED_TYPES     =  ['Computer', 'Phone', 'Peripheral', 'Software', 'Monitor',
-        'Printer', 'NetworkEquipment'
-    ];
+    global $PLUGIN_HOOKS;
 
     $PLUGIN_HOOKS['csrf_compliant']['genericobject'] = true;
-    $GENERICOBJECT_PDF_TYPES                         =  [];
 
-    if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile'])) {
-       //if treeview is installed
-        if (Plugin::isPluginActive("treeview") && class_exists('PluginTreeviewConfig')) {
-           //foreach type in genericobject
-            foreach (PluginGenericobjectType::getTypes() as $itemtype => $value) {
-                //check if location_id field exist
-                $fields_in_db = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
-                $objecttype = PluginGenericobjectType::getInstance($itemtype);
-                if (isset($fields_in_db['locations_id']) && $objecttype->canUsePluginTreeview()) {
-                   //register class
-                    PluginTreeviewConfig::registerType($itemtype);
-                    $PLUGIN_HOOKS['treeview'][$itemtype] = Plugin::getWebDir('genericobject') . '/pics/default-icon16.png';
+    // Config page
+    if (Plugin::isPluginActive("genericobject") && isset($_SESSION['glpiactiveprofile']) && Session::haveRight('config', READ)) {
 
-                   //add hook for overload item show form url
-                    $PLUGIN_HOOKS['treeview_params']['genericobject'] = [
-                        'PluginGenericobjectObject',
-                        'showGenericObjectTreeview'
-                    ];
-
-                   //add hook for overload search form url of itemtype
-                    $PLUGIN_HOOKS['treeview_search_url_parent_node']['genericobject'] = [
-                        'PluginGenericobjectObject',
-                        'getParentNodeSearchUrl'
-                    ];
-                }
-            }
-        }
-
-        $PLUGIN_HOOKS['change_profile']['genericobject'] = [
-            'PluginGenericobjectProfile',
-            'changeProfile'
-        ];
-
-        plugin_genericobject_includeCommonFields();
-        $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
-
-       // add css styles
-        $PLUGIN_HOOKS['add_css']['genericobject'] = [
-            "css/styles.css"
-        ];
-
-       // Display a menu entry ?
-        $PLUGIN_HOOKS['menu_toadd']['genericobject'] = [
-            'config' => 'PluginGenericobjectType',
-            'assets' => 'PluginGenericobjectObject'
-        ];
-
-       // Config page
-        if (Session::haveRight('config', READ)) {
-            $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/type.php';
-        }
-
-        $PLUGIN_HOOKS['assign_to_ticket']['genericobject'] = true;
-        $PLUGIN_HOOKS['use_massive_action']['genericobject'] = 1;
-
-        $PLUGIN_HOOKS['post_init']['genericobject'] = 'plugin_post_init_genericobject';
-        $PLUGIN_HOOKS['plugin_datainjection_populate']['genericobject'] = "plugin_datainjection_populate_genericobject";
-
-        $PLUGIN_HOOKS['formcreator_get_glpi_object_types']['genericobject'] = [
-            PluginGenericobjectType::getType(),
-            'getTypesForFormcreator'
-        ];
-
-       // Add every genericobject item's to the list of itemtypes for which the
-       // impact analysis can be enabled
-        foreach ((new PluginGenericobjectType())->find([]) as $row) {
-            if (empty($row['impact_icon'])) {
-                $icon = ""; // Will fallback to default impact icon
-            } else {
-                $obj = new PluginGenericobjectType();
-                $obj->getFromDB($row['id']);
-                $icon = $obj->getImpactIconUrl(false) ?? "";
-            }
-
-            $CFG_GLPI['impact_asset_types'][$row['itemtype']] = $icon;
-        }
-    }
-}
-
-function plugin_post_init_genericobject()
-{
-    Plugin::registerClass(
-        'PluginGenericobjectProfile',
-        ['addtabon' => ['Profile', 'PluginGenericobjectType']]
-    );
-
-
-    foreach (PluginGenericobjectType::getTypes() as $id => $objecttype) {
-        $itemtype = $objecttype['itemtype'];
-        if (class_exists($itemtype)) {
-            $itemtype::registerType();
-        }
+        $PLUGIN_HOOKS['config_page']['genericobject'] = 'front/eol_info.php';
     }
 }
 
@@ -236,7 +129,7 @@ function plugin_post_init_genericobject()
 function plugin_version_genericobject()
 {
     return [
-        'name'           => __("Objects management", "genericobject"),
+        'name'           => __s("Objects management (Migration Only)", "genericobject"),
         'version'        => PLUGIN_GENERICOBJECT_VERSION,
         'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
         'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
@@ -246,55 +139,7 @@ function plugin_version_genericobject()
                 'min' => PLUGIN_GENERICOBJECT_MIN_GLPI,
                 'max' => PLUGIN_GENERICOBJECT_MAX_GLPI,
                 'dev' => true, //Required to allow 9.2-dev
-            ]
-        ]
+            ],
+        ],
     ];
-}
-
-
-function plugin_genericobject_haveTypeRight($itemtype, $right)
-{
-    switch ($itemtype) {
-        case 'PluginGenericobjectType':
-            return Session::haveRight("config", $right);
-        default:
-            return Session::haveRight($itemtype, $right);
-    }
-}
-
-function plugin_genericobject_includeCommonFields($force = false)
-{
-    $includes = [
-        sprintf('%s/fields/field.constant.php', GENERICOBJECT_DIR), // Default common fields constants
-    ];
-
-   // User locales for common fields
-    if (
-        isset($_SESSION['glpilanguage'])
-        && file_exists($locale_file = sprintf('%s/fields.%s.php', GENERICOBJECT_LOCALES_PATH, $_SESSION['glpilanguage']))
-    ) {
-        $includes[] = $locale_file;
-    } elseif (file_exists($locale_file = sprintf('%s/fields.%s.php', GENERICOBJECT_LOCALES_PATH, 'en_GB'))) {
-        $includes[] = $locale_file;
-    }
-
-   // User common fields constants
-    if (file_exists($fields_file = sprintf('%s/field.constant.php', GENERICOBJECT_FIELDS_PATH))) {
-        $includes[] = $fields_file;
-    }
-
-    foreach ($includes as $include) {
-        if (!$force) {
-            include_once($include);
-        } else {
-            include($include);
-        }
-    }
-}
-
-function plugin_genericobject_haveRight($class, $right)
-{
-
-    $right_name = PluginGenericobjectProfile::getProfileNameForItemtype($class);
-    return Session::haveRight($right_name, $right);
 }

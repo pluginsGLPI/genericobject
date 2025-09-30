@@ -1,0 +1,145 @@
+{#
+ # -------------------------------------------------------------------------
+ # GenericObject plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of GenericObject.
+ #
+ # GenericObject is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # GenericObject is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with GenericObject. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2009-2023 by GenericObject plugin team.
+ # @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ # @link      https://github.com/pluginsGLPI/genericobject
+ # -------------------------------------------------------------------------
+ #}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+            <div class="card shadow-sm">
+                {# Header with icon and title #}
+                <div class="card-header bg-warning text-dark border-0">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="ti ti-alert-triangle fa-2x"></i>
+                        </div>
+                        <div class="d-flex align-items-center flex-column">
+                            <p class="mb-0 h3">
+                                {{ __('GenericObject End of Life Notice', 'genericobject') }}
+                            </p>
+                            <p class="mb-0 text-light">
+                                {{ __('Migration guidance and information', 'genericobject') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Body #}
+                <div class="card-body">
+                    {# EOL Notice Banner #}
+                    <div class="alert alert-info border-start border-info border-2 mb-4">
+                        <div class="d-flex align-items-start">
+                            <i class="ti ti-info-circle text-info me-2 mt-1"></i>
+                            <div>
+                                <h5 class="alert-heading mb-2">{{ __('Important Notice', 'genericobject') }}</h5>
+                                <p class="mb-0">
+                                    {{ __("GenericObject v%s has reached End of Life (EOL). This version only provides migration assistance to help you switch to GLPI 11's asset definition", 'genericobject')|format(plugin_version) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Migration Information Grid #}
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="card border-success h-100">
+                                <div class="card-header bg-light border-success">
+                                    <h5 class="card-title mb-0 text-success">
+                                        <i class="ti ti-arrow-up me-2"></i>
+                                        {{ __('What changed?', 'genericobject') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2">
+                                            <i class="ti ti-check text-success me-2"></i>
+                                            {{ __('GLPI 11 now has native custom asset creation capabilities', 'genericobject') }}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="ti ti-check text-success me-2"></i>
+                                            {{ __('All Genericobject features are available in GLPI core', 'genericobject') }}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="ti ti-check text-success me-2"></i>
+                                            {{ __('Better integration with GLPI workflows', 'genericobject') }}
+                                        </li>
+                                        <li class="mb-0">
+                                            <i class="ti ti-check text-success me-2"></i>
+                                            {{ __('Improved performance and security', 'genericobject') }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-primary h-100">
+                                <div class="card-header bg-light border-primary">
+                                    <h5 class="card-title mb-0 text-primary">
+                                        <i class="ti ti-checklist me-2"></i>
+                                        {{ __('Next steps', 'genericobject') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2">
+                                            <i class="ti ti-chevron-right text-primary me-2"></i>
+                                            {{ __('Review your existing genericobject assets', 'genericobject') }}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="ti ti-chevron-right text-primary me-2"></i>
+                                            {{ __('Migrate to GLPI 11 native asset definition', 'genericobject') }}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="ti ti-chevron-right text-primary me-2"></i>
+                                            {{ __('Test the new asset system', 'genericobject') }}
+                                        </li>
+                                        <li class="mb-0">
+                                            <i class="ti ti-chevron-right text-primary me-2"></i>
+                                            {{ __('Uninstall GenericObject plugin when ready', 'genericobject') }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Action buttons #}
+                    <div class="border-top pt-4">
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <a href="{{ plugin_web_dir }}/front/migration_status.php"
+                               class="btn btn-primary px-4">
+                                <i class="ti ti-arrows-exchange me-2"></i>
+                                {{ __('View Migration Status', 'genericobject') }}
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

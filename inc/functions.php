@@ -36,16 +36,30 @@
  */
 function dropdown_getTypeName($class, $nb = 0)
 {
+    if (!class_exists($class, true)) {
+        return $class;
+    }
+
     $fk = getForeignKeyFieldForTable(getTableForItemType($class));
+    /** @var CommonDBTM $instance */
     $instance = new $class();
-    $options = PluginGenericobjectField::getFieldOptions($fk, $instance->linked_itemtype);
-    $dropdown_type = isset($options['dropdown_type'])
-      ? $options['dropdown_type']
-      : null;
+
+    $linked_itemtype = null;
+    if (property_exists($instance, 'linked_itemtype')) {
+        $linked_itemtype = $instance->linked_itemtype;
+    }
+
+    $options = PluginGenericobjectField::getFieldOptions($fk, $linked_itemtype);
+    $dropdown_type = $options['dropdown_type']
+      ?? null;
     $label = $options['name'] ?? "no-name";
-    if (!is_null($dropdown_type) and $dropdown_type === 'isolated') {
-        $linked_itemtype_object = new $instance->linked_itemtype();
-        $label .= " (" . __($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
+    if (!is_null($dropdown_type) && $dropdown_type === 'isolated' && !is_null($linked_itemtype)) {
+        if (!class_exists($linked_itemtype, true)) {
+            return $label;
+        }
+        /** @var CommonDBTM $linked_itemtype_object */
+        $linked_itemtype_object = new $linked_itemtype();
+        $label .= " (" . __s($linked_itemtype_object::getTypeName(), 'genericobject') . ")";
     }
     if ($label != '') {
         return $label;
@@ -72,18 +86,12 @@ function _log()
         $trace_file = str_replace("\\", "/", $trace[0]['file']);
         $filename = preg_replace("|^" . $glpi_root . "/" . Plugin::getPhpDir('genericobject', false) . "/|", "", $trace_file);
     }
-    if (count($trace) > 1) {
-        $caller = $trace[1];
-    } else {
-        $caller = null;
-    }
+    $caller = count($trace) > 1 ? $trace[1] : null;
     $msg = _format_trace($trace, func_get_args());
     $msg .= "\n";
     $show_log = false;
     if (
-        !is_null($caller) and
-        isset($caller['class']) and
-        in_array($caller['class'], $LOG_FILTER)
+        !is_null($caller) && isset($caller['class']) && in_array($caller['class'], $LOG_FILTER)
     ) {
         $callee = array_shift($trace);
         $show_log = true;
@@ -123,9 +131,9 @@ function _format_trace($bt, $args)
     foreach ($args as $arg) {
         if (is_array($arg) || is_object($arg)) {
             $msg .= " " . str_replace("\n", "\n  ", print_r($arg, true));
-        } else if (is_null($arg)) {
+        } elseif (is_null($arg)) {
             $msg .= 'NULL ';
-        } else if (is_bool($arg)) {
+        } elseif (is_bool($arg)) {
             $msg .= ($arg ? 'true' : 'false') . ' ';
         } else {
             $msg .= $arg . ' ';
