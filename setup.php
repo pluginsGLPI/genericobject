@@ -129,7 +129,7 @@ function plugin_init_genericobject()
 function plugin_version_genericobject()
 {
     return [
-        'name'           => __s("Objects management (Migration Only)", "genericobject"),
+        'name'           => __s("Generic Objects End-of-Life Updater", "genericobject"),
         'version'        => PLUGIN_GENERICOBJECT_VERSION,
         'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
         'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
