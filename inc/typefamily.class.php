@@ -71,7 +71,8 @@ class PluginGenericobjectTypeFamily extends CommonDropdown
         /** @var DBmysql $DB */
         global $DB;
 
+        $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
         $table = getTableForItemType(self::class);
-        $DB->dropTable($table, true);
+        $migration->dropTable($table);
     }
 }
