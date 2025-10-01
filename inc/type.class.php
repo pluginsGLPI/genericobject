@@ -654,6 +654,8 @@ class PluginGenericobjectType extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
 
+        $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
+
         //Delete references to PluginGenericobjectType in the following tables
         self::deleteItemtypeReferencesInGLPI(self::class);
 
@@ -665,7 +667,7 @@ class PluginGenericobjectType extends CommonDBTM
         }
 
         //Delete table
-        $DB->dropTable('glpi_plugin_genericobject_types', true);
+        $migration->dropTable('glpi_plugin_genericobject_types');
     }
 
 
