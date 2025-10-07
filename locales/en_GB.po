@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-18 02:03+0000\n"
-"PO-Revision-Date: 2025-06-18 02:03+0000\n"
+"POT-Creation-Date: 2025-10-07 01:51+0000\n"
+"PO-Revision-Date: 2025-10-07 01:51+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -17,167 +17,222 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: index.php:62 front/familylist.php:37 front/familylist.php:49
-#: front/type.form.php:69 inc/profile.class.php:43
-#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
-#: setup.php:239
-msgid "Objects management"
-msgstr "Objects management"
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "GenericObject End of Life Notice"
 
-#: index.php:74 front/familylist.php:44
-msgid "Empty family"
-msgstr "Empty family"
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Migration guidance and information"
 
-#: front/commondropdown.php:39 front/commontreedropdown.form.php:39
-#: front/commondropdown.form.php:39
-msgid "The requested dropdown does not exists"
-msgstr "The requested dropdown does not exists"
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Important Notice"
 
-#: front/field.form.php:46
-msgid "Field(s) deleted successfully"
-msgstr "Field(s) deleted successfully"
-
-#: front/field.form.php:56
-msgid "Field added successfully"
-msgstr "Field added successfully"
-
-#: front/object.php:37 front/type.php:43 inc/profile.class.php:304
-#: inc/type.class.php:72
-msgid "Type of objects"
-msgstr "Type of objects"
-
-#: inc/profile.class.php:144
-msgid "General"
-msgstr "General"
-
-#: inc/profile.class.php:150
-msgid "Objects"
-msgstr "Objects"
-
-#: inc/profile.class.php:152
-msgid "(No types defined yet)"
-msgstr "(No types defined yet)"
-
-#: inc/field.class.php:74
-msgid "Fields associated with the object"
-msgstr "Fields associated with the object"
-
-#: inc/field.class.php:80
-msgid "Label"
-msgstr "Label"
-
-#: inc/field.class.php:81
-msgid "Name in DB"
-msgstr "Name in DB"
-
-#: inc/field.class.php:135
-msgid "Add new field"
-msgstr "Add new field"
-
-#: inc/field.class.php:345
-msgid "Read-only field"
-msgstr "Read-only field"
-
-#: inc/type.class.php:167
-msgid "Type name is missing"
-msgstr "Type name is missing"
-
-#: inc/type.class.php:173
-msgid "Type name must be longer"
-msgstr "Type name must be longer"
-
-#: inc/type.class.php:180
+#: templates/eol_info.html.twig
+#, php-format
 msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
 msgstr ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
 
-#: inc/type.class.php:188
-msgid "Type must start with a letter"
-msgstr "Type must start with a letter"
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "What changed?"
 
-#: inc/type.class.php:195
-msgid "A type already exists with the same name"
-msgstr "A type already exists with the same name"
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 now has native custom asset creation capabilities"
 
-#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "All Genericobject features are available in GLPI core"
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "Better integration with GLPI workflows"
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Improved performance and security"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Next steps"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Review your existing genericobject assets"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "Migrate to GLPI 11 native asset definition"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Test the new asset system"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Uninstall GenericObject plugin when ready"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "View Migration Status"
+
+#: templates/migration_status.html.twig front/migration_status.php:69
+msgid "GenericObject Migration Status"
+msgstr "GenericObject Migration Status"
+
+#: templates/migration_status.html.twig
+msgid "End of Life migration tool for GLPI 11"
+msgstr "End of Life migration tool for GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "End of Life Notice"
+msgstr "End of Life Notice"
+
+#: templates/migration_status.html.twig
+msgid ""
+"GenericObject v3.0.0 is an End-of-Life version. All custom asset creation "
+"functionality has been moved to GLPI 11 native asset definition."
+msgstr ""
+"GenericObject v3.0.0 is an End-of-Life version. All custom asset creation "
+"functionality has been moved to GLPI 11 native asset definition."
+
+#: templates/migration_status.html.twig
+msgid "Migration Status"
+msgstr "Migration Status"
+
+#: templates/migration_status.html.twig
+msgid "Migrated"
+msgstr "Migrated"
+
+#: templates/migration_status.html.twig
+msgid "Items Migrated:"
+msgstr "Items Migrated:"
+
+#: templates/migration_status.html.twig
+msgid "View Items"
+msgstr "View Items"
+
+#: templates/migration_status.html.twig
+msgid "View Asset"
+msgstr "View Asset"
+
+#: templates/migration_status.html.twig
+msgid "Not Migrated"
+msgstr "Not Migrated"
+
+#: templates/migration_status.html.twig
+msgid "How to Migrate"
+msgstr "How to Migrate"
+
+#: templates/migration_status.html.twig
+msgid "Command Line Migration Required"
+msgstr "Command Line Migration Required"
+
+#: templates/migration_status.html.twig
+msgid ""
+"For optimal performance and reliability, the migration must be performed "
+"using the command line:"
+msgstr ""
+"For optimal performance and reliability, the migration must be performed "
+"using the command line:"
+
+#: templates/migration_status.html.twig
+msgid "Copy command"
+msgstr "Copy command"
+
+#: templates/migration_status.html.twig
+msgid "Run this command from your GLPI root directory"
+msgstr "Run this command from your GLPI root directory"
+
+#: templates/migration_status.html.twig
+msgid "Migration Process"
+msgstr "Migration Process"
+
+#: templates/migration_status.html.twig
+msgid "Generic objects will be converted into custom assets"
+msgstr "Generic objects will be converted into custom assets"
+
+#: templates/migration_status.html.twig
+msgid "Types will be retained."
+msgstr "Types will be retained."
+
+#: templates/migration_status.html.twig
+msgid "Asset data will not be lost"
+msgstr "Asset data will not be lost"
+
+#: templates/migration_status.html.twig
+msgid ""
+"Note: Migration status detection is based on data presence and may not be "
+"100% accurate. Please verify manually after running the migration command."
+msgstr ""
+"Note: Migration status detection is based on data presence and may not be "
+"100% accurate. Please verify manually after running the migration command."
+
+#: templates/migration_status.html.twig
+msgid "Next Steps"
+msgstr "Next Steps"
+
+#: templates/migration_status.html.twig
+msgid "After Migration"
+msgstr "After Migration"
+
+#: templates/migration_status.html.twig
+msgid "Review converted assets in GLPI 11"
+msgstr "Review converted assets in GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "Test asset access permissions"
+msgstr "Test asset access permissions"
+
+#: templates/migration_status.html.twig
+msgid "Recommendations"
+msgstr "Recommendations"
+
+#: templates/migration_status.html.twig
+msgid "Train users on GLPI 11 native custom assets"
+msgstr "Train users on GLPI 11 native custom assets"
+
+#: templates/migration_status.html.twig
+msgid "Update internal documentation"
+msgstr "Update internal documentation"
+
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
+msgstr "Generic Objects End-of-Life Updater"
+
+#: inc/typefamily.class.php:41
 msgid "Family of type of objects"
 msgstr "Family of type of objects"
 
-#: inc/type.class.php:617
-msgid "Internal identifier"
-msgstr "Internal identifier"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "GenericObject EOL Info"
 
-#: inc/type.class.php:676
-msgid "Behaviour"
-msgstr "Behaviour"
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "GenericObject End of Life Information"
 
-#: inc/type.class.php:695
-msgid "Network connections"
-msgstr "Network connections"
+#: inc/type.class.php:74
+msgid "Type of objects"
+msgstr "Type of objects"
 
-#: inc/type.class.php:701
-msgid "injection file plugin"
-msgstr "injection file plugin"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "Genericobject End of Life Information"
 
-#: inc/type.class.php:703
-msgid "geninventorynumber plugin"
-msgstr "geninventorynumber plugin"
-
-#: inc/type.class.php:704
-msgid "order plugin"
-msgstr "order plugin"
-
-#: inc/type.class.php:705
-msgid "item's uninstallation plugin"
-msgstr "item's uninstallation plugin"
-
-#: inc/type.class.php:706
-msgid "simcard plugin"
-msgstr "simcard plugin"
-
-#: inc/type.class.php:707
-msgid "treeview plugin"
-msgstr "treeview plugin"
-
-#: inc/type.class.php:771
-msgid "Icon (impact analysis)"
-msgstr "Icon (impact analysis)"
-
-#: inc/type.class.php:910
-msgid "Regenerate files"
-msgstr "Regenerate files"
-
-#: inc/type.class.php:925
-msgid "Link to other objects"
-msgstr "Link to other objects"
-
-#: inc/type.class.php:2026
-msgid "Other"
-msgid_plural "Others"
-msgstr[0] "Other"
-msgstr[1] "Others"
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2440
-#, php-format
-msgid "Unable to load the class %1$s."
-msgstr "Unable to load the class %1$s."
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2442
+#: index.php:36
 #, php-format
 msgid ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
+"GenericObject v%s is End-of-Life. All genericobject functionality is now "
+"available in GLPI 11 core. Check migration status or use native custom "
+"assets."
 msgstr ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
-
-#: inc/object.class.php:618
-msgid "Object preview"
-msgstr "Object preview"
-
-#: inc/object.class.php:889
-msgid "You must configure rights to enable the preview"
-msgstr "You must configure rights to enable the preview"
+"GenericObject v%s is End-of-Life. All genericobject functionality is now "
+"available in GLPI 11 core. Check migration status or use native custom "
+"assets."

@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2024
+# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2025
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-11 02:04+0000\n"
+"POT-Creation-Date: 2025-10-07 01:51+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2024\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2025\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,164 +18,211 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: index.php:62 front/familylist.php:37 front/familylist.php:49
-#: front/type.form.php:69 inc/profile.class.php:43
-#: inc/object_item.class.php:122 inc/type.class.php:428 inc/type.class.php:564
-#: setup.php:239
-msgid "Objects management"
-msgstr "Nesne yönetimi"
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "GenericObject destek sonu bildirimi"
 
-#: index.php:74 front/familylist.php:44
-msgid "Empty family"
-msgstr "Aile boş"
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Aktarım rehberi ve bilgileri"
 
-#: front/commondropdown.php:39 front/commontreedropdown.form.php:39
-#: front/commondropdown.form.php:39
-msgid "The requested dropdown does not exists"
-msgstr "İstenen açılan kutu bulunamadı"
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Önemli not"
 
-#: front/field.form.php:46
-msgid "Field(s) deleted successfully"
-msgstr "Alanlar silindi"
-
-#: front/field.form.php:56
-msgid "Field added successfully"
-msgstr "Alan eklendi"
-
-#: front/object.php:37 front/type.php:43 inc/profile.class.php:304
-#: inc/type.class.php:72
-msgid "Type of objects"
-msgstr "Nesne türü"
-
-#: inc/profile.class.php:144
-msgid "General"
-msgstr "Genel"
-
-#: inc/profile.class.php:150
-msgid "Objects"
-msgstr "Nesneler"
-
-#: inc/profile.class.php:152
-msgid "(No types defined yet)"
-msgstr "(Henüz bir tür tanımlanmamış)"
-
-#: inc/field.class.php:74
-msgid "Fields associated with the object"
-msgstr "Nesne ile ilişkilendirilmiş alanlar"
-
-#: inc/field.class.php:80
-msgid "Label"
-msgstr "Etiket"
-
-#: inc/field.class.php:81
-msgid "Name in DB"
-msgstr "Veri tabanındaki ad"
-
-#: inc/field.class.php:135
-msgid "Add new field"
-msgstr "Alan ekle"
-
-#: inc/field.class.php:345
-msgid "Read-only field"
-msgstr "Salt okunur alan"
-
-#: inc/type.class.php:167
-msgid "Type name is missing"
-msgstr "Tür adı eksik"
-
-#: inc/type.class.php:173
-msgid "Type name must be longer"
-msgstr "Tür adı daha uzun olmalı"
-
-#: inc/type.class.php:180
+#: templates/eol_info.html.twig
+#, php-format
 msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "field', 'object' ve 'type' tipleri ayrılmış olduğundan kullanılamaz. Lütfen başka bir tür seçin"
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr "GenericObject v%s desteği sona erdi (EOL). Bu sürüm yalnızca verilerin GLPI 11 varlık tanımlarına aktarımında yardımcı olur"
 
-#: inc/type.class.php:188
-msgid "Type must start with a letter"
-msgstr "Tür bir harf ile başlamalıdır"
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "Ne değişti?"
 
-#: inc/type.class.php:195
-msgid "A type already exists with the same name"
-msgstr "Aynı adlı bir tür zaten var"
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 içine doğal varlık oluşturma özellikleri eklendi"
 
-#: inc/type.class.php:516 inc/type.class.php:661 inc/typefamily.class.php:41
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "Tüm GenericObject özellikleri GLPI çekirdeğine eklendi"
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "GLPI iş akışları ile daha iyi bütünlük sağlandı"
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Başarım ve güvenlik iyileştirildi"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Sonraki adımlar"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Var olan GenericObject varlıklarını gözden geçirin"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "GLPI 11 doğal varlık tanımlarına geçin"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Yeni varlık sistemini deneyin"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Hazır olduğunuzda GenericObject eklentisini kaldırın"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "Aktarım durumunu görüntüle"
+
+#: templates/migration_status.html.twig front/migration_status.php:69
+msgid "GenericObject Migration Status"
+msgstr "GenericObject aktarım durumu"
+
+#: templates/migration_status.html.twig
+msgid "End of Life migration tool for GLPI 11"
+msgstr "GLPI 11 için destek sonu aracı"
+
+#: templates/migration_status.html.twig
+msgid "End of Life Notice"
+msgstr "Destek sonu bildirimi"
+
+#: templates/migration_status.html.twig
+msgid ""
+"GenericObject v3.0.0 is an End-of-Life version. All custom asset creation "
+"functionality has been moved to GLPI 11 native asset definition."
+msgstr "GenericObject v3.0.0 bir destek sonu sürümüdür. Tüm özel varlık oluşturma özellikleri GLPI 11 doğal varlık tanımları üzerine taşındı."
+
+#: templates/migration_status.html.twig
+msgid "Migration Status"
+msgstr "Aktarım durumu"
+
+#: templates/migration_status.html.twig
+msgid "Migrated"
+msgstr "Aktarıldı"
+
+#: templates/migration_status.html.twig
+msgid "Items Migrated:"
+msgstr "Aktarılan ögeler:"
+
+#: templates/migration_status.html.twig
+msgid "View Items"
+msgstr "Ögeleri görüntüle"
+
+#: templates/migration_status.html.twig
+msgid "View Asset"
+msgstr "Varlığı görüntüle"
+
+#: templates/migration_status.html.twig
+msgid "Not Migrated"
+msgstr "Aktarılmadı"
+
+#: templates/migration_status.html.twig
+msgid "How to Migrate"
+msgstr "Aktarım nasıl yapılır"
+
+#: templates/migration_status.html.twig
+msgid "Command Line Migration Required"
+msgstr "Aktarım işlemi komut satırından yapılmalıdır"
+
+#: templates/migration_status.html.twig
+msgid ""
+"For optimal performance and reliability, the migration must be performed "
+"using the command line:"
+msgstr "En iyi başarım ve kararlılık için aktarım işlemi komut satırından yapılmalıdır:"
+
+#: templates/migration_status.html.twig
+msgid "Copy command"
+msgstr "Komutu kopyala"
+
+#: templates/migration_status.html.twig
+msgid "Run this command from your GLPI root directory"
+msgstr "Bu komutu GLPI kök klasörünüzde yürütün"
+
+#: templates/migration_status.html.twig
+msgid "Migration Process"
+msgstr "Aktarım süreci"
+
+#: templates/migration_status.html.twig
+msgid "Generic objects will be converted into custom assets"
+msgstr "Genel nesneler özel varlıklara dönüştürülecek"
+
+#: templates/migration_status.html.twig
+msgid "Types will be retained."
+msgstr "Türler korunacak."
+
+#: templates/migration_status.html.twig
+msgid "Asset data will not be lost"
+msgstr "Varlık verileri kaybolmayacak"
+
+#: templates/migration_status.html.twig
+msgid ""
+"Note: Migration status detection is based on data presence and may not be "
+"100% accurate. Please verify manually after running the migration command."
+msgstr "Not: Aktarım durumu algılaması var olan verilere göre yapıldığından %100 doğru olmayabilir. Lütfen aktarım komutunu yürüttükten sonra sonucu el ile doğrulayın."
+
+#: templates/migration_status.html.twig
+msgid "Next Steps"
+msgstr "Sonraki adımlar"
+
+#: templates/migration_status.html.twig
+msgid "After Migration"
+msgstr "Aktarım sonrası"
+
+#: templates/migration_status.html.twig
+msgid "Review converted assets in GLPI 11"
+msgstr "GLPI üzerinde aktarılan varlıkları gözden geçirin"
+
+#: templates/migration_status.html.twig
+msgid "Test asset access permissions"
+msgstr "Varlık erişimi izinlerini denetleyin"
+
+#: templates/migration_status.html.twig
+msgid "Recommendations"
+msgstr "Öneriler"
+
+#: templates/migration_status.html.twig
+msgid "Train users on GLPI 11 native custom assets"
+msgstr "Kullanıcılara GLPI doğal özel varlıkları eğitimi verin"
+
+#: templates/migration_status.html.twig
+msgid "Update internal documentation"
+msgstr "Kuruluş içindeki belgeleri güncelleyin"
+
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
+msgstr "Generic Objects destek sonu güncelleyici"
+
+#: inc/typefamily.class.php:41
 msgid "Family of type of objects"
 msgstr "Nesnelerin aile türü"
 
-#: inc/type.class.php:617
-msgid "Internal identifier"
-msgstr "İç belirteç"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "GenericObject destek sonu bilgileri"
 
-#: inc/type.class.php:676
-msgid "Behaviour"
-msgstr "Davranış"
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "GenericObject destek sonu bildirimi"
 
-#: inc/type.class.php:695
-msgid "Network connections"
-msgstr "Ağ bağlantıları"
+#: inc/type.class.php:74
+msgid "Type of objects"
+msgstr "Nesne türü"
 
-#: inc/type.class.php:701
-msgid "injection file plugin"
-msgstr "Veri aktarma eklentisi"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "GenericObject destek sonu bilgileri"
 
-#: inc/type.class.php:703
-msgid "geninventorynumber plugin"
-msgstr "Envanter numarası alma uygulama eki"
-
-#: inc/type.class.php:704
-msgid "order plugin"
-msgstr "Sıralama eklentisi"
-
-#: inc/type.class.php:705
-msgid "item's uninstallation plugin"
-msgstr "Öge kaldırma eklentisi"
-
-#: inc/type.class.php:706
-msgid "simcard plugin"
-msgstr "SIM kart eklentisi"
-
-#: inc/type.class.php:707
-msgid "treeview plugin"
-msgstr "Ağaç görünümü eklentisi"
-
-#: inc/type.class.php:771
-msgid "Icon (impact analysis)"
-msgstr "Simge (etki incelemesi)"
-
-#: inc/type.class.php:910
-msgid "Regenerate files"
-msgstr "Dosyaları yeniden oluştur"
-
-#: inc/type.class.php:925
-msgid "Link to other objects"
-msgstr "Diğer nesnelere bağlantı"
-
-#: inc/type.class.php:2026
-msgid "Other"
-msgid_plural "Others"
-msgstr[0] "Diğer"
-msgstr[1] "Diğer"
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2440
-#, php-format
-msgid "Unable to load the class %1$s."
-msgstr "%1$s sınıfı yüklenemedi."
-
-#. TRANS:  %1$s is itemtype name
-#: inc/type.class.php:2442
+#: index.php:36
 #, php-format
 msgid ""
-"You probably have garbage data in your database for this plugin and missing "
-"files in %1$s"
-msgstr "Veri tabanınızda bu eklenti ve %1$s içindeki eksik dosyalar için büyük olasılıkla çöp veriler var "
-
-#: inc/object.class.php:618
-msgid "Object preview"
-msgstr "Nesne ön izlemesi"
-
-#: inc/object.class.php:889
-msgid "You must configure rights to enable the preview"
-msgstr "Ön izlemeyi görüntüleyebilmek için izinleri yapılandırmalısınız"
+"GenericObject v%s is End-of-Life. All genericobject functionality is now "
+"available in GLPI 11 core. Check migration status or use native custom "
+"assets."
+msgstr "GenericObject v%s desteği sona erdi. Tüm GenericObject özellikleri GLPI 11 çekirdeğine eklendi. Aktarım durumunu denetleyin ya da doğal özel varlıkları kullanın."
