@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased] - XXXX-XX-XX
+
+- Fix Twig error on migration_status page
+
 ## [3.0.0 End-of-Life Updater] - 2025-30-09
 
 - End-of-Life Support and Compatibility with GLPI 11
