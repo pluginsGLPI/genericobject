@@ -6,12 +6,10 @@
    <logo>https://raw.githubusercontent.com/pluginsGLPI/genericobject/main/genericobject.png</logo>
    <description>
       <short>
-         <fr>Plugin marquant la fin de vie du plugin Genericobject.
-             Il met à jour les tables et les données de la base vers la version finale, prérequis avant la migration automatique des formulaires vers les assets personnalisés de GLPI 11.
-             ⚠️ Ce plugin doit être installé uniquement en production pour effectuer la mise à jour, puis désinstallé une fois l’opération terminée.</fr>
-         <en>Plugin marking the end of life of Genericobject plugin.
-             It updates database tables and data to the final version, prerequisites before the automatic migration of forms into GLPI 11 custom assets.
-             ⚠️ This plugin must be installed in production only to perform the update, and then uninstalled once the operation is complete.</en>
+         <fr>Ce plugin vous permet de faire l'inventaire de nouveaux types d'objets.
+            ⚠️ À partir de GLPI 11 : il prépare la migration des assets personnalisés vers le cœur de GLPI, une fois cette migration effectuée, il peut-être désinstallé.</fr>
+         <en>This plugin allows you to inventory new types of objects.
+            ⚠️ Starting with GLPI 11: it prepares the migration of custom assets to the GLPI core; once this migration is complete, it can be uninstalled.</en>
       </short>
       <long>
 	      <fr>
