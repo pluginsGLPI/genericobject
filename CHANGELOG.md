@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - XXXX-XX-XX
 
 - Fix Twig error on migration_status page
+- Check method existence before calling uninstall on custom assets
 
 ## [3.0.0 End-of-Life Updater] - 2025-30-09
 
