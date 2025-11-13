@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased] - XXXX-XX-XX
+## [3.0.1 End-of-Life Updater] - 2025-11-13
 
 - Fix Twig error on migration_status page
 - Check method existence before calling uninstall on custom assets
