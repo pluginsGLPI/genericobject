@@ -309,8 +309,16 @@ class PluginGenericobjectType extends CommonDBTM
         $preferences = new DisplayPreference();
         $preferences->deleteByCriteria(["itemtype" => $itemtype]);
         $DB->dropTable(getTableForItemType($itemtype), true);
-        $DB->dropTable(getTableForItemType($itemtype . "Model"), true);
-        $DB->dropTable(getTableForItemType($itemtype . "Type"), true);
+
+
+        if (strlen(getTableForItemType($itemtype) . "Model") <= 64) {
+            $DB->dropTable(getTableForItemType($itemtype . "Model"), true);
+        }
+
+        if (strlen(getTableForItemType($itemtype) . "Type") <= 64) {
+            $DB->dropTable(getTableForItemType($itemtype . "Type"), true);
+        }
+
     }
 
 
@@ -323,7 +331,9 @@ class PluginGenericobjectType extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        $DB->dropTable(getTableForItemType($itemtype) . "_items", true);
+        if (strlen(getTableForItemType($itemtype) . "_items") <= 64) {
+            $DB->dropTable(getTableForItemType($itemtype) . "_items", true);
+        }
     }
 
     /**
