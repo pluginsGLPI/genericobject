@@ -111,6 +111,26 @@ class PluginGenericobjectType extends CommonDBTM
         }
     }
 
+    public static function deleteFolder(string $folder)
+    {
+        if (!is_dir($folder)) {
+            return;
+        }
+
+        $it = new RecursiveDirectoryIterator($folder, FilesystemIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+
+        rmdir($folder);
+    }
+
 
     public static function getCompleteClassFilename($name)
     {
@@ -660,6 +680,13 @@ class PluginGenericobjectType extends CommonDBTM
         self::deleteItemtypeReferencesInGLPI(self::class);
 
         foreach ($DB->request(['FROM' => 'glpi_plugin_genericobject_types']) as $type) {
+
+            // GLPI 11 migration may change plugin itemtype from glpi_plugin_genericobject_types table during CustomAsset migration
+            // rely on original name to get correct itemtype
+            if (str_starts_with($type['itemtype'], 'Glpi\\CustomAsset\\')) {
+                    $type['itemtype'] = self::getClassByName($type['name']);
+            }
+
             //Delete references to PluginGenericobjectType in the following tables
             self::deleteItemtypeReferencesInGLPI($type['itemtype']);
             //Dropd files and classes
@@ -668,6 +695,9 @@ class PluginGenericobjectType extends CommonDBTM
 
         //Delete table
         $migration->dropTable('glpi_plugin_genericobject_types');
+
+        self::deleteFolder(GENERICOBJECT_DOC_DIR);
+
     }
 
 
