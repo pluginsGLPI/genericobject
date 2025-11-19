@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.0.2 End-of-Life Updater] - 2025-11-13
 
-- Uninstall process
+- Secured, fixed, and enhanced the uninstall process
 
 ## [3.0.1 End-of-Life Updater] - 2025-11-13
 
