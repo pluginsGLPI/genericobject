@@ -309,6 +309,8 @@ class PluginGenericobjectType extends CommonDBTM
         $preferences = new DisplayPreference();
         $preferences->deleteByCriteria(["itemtype" => $itemtype]);
         $DB->dropTable(getTableForItemType($itemtype), true);
+        $DB->dropTable(getTableForItemType($itemtype . "Model"), true);
+        $DB->dropTable(getTableForItemType($itemtype . "Type"), true);
     }
 
 
