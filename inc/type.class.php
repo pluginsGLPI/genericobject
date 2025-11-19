@@ -696,7 +696,7 @@ class PluginGenericobjectType extends CommonDBTM
             // GLPI 11 migration may change plugin itemtype from glpi_plugin_genericobject_types table during CustomAsset migration
             // rely on original name to get correct itemtype
             if (str_starts_with($type['itemtype'], 'Glpi\\CustomAsset\\')) {
-                    $type['itemtype'] = self::getClassByName($type['name']);
+                $type['itemtype'] = self::getClassByName($type['name']);
             }
 
             //Delete references to PluginGenericobjectType in the following tables
