@@ -61,7 +61,7 @@ This version provides support for migration only. For features related to custom
       <version>
          <num>3.0.2</num>
          <compatibility>~11.0.0</compatibility>
-         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/3.0.1/glpi-genericobject-3.0.2.tar.bz2</download_url>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/3.0.2/glpi-genericobject-3.0.2.tar.bz2</download_url>
       </version>
       <version>
          <num>3.0.1</num>
