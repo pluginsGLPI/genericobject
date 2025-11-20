@@ -13,15 +13,15 @@
       </short>
       <long>
 	      <fr>
-Genericobject 3.0.0 - Plugin de migration uniquement (Fin de vie)
+Genericobject 3.0.x - Plugin de migration uniquement (Fin de vie)
 
 Si vous prévoyez de migrer votre instance GLPI vers la version 11 et que vous n'avez pas installé la version 2.14.14 sur votre instance GLPI 10.0.x, une version spécifique compatible avec GLPI 11 est disponible.
 
-⚠️ Attention : la version finale 3.0.0 est une version EOL (fin de vie). Elle ne bénéficie plus de mises à jour fonctionnelles ni de correctifs de sécurité.
+⚠️ Attention : la version finale 3.0.x est une version EOL (fin de vie). Elle ne bénéficie plus de mises à jour fonctionnelles ni de correctifs de sécurité.
 
 Instructions d'utilisation :
 --------------------------
-1. Après la migration vers GLPI 11, installez cette version finale (3.0.0).
+1. Après la migration vers GLPI 11, installez cette version finale (3.0.x).
 2. Lancez l'opération de migration des données à l'aide de la commande suivante :
     - « `php bin/console migration:genericobject_plugin_to_core` ».
 3. Attention : si vous avez ajouté des champs supplémentaires à vos éléments GenericObject en utilisant le plugin Fields, vous devez mettre à jour ce dernier vers la version compatible avec GLPI 11 (1.22.0).
@@ -31,15 +31,15 @@ Cette version inclut en effet une méthode de migration dédiée permettant d'as
 Cette version ne fournit qu'un support pour la migration. Pour les fonctionnalités relatives aux actifs personnalisés, utilisez les actifs personnalisés natifs de GLPI 11.
          </fr>
          <en>
-Genericobject 3.0.0 - Migration Plugin Only (End of Life)
+Genericobject 3.0.x - Migration Plugin Only (End of Life)
 
 If you plan to migrate your GLPI instance to version 11 and have not installed version 2.14.14 on your GLPI 10.0.x instance, a specific version compatible with GLPI 11 is available.
 
-⚠️ Warning: the final version 3.0.0 is an EOL (End of Life) release. It no longer receives functional updates or security patches.
+⚠️ Warning: the final version 3.0.x is an EOL (End of Life) release. It no longer receives functional updates or security patches.
 
 Usage Instructions:
 --------------------------
-1. After migrating to GLPI 11, install this final version (3.0.0).
+1. After migrating to GLPI 11, install this final version (3.0.x).
 2. Run the data migration operation using the following command:
     - "`php bin/console migration:genericobject_plugin_to_core`".
 3. Warning: if you have added extra fields to your GenericObject items using the Fields plugin, you must update it to the version compatible with GLPI 11 (1.22.0).  
@@ -58,6 +58,11 @@ This version provides support for migration only. For features related to custom
       <author>Walid Nouh</author>
    </authors>
    <versions>
+      <version>
+         <num>3.0.2</num>
+         <compatibility>~11.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/genericobject/releases/download/3.0.1/glpi-genericobject-3.0.2.tar.bz2</download_url>
+      </version>
       <version>
          <num>3.0.1</num>
          <compatibility>~11.0.0</compatibility>
