@@ -1,138 +1,228 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
+# Alan Lehoux, 2025
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-06 14:50+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2025-11-26 02:01+0000\n"
+"PO-Revision-Date: 2015-07-23 09:47+0000\n"
+"Last-Translator: Alan Lehoux, 2025\n"
+"Language-Team: Spanish (Argentina) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es_AR\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: hook.php:152
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "Aviso de Fin de Vida Útil del Administración de Objetos"
+
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Información y orientación de migración"
+
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Aviso Importante"
+
+#: templates/eol_info.html.twig
+#, php-format
 msgid ""
-"Error: directories '/inc', '/front' and '/locales' of plugin must be "
-"writable by the web server."
-msgstr "Error: los directorios '/inc', '/front' and '/locales' del plugin se deben poder escribir en el servidor web."
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr "Administración de Objetos v%s alcanzó el Fin de Vida Útil (FVU). Esta versión solo proporciona asistencia de migración para ayudarte a cambiar a la definición de activos de GLPI 11"
 
-#: index.php:46 index.php:49 setup.php:118 front/type.form.php:73
-#: inc/object_item.class.php:110 inc/type.class.php:239
-msgid "Objects management"
-msgstr "Administración de Objetos"
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "¿Qué cambió?"
 
-#: setup.php:82 setup.php:83
-msgid "Go to objects list"
-msgstr "Ir a la lista de objetos"
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 ahora tiene capacidades nativas para crear activos personalizados"
 
-#: front/field.form.php:40
-msgid "Field(s) deleted successfully"
-msgstr "Campo(s) borrados completamente"
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "Todas las funcionalidades de Administración de Objetos están disponibles en el núcleo de GLPI"
 
-#: front/field.form.php:50
-msgid "Field added successfully"
-msgstr "Campo agregado completamente"
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "Mejor integración con los flujos de trabajo de GLPI"
 
-#: front/type.php:37 inc/type.class.php:61
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Rendimiento y seguridad mejorados"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Próximos pasos"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Revisá tus activos de administración de objetos existentes"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "Migrá a la definición de activos nativa de GLPI 11"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Probá el nuevo sistema de activos"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Desinstalá el complemento Administración de Objetos cuando estés listo/a"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "Ver Estado de Migración"
+
+#: templates/migration_status.html.twig front/migration_status.php:69
+msgid "GenericObject Migration Status"
+msgstr "Estado de Migración de Administración de Objetos"
+
+#: templates/migration_status.html.twig
+msgid "End of Life migration tool for GLPI 11"
+msgstr "Herramienta de migración de Fin de Vida Útil para GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "End of Life Notice"
+msgstr "Aviso de Fin de Vida Útil"
+
+#: templates/migration_status.html.twig
+msgid ""
+"GenericObject v3.0.0 is an End-of-Life version. All custom asset creation "
+"functionality has been moved to GLPI 11 native asset definition."
+msgstr "Administración de Objetos v3.0.0 es una versión de Fin de Vida Útil. Toda la funcionalidad de creación de activos personalizados fue movida a la definición de activos nativa de GLPI 11."
+
+#: templates/migration_status.html.twig
+msgid "Migration Status"
+msgstr "Estado de Migración"
+
+#: templates/migration_status.html.twig
+msgid "Migrated"
+msgstr "Migrado"
+
+#: templates/migration_status.html.twig
+msgid "Items Migrated:"
+msgstr "Elementos Migrados:"
+
+#: templates/migration_status.html.twig
+msgid "View Items"
+msgstr "Ver Elementos"
+
+#: templates/migration_status.html.twig
+msgid "View Asset"
+msgstr "Ver Activo"
+
+#: templates/migration_status.html.twig
+msgid "Not Migrated"
+msgstr "No Migrado"
+
+#: templates/migration_status.html.twig
+msgid "How to Migrate"
+msgstr "Cómo Migrar"
+
+#: templates/migration_status.html.twig
+msgid "Command Line Migration Required"
+msgstr "Se Requiere Migración por Línea de Comandos"
+
+#: templates/migration_status.html.twig
+msgid ""
+"For optimal performance and reliability, the migration must be performed "
+"using the command line:"
+msgstr "Para un rendimiento y confiabilidad óptimos, la migración debe realizarse usando la línea de comandos:"
+
+#: templates/migration_status.html.twig
+msgid "Copy command"
+msgstr "Copiar comando"
+
+#: templates/migration_status.html.twig
+msgid "Run this command from your GLPI root directory"
+msgstr "Ejecutá este comando desde tu directorio raíz de GLPI"
+
+#: templates/migration_status.html.twig
+msgid "Migration Process"
+msgstr "Proceso de Migración"
+
+#: templates/migration_status.html.twig
+msgid "Generic objects will be converted into custom assets"
+msgstr "Los objetos de Administración de Objetos serán convertidos en activos personalizados"
+
+#: templates/migration_status.html.twig
+msgid "Types will be retained."
+msgstr "Los tipos serán retenidos."
+
+#: templates/migration_status.html.twig
+msgid "Asset data will not be lost"
+msgstr "Los datos de los activos no se perderán"
+
+#: templates/migration_status.html.twig
+msgid ""
+"Note: Migration status detection is based on data presence and may not be "
+"100% accurate. Please verify manually after running the migration command."
+msgstr "Nota: La detección del estado de migración se basa en la presencia de datos y puede no ser 100% precisa. Por favor, verificá manualmente después de ejecutar el comando de migración."
+
+#: templates/migration_status.html.twig
+msgid "Next Steps"
+msgstr "Próximos Pasos"
+
+#: templates/migration_status.html.twig
+msgid "After Migration"
+msgstr "Después de la Migración"
+
+#: templates/migration_status.html.twig
+msgid "Review converted assets in GLPI 11"
+msgstr "Revisá los activos convertidos en GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "Test asset access permissions"
+msgstr "Probá los permisos de acceso a los activos"
+
+#: templates/migration_status.html.twig
+msgid "Recommendations"
+msgstr "Recomendaciones"
+
+#: templates/migration_status.html.twig
+msgid "Train users on GLPI 11 native custom assets"
+msgstr "Capacitá a los usuarios sobre los activos personalizados nativos de GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "Update internal documentation"
+msgstr "Actualizá la documentación interna"
+
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
+msgstr "Actualizador de Fin-de-Vida-Útil de Administración de Objetos"
+
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Familia de tipo de objetos"
+
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "Información de FVU de Administración de Objetos"
+
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de Objetos"
+
+#: inc/type.class.php:74
 msgid "Type of objects"
 msgstr "Tipo de objetos"
 
-#: inc/field.class.php:66
-msgid "Fields associated with the object"
-msgstr "Campos asociados con el objeto"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de objetos"
 
-#: inc/field.class.php:72
-msgid "Label"
-msgstr "Etiqueta"
-
-#: inc/field.class.php:73
-msgid "Name in DB"
-msgstr "Nombre en DB"
-
-#: inc/field.class.php:105
-msgid "Add new field"
-msgstr "Agregar un campo nuevo"
-
-#: inc/object.class.php:346
-msgid "Object preview"
-msgstr "Vista preliminar del Objeto"
-
-#: inc/object.class.php:633
-msgid "You must configure rights to enable the preview"
-msgstr "Debe configurar derechos para ver vista previa"
-
-#: inc/profile.class.php:62 inc/profile.class.php:121
-msgid "Access object"
-msgstr "Acceso a objeto"
-
-#: inc/profile.class.php:69 inc/profile.class.php:127
-msgid "Associate tickets to this object"
-msgstr "Asociar tickets con este objeto"
-
-#: inc/profile.class.php:147
-msgid "No type defined"
-msgstr "Tipo no definido"
-
-#: inc/type.class.php:150
-msgid "Type name is missing"
-msgstr "Tipo de objeto no existe"
-
-#: inc/type.class.php:156
+#: index.php:36
+#, php-format
 msgid ""
-"Types 'field', 'object' and 'type' are reserved. Please choose another one"
-msgstr "Types 'field', 'object' and 'type' are reserved. Please choose another one"
-
-#: inc/type.class.php:163
-msgid "Type must start with a letter"
-msgstr "El tipo de objeto debe comenzar con una letra"
-
-#: inc/type.class.php:170
-msgid "A type already exists with the same name"
-msgstr "Ya existe un tipo de objeto con ese nombre"
-
-#: inc/type.class.php:339
-msgid "Internal identifier"
-msgstr "Identificador interno"
-
-#: inc/type.class.php:383
-msgid "Behaviour"
-msgstr "Comportamiento"
-
-#: inc/type.class.php:398 inc/type.class.php:513
-msgid "Link to other objects"
-msgstr ""
-
-#: inc/type.class.php:399
-msgid "Network connections"
-msgstr "Conexiones de red"
-
-#: inc/type.class.php:400
-msgid "injection file plugin"
-msgstr "Plugin Inyección de archivo"
-
-#: inc/type.class.php:402
-msgid "order plugin"
-msgstr "Plugin Orden de compras"
-
-#: inc/type.class.php:403
-msgid "item's uninstallation plugin"
-msgstr "Plugins desinstalación de items"
-
-#: inc/type.class.php:500
-msgid "Regenerate files"
-msgstr ""
-
-#: index.php:60
-msgid "Empty family"
-msgstr ""
-
-#: inc/typefamily.class.php:35
-msgid "Family of type of objects"
-msgstr ""
+"GenericObject v%s is End-of-Life. All genericobject functionality is now "
+"available in GLPI 11 core. Check migration status or use native custom "
+"assets."
+msgstr "Administración de Objetos v%s está en Fin de Vida Útil. Toda la funcionalidad del administración de objetos está ahora disponible en el núcleo de GLPI 11. Revisá el estado de la migración o usá los activos personalizados nativos."
