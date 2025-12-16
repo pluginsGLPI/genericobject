@@ -846,7 +846,7 @@ class PluginGenericobjectType extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
 
-        if ($old_itemtype != $new_itemtype) {
+        if ($old_itemtype != $new_itemtype && !str_starts_with($old_itemtype, 'Glpi\\CustomAsset\\')) {
             $migration->renameItemtype($old_itemtype, $new_itemtype);
             $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
         }
