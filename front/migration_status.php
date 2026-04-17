@@ -34,14 +34,23 @@ use Glpi\Asset\AssetDefinition;
 // Check if user has admin rights
 Session::checkRight('config', UPDATE);
 
+/** @var array $CFG_GLPI */
 /** @var DBmysql $DB */
-global $DB;
+global $CFG_GLPI, $DB;
+
+// Handle rename POST action
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['type_id'], $_POST['new_name'])) {
+    $type_id  = (int) $_POST['type_id'];
+    $new_name = (string) $_POST['new_name'];
+    PluginGenericobjectType::renameType($type_id, $new_name);
+    Html::redirect($CFG_GLPI['root_doc'] . '/plugins/genericobject/front/migration_status.php');
+}
 
 // Get all GenericObject types
 $genericobject_types = [];
 if ($DB->tableExists(PluginGenericobjectType::getTable())) {
     $query = [
-        'SELECT' => ['itemtype', 'name'],
+        'SELECT' => ['id', 'name'],
         'FROM'   => PluginGenericobjectType::getTable(),
     ];
     $request = $DB->request($query);
@@ -72,6 +81,7 @@ Html::header(__s('GenericObject Migration Status', 'genericobject'), '', "tools"
 TemplateRenderer::getInstance()->display('@genericobject/migration_status.html.twig', [
     'genericobject_types' => $genericobject_types,
     'customassets'        => $customassets,
+    'reserved_names'      => array_map('strtolower', PluginGenericobjectType::getReservedNames()),
 ]);
 
 // Display GLPI footer

@@ -749,80 +749,224 @@ class PluginGenericobjectType extends CommonDBTM
                 continue;
             }
 
-            self::updateNameAndItemtype(
+            self::applyTypeRename(
                 $migration,
+                $type['id'],
                 $old_name,
                 $new_name,
                 $old_itemtype,
                 $new_itemtype,
             );
-
-            $DB->update(
-                self::getTable(),
-                [
-                    'name'     => $new_name,
-                    'itemtype' => $new_itemtype,
-                ],
-                ['id' => $type['id']],
-            );
-
-            $DB->update(
-                self::getTable(),
-                [
-                    'linked_itemtypes' => new QueryExpression(
-                        'REPLACE('
-                        . $DB->quoteName('linked_itemtypes')
-                        . ','
-                        . $DB->quoteValue('"' . $old_itemtype . '"') // itemtype is surrounded by quotes
-                        . ','
-                        . $DB->quoteValue('"' . $new_itemtype . '"') // itemtype is surrounded by quotes
-                        . ')',
-                    ),
-                ],
-                ['linked_itemtypes' => ['LIKE', '%"' . $old_itemtype . '"%']],
-            );
-
-            // Handle dropdowns related to itemtype
-            $table  = getTableForItemType($new_itemtype);
-            $fields = $DB->listFields($table);
-            foreach ($fields as $field => $options) {
-                if (preg_match("/s_id$/", $field)) {
-                    $dropdown_old_table    = getTableNameForForeignKeyField($field);
-
-                    if (!preg_match('/^glpi_plugin_genericobject_/', $dropdown_old_table)) {
-                        continue;
-                    }
-
-                    $dropdown_old_name     = getSingular(
-                        str_replace(
-                            "glpi_plugin_genericobject_",
-                            "",
-                            $dropdown_old_table,
-                        ),
-                    );
-                    $dropdown_old_itemtype = 'PluginGenericobject' . ucfirst($dropdown_old_name);
-                    $dropdown_new_name     = self::filterInput($dropdown_old_name);
-                    $dropdown_new_itemtype = self::getClassByName($dropdown_new_name);
-
-                    if (
-                        $dropdown_old_name == $dropdown_new_name
-                        && $dropdown_old_itemtype == $dropdown_new_itemtype
-                    ) {
-                        continue;
-                    }
-
-                    self::updateNameAndItemtype(
-                        $migration,
-                        $dropdown_old_name,
-                        $dropdown_new_name,
-                        $dropdown_old_itemtype,
-                        $dropdown_new_itemtype,
-                    );
-                }
-            }
         }
 
-        ProfileRight::cleanAllPossibleRights(); // Clean all possible rights are their name may have change
+        ProfileRight::cleanAllPossibleRights();
+    }
+
+    /**
+     * Apply a full rename for a single type: update files, database tables,
+     * foreign keys, relation tables, linked_itemtypes, and related dropdowns.
+     *
+     * @param Migration $migration
+     * @param int       $type_id       ID of the type in glpi_plugin_genericobject_types
+     * @param string    $old_name      Current type name
+     * @param string    $new_name      New type name
+     * @param string    $old_itemtype  Current itemtype class name
+     * @param string    $new_itemtype  New itemtype class name
+     */
+    private static function applyTypeRename(
+        Migration $migration,
+        int $type_id,
+        string $old_name,
+        string $new_name,
+        string $old_itemtype,
+        string $new_itemtype,
+    ): void {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        self::updateNameAndItemtype(
+            $migration,
+            $old_name,
+            $new_name,
+            $old_itemtype,
+            $new_itemtype,
+        );
+
+        $DB->update(
+            self::getTable(),
+            [
+                'name'     => $new_name,
+                'itemtype' => $new_itemtype,
+            ],
+            ['id' => $type_id],
+        );
+
+        $DB->update(
+            self::getTable(),
+            [
+                'linked_itemtypes' => new QueryExpression(
+                    'REPLACE('
+                    . $DB->quoteName('linked_itemtypes')
+                    . ','
+                    . $DB->quoteValue('"' . $old_itemtype . '"') // itemtype is surrounded by quotes
+                    . ','
+                    . $DB->quoteValue('"' . $new_itemtype . '"') // itemtype is surrounded by quotes
+                    . ')',
+                ),
+            ],
+            ['linked_itemtypes' => ['LIKE', '%"' . $old_itemtype . '"%']],
+        );
+
+        // Handle dropdowns related to itemtype
+        $table  = getTableForItemType($new_itemtype);
+        $fields = $DB->listFields($table);
+        foreach ($fields as $field => $options) {
+            if (preg_match("/s_id$/", $field)) {
+                $dropdown_old_table    = getTableNameForForeignKeyField($field);
+
+                if (!preg_match('/^glpi_plugin_genericobject_/', $dropdown_old_table)) {
+                    continue;
+                }
+
+                $dropdown_old_name     = getSingular(
+                    str_replace(
+                        "glpi_plugin_genericobject_",
+                        "",
+                        $dropdown_old_table,
+                    ),
+                );
+                $dropdown_old_itemtype = 'PluginGenericobject' . ucfirst($dropdown_old_name);
+                $dropdown_new_name     = self::filterInput($dropdown_old_name);
+                $dropdown_new_itemtype = self::getClassByName($dropdown_new_name);
+
+                if (
+                    $dropdown_old_name == $dropdown_new_name
+                    && $dropdown_old_itemtype == $dropdown_new_itemtype
+                ) {
+                    continue;
+                }
+
+                self::updateNameAndItemtype(
+                    $migration,
+                    $dropdown_old_name,
+                    $dropdown_new_name,
+                    $dropdown_old_itemtype,
+                    $dropdown_new_itemtype,
+                );
+            }
+        }
+    }
+
+    /**
+     * Rename a genericobject type.
+     *
+     * Updates the type name, itemtype, all generated files, database tables,
+     * foreign keys, and all relation tables where the itemtype is referenced.
+     *
+     * @param int    $type_id  ID of the type in glpi_plugin_genericobject_types
+     * @param string $new_name New name for the type (will be filtered)
+     *
+     * @return bool True on success, false on failure
+     */
+    public static function renameType(int $type_id, string $new_name): bool
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        $type = new self();
+        if (!$type->getFromDB($type_id)) {
+            Session::addMessageAfterRedirect(
+                __s('Type not found.', 'genericobject'),
+                false,
+                ERROR,
+            );
+            return false;
+        }
+
+        $old_name = $type->fields['name'];
+        $new_name = self::filterInput($new_name);
+
+        if ($new_name === '') {
+            Session::addMessageAfterRedirect(
+                __s('The new name cannot be empty.', 'genericobject'),
+                false,
+                ERROR,
+            );
+            return false;
+        }
+
+        if ($new_name === $old_name) {
+            return true;
+        }
+
+        $existing = $DB->request([
+            'FROM'  => self::getTable(),
+            'WHERE' => [
+                'name' => $new_name,
+                'NOT'  => ['id' => $type_id],
+            ],
+        ]);
+        if ($existing->numrows() > 0) {
+            Session::addMessageAfterRedirect(
+                __s('A type with this name already exists.', 'genericobject'),
+                false,
+                ERROR,
+            );
+            return false;
+        }
+
+        $manager = \Glpi\Asset\AssetDefinitionManager::getInstance();
+        $reserved_pattern = $manager->getReservedSystemNamesPattern();
+        if (preg_match($reserved_pattern, $new_name) === 1) {
+            Session::addMessageAfterRedirect(
+                __s('This name is reserved by a native GLPI asset type.', 'genericobject'),
+                false,
+                ERROR,
+            );
+            return false;
+        }
+
+        $old_itemtype = $type->fields['itemtype'];
+        $new_itemtype = self::getClassByName($new_name);
+
+        $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
+        self::applyTypeRename(
+            $migration,
+            $type_id,
+            $old_name,
+            $new_name,
+            $old_itemtype,
+            $new_itemtype,
+        );
+        ProfileRight::cleanAllPossibleRights();
+        $migration->executeMigration();
+
+        Session::addMessageAfterRedirect(
+            sprintf(
+                __s('Type "%s" has been renamed to "%s".', 'genericobject'),
+                $old_name,
+                $new_name,
+            ),
+            false,
+            INFO,
+        );
+
+        return true;
+    }
+
+    /**
+     * Get the list of reserved GLPI core asset names.
+     *
+     * @return string[]
+     */
+    public static function getReservedNames(): array
+    {
+        $manager = \Glpi\Asset\AssetDefinitionManager::getInstance();
+        $pattern = $manager->getReservedSystemNamesPattern();
+        if (preg_match('/\(([^)]+)\)/', $pattern, $matches)) {
+            return explode('|', $matches[1]);
+        }
+        return [];
     }
 
     /**
