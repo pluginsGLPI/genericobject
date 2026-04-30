@@ -27,9 +27,13 @@
  #}
 
 {% set conflict_count = 0 %}
+{% set too_long_count = 0 %}
 {% for genericobject_type in genericobject_types %}
     {% if genericobject_type.name|lower in reserved_names and customassets[genericobject_type.name] is not defined %}
         {% set conflict_count = conflict_count + 1 %}
+    {% endif %}
+    {% if genericobject_type.name|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
+        {% set too_long_count = too_long_count + 1 %}
     {% endif %}
 {% endfor %}
 
@@ -70,6 +74,28 @@
                 </div>
             </div>
         </div>
+
+        {# Name Too Long Banner — only shown when types exceed the max name length #}
+        {% if too_long_count > 0 %}
+            <div class="alert alert-danger border-start border-danger border-2 mb-4">
+                <div class="d-flex align-items-start">
+                    <i class="ti ti-alert-circle text-danger me-3 mt-1 fa-lg"></i>
+                    <div>
+                        <h5 class="alert-heading mb-2">
+                            {{ __('Name too long', 'genericobject') }}
+                            <span class="badge bg-danger ms-2">{{ too_long_count }}</span>
+                        </h5>
+                        <p class="mb-0">
+                            {% if too_long_count == 1 %}
+                                {{ __('1 type has a name that exceeds the maximum allowed length of %d characters. Please rename it manually before migrating.', 'genericobject')|format(constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) }}
+                            {% else %}
+                                {{ (too_long_count ~ ' ' ~ __('types have names that exceed the maximum allowed length of %d characters and cannot be automatically renamed. Please rename them manually before migrating.', 'genericobject'))|format(constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
         {# Name Conflict Banner — only shown when conflicts exist #}
         {% if conflict_count > 0 %}
@@ -123,18 +149,21 @@
                 <div class="d-flex flex-wrap justify-content-start gap-3">
                     {% for key, genericobject_type in paginated_types %}
                         {% set is_conflicting = genericobject_type.name|lower in reserved_names and customassets[genericobject_type.name] is not defined %}
+                        {% set is_too_long = genericobject_type.name|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
                         {% set modal_id = 'rename-modal-' ~ genericobject_type.id %}
                         <div class="card shadow-sm mb-2 d-flex flex-column h-100" style="flex: 0 0 calc(33.333% - 1rem);">
                             <div class="card-header d-flex align-items-center
                                         {% if customassets[genericobject_type.name] is defined %}
                                             bg-success bg-opacity-10 text-success
-                                        {% elseif is_conflicting %}
+                                        {% elseif is_conflicting or is_too_long %}
                                             bg-warning bg-opacity-10 text-warning
                                         {% else %}
                                             bg-danger bg-opacity-10 text-danger
                                         {% endif %}">
                                 {% if is_conflicting %}
                                     <i class="ti ti-alert-triangle fa-lg me-2 text-warning" title="{{ __('Name conflict: cannot be migrated', 'genericobject') }}"></i>
+                                {% elseif is_too_long %}
+                                    <i class="ti ti-alert-triangle fa-lg me-2 text-warning" title="{{ __('Name too long: cannot be automatically renamed', 'genericobject') }}"></i>
                                 {% elseif customassets[genericobject_type.name] is defined and customassets[genericobject_type.name].icon %}
                                     <i class="{{ customassets[genericobject_type.name].icon }} fa-lg me-2"></i>
                                 {% else %}
@@ -145,6 +174,10 @@
                                     {% if is_conflicting %}
                                         <span class="badge bg-warning text-dark ms-1">
                                             {{ __('Conflict', 'genericobject') }}
+                                        </span>
+                                    {% elseif is_too_long %}
+                                        <span class="badge bg-warning text-dark ms-1">
+                                            {{ __('Name too long', 'genericobject') }}
                                         </span>
                                     {% endif %}
                                 </h3>
@@ -176,7 +209,7 @@
                                     </div>
                                 {% else %}
                                     <div class="mb-2">
-                                        {% if is_conflicting %}
+                                        {% if is_conflicting or is_too_long %}
                                             <i class="ti ti-alert-circle text-warning me-2"></i>
                                             <span class="text-warning fw-bold">{{ __('Cannot Migrate', 'genericobject') }}</span>
                                         {% else %}
@@ -189,6 +222,13 @@
                                             <small class="text-muted">
                                                 <i class="ti ti-info-circle me-1"></i>
                                                 {{ __('The name "%s" is reserved by a native GLPI asset type.')|format(genericobject_type.name) }}
+                                            </small>
+                                        </div>
+                                    {% elseif is_too_long %}
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="ti ti-info-circle me-1"></i>
+                                                {{ __('The name "%s" exceeds the maximum allowed length of %d characters. Please rename it manually.')|format(genericobject_type.name, constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) }}
                                             </small>
                                         </div>
                                     {% endif %}

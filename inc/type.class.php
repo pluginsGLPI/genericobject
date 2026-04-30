@@ -857,6 +857,8 @@ class PluginGenericobjectType extends CommonDBTM
                 );
             }
         }
+
+        self::applyPluginsRename($migration, $old_itemtype, $new_itemtype);
     }
 
     /**
@@ -1120,6 +1122,48 @@ class PluginGenericobjectType extends CommonDBTM
                     ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($new_itemtype)],
                     ['name' => PluginGenericobjectProfile::getProfileNameForItemtype($old_itemtype)],
                 ),
+            );
+        }
+    }
+
+    /**
+     * Update all plugin data when a genericobject type is renamed.
+     *
+     * @param Migration $migration
+     * @param string    $old_itemtype  Old itemtype class name
+     * @param string    $new_itemtype  New itemtype class name
+     */
+    private static function applyPluginsRename(
+        Migration $migration,
+        string $old_itemtype,
+        string $new_itemtype,
+    ): void {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        $columns = $DB->request([
+            'SELECT' => ['TABLE_NAME'],
+            'FROM'   => 'information_schema.COLUMNS',
+            'WHERE'  => [
+                'TABLE_SCHEMA' => $DB->dbdefault,
+                'TABLE_NAME'   => ['LIKE', 'glpi\_plugin\_%'],
+                'COLUMN_NAME'  => 'itemtypes',
+            ],
+        ]);
+
+        foreach ($columns as $row) {
+            $DB->update(
+                $row['TABLE_NAME'],
+                [
+                    'itemtypes' => new QueryExpression(
+                        'REPLACE('
+                        . $DB->quoteName('itemtypes')
+                        . ', ' . $DB->quoteValue(json_encode($old_itemtype))
+                        . ', ' . $DB->quoteValue(json_encode($new_itemtype))
+                        . ')',
+                    ),
+                ],
+                ['itemtypes' => ['LIKE', '%' . $old_itemtype . '%']],
             );
         }
     }
