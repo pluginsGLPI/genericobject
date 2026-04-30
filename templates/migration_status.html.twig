@@ -243,14 +243,26 @@
                                                     {{ __('New name', 'genericobject') }}
                                                 </label>
                                                 <input type="text"
-                                                       id="{{ modal_id }}-input"
-                                                       name="new_name"
-                                                       class="form-control"
-                                                       value="{{ genericobject_type.name }}"
-                                                       pattern="[a-zA-Z][a-zA-Z0-9]*"
-                                                       title="{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}"
-                                                       required>
-                                                <small class="text-muted">{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}</small>
+                                                    id="{{ modal_id }}-input"
+                                                    name="new_name"
+                                                    class="form-control"
+                                                    value="{{ genericobject_type.name }}"
+                                                    pattern="[a-zA-Z][a-zA-Z0-9]*"
+                                                    maxlength="{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}"
+                                                    title="{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}"
+                                                    data-counter-target="{{ modal_id }}-counter"
+                                                    data-warning-target="{{ modal_id }}-length-warning"
+                                                    oninput="glpiGenericobjectUpdateCounter(this)"
+                                                    required
+                                                >
+                                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                                    <small class="text-muted">{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}</small>
+                                                    <small id="{{ modal_id }}-counter" class="text-muted">{{ genericobject_type.name|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}</small>
+                                                </div>
+                                                <div id="{{ modal_id }}-length-warning" class="text-danger small mt-1 d-none">
+                                                    <i class="ti ti-alert-circle me-1"></i>
+                                                    {{ __('Maximum length of %d characters reached.', 'genericobject')|format(constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) }}
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">
@@ -400,6 +412,40 @@
     }
 </style>
 <script>
+    function glpiGenericobjectUpdateCounter(input) {
+        const maxLen = parseInt(input.getAttribute('maxlength'));
+        const currentLen = input.value.length;
+        const counterId = input.dataset.counterTarget;
+        const warningId = input.dataset.warningTarget;
+        const counter = counterId ? document.getElementById(counterId) : null;
+        const warning = warningId ? document.getElementById(warningId) : null;
+
+        if (counter) {
+            counter.textContent = currentLen + '/' + maxLen;
+            counter.className = 'small';
+            if (currentLen >= maxLen) {
+                counter.classList.add('text-danger', 'fw-bold');
+            } else {
+                counter.classList.add('text-muted');
+            }
+        }
+
+        if (warning) {
+            if (currentLen >= maxLen) {
+                warning.classList.remove('d-none');
+            } else {
+                warning.classList.add('d-none');
+            }
+        }
+    }
+
+    document.addEventListener('shown.bs.modal', function (event) {
+        const input = event.target.querySelector('[data-counter-target]');
+        if (input) {
+            glpiGenericobjectUpdateCounter(input);
+        }
+    });
+
     function copyCode() {
         const codeBlock = document.getElementById('codeBlock');
         const textArea = document.createElement('textarea');

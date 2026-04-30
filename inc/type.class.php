@@ -52,6 +52,8 @@ class PluginGenericobjectType extends CommonDBTM
 
     public const CAN_OPEN_TICKET             = 1024;
 
+    public const MAX_TYPE_NAME_LENGTH = 25;
+
     public $dohistory                 = true;
 
     public static $rightname          = 'plugin_genericobject_types';
@@ -920,6 +922,20 @@ class PluginGenericobjectType extends CommonDBTM
         if (preg_match($reserved_pattern, $new_name) === 1) {
             Session::addMessageAfterRedirect(
                 __s('This name is reserved by a native GLPI asset type.', 'genericobject'),
+                false,
+                ERROR,
+            );
+            return false;
+        }
+
+        $new_system_name = self::getSystemName($new_name);
+        if (strlen($new_system_name) > self::MAX_TYPE_NAME_LENGTH) {
+            Session::addMessageAfterRedirect(
+                sprintf(
+                    __s('The name "%s" is too long. The maximum allowed length is %d characters.', 'genericobject'),
+                    $new_system_name,
+                    self::MAX_TYPE_NAME_LENGTH,
+                ),
                 false,
                 ERROR,
             );

@@ -79,9 +79,9 @@ Html::header(__s('GenericObject Migration Status', 'genericobject'), '', "tools"
 
 // Render the template content
 TemplateRenderer::getInstance()->display('@genericobject/migration_status.html.twig', [
-    'genericobject_types' => $genericobject_types,
-    'customassets'        => $customassets,
-    'reserved_names'      => array_map('strtolower', PluginGenericobjectType::getReservedNames()),
+    'genericobject_types'  => $genericobject_types,
+    'customassets'         => $customassets,
+    'reserved_names'       => array_map('strtolower', PluginGenericobjectType::getReservedNames()),
 ]);
 
 // Display GLPI footer
