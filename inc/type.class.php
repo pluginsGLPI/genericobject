@@ -858,7 +858,7 @@ class PluginGenericobjectType extends CommonDBTM
             }
         }
 
-        self::applyPluginsRename($migration, $old_itemtype, $new_itemtype);
+        self::applyPluginsTypeRename($migration, $old_itemtype, $new_itemtype);
     }
 
     /**
@@ -897,10 +897,6 @@ class PluginGenericobjectType extends CommonDBTM
                 ERROR,
             );
             return false;
-        }
-
-        if ($new_name === $old_name) {
-            return true;
         }
 
         $existing = $DB->request([
@@ -942,6 +938,10 @@ class PluginGenericobjectType extends CommonDBTM
                 ERROR,
             );
             return false;
+        }
+
+        if ($new_name === $old_name) {
+            return true;
         }
 
         $old_itemtype = $type->fields['itemtype'];
@@ -1133,7 +1133,7 @@ class PluginGenericobjectType extends CommonDBTM
      * @param string    $old_itemtype  Old itemtype class name
      * @param string    $new_itemtype  New itemtype class name
      */
-    private static function applyPluginsRename(
+    private static function applyPluginsTypeRename(
         Migration $migration,
         string $old_itemtype,
         string $new_itemtype,
@@ -1141,19 +1141,48 @@ class PluginGenericobjectType extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
 
-        $columns = $DB->request([
-            'SELECT' => ['TABLE_NAME'],
-            'FROM'   => 'information_schema.COLUMNS',
-            'WHERE'  => [
-                'TABLE_SCHEMA' => $DB->dbdefault,
-                'TABLE_NAME'   => ['LIKE', 'glpi\_plugin\_%'],
-                'COLUMN_NAME'  => 'itemtypes',
-            ],
-        ]);
+        // Get all plugin tables
+        $tables_result = $DB->doQuery("SHOW TABLES LIKE 'glpi\\_plugin\\_%'");
+        if (!$tables_result) {
+            return;
+        }
 
-        foreach ($columns as $row) {
+        $table_names = [];
+        while ($row = $DB->fetchRow($tables_result)) {
+            $table_name = $row[0];
+
+            // Check if table name contains old itemtype and rename it
+            if (str_contains($table_name, strtolower($old_itemtype))) {
+                $new_table_name = str_replace(strtolower($old_itemtype), strtolower($new_itemtype), $table_name);
+                $migration->renameTable($table_name, $new_table_name);
+                $table_name = $new_table_name;
+            }
+
+            $table_names[] = $table_name;
+        }
+
+        try {
+            $migration->executeMigration();
+        } catch (Exception $e) {
+            Session::addMessageAfterRedirect(
+                sprintf(
+                    __s('An error occurred during the plugin tables rename: %s', 'genericobject'),
+                    $e->getMessage(),
+                ),
+                false,
+                ERROR,
+            );
+            return;
+        }
+
+        // Update itemtypes field by replacing old itemtype by new itemtype
+        foreach ($table_names as $table_name) {
+            if (!$DB->fieldExists($table_name, 'itemtypes')) {
+                continue;
+            }
+
             $DB->update(
-                $row['TABLE_NAME'],
+                $table_name,
                 [
                     'itemtypes' => new QueryExpression(
                         'REPLACE('
