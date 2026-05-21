@@ -34,7 +34,7 @@
     {% if genericobject_type.name|lower in reserved_names and customassets[genericobject_type.name] is not defined %}
         {% set conflict_count = conflict_count + 1 %}
     {% endif %}
-    {% if genericobject_type.name|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
+    {% if call('PluginGenericobjectType::getSystemName', [genericobject_type.name])|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
         {% set too_long_count = too_long_count + 1 %}
     {% endif %}
 {% endfor %}
@@ -111,17 +111,18 @@
                 <div class="d-flex flex-wrap justify-content-start gap-3">
                     {% for key, genericobject_type in paginated_types %}
                         {% set is_conflicting = genericobject_type.name|lower in reserved_names and customassets[genericobject_type.name] is not defined %}
-                        {% set is_too_long = genericobject_type.name|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
+                        {% set is_too_long = call('PluginGenericobjectType::getSystemName', [genericobject_type.name])|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
                         {% set modal_id = 'rename-modal-' ~ genericobject_type.id %}
                         <div class="card shadow-sm mb-2 d-flex flex-column h-100" style="flex: 0 0 calc(33.333% - 1rem);">
                             <div class="card-header d-flex align-items-center
-                                        {% if customassets[genericobject_type.name] is defined %}
-                                            bg-success bg-opacity-10 text-success
-                                        {% elseif is_conflicting or is_too_long %}
-                                            bg-warning bg-opacity-10 text-warning
-                                        {% else %}
-                                            bg-danger bg-opacity-10 text-danger
-                                        {% endif %}">
+                                {% if customassets[genericobject_type.name] is defined %}
+                                    bg-success bg-opacity-10 text-success
+                                {% elseif is_conflicting or is_too_long %}
+                                    bg-warning bg-opacity-10 text-warning
+                                {% else %}
+                                    bg-danger bg-opacity-10 text-danger
+                                {% endif %}"
+                            >
                                 {% if is_conflicting %}
                                     <i class="ti ti-alert-triangle fa-lg me-2 text-warning" title="{{ __('Name conflict: cannot be migrated', 'genericobject') }}"></i>
                                 {% elseif is_too_long %}
