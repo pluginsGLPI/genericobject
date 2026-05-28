@@ -27,7 +27,7 @@
  * @link      https://github.com/pluginsGLPI/genericobject
  * -------------------------------------------------------------------------
  */
-
+use Glpi\Asset\AssetDefinitionManager;
 use Glpi\DBAL\QueryExpression;
 
 class PluginGenericobjectType extends CommonDBTM
@@ -913,7 +913,7 @@ class PluginGenericobjectType extends CommonDBTM
             return false;
         }
 
-        $manager = \Glpi\Asset\AssetDefinitionManager::getInstance();
+        $manager = AssetDefinitionManager::getInstance();
         $reserved_pattern = $manager->getReservedSystemNamesPattern();
         if (preg_match($reserved_pattern, $new_name) === 1) {
             Session::addMessageAfterRedirect(
@@ -977,7 +977,7 @@ class PluginGenericobjectType extends CommonDBTM
      */
     public static function getReservedNames(): array
     {
-        $manager = \Glpi\Asset\AssetDefinitionManager::getInstance();
+        $manager = AssetDefinitionManager::getInstance();
         $pattern = $manager->getReservedSystemNamesPattern();
         if (preg_match('/\(([^)]+)\)/', $pattern, $matches)) {
             return explode('|', $matches[1]);
@@ -1133,8 +1133,7 @@ class PluginGenericobjectType extends CommonDBTM
         Migration $migration,
         string $old_itemtype,
         string $new_itemtype,
-    ): void
-    {
+    ): void {
         /** @var DBmysql $DB */
         global $DB;
 
@@ -1145,9 +1144,6 @@ class PluginGenericobjectType extends CommonDBTM
 
         // Get all foreign key columns referencing the old itemtype
         $fields_tables_result = $DB->doQuery("SHOW TABLES LIKE 'glpi\\_plugin\\_fields\\_%'");
-        if (!$fields_tables_result) {
-            return;
-        }
 
         // For each table, find fields that are foreign keys to the old itemtype and rename them
         while ($row = $DB->fetchRow($fields_tables_result)) {
@@ -1170,8 +1166,8 @@ class PluginGenericobjectType extends CommonDBTM
                             'Field "%s" cannot be renamed in table "%s" as "%s" is field already exists.',
                             $fkey_oldname,
                             $table_name,
-                            $fkey_newname
-                        )
+                            $fkey_newname,
+                        ),
                     );
                 }
 
@@ -1202,7 +1198,7 @@ class PluginGenericobjectType extends CommonDBTM
                         ),
                     ],
                     ['type' => ['LIKE', 'dropdown-' . $old_itemtype]],
-                )
+                ),
             );
         }
 
@@ -1226,9 +1222,6 @@ class PluginGenericobjectType extends CommonDBTM
 
         // Get all plugin tables
         $tables_result = $DB->doQuery("SHOW TABLES LIKE 'glpi\\_plugin\\_%'");
-        if (!$tables_result) {
-            return;
-        }
 
         $table_names = [];
         while ($row = $DB->fetchRow($tables_result)) {
