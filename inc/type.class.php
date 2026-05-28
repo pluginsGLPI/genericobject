@@ -1007,7 +1007,7 @@ class PluginGenericobjectType extends CommonDBTM
         global $DB;
 
         if ($old_itemtype != $new_itemtype && !str_starts_with($old_itemtype, 'Glpi\\CustomAsset\\')) {
-            self::renameItemtypeForFieldsPlugin($old_itemtype, $new_itemtype);
+            self::renameItemtypeForFieldsPlugin($migration, $old_itemtype, $new_itemtype);
             $migration->renameItemtype($old_itemtype, $new_itemtype);
             self::applyPluginsTypeRename($migration, $old_itemtype, $new_itemtype);
             $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
@@ -1130,6 +1130,7 @@ class PluginGenericobjectType extends CommonDBTM
      * Rename itemtype for fields plugin and all its references.
      */
     private static function renameItemtypeForFieldsPlugin(
+        Migration $migration,
         string $old_itemtype,
         string $new_itemtype,
     ): void
@@ -1143,77 +1144,69 @@ class PluginGenericobjectType extends CommonDBTM
         $new_fkey  = getForeignKeyFieldForTable($new_table);
 
         // Get all foreign key columns referencing the old itemtype
-        $fkey_column_iterator = $DB->request(
-            [
-                'SELECT' => [
-                    'table_name AS TABLE_NAME',
-                    'column_name AS COLUMN_NAME',
-                ],
-                'FROM'   => 'information_schema.columns',
-                'WHERE'  => [
-                    'table_schema' => $DB->dbdefault,
-                    'table_name'   => ['LIKE', 'glpi\\_plugin\\_fields\\_%'],
-                    'OR' => [
-                        ['column_name'  => $old_fkey],
-                        ['column_name'  => ['LIKE', $old_fkey . '_%']],
-                    ],
-                ],
-            ]
-        );
-        foreach ($fkey_column_iterator as $fkey_column) {
-            $fkey_table   = $fkey_column['TABLE_NAME'];
-            $fkey_oldname = $fkey_column['COLUMN_NAME'];
-            $fkey_newname = preg_replace('/^' . preg_quote($old_fkey, '/') . '/', $new_fkey, $fkey_oldname);
+        $fields_tables_result = $DB->doQuery("SHOW TABLES LIKE 'glpi\\_plugin\\_fields\\_%'");
+        if (!$fields_tables_result) {
+            return;
+        }
 
-            // Check if new foreign key name already exists in the table
-            if ($DB->fieldExists($fkey_table, $fkey_newname)) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Field "%s" cannot be renamed in table "%s" as "%s" is field already exists.',
-                        $fkey_oldname,
-                        $fkey_table,
-                        $fkey_newname
-                    )
-                );
-            }
+        // For each table, find fields that are foreign keys to the old itemtype and rename them
+        while ($row = $DB->fetchRow($fields_tables_result)) {
+            $table_name = $row[0];
 
-            // Rename the foreign key column immediately so it is already updated when renameItemtype() scans all tables
-            if (!$DB->doQuery("ALTER TABLE `{$fkey_table}` RENAME COLUMN `{$fkey_oldname}` TO `{$fkey_newname}`")) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Failed to rename field "%s" to "%s" in table "%s": %s',
-                        $fkey_oldname,
-                        $fkey_newname,
-                        $fkey_table,
-                        $DB->error(),
-                    )
-                );
+            // Fields to rename are those that are exactly the old foreign key or start with old foreign key followed by an underscore
+            $fields_to_rename = array_filter(
+                $DB->listFields($table_name),
+                fn($field) => $field === $old_fkey || str_starts_with($field, $old_fkey . '_'),
+                ARRAY_FILTER_USE_KEY,
+            );
+            foreach (array_keys($fields_to_rename) as $field) {
+                $fkey_oldname = $field;
+                $fkey_newname = preg_replace('/^' . preg_quote($old_fkey, '/') . '/', $new_fkey, $fkey_oldname);
+
+                // Check if new foreign key name already exists in the table
+                if ($DB->fieldExists($table_name, $fkey_newname)) {
+                    throw new RuntimeException(
+                        sprintf(
+                            'Field "%s" cannot be renamed in table "%s" as "%s" is field already exists.',
+                            $fkey_oldname,
+                            $table_name,
+                            $fkey_newname
+                        )
+                    );
+                }
+
+                // Rename the foreign key column immediately so it is already updated when renameItemtype() scans all tables
+                $migration->addPreQuery("ALTER TABLE `{$table_name}` RENAME COLUMN `{$fkey_oldname}` TO `{$fkey_newname}`");
             }
         }
 
         // Update the 'type' column in plugin fields that reference this itemtype
         if ($DB->tableExists('glpi_plugin_fields_fields')) {
-            $DB->update(
-                'glpi_plugin_fields_fields',
-                [
-                    'type' => new QueryExpression(
-                        'REPLACE('
-                        . $DB->quoteName('type')
-                        . ', ' . $DB->quoteValue('dropdown-' . $old_itemtype)
-                        . ', ' . $DB->quoteValue('dropdown-' . $new_itemtype)
-                        . ')',
-                    ),
-                    'name' => new QueryExpression(
-                        'REPLACE('
-                        . $DB->quoteName('name')
-                        . ', ' . $DB->quoteValue($old_fkey)
-                        . ', ' . $DB->quoteValue($new_fkey)
-                        . ')',
-                    ),
-                ],
-                ['type' => ['LIKE', 'dropdown-' . $old_itemtype . '%']],
+            $migration->addPostQuery(
+                $DB->buildUpdate(
+                    'glpi_plugin_fields_fields',
+                    [
+                        'type' => new QueryExpression(
+                            'REPLACE('
+                            . $DB->quoteName('type')
+                            . ', ' . $DB->quoteValue('dropdown-' . $old_itemtype)
+                            . ', ' . $DB->quoteValue('dropdown-' . $new_itemtype)
+                            . ')',
+                        ),
+                        'name' => new QueryExpression(
+                            'REPLACE('
+                            . $DB->quoteName('name')
+                            . ', ' . $DB->quoteValue($old_fkey)
+                            . ', ' . $DB->quoteValue($new_fkey)
+                            . ')',
+                        ),
+                    ],
+                    ['type' => ['LIKE', 'dropdown-' . $old_itemtype]],
+                )
             );
         }
+
+        $migration->executeMigration();
     }
 
     /**
