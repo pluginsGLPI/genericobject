@@ -38,6 +38,13 @@ Session::checkRight('config', UPDATE);
 /** @var DBmysql $DB */
 global $CFG_GLPI, $DB;
 
+// Handle get_system_name AJAX action
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_system_name') {
+    header('Content-Type: application/json');
+    echo json_encode(['system_name' => PluginGenericobjectType::getSystemName((string) ($_GET['name'] ?? ''))]);
+    exit;
+}
+
 // Handle rename POST action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['type_id'], $_POST['new_name'])) {
     $type_id  = (int) $_POST['type_id'];
