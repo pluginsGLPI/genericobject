@@ -255,12 +255,32 @@
                                                     title="{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}"
                                                     data-counter-target="{{ modal_id }}-counter"
                                                     data-warning-target="{{ modal_id }}-length-warning"
+                                                    data-result-target="{{ modal_id }}-result"
                                                     oninput="glpiGenericobjectUpdateCounter(this)"
                                                     required
                                                 >
                                                 <div class="d-flex justify-content-between align-items-center mt-1">
+    
+                                                    <div class="d-flex flex-grow-1 gap-2" style="min-width: 0;">
+                                                        <small class="text-muted">
+                                                            {{ __('Use system name:', 'genericobject') }}
+                                                        </small>
+
+                                                        <small id="{{ modal_id }}-result"
+                                                            class="text-muted fw-bold text-truncate"
+                                                            style="min-width: 0; max-width: 50%;">
+                                                            {{ call('PluginGenericobjectType::getSystemName', [genericobject_type.name]) }}
+                                                        </small>
+                                                    </div>
+
+                                                    <small id="{{ modal_id }}-counter"
+                                                        class="text-muted flex-shrink-0">
+                                                        {{ genericobject_type.name|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}
+                                                    </small>
+
+                                                </div>
+                                                <div>
                                                     <small class="text-muted">{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}</small>
-                                                    <small id="{{ modal_id }}-counter" class="text-muted">{{ genericobject_type.name|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}</small>
                                                 </div>
                                                 <div id="{{ modal_id }}-length-warning" class="text-danger small mt-1 d-none">
                                                     <i class="ti ti-alert-circle me-1"></i>
@@ -417,29 +437,42 @@
 <script>
     function glpiGenericobjectUpdateCounter(input) {
         const maxLen = parseInt(input.getAttribute('maxlength'));
-        const currentLen = input.value.length;
         const counterId = input.dataset.counterTarget;
         const warningId = input.dataset.warningTarget;
+        const resultId = input.dataset.resultTarget;
         const counter = counterId ? document.getElementById(counterId) : null;
         const warning = warningId ? document.getElementById(warningId) : null;
+        const result = resultId ? document.getElementById(resultId) : null;
 
-        if (counter) {
-            counter.textContent = currentLen + '/' + maxLen;
-            counter.className = 'small';
-            if (currentLen >= maxLen) {
-                counter.classList.add('text-danger', 'fw-bold');
-            } else {
-                counter.classList.add('text-muted');
+        fetch(
+            '{{ config('root_doc') }}/plugins/genericobject/front/migration_status.php?action=get_system_name&name=' + encodeURIComponent(input.value),
+        )
+        .then(r => r.json())
+        .then(data => {
+            const currentLen = data.system_name.length;
+            if (counter) {
+                counter.textContent = currentLen + '/' + maxLen;
+                counter.className = 'small';
+                if (currentLen >= maxLen) {
+                    counter.classList.add('text-danger', 'fw-bold');
+                } else {
+                    counter.classList.add('text-muted');
+                }
             }
-        }
 
-        if (warning) {
-            if (currentLen >= maxLen) {
-                warning.classList.remove('d-none');
-            } else {
-                warning.classList.add('d-none');
+            if (warning) {
+                if (currentLen >= maxLen) {
+                    warning.classList.remove('d-none');
+                } else {
+                    warning.classList.add('d-none');
+                }
             }
-        }
+
+            if (result) {
+                result.textContent = data.system_name;
+            }
+        })
+        .catch((e) => console.error(e.message));
     }
 
     document.addEventListener('shown.bs.modal', function (event) {
