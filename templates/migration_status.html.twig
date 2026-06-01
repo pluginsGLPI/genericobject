@@ -260,24 +260,20 @@
                                                     required
                                                 >
                                                 <div class="d-flex justify-content-between align-items-center mt-1">
-    
                                                     <div class="d-flex flex-grow-1 gap-2" style="min-width: 0;">
                                                         <small class="text-muted">
                                                             {{ __('Use system name:', 'genericobject') }}
                                                         </small>
-
                                                         <small id="{{ modal_id }}-result"
                                                             class="text-muted fw-bold text-truncate"
                                                             style="min-width: 0; max-width: 50%;">
                                                             {{ call('PluginGenericobjectType::getSystemName', [genericobject_type.name]) }}
                                                         </small>
                                                     </div>
-
                                                     <small id="{{ modal_id }}-counter"
                                                         class="text-muted flex-shrink-0">
                                                         {{ genericobject_type.name|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}
                                                     </small>
-
                                                 </div>
                                                 <div>
                                                     <small class="text-muted">{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}</small>
