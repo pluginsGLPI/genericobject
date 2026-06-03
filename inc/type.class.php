@@ -955,7 +955,7 @@ class PluginGenericobjectType extends CommonDBTM
                 $old_itemtype,
                 $new_itemtype,
             );
-        } catch (RuntimeException $e) { 
+        } catch (RuntimeException $e) {
             Session::addMessageAfterRedirect($e->getMessage(), false, ERROR);
             return false;
         }
