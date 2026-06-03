@@ -946,14 +946,19 @@ class PluginGenericobjectType extends CommonDBTM
         $new_itemtype = self::getClassByName($new_name);
 
         $migration = new Migration(PLUGIN_GENERICOBJECT_VERSION);
-        self::applyTypeRename(
-            $migration,
-            $type_id,
-            $old_name,
-            $new_name,
-            $old_itemtype,
-            $new_itemtype,
-        );
+        try {
+            self::applyTypeRename(
+                $migration,
+                $type_id,
+                $old_name,
+                $new_name,
+                $old_itemtype,
+                $new_itemtype,
+            );
+        } catch (RuntimeException $e) { 
+            Session::addMessageAfterRedirect($e->getMessage(), false, ERROR);
+            return false;
+        }
         ProfileRight::cleanAllPossibleRights();
         $migration->executeMigration();
 
