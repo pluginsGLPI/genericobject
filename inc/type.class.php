@@ -214,6 +214,10 @@ class PluginGenericobjectType extends CommonDBTM
 
     public function prepareInputForUpdate($input)
     {
+        if (isset($input['name'])) {
+            $input['name'] = self::filterInput($input['name']);
+        }
+
        // Handle impact_icon
         $input = $this->handleImpactIconUpdate($input);
 
