@@ -139,10 +139,24 @@ class PluginGenericobjectType extends CommonDBTM
         return GENERICOBJECT_CLASS_PATH . "/" . self::getSystemName($name) . ".class.php";
     }
 
-
     public static function getCompleteItemClassFilename($name)
     {
         return GENERICOBJECT_CLASS_PATH . "/" . self::getSystemName($name) . "_item.class.php";
+    }
+
+    public static function getCompleteClassModelFilename($name)
+    {
+        return GENERICOBJECT_CLASS_PATH . "/" . self::getSystemName($name) . "model.class.php";
+    }
+
+    public static function getCompleteClassTypeFilename($name)
+    {
+        return GENERICOBJECT_CLASS_PATH . "/" . self::getSystemName($name) . "type.class.php";
+    }
+
+    public static function getCompleteClassCategoryFilename($name)
+    {
+        return GENERICOBJECT_CLASS_PATH . "/" . self::getSystemName($name) . "category.class.php";
     }
 
 
@@ -151,10 +165,39 @@ class PluginGenericobjectType extends CommonDBTM
         return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . ".form.php";
     }
 
-
     public static function getCompleteSearchFilename($name)
     {
         return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . ".php";
+    }
+
+    public static function getCompleteModelFormFilename($name)
+    {
+        return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . "model.form.php";
+    }
+
+    public static function getCompleteModelSearchFilename($name)
+    {
+        return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . "model.php";
+    }
+
+    public static function getCompleteTypeFormFilename($name)
+    {
+        return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . "type.form.php";
+    }
+
+    public static function getCompleteTypeSearchFilename($name)
+    {
+        return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . "type.php";
+    }
+
+    public static function getCompleteCategoryFormFilename($name)
+    {
+        return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . "category.form.php";
+    }
+
+    public static function getCompleteCategorySearchFilename($name)
+    {
+        return GENERICOBJECT_FRONT_PATH . "/" . self::getSystemName($name) . "category.php";
     }
 
 
@@ -184,12 +227,18 @@ class PluginGenericobjectType extends CommonDBTM
     public static function deleteFormFile($name)
     {
         self::deleteFile(self::getCompleteFormFilename($name));
+        self::deleteFile(self::getCompleteModelFormFilename($name));
+        self::deleteFile(self::getCompleteTypeFormFilename($name));
+        self::deleteFile(self::getCompleteCategoryFormFilename($name));
     }
 
 
     public static function deleteSearchFile($name)
     {
         self::deleteFile(self::getCompleteSearchFilename($name));
+        self::deleteFile(self::getCompleteModelSearchFilename($name));
+        self::deleteFile(self::getCompleteTypeSearchFilename($name));
+        self::deleteFile(self::getCompleteCategorySearchFilename($name));
     }
 
 
@@ -207,6 +256,10 @@ class PluginGenericobjectType extends CommonDBTM
     public static function deleteClassFile($name)
     {
         self::deleteFile(self::getCompleteClassFilename($name));
+        self::deleteFile(self::getCompleteItemClassFilename($name));
+        self::deleteFile(self::getCompleteClassModelFilename($name));
+        self::deleteFile(self::getCompleteClassTypeFilename($name));
+        self::deleteFile(self::getCompleteClassCategoryFilename($name));
     }
 
 
@@ -1014,6 +1067,9 @@ class PluginGenericobjectType extends CommonDBTM
         if ($old_itemtype != $new_itemtype && !str_starts_with($old_itemtype, 'Glpi\\CustomAsset\\')) {
             self::renameItemtypeForFieldsPlugin($migration, $old_itemtype, $new_itemtype);
             $migration->renameItemtype($old_itemtype, $new_itemtype);
+            $migration->renameItemtype($old_itemtype . 'Model', $new_itemtype . 'Model');
+            $migration->renameItemtype($old_itemtype . 'Type', $new_itemtype . 'Type');
+            $migration->renameItemtype($old_itemtype . 'Category', $new_itemtype . 'Category');
             self::applyPluginsTypeRename($migration, $old_itemtype, $new_itemtype);
             $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
         }
@@ -1030,8 +1086,17 @@ class PluginGenericobjectType extends CommonDBTM
         $destination_files = [
             self::getCompleteClassFilename($new_name),
             self::getCompleteItemClassFilename($new_name),
+            self::getCompleteClassModelFilename($new_name),
+            self::getCompleteClassTypeFilename($new_name),
+            self::getCompleteClassCategoryFilename($new_name),
             self::getCompleteFormFilename($new_name),
             self::getCompleteSearchFilename($new_name),
+            self::getCompleteModelFormFilename($new_name),
+            self::getCompleteModelSearchFilename($new_name),
+            self::getCompleteTypeFormFilename($new_name),
+            self::getCompleteTypeSearchFilename($new_name),
+            self::getCompleteCategoryFormFilename($new_name),
+            self::getCompleteCategorySearchFilename($new_name),
             self::getCompleteAjaxTabFilename($new_name),
             self::getCompleteInjectionFilename($new_name),
             self::getCompleteConstantFilename($new_name),
