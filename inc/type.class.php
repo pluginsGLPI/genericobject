@@ -1012,8 +1012,8 @@ class PluginGenericobjectType extends CommonDBTM
             Session::addMessageAfterRedirect($e->getMessage(), false, ERROR);
             return false;
         }
-        ProfileRight::cleanAllPossibleRights();
         $migration->executeMigration();
+        ProfileRight::cleanAllPossibleRights();
 
         Session::addMessageAfterRedirect(
             sprintf(
@@ -1233,7 +1233,7 @@ class PluginGenericobjectType extends CommonDBTM
                 if ($DB->fieldExists($table_name, $fkey_newname)) {
                     throw new RuntimeException(
                         sprintf(
-                            'Field "%s" cannot be renamed in table "%s" as "%s" is field already exists.',
+                            'Field "%s" cannot be renamed in table "%s": field "%s" already exists.',
                             $fkey_oldname,
                             $table_name,
                             $fkey_newname,
@@ -1293,13 +1293,16 @@ class PluginGenericobjectType extends CommonDBTM
         // Get all plugin tables
         $tables_result = $DB->doQuery("SHOW TABLES LIKE 'glpi\\_plugin\\_%'");
 
+        $old_table = getTableForItemType($old_itemtype);
+        $new_table = getTableForItemType($new_itemtype);
+
         $table_names = [];
         while ($row = $DB->fetchRow($tables_result)) {
             $table_name = $row[0];
 
-            // Check if table name contains old itemtype and rename it
-            if (str_contains($table_name, strtolower($old_itemtype))) {
-                $new_table_name = str_replace(strtolower($old_itemtype), strtolower($new_itemtype), $table_name);
+            // Rename the itemtype's own table and any relation table derived from it (e.g. "..._users")
+            if (str_starts_with($table_name, $old_table)) {
+                $new_table_name = $new_table . substr($table_name, strlen($old_table));
                 $migration->renameTable($table_name, $new_table_name);
                 $table_name = $new_table_name;
             }

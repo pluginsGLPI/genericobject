@@ -272,7 +272,7 @@
                                                     </div>
                                                     <small id="{{ modal_id }}-counter"
                                                         class="text-muted flex-shrink-0">
-                                                        {{ genericobject_type.name|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}
+                                                        {{ call('PluginGenericobjectType::getSystemName', [genericobject_type.name])|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}
                                                     </small>
                                                 </div>
                                                 <div>
