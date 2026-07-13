@@ -1301,7 +1301,7 @@ class PluginGenericobjectType extends CommonDBTM
             $table_name = $row[0];
 
             // Rename the itemtype's own table and any relation table derived from it (e.g. "..._users")
-            if (str_starts_with($table_name, $old_table)) {
+            if ($table_name === $old_table || str_starts_with($table_name, $old_table . '_')) {
                 $new_table_name = $new_table . substr($table_name, strlen($old_table));
                 $migration->renameTable($table_name, $new_table_name);
                 $table_name = $new_table_name;
