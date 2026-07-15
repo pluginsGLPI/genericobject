@@ -1067,9 +1067,15 @@ class PluginGenericobjectType extends CommonDBTM
         if ($old_itemtype != $new_itemtype && !str_starts_with($old_itemtype, 'Glpi\\CustomAsset\\')) {
             self::renameItemtypeForFieldsPlugin($migration, $old_itemtype, $new_itemtype);
             $migration->renameItemtype($old_itemtype, $new_itemtype);
-            $migration->renameItemtype($old_itemtype . 'Model', $new_itemtype . 'Model');
-            $migration->renameItemtype($old_itemtype . 'Type', $new_itemtype . 'Type');
-            $migration->renameItemtype($old_itemtype . 'Category', $new_itemtype . 'Category');
+            if ($DB->tableExists(getTableForItemType($old_itemtype . 'Model'))) {
+                $migration->renameItemtype($old_itemtype . 'Model', $new_itemtype . 'Model');
+            }
+            if ($DB->tableExists(getTableForItemType($old_itemtype . 'Type'))) {
+                $migration->renameItemtype($old_itemtype . 'Type', $new_itemtype . 'Type');
+            }
+            if ($DB->tableExists(getTableForItemType($old_itemtype . 'Category'))) {
+                $migration->renameItemtype($old_itemtype . 'Category', $new_itemtype . 'Category');
+            }
             self::applyPluginsTypeRename($migration, $old_itemtype, $new_itemtype);
             $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
         }
