@@ -1065,18 +1065,18 @@ class PluginGenericobjectType extends CommonDBTM
         global $DB;
 
         if ($old_itemtype != $new_itemtype && !str_starts_with($old_itemtype, 'Glpi\\CustomAsset\\')) {
-            self::renameItemtypeForFieldsPlugin($migration, $old_itemtype, $new_itemtype);
-            $migration->renameItemtype($old_itemtype, $new_itemtype);
-            if ($DB->tableExists(getTableForItemType($old_itemtype . 'Model'))) {
-                $migration->renameItemtype($old_itemtype . 'Model', $new_itemtype . 'Model');
+            // Apply the same rename (fields plugin fkeys, itemtype/table, other plugin tables) to the type
+            // itself and its Model/Type/Category companion dropdowns, as they can also be referenced elsewhere.
+            foreach (['', 'Model', 'Type', 'Category'] as $suffix) {
+                $old_variant_itemtype = $old_itemtype . $suffix;
+                $new_variant_itemtype = $new_itemtype . $suffix;
+                if ($suffix !== '' && !$DB->tableExists(getTableForItemType($old_variant_itemtype))) {
+                    continue;
+                }
+                self::renameItemtypeForFieldsPlugin($migration, $old_variant_itemtype, $new_variant_itemtype);
+                $migration->renameItemtype($old_variant_itemtype, $new_variant_itemtype);
+                self::applyPluginsTypeRename($migration, $old_variant_itemtype, $new_variant_itemtype);
             }
-            if ($DB->tableExists(getTableForItemType($old_itemtype . 'Type'))) {
-                $migration->renameItemtype($old_itemtype . 'Type', $new_itemtype . 'Type');
-            }
-            if ($DB->tableExists(getTableForItemType($old_itemtype . 'Category'))) {
-                $migration->renameItemtype($old_itemtype . 'Category', $new_itemtype . 'Category');
-            }
-            self::applyPluginsTypeRename($migration, $old_itemtype, $new_itemtype);
             $migration->executeMigration(); // Execute migration to flush updates on tables that may be renamed
         }
 
