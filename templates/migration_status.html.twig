@@ -26,6 +26,19 @@
  # -------------------------------------------------------------------------
  #}
 
+{% import 'components/alerts_macros.html.twig' as alerts %}
+
+{% set conflict_count = 0 %}
+{% set too_long_count = 0 %}
+{% for genericobject_type in genericobject_types %}
+    {% if genericobject_type.name|lower in reserved_names and customassets[genericobject_type.name] is not defined %}
+        {% set conflict_count = conflict_count + 1 %}
+    {% endif %}
+    {% if call('PluginGenericobjectType::getSystemName', [genericobject_type.name])|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
+        {% set too_long_count = too_long_count + 1 %}
+    {% endif %}
+{% endfor %}
+
 {# Page Header #}
 <div class="d-flex align-items-center mb-4">
     <div class="me-3">
@@ -37,20 +50,36 @@
     </div>
 </div>
 <div class="row">
-    <div
-        class="col-12">
-        {# EOL Warning Banner #}
-        <div class="alert alert-warning border-start border-warning border-2 mb-4">
-            <div class="d-flex align-items-start">
-                <i class="ti ti-alert-triangle text-warning me-3 mt-1 fa-lg"></i>
-                <div>
-                    <h5 class="alert-heading mb-2">{{ __('End of Life Notice', 'genericobject') }}</h5>
-                    <p class="mb-0">
-                        {{ __('GenericObject v3.0.0 is an End-of-Life version. All custom asset creation functionality has been moved to GLPI 11 native asset definition.', 'genericobject') }}
-                    </p>
-                </div>
-            </div>
-        </div>
+    <div class="col-12">
+        {# EOL Warning Alert #}
+        {{ alerts.alert_warning(
+            __('End of Life Notice', 'genericobject'),
+            [__('GenericObject v3.0.0 is an End-of-Life version. All custom asset creation functionality has been moved to GLPI 11 native asset definition.', 'genericobject')]
+        ) }}
+
+        {# Rename Info Alert #}
+        {{ alerts.alert_info(
+            __('Name Conflict?', 'genericobject'),
+            [__('If a GenericObject type shares the same name as a native GLPI asset (e.g. Printer, Computer), migration will fail. Use the Rename button on the relevant card below to resolve the conflict before migrating.', 'genericobject')]
+        ) }}
+
+        {# Name Too Long Alert — only shown when types exceed the max name length #}
+        {% if too_long_count > 0 %}
+            {% set too_long_message = (too_long_count ~ ' ' ~ __('type(s) have names that exceed the maximum allowed length of %d characters and cannot be automatically renamed. Please rename them manually before migrating.', 'genericobject'))|format(constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) %}
+            {{ alerts.alert_danger(
+                __('Name too long', 'genericobject') ~ ' (' ~ too_long_count ~ ')',
+                [too_long_message]
+            ) }}
+        {% endif %}
+
+        {# Name Conflict Alert — only shown when conflicts exist #}
+        {% if conflict_count > 0 %}
+            {% set conflict_message = conflict_count ~ ' ' ~ __('type(s) cannot be migrated because their names are reserved by native GLPI assets. Use the Rename button on the cards below to fix them before migrating.', 'genericobject') %}
+            {{ alerts.alert_danger(
+                __('Name Conflict detected', 'genericobject') ~ ' (' ~ conflict_count ~ ')',
+                [conflict_message]
+            ) }}
+        {% endif %}
 
         {# Migration Status Card #}
         <div class="card shadow-sm mb-4">
@@ -81,20 +110,39 @@
 
                 <div class="d-flex flex-wrap justify-content-start gap-3">
                     {% for key, genericobject_type in paginated_types %}
+                        {% set is_conflicting = genericobject_type.name|lower in reserved_names and customassets[genericobject_type.name] is not defined %}
+                        {% set is_too_long = call('PluginGenericobjectType::getSystemName', [genericobject_type.name])|length > constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') and customassets[genericobject_type.name] is not defined %}
+                        {% set modal_id = 'rename-modal-' ~ genericobject_type.id %}
                         <div class="card shadow-sm mb-2 d-flex flex-column h-100" style="flex: 0 0 calc(33.333% - 1rem);">
                             <div class="card-header d-flex align-items-center
-                                        {% if customassets[genericobject_type.name] is defined %}
-                                            bg-success bg-opacity-10 text-success
-                                        {% else %}
-                                            bg-danger bg-opacity-10 text-danger
-                                        {% endif %}">
-                                {% if customassets[genericobject_type.name] is defined and customassets[genericobject_type.name].icon %}
+                                {% if customassets[genericobject_type.name] is defined %}
+                                    bg-success bg-opacity-10 text-success
+                                {% elseif is_conflicting or is_too_long %}
+                                    bg-warning bg-opacity-10 text-warning
+                                {% else %}
+                                    bg-danger bg-opacity-10 text-danger
+                                {% endif %}"
+                            >
+                                {% if is_conflicting %}
+                                    <i class="ti ti-alert-triangle fa-lg me-2 text-warning" title="{{ __('Name conflict: cannot be migrated', 'genericobject') }}"></i>
+                                {% elseif is_too_long %}
+                                    <i class="ti ti-alert-triangle fa-lg me-2 text-warning" title="{{ __('Name too long: cannot be automatically renamed', 'genericobject') }}"></i>
+                                {% elseif customassets[genericobject_type.name] is defined and customassets[genericobject_type.name].icon %}
                                     <i class="{{ customassets[genericobject_type.name].icon }} fa-lg me-2"></i>
                                 {% else %}
                                     <i class="ti ti-box fa-lg me-2"></i>
                                 {% endif %}
                                 <h3 class="card-title mb-0">
                                     {{ genericobject_type.name }}
+                                    {% if is_conflicting %}
+                                        <span class="badge bg-warning text-dark ms-1">
+                                            {{ __('Conflict', 'genericobject') }}
+                                        </span>
+                                    {% elseif is_too_long %}
+                                        <span class="badge bg-warning text-dark ms-1">
+                                            {{ __('Name too long', 'genericobject') }}
+                                        </span>
+                                    {% endif %}
                                 </h3>
                             </div>
 
@@ -111,12 +159,12 @@
                                         </span>
                                     </div>
                                     <div class="mt-auto d-flex justify-content-end gap-2">
-                                        <a href="{{ CFG_GLPI.root_doc }}/front/asset/asset.php?class={{ customassets[genericobject_type.name].system_name }}"
+                                        <a href="{{ config('root_doc') }}/front/asset/asset.php?class={{ customassets[genericobject_type.name].system_name }}"
                                         class="btn btn-outline-primary">
                                             <i class="ti ti-list me-2"></i>
                                             {{ __('View Items', 'genericobject') }}
                                         </a>
-                                        <a href="{{ CFG_GLPI.root_doc }}/front/asset/assetdefinition.form.php?id={{ customassets[genericobject_type.name].id }}"
+                                        <a href="{{ config('root_doc') }}/front/asset/assetdefinition.form.php?id={{ customassets[genericobject_type.name].id }}"
                                         class="btn btn-outline-success">
                                             <i class="ti ti-eye me-2"></i>
                                             {{ __('View Asset', 'genericobject') }}
@@ -124,9 +172,29 @@
                                     </div>
                                 {% else %}
                                     <div class="mb-2">
-                                        <i class="ti ti-x text-danger me-2"></i>
-                                        <span class="text-danger fw-bold">{{ __('Not Migrated', 'genericobject') }}</span>
+                                        {% if is_conflicting or is_too_long %}
+                                            <i class="ti ti-alert-circle text-warning me-2"></i>
+                                            <span class="text-warning fw-bold">{{ __('Cannot Migrate', 'genericobject') }}</span>
+                                        {% else %}
+                                            <i class="ti ti-x text-danger me-2"></i>
+                                            <span class="text-danger fw-bold">{{ __('Not Migrated', 'genericobject') }}</span>
+                                        {% endif %}
                                     </div>
+                                    {% if is_conflicting %}
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="ti ti-info-circle me-1"></i>
+                                                {{ __('The name "%s" is reserved by a native GLPI asset type.')|format(genericobject_type.name) }}
+                                            </small>
+                                        </div>
+                                    {% elseif is_too_long %}
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="ti ti-info-circle me-1"></i>
+                                                {{ __('The name "%s" exceeds the maximum allowed length of %d characters. Please rename it manually.')|format(genericobject_type.name, constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
                                     <div class="mb-2">
                                         <strong>{{ __('Items Migrated:', 'genericobject') }}</strong>
                                         <span class="badge glpi-badge">0</span>
@@ -136,6 +204,13 @@
                                             <i class="ti ti-list me-2"></i>
                                             {{ __('View Items', 'genericobject') }}
                                         </button>
+                                        <button type="button"
+                                                class="btn btn-outline-warning"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#{{ modal_id }}">
+                                            <i class="ti ti-pencil me-2"></i>
+                                            {{ __('Rename', 'genericobject') }}
+                                        </button>
                                         <button class="btn btn-outline-secondary" disabled>
                                             <i class="ti ti-eye me-2"></i>
                                             {{ __('View Asset', 'genericobject') }}
@@ -144,6 +219,85 @@
                                 {% endif %}
                             </div>
                         </div>
+
+                        {# Rename Modal for non-migrated types #}
+                        {% if customassets[genericobject_type.name] is not defined %}
+                            <div class="modal fade" id="{{ modal_id }}" tabindex="-1" aria-labelledby="{{ modal_id }}-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form method="post" action="{{ config('root_doc') }}/plugins/genericobject/front/migration_status.php">
+                                            <input type="hidden" name="type_id" value="{{ genericobject_type.id }}">
+                                            <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="{{ modal_id }}-label">
+                                                    <i class="ti ti-pencil me-2"></i>
+                                                    {{ __('Rename "%s"', 'genericobject')|format(genericobject_type.name) }}
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {% if is_conflicting %}
+                                                    <div class="alert alert-warning mb-3">
+                                                        <i class="ti ti-alert-triangle me-2"></i>
+                                                        {{ __('The name "%s" conflicts with a native GLPI asset type. Choose a different name to allow migration.', 'genericobject')|format(genericobject_type.name) }}
+                                                    </div>
+                                                {% endif %}
+                                                <label class="form-label" for="{{ modal_id }}-input">
+                                                    {{ __('New name', 'genericobject') }}
+                                                </label>
+                                                <input type="text"
+                                                    id="{{ modal_id }}-input"
+                                                    name="new_name"
+                                                    class="form-control"
+                                                    value="{{ genericobject_type.name }}"
+                                                    pattern="[a-zA-Z][a-zA-Z0-9]*"
+                                                    maxlength="{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}"
+                                                    title="{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}"
+                                                    data-counter-target="{{ modal_id }}-counter"
+                                                    data-warning-target="{{ modal_id }}-length-warning"
+                                                    data-result-target="{{ modal_id }}-result"
+                                                    oninput="glpiGenericobjectUpdateCounter(this)"
+                                                    required
+                                                >
+                                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                                    <div class="d-flex flex-grow-1 gap-2" style="min-width: 0;">
+                                                        <small class="text-muted">
+                                                            {{ __('Use system name:', 'genericobject') }}
+                                                        </small>
+                                                        <small id="{{ modal_id }}-result"
+                                                            class="text-muted fw-bold text-truncate"
+                                                            style="min-width: 0; max-width: 50%;">
+                                                            {{ call('PluginGenericobjectType::getSystemName', [genericobject_type.name]) }}
+                                                        </small>
+                                                    </div>
+                                                    <small id="{{ modal_id }}-counter"
+                                                        class="text-muted flex-shrink-0">
+                                                        {{ call('PluginGenericobjectType::getSystemName', [genericobject_type.name])|length }}/{{ constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH') }}
+                                                    </small>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">{{ __('Only letters and numbers, must start with a letter.', 'genericobject') }}</small>
+                                                </div>
+                                                <div id="{{ modal_id }}-length-warning" class="text-danger small mt-1 d-none">
+                                                    <i class="ti ti-alert-circle me-1"></i>
+                                                    {{ __('Maximum length of %d characters reached.', 'genericobject')|format(constant('PluginGenericobjectType::MAX_TYPE_NAME_LENGTH')) }}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">
+                                                    {{ __('Cancel') }}
+                                                </button>
+                                                <button type="submit" class="btn btn-warning">
+                                                    <i class="ti ti-pencil me-1"></i>
+                                                    {{ __('Rename', 'genericobject') }}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
                     {% endfor %}
                 </div>
                 {# Display pagination controls at the bottom #}
@@ -165,7 +319,7 @@
                     {{ __('How to Migrate', 'genericobject') }}
                 </h3>
             </div>
-                <div class="card-body">
+            <div class="card-body">
                     <div class="alert alert-warning border-start border-warning border-2 mb-4">
                         <div class="d-flex align-items-start">
                             <i class="ti ti-terminal-2 text-warning me-3 mt-1"></i>
@@ -212,6 +366,7 @@
 
                 </div>
             </div>
+        </div>
 
         {# Next Steps Card #}
         <div class="card shadow-sm mb-4">
@@ -276,6 +431,53 @@
     }
 </style>
 <script>
+    function glpiGenericobjectUpdateCounter(input) {
+        const maxLen = parseInt(input.getAttribute('maxlength'));
+        const counterId = input.dataset.counterTarget;
+        const warningId = input.dataset.warningTarget;
+        const resultId = input.dataset.resultTarget;
+        const counter = counterId ? document.getElementById(counterId) : null;
+        const warning = warningId ? document.getElementById(warningId) : null;
+        const result = resultId ? document.getElementById(resultId) : null;
+
+        fetch(
+            '{{ config('root_doc') }}/plugins/genericobject/front/migration_status.php?action=get_system_name&name=' + encodeURIComponent(input.value),
+        )
+        .then(r => r.json())
+        .then(data => {
+            const currentLen = data.system_name.length;
+            if (counter) {
+                counter.textContent = currentLen + '/' + maxLen;
+                counter.className = 'small';
+                if (currentLen >= maxLen) {
+                    counter.classList.add('text-danger', 'fw-bold');
+                } else {
+                    counter.classList.add('text-muted');
+                }
+            }
+
+            if (warning) {
+                if (currentLen >= maxLen) {
+                    warning.classList.remove('d-none');
+                } else {
+                    warning.classList.add('d-none');
+                }
+            }
+
+            if (result) {
+                result.textContent = data.system_name;
+            }
+        })
+        .catch((e) => console.error(e.message));
+    }
+
+    document.addEventListener('shown.bs.modal', function (event) {
+        const input = event.target.querySelector('[data-counter-target]');
+        if (input) {
+            glpiGenericobjectUpdateCounter(input);
+        }
+    });
+
     function copyCode() {
         const codeBlock = document.getElementById('codeBlock');
         const textArea = document.createElement('textarea');
