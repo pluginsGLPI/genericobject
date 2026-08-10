@@ -431,7 +431,14 @@
     }
 </style>
 <script>
+    const glpiGenericobjectDebounceTimers = new WeakMap();
+
     function glpiGenericobjectUpdateCounter(input) {
+        clearTimeout(glpiGenericobjectDebounceTimers.get(input));
+        glpiGenericobjectDebounceTimers.set(input, setTimeout(() => glpiGenericobjectFetchSystemName(input), 300));
+    }
+
+    function glpiGenericobjectFetchSystemName(input) {
         const maxLen = parseInt(input.getAttribute('maxlength'));
         const counterId = input.dataset.counterTarget;
         const warningId = input.dataset.warningTarget;
