@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2025
+# Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2026
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-12 02:22+0000\n"
+"POT-Creation-Date: 2026-08-17 00:55+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2025\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2026\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,70 +18,7 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: templates/eol_info.html.twig
-msgid "GenericObject End of Life Notice"
-msgstr "GenericObject destek sonu bildirimi"
-
-#: templates/eol_info.html.twig
-msgid "Migration guidance and information"
-msgstr "Aktarım rehberi ve bilgileri"
-
-#: templates/eol_info.html.twig
-msgid "Important Notice"
-msgstr "Önemli not"
-
-#: templates/eol_info.html.twig
-#, php-format
-msgid ""
-"GenericObject v%s has reached End of Life (EOL). This version only provides "
-"migration assistance to help you switch to GLPI 11's asset definition"
-msgstr "GenericObject v%s desteği sona erdi (EOL). Bu sürüm yalnızca verilerin GLPI 11 varlık tanımlarına aktarımında yardımcı olur"
-
-#: templates/eol_info.html.twig
-msgid "What changed?"
-msgstr "Ne değişti?"
-
-#: templates/eol_info.html.twig
-msgid "GLPI 11 now has native custom asset creation capabilities"
-msgstr "GLPI 11 içine doğal varlık oluşturma özellikleri eklendi"
-
-#: templates/eol_info.html.twig
-msgid "All Genericobject features are available in GLPI core"
-msgstr "Tüm GenericObject özellikleri GLPI çekirdeğine eklendi"
-
-#: templates/eol_info.html.twig
-msgid "Better integration with GLPI workflows"
-msgstr "GLPI iş akışları ile daha iyi bütünlük sağlandı"
-
-#: templates/eol_info.html.twig
-msgid "Improved performance and security"
-msgstr "Başarım ve güvenlik iyileştirildi"
-
-#: templates/eol_info.html.twig
-msgid "Next steps"
-msgstr "Sonraki adımlar"
-
-#: templates/eol_info.html.twig
-msgid "Review your existing genericobject assets"
-msgstr "Var olan GenericObject varlıklarını gözden geçirin"
-
-#: templates/eol_info.html.twig
-msgid "Migrate to GLPI 11 native asset definition"
-msgstr "GLPI 11 doğal varlık tanımlarına geçin"
-
-#: templates/eol_info.html.twig
-msgid "Test the new asset system"
-msgstr "Yeni varlık sistemini deneyin"
-
-#: templates/eol_info.html.twig
-msgid "Uninstall GenericObject plugin when ready"
-msgstr "Hazır olduğunuzda GenericObject eklentisini kaldırın"
-
-#: templates/eol_info.html.twig
-msgid "View Migration Status"
-msgstr "Aktarım durumunu görüntüle"
-
-#: templates/migration_status.html.twig front/migration_status.php:69
+#: templates/migration_status.html.twig front/migration_status.php:85
 msgid "GenericObject Migration Status"
 msgstr "GenericObject aktarım durumu"
 
@@ -100,8 +37,54 @@ msgid ""
 msgstr "GenericObject v3.0.0 bir destek sonu sürümüdür. Tüm özel varlık oluşturma özellikleri GLPI 11 doğal varlık tanımları üzerine taşındı."
 
 #: templates/migration_status.html.twig
+msgid "Name Conflict?"
+msgstr "Ad çakışması mı var?"
+
+#: templates/migration_status.html.twig
+msgid ""
+"If a GenericObject type shares the same name as a native GLPI asset (e.g. "
+"Printer, Computer), migration will fail. Use the Rename button on the "
+"relevant card below to resolve the conflict before migrating."
+msgstr "Bir GenericObject türünün adı, yerel bir GLPI varlığıyla aynı ise (Yazıcılar, Bilgisayarlar gibi), aktarım yapılamaz. Aktarımdan önce çakışmayı çözmek için aşağıdaki ilgili kartta bulunan Yeniden adlandır düğmesini kullanın."
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid ""
+"type(s) have names that exceed the maximum allowed length of %d characters "
+"and cannot be automatically renamed. Please rename them manually before "
+"migrating."
+msgstr "türün adı, izin verilen en fazla %d karakter sayısından uzun ve bunlar otomatik olarak yeniden adlandırılamıyor. Lütfen aktarmadan önce bunların adını el ile değiştirin."
+
+#: templates/migration_status.html.twig
+msgid "Name too long"
+msgstr "Ad çok uzun"
+
+#: templates/migration_status.html.twig
+msgid ""
+"type(s) cannot be migrated because their names are reserved by native GLPI "
+"assets. Use the Rename button on the cards below to fix them before "
+"migrating."
+msgstr "türün adı, yerel GLPI varlıklarının kullanımına ayrıldığı için aktarılamaz. Aktarmadan önce bunları düzeltmek için aşağıdaki kartlarda bulunan Yeniden adlandır düğmesini kullanın."
+
+#: templates/migration_status.html.twig
+msgid "Name Conflict detected"
+msgstr "Ad çakışması bulundu"
+
+#: templates/migration_status.html.twig
 msgid "Migration Status"
 msgstr "Aktarım durumu"
+
+#: templates/migration_status.html.twig
+msgid "Name conflict: cannot be migrated"
+msgstr "Ad çakışması: Aktarılamadı"
+
+#: templates/migration_status.html.twig
+msgid "Name too long: cannot be automatically renamed"
+msgstr "Ad çok uzun: Otomatik olarak yeniden adlandırılamadı"
+
+#: templates/migration_status.html.twig
+msgid "Conflict"
+msgstr "Çakışma"
 
 #: templates/migration_status.html.twig
 msgid "Migrated"
@@ -120,8 +103,45 @@ msgid "View Asset"
 msgstr "Varlığı görüntüle"
 
 #: templates/migration_status.html.twig
+msgid "Cannot Migrate"
+msgstr "Aktarılamaz"
+
+#: templates/migration_status.html.twig
 msgid "Not Migrated"
 msgstr "Aktarılmadı"
+
+#: templates/migration_status.html.twig
+msgid "Rename"
+msgstr "Yeniden adlandır"
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid "Rename \"%s\""
+msgstr "\"%s\" ögesini yeniden adlandır"
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid ""
+"The name \"%s\" conflicts with a native GLPI asset type. Choose a different "
+"name to allow migration."
+msgstr "\"%s\" adı, yerel bir GLPI varlığı türüyle aynı. Aktarımı sürdürebilmek için farklı bir ad seçin."
+
+#: templates/migration_status.html.twig
+msgid "New name"
+msgstr "Yeni ad"
+
+#: templates/migration_status.html.twig
+msgid "Only letters and numbers, must start with a letter."
+msgstr "Yalnızca harfler ve rakamlar. Bir harf ile başlamalıdır."
+
+#: templates/migration_status.html.twig
+msgid "Use system name:"
+msgstr "Sistem adı kullanılsın:"
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid "Maximum length of %d characters reached."
+msgstr "Olabilecek en fazla %d karakter uzunluğuna ulaşıldı."
 
 #: templates/migration_status.html.twig
 msgid "How to Migrate"
@@ -195,13 +215,76 @@ msgstr "Kullanıcılara GLPI doğal özel varlıkları eğitimi verin"
 msgid "Update internal documentation"
 msgstr "Kuruluş içindeki belgeleri güncelleyin"
 
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "GenericObject destek sonu bildirimi"
+
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Aktarım rehberi ve bilgileri"
+
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Önemli not"
+
+#: templates/eol_info.html.twig
+#, php-format
+msgid ""
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr "GenericObject v%s desteği sona erdi (EOL). Bu sürüm yalnızca verilerin GLPI 11 varlık tanımlarına aktarımında yardımcı olur"
+
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "Ne değişti?"
+
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 içine doğal varlık oluşturma özellikleri eklendi"
+
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "Tüm GenericObject özellikleri GLPI çekirdeğine eklendi"
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "GLPI iş akışları ile daha iyi bütünlük sağlandı"
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Başarım ve güvenlik iyileştirildi"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Sonraki adımlar"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Var olan GenericObject varlıklarını gözden geçirin"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "GLPI 11 doğal varlık tanımlarına geçin"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Yeni varlık sistemini deneyin"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Hazır olduğunuzda GenericObject eklentisini kaldırın"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "Aktarım durumunu görüntüle"
+
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "GenericObject destek sonu bilgileri"
+
 #: setup.php:132
 msgid "Generic Objects End-of-Life Updater"
 msgstr "Generic Objects destek sonu güncelleyici"
-
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Nesnelerin aile türü"
 
 #: inc/eolinfo.class.php:47
 msgid "GenericObject EOL Info"
@@ -211,13 +294,39 @@ msgstr "GenericObject destek sonu bilgileri"
 msgid "GenericObject End of Life Information"
 msgstr "GenericObject destek sonu bildirimi"
 
-#: inc/type.class.php:74
+#: inc/type.class.php:76
 msgid "Type of objects"
 msgstr "Nesne türü"
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr "GenericObject destek sonu bilgileri"
+#: inc/type.class.php:934
+msgid "Type not found."
+msgstr "Tür bulunamadı."
+
+#: inc/type.class.php:946
+msgid "The new name cannot be empty."
+msgstr "Yeni ad boş olamaz."
+
+#: inc/type.class.php:962
+msgid "A type with this name already exists."
+msgstr "Aynı adlı bir tür zaten var."
+
+#: inc/type.class.php:973
+msgid "This name is reserved by a native GLPI asset type."
+msgstr "Bu ad bir yerel GLPI varlığı türüne ayrılmış."
+
+#: inc/type.class.php:984
+#, php-format
+msgid "The name \"%s\" is too long. The maximum allowed length is %d characters."
+msgstr "\"%s\" adı çok uzun. En fazla %d karakter uzunluğuna izin veriliyor."
+
+#: inc/type.class.php:1020
+#, php-format
+msgid "Type \"%s\" has been renamed to \"%s\"."
+msgstr "\"%s\" türü \"%s\" olarak yeniden adlandırıldı."
+
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Nesnelerin aile türü"
 
 #: index.php:36
 #, php-format
