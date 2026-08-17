@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-29 02:36+0000\n"
+"POT-Creation-Date: 2026-08-17 00:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,70 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/eol_info.html.twig
-msgid "GenericObject End of Life Notice"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Migration guidance and information"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Important Notice"
-msgstr ""
-
-#: templates/eol_info.html.twig
-#, php-format
-msgid ""
-"GenericObject v%s has reached End of Life (EOL). This version only provides "
-"migration assistance to help you switch to GLPI 11's asset definition"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "What changed?"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "GLPI 11 now has native custom asset creation capabilities"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "All Genericobject features are available in GLPI core"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Better integration with GLPI workflows"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Improved performance and security"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Next steps"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Review your existing genericobject assets"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Migrate to GLPI 11 native asset definition"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Test the new asset system"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "Uninstall GenericObject plugin when ready"
-msgstr ""
-
-#: templates/eol_info.html.twig
-msgid "View Migration Status"
-msgstr ""
-
-#: templates/migration_status.html.twig front/migration_status.php:69
+#: templates/migration_status.html.twig front/migration_status.php:85
 msgid "GenericObject Migration Status"
 msgstr ""
 
@@ -99,7 +36,53 @@ msgid ""
 msgstr ""
 
 #: templates/migration_status.html.twig
+msgid "Name Conflict?"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid ""
+"If a GenericObject type shares the same name as a native GLPI asset (e.g. "
+"Printer, Computer), migration will fail. Use the Rename button on the "
+"relevant card below to resolve the conflict before migrating."
+msgstr ""
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid ""
+"type(s) have names that exceed the maximum allowed length of %d characters "
+"and cannot be automatically renamed. Please rename them manually before "
+"migrating."
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Name too long"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid ""
+"type(s) cannot be migrated because their names are reserved by native GLPI "
+"assets. Use the Rename button on the cards below to fix them before "
+"migrating."
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Name Conflict detected"
+msgstr ""
+
+#: templates/migration_status.html.twig
 msgid "Migration Status"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Name conflict: cannot be migrated"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Name too long: cannot be automatically renamed"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Conflict"
 msgstr ""
 
 #: templates/migration_status.html.twig
@@ -119,7 +102,44 @@ msgid "View Asset"
 msgstr ""
 
 #: templates/migration_status.html.twig
+msgid "Cannot Migrate"
+msgstr ""
+
+#: templates/migration_status.html.twig
 msgid "Not Migrated"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Rename"
+msgstr ""
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid "Rename \"%s\""
+msgstr ""
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid ""
+"The name \"%s\" conflicts with a native GLPI asset type. Choose a different "
+"name to allow migration."
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "New name"
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Only letters and numbers, must start with a letter."
+msgstr ""
+
+#: templates/migration_status.html.twig
+msgid "Use system name:"
+msgstr ""
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid "Maximum length of %d characters reached."
 msgstr ""
 
 #: templates/migration_status.html.twig
@@ -194,12 +214,75 @@ msgstr ""
 msgid "Update internal documentation"
 msgstr ""
 
-#: setup.php:132
-msgid "Generic Objects End-of-Life Updater"
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
 msgstr ""
 
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr ""
+
+#: templates/eol_info.html.twig
+#, php-format
+msgid ""
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr ""
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr ""
+
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr ""
+
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
 msgstr ""
 
 #: inc/eolinfo.class.php:47
@@ -210,12 +293,39 @@ msgstr ""
 msgid "GenericObject End of Life Information"
 msgstr ""
 
-#: inc/type.class.php:74
+#: inc/type.class.php:76
 msgid "Type of objects"
 msgstr ""
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
+#: inc/type.class.php:934
+msgid "Type not found."
+msgstr ""
+
+#: inc/type.class.php:946
+msgid "The new name cannot be empty."
+msgstr ""
+
+#: inc/type.class.php:962
+msgid "A type with this name already exists."
+msgstr ""
+
+#: inc/type.class.php:973
+msgid "This name is reserved by a native GLPI asset type."
+msgstr ""
+
+#: inc/type.class.php:984
+#, php-format
+msgid ""
+"The name \"%s\" is too long. The maximum allowed length is %d characters."
+msgstr ""
+
+#: inc/type.class.php:1020
+#, php-format
+msgid "Type \"%s\" has been renamed to \"%s\"."
+msgstr ""
+
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
 msgstr ""
 
 #: index.php:36
