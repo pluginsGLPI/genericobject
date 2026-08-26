@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-29 02:36+0000\n"
+"POT-Creation-Date: 2026-08-26 00:58+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Edwin Elias Alvarez <elias986@yahoo.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/es_MX/)\n"
@@ -17,6 +17,203 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_MX\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: templates/migration_status.html.twig front/migration_status.php:85
+msgid "GenericObject Migration Status"
+msgstr "Estado de Migración de Administración de Objetos"
+
+#: templates/migration_status.html.twig
+msgid "End of Life migration tool for GLPI 11"
+msgstr "Herramienta de migración de Fin de Vida Útil para GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "End of Life Notice"
+msgstr "Aviso de Fin de Vida Útil"
+
+#: templates/migration_status.html.twig
+msgid ""
+"GenericObject v3.0.0 is an End-of-Life version. All custom asset creation "
+"functionality has been moved to GLPI 11 native asset definition."
+msgstr "Administración de Objetos v3.0.0 es una versión de Fin de Vida Útil. Toda la funcionalidad de creación de activos personalizados fue movida a la definición de activos nativa de GLPI 11."
+
+#: templates/migration_status.html.twig
+msgid "Name Conflict?"
+msgstr "¿Conflicto de Nombre?"
+
+#: templates/migration_status.html.twig
+msgid ""
+"If a GenericObject type shares the same name as a native GLPI asset (e.g. "
+"Printer, Computer), migration will fail. Use the Rename button on the "
+"relevant card below to resolve the conflict before migrating."
+msgstr "Si un tipo de Administración de Objetos comparte el mismo nombre que un activo nativo de GLPI (por ejemplo, Impresora, Computadora), la migración fallará. Usa el botón Renombrar en la tarjeta correspondiente abajo para resolver el conflicto antes de migrar."
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid ""
+"type(s) have names that exceed the maximum allowed length of %d characters "
+"and cannot be automatically renamed. Please rename them manually before "
+"migrating."
+msgstr "tipo(s) tienen nombres que exceden la longitud máxima permitida de %d caracteres y no pueden renombrarse automáticamente. Por favor, renómbralos manualmente antes de migrar."
+
+#: templates/migration_status.html.twig
+msgid "Name too long"
+msgstr "Nombre demasiado largo"
+
+#: templates/migration_status.html.twig
+msgid ""
+"type(s) cannot be migrated because their names are reserved by native GLPI "
+"assets. Use the Rename button on the cards below to fix them before "
+"migrating."
+msgstr "tipo(s) no pueden migrarse porque sus nombres están reservados por activos nativos de GLPI. Usa el botón Renombrar en las tarjetas abajo para corregirlos antes de migrar."
+
+#: templates/migration_status.html.twig
+msgid "Name Conflict detected"
+msgstr "Conflicto de Nombre detectado"
+
+#: templates/migration_status.html.twig
+msgid "Migration Status"
+msgstr "Estado de Migración"
+
+#: templates/migration_status.html.twig
+msgid "Name conflict: cannot be migrated"
+msgstr "Conflicto de nombre: no se puede migrar"
+
+#: templates/migration_status.html.twig
+msgid "Name too long: cannot be automatically renamed"
+msgstr "Nombre demasiado largo: no se puede renombrar automáticamente"
+
+#: templates/migration_status.html.twig
+msgid "Conflict"
+msgstr "Conflicto"
+
+#: templates/migration_status.html.twig
+msgid "Migrated"
+msgstr "Migrado"
+
+#: templates/migration_status.html.twig
+msgid "Items Migrated:"
+msgstr "Elementos Migrados:"
+
+#: templates/migration_status.html.twig
+msgid "View Items"
+msgstr "Ver Elementos"
+
+#: templates/migration_status.html.twig
+msgid "View Asset"
+msgstr "Ver Activo"
+
+#: templates/migration_status.html.twig
+msgid "Cannot Migrate"
+msgstr "No se Puede Migrar"
+
+#: templates/migration_status.html.twig
+msgid "Not Migrated"
+msgstr "No Migrado"
+
+#: templates/migration_status.html.twig
+msgid "Rename"
+msgstr "Renombrar"
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid "Rename \"%s\""
+msgstr "Renombrar \"%s\""
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid ""
+"The name \"%s\" conflicts with a native GLPI asset type. Choose a different "
+"name to allow migration."
+msgstr "El nombre \"%s\" entra en conflicto con un tipo de activo nativo de GLPI. Elige un nombre diferente para permitir la migración."
+
+#: templates/migration_status.html.twig
+msgid "New name"
+msgstr "Nuevo nombre"
+
+#: templates/migration_status.html.twig
+msgid "Only letters and numbers, must start with a letter."
+msgstr "Solo letras y números, debe comenzar con una letra."
+
+#: templates/migration_status.html.twig
+msgid "Use system name:"
+msgstr "Usar nombre del sistema:"
+
+#: templates/migration_status.html.twig
+#, php-format
+msgid "Maximum length of %d characters reached."
+msgstr "Se alcanzó la longitud máxima de %d caracteres."
+
+#: templates/migration_status.html.twig
+msgid "How to Migrate"
+msgstr "Cómo Migrar"
+
+#: templates/migration_status.html.twig
+msgid "Command Line Migration Required"
+msgstr "Se Requiere Migración por Línea de Comandos"
+
+#: templates/migration_status.html.twig
+msgid ""
+"For optimal performance and reliability, the migration must be performed "
+"using the command line:"
+msgstr "Para un rendimiento y confiabilidad óptimos, la migración debe realizarse usando la línea de comandos:"
+
+#: templates/migration_status.html.twig
+msgid "Copy command"
+msgstr "Copiar comando"
+
+#: templates/migration_status.html.twig
+msgid "Run this command from your GLPI root directory"
+msgstr "Ejecuta este comando desde tu directorio raíz de GLPI"
+
+#: templates/migration_status.html.twig
+msgid "Migration Process"
+msgstr "Proceso de Migración"
+
+#: templates/migration_status.html.twig
+msgid "Generic objects will be converted into custom assets"
+msgstr "Los objetos de Administración de Objetos serán convertidos en activos personalizados"
+
+#: templates/migration_status.html.twig
+msgid "Types will be retained."
+msgstr "Los tipos serán retenidos."
+
+#: templates/migration_status.html.twig
+msgid "Asset data will not be lost"
+msgstr "Los datos de los activos no se perderán"
+
+#: templates/migration_status.html.twig
+msgid ""
+"Note: Migration status detection is based on data presence and may not be "
+"100% accurate. Please verify manually after running the migration command."
+msgstr "Nota: La detección del estado de migración se basa en la presencia de datos y puede no ser 100% precisa. Por favor, verifica manualmente después de ejecutar el comando de migración."
+
+#: templates/migration_status.html.twig
+msgid "Next Steps"
+msgstr "Próximos Pasos"
+
+#: templates/migration_status.html.twig
+msgid "After Migration"
+msgstr "Después de la Migración"
+
+#: templates/migration_status.html.twig
+msgid "Review converted assets in GLPI 11"
+msgstr "Revisa los activos convertidos en GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "Test asset access permissions"
+msgstr "Prueba los permisos de acceso a los activos"
+
+#: templates/migration_status.html.twig
+msgid "Recommendations"
+msgstr "Recomendaciones"
+
+#: templates/migration_status.html.twig
+msgid "Train users on GLPI 11 native custom assets"
+msgstr "Capacita a los usuarios sobre los activos personalizados nativos de GLPI 11"
+
+#: templates/migration_status.html.twig
+msgid "Update internal documentation"
+msgstr "Actualiza la documentación interna"
 
 #: templates/eol_info.html.twig
 msgid "GenericObject End of Life Notice"
@@ -63,145 +260,31 @@ msgstr "Próximos pasos"
 
 #: templates/eol_info.html.twig
 msgid "Review your existing genericobject assets"
-msgstr "Revisá tus activos de administración de objetos existentes"
+msgstr "Revisa tus activos de administración de objetos existentes"
 
 #: templates/eol_info.html.twig
 msgid "Migrate to GLPI 11 native asset definition"
-msgstr "Migrá a la definición de activos nativa de GLPI 11"
+msgstr "Migra a la definición de activos nativa de GLPI 11"
 
 #: templates/eol_info.html.twig
 msgid "Test the new asset system"
-msgstr "Probá el nuevo sistema de activos"
+msgstr "Prueba el nuevo sistema de activos"
 
 #: templates/eol_info.html.twig
 msgid "Uninstall GenericObject plugin when ready"
-msgstr "Desinstalá el complemento Administración de Objetos cuando estés listo/a"
+msgstr "Desinstala el complemento Administración de Objetos cuando estés listo/a"
 
 #: templates/eol_info.html.twig
 msgid "View Migration Status"
 msgstr "Ver Estado de Migración"
 
-#: templates/migration_status.html.twig front/migration_status.php:69
-msgid "GenericObject Migration Status"
-msgstr "Estado de Migración de Administración de Objetos"
-
-#: templates/migration_status.html.twig
-msgid "End of Life migration tool for GLPI 11"
-msgstr "Herramienta de migración de Fin de Vida Útil para GLPI 11"
-
-#: templates/migration_status.html.twig
-msgid "End of Life Notice"
-msgstr "Aviso de Fin de Vida Útil"
-
-#: templates/migration_status.html.twig
-msgid ""
-"GenericObject v3.0.0 is an End-of-Life version. All custom asset creation "
-"functionality has been moved to GLPI 11 native asset definition."
-msgstr "Administración de Objetos v3.0.0 es una versión de Fin de Vida Útil. Toda la funcionalidad de creación de activos personalizados fue movida a la definición de activos nativa de GLPI 11."
-
-#: templates/migration_status.html.twig
-msgid "Migration Status"
-msgstr "Estado de Migración"
-
-#: templates/migration_status.html.twig
-msgid "Migrated"
-msgstr "Migrado"
-
-#: templates/migration_status.html.twig
-msgid "Items Migrated:"
-msgstr "Elementos Migrados:"
-
-#: templates/migration_status.html.twig
-msgid "View Items"
-msgstr "Ver Elementos"
-
-#: templates/migration_status.html.twig
-msgid "View Asset"
-msgstr "Ver Activo"
-
-#: templates/migration_status.html.twig
-msgid "Not Migrated"
-msgstr "No Migrado"
-
-#: templates/migration_status.html.twig
-msgid "How to Migrate"
-msgstr "Cómo Migrar"
-
-#: templates/migration_status.html.twig
-msgid "Command Line Migration Required"
-msgstr "Se Requiere Migración por Línea de Comandos"
-
-#: templates/migration_status.html.twig
-msgid ""
-"For optimal performance and reliability, the migration must be performed "
-"using the command line:"
-msgstr "Para un rendimiento y confiabilidad óptimos, la migración debe realizarse usando la línea de comandos:"
-
-#: templates/migration_status.html.twig
-msgid "Copy command"
-msgstr "Copiar comando"
-
-#: templates/migration_status.html.twig
-msgid "Run this command from your GLPI root directory"
-msgstr "Ejecutá este comando desde tu directorio raíz de GLPI"
-
-#: templates/migration_status.html.twig
-msgid "Migration Process"
-msgstr "Proceso de Migración"
-
-#: templates/migration_status.html.twig
-msgid "Generic objects will be converted into custom assets"
-msgstr "Los objetos de Administración de Objetos serán convertidos en activos personalizados"
-
-#: templates/migration_status.html.twig
-msgid "Types will be retained."
-msgstr "Los tipos serán retenidos."
-
-#: templates/migration_status.html.twig
-msgid "Asset data will not be lost"
-msgstr "Los datos de los activos no se perderán"
-
-#: templates/migration_status.html.twig
-msgid ""
-"Note: Migration status detection is based on data presence and may not be "
-"100% accurate. Please verify manually after running the migration command."
-msgstr "Nota: La detección del estado de migración se basa en la presencia de datos y puede no ser 100% precisa. Por favor, verificá manualmente después de ejecutar el comando de migración."
-
-#: templates/migration_status.html.twig
-msgid "Next Steps"
-msgstr "Próximos Pasos"
-
-#: templates/migration_status.html.twig
-msgid "After Migration"
-msgstr "Después de la Migración"
-
-#: templates/migration_status.html.twig
-msgid "Review converted assets in GLPI 11"
-msgstr "Revisá los activos convertidos en GLPI 11"
-
-#: templates/migration_status.html.twig
-msgid "Test asset access permissions"
-msgstr "Probá los permisos de acceso a los activos"
-
-#: templates/migration_status.html.twig
-msgid "Recommendations"
-msgstr "Recomendaciones"
-
-#: templates/migration_status.html.twig
-msgid "Train users on GLPI 11 native custom assets"
-msgstr "Capacitá a los usuarios sobre los activos personalizados nativos de GLPI 11"
-
-#: templates/migration_status.html.twig
-msgid "Update internal documentation"
-msgstr "Actualizá la documentación interna"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de objetos"
 
 #: setup.php:132
 msgid "Generic Objects End-of-Life Updater"
 msgstr "Actualizador de Fin-de-Vida-Útil de Administración de Objetos"
-
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Familia de tipo de objetos"
 
 #: inc/eolinfo.class.php:47
 msgid "GenericObject EOL Info"
@@ -211,13 +294,39 @@ msgstr "Información de FVU de Administración de Objetos"
 msgid "GenericObject End of Life Information"
 msgstr "Información de Fin de Vida Útil de Administración de Objetos"
 
-#: inc/type.class.php:74
+#: inc/type.class.php:76
 msgid "Type of objects"
 msgstr "Tipo de objetos"
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr "Información de Fin de Vida Útil de Administración de objetos"
+#: inc/type.class.php:934
+msgid "Type not found."
+msgstr "Tipo no encontrado."
+
+#: inc/type.class.php:946
+msgid "The new name cannot be empty."
+msgstr "El nuevo nombre no puede estar vacío."
+
+#: inc/type.class.php:962
+msgid "A type with this name already exists."
+msgstr "Ya existe un tipo con este nombre."
+
+#: inc/type.class.php:973
+msgid "This name is reserved by a native GLPI asset type."
+msgstr "Este nombre está reservado por un tipo de activo nativo de GLPI."
+
+#: inc/type.class.php:984
+#, php-format
+msgid "The name \"%s\" is too long. The maximum allowed length is %d characters."
+msgstr "El nombre \"%s\" es demasiado largo. La longitud máxima permitida es de %d caracteres."
+
+#: inc/type.class.php:1020
+#, php-format
+msgid "Type \"%s\" has been renamed to \"%s\"."
+msgstr "El tipo \"%s\" ha sido renombrado a \"%s\"."
+
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Familia de tipo de objetos"
 
 #: index.php:36
 #, php-format
@@ -225,4 +334,4 @@ msgid ""
 "GenericObject v%s is End-of-Life. All genericobject functionality is now "
 "available in GLPI 11 core. Check migration status or use native custom "
 "assets."
-msgstr "Administración de Objetos v%s está en Fin de Vida Útil. Toda la funcionalidad del administración de objetos está ahora disponible en el núcleo de GLPI 11. Revisá el estado de la migración o usá los activos personalizados nativos."
+msgstr "Administración de Objetos v%s está en Fin de Vida Útil. Toda la funcionalidad del administración de objetos está ahora disponible en el núcleo de GLPI 11. Revisa el estado de la migración o usa los activos personalizados nativos."
