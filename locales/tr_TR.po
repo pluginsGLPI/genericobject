@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-17 00:55+0000\n"
+"POT-Creation-Date: 2026-09-04 02:32+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2026\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
@@ -278,21 +278,17 @@ msgstr "Hazır olduğunuzda GenericObject eklentisini kaldırın"
 msgid "View Migration Status"
 msgstr "Aktarım durumunu görüntüle"
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr "GenericObject destek sonu bilgileri"
-
 #: setup.php:132
 msgid "Generic Objects End-of-Life Updater"
 msgstr "Generic Objects destek sonu güncelleyici"
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
 msgstr "GenericObject destek sonu bilgileri"
 
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
-msgstr "GenericObject destek sonu bildirimi"
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Nesnelerin aile türü"
 
 #: inc/type.class.php:76
 msgid "Type of objects"
@@ -324,9 +320,13 @@ msgstr "\"%s\" adı çok uzun. En fazla %d karakter uzunluğuna izin veriliyor."
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr "\"%s\" türü \"%s\" olarak yeniden adlandırıldı."
 
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Nesnelerin aile türü"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "GenericObject destek sonu bilgileri"
+
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "GenericObject destek sonu bildirimi"
 
 #: index.php:36
 #, php-format

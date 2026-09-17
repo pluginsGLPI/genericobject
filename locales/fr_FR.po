@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 00:55+0000\n"
+"POT-Creation-Date: 2026-09-04 02:32+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: EpicIT33, 2025-2026\n"
 "Language-Team: French (France) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/fr_FR/)\n"
@@ -284,21 +284,17 @@ msgstr "Désinstallez le plugin GenericObject lorsque vous êtes prêt"
 msgid "View Migration Status"
 msgstr "Afficher l'état de la migration"
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr "Informations relatives à la fin de vie de GenericObject"
-
 #: setup.php:132
 msgid "Generic Objects End-of-Life Updater"
 msgstr "Programme de mise à jour de fin de vie des objets génériques"
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
-msgstr "Informations sur la fin de vie (EOL) de GenericObject"
-
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
 msgstr "Informations relatives à la fin de vie de GenericObject"
+
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Famille"
 
 #: inc/type.class.php:76
 msgid "Type of objects"
@@ -330,9 +326,13 @@ msgstr "Le nom \"%s\" est trop long. La longueur maximale autorisée est de %d c
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr "Le type «%s» a été renommé «%s»."
 
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Famille"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "Informations sur la fin de vie (EOL) de GenericObject"
+
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "Informations relatives à la fin de vie de GenericObject"
 
 #: index.php:36
 #, php-format
