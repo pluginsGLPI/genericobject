@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-26 00:58+0000\n"
+"POT-Creation-Date: 2026-09-17 02:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -277,20 +277,16 @@ msgstr ""
 msgid "View Migration Status"
 msgstr ""
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr ""
-
 #: setup.php:132
 msgid "Generic Objects End-of-Life Updater"
 msgstr ""
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
 msgstr ""
 
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
 msgstr ""
 
 #: inc/type.class.php:76
@@ -324,8 +320,12 @@ msgstr ""
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr ""
 
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr ""
+
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
 msgstr ""
 
 #: index.php:36

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-26 00:58+0000\n"
+"POT-Creation-Date: 2026-09-04 02:32+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Edwin Elias Alvarez <elias986@yahoo.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/es_MX/)\n"
@@ -278,21 +278,17 @@ msgstr "Desinstala el complemento Administración de Objetos cuando estés listo
 msgid "View Migration Status"
 msgstr "Ver Estado de Migración"
 
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr "Información de Fin de Vida Útil de Administración de objetos"
-
 #: setup.php:132
 msgid "Generic Objects End-of-Life Updater"
 msgstr "Actualizador de Fin-de-Vida-Útil de Administración de Objetos"
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
-msgstr "Información de FVU de Administración de Objetos"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de objetos"
 
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
-msgstr "Información de Fin de Vida Útil de Administración de Objetos"
+#: inc/typefamily.class.php:41
+msgid "Family of type of objects"
+msgstr "Familia de tipo de objetos"
 
 #: inc/type.class.php:76
 msgid "Type of objects"
@@ -324,9 +320,13 @@ msgstr "El nombre \"%s\" es demasiado largo. La longitud máxima permitida es de
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr "El tipo \"%s\" ha sido renombrado a \"%s\"."
 
-#: inc/typefamily.class.php:41
-msgid "Family of type of objects"
-msgstr "Familia de tipo de objetos"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "Información de FVU de Administración de Objetos"
+
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de Objetos"
 
 #: index.php:36
 #, php-format
