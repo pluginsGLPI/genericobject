@@ -84,15 +84,7 @@ class PluginGenericobjectType extends CommonDBTM
 
     public function getFromDBByType($itemtype)
     {
-        /** @var DBmysql $DB */
-        global $DB;
-
-        $query  = "SELECT * FROM `" . getTableForItemType(__CLASS__) . "` " .
-                "WHERE `itemtype`='$itemtype'";
-        $result = $DB->query($query);
-        if ($DB->numrows($result) > 0) {
-            $this->fields = $DB->fetchArray($result);
-        } else {
+        if (!$this->getFromDBByCrit(['itemtype' => $itemtype])) {
             $this->getEmpty();
         }
     }
@@ -1330,7 +1322,9 @@ class PluginGenericobjectType extends CommonDBTM
         foreach ($locale_files as $locale_file) {
             self::addFileFromTemplate(
                 [
-                    'NAME'      => $name,
+                   // Template writes NAME inside a double quoted PHP string; filterInput() is not
+                   // reusable here as getSingular() would alter an already singular name
+                    'NAME'      => preg_replace('/[^a-zA-Z0-9]/', '', $name),
                     'CLASSNAME' => self::getClassByName($name),
                 ],
                 self::LOCALE_TEMPLATE,
@@ -1916,6 +1910,24 @@ class PluginGenericobjectType extends CommonDBTM
         $value = preg_replace("/[^a-zA-Z0-9]/", '', $value);
 
         return  str_replace($search, $replace, $value);
+    }
+
+
+   /**
+    * Keep only itemtypes that are actually proposed as linkable
+    * @param mixed $itemtypes the submitted itemtypes
+    * @return array the allowed itemtypes
+    */
+    public static function filterLinkedItemtypes($itemtypes)
+    {
+        /** @var array $GO_LINKED_TYPES */
+        global $GO_LINKED_TYPES;
+
+        if (!is_array($itemtypes)) {
+            return [];
+        }
+
+        return array_values(array_intersect($itemtypes, $GO_LINKED_TYPES));
     }
 
 

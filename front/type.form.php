@@ -39,24 +39,36 @@ if (isset($_POST["select"]) && $_POST["select"] == "all") {
     $extraparams["selected"] = "checked";
 }
 
+$post_id  = (int) ($_POST["id"] ?? 0);
+$needs_id = isset($_POST["update"]) || isset($_POST["purge"]) || isset($_POST["regenerate"]);
+if ($needs_id && $post_id <= 0) {
+    Html::displayErrorAndDie("lost");
+}
+
 if (isset($_POST["add"])) {
    //Add a new itemtype
+    $type->check(-1, CREATE, $_POST);
     $new_id = $type->add($_POST);
     Html::redirect(Toolbox::getItemTypeFormURL('PluginGenericobjectType') . "?id=$new_id");
 } else if (isset($_POST["update"])) {
    //Update an existing itemtype
-    if (isset($_POST['itemtypes']) && is_array($_POST['itemtypes'])) {
-        $_POST['linked_itemtypes'] = json_encode($_POST['itemtypes']);
+    $type->check($post_id, UPDATE);
+    unset($_POST['name'], $_POST['itemtype'], $_POST['linked_itemtypes']);
+    if (isset($_POST['itemtypes'])) {
+        $_POST['linked_itemtypes'] = json_encode(
+            PluginGenericobjectType::filterLinkedItemtypes($_POST['itemtypes'])
+        );
     }
     $type->update($_POST);
     Html::back();
 } else if (isset($_POST["purge"])) {
    //Delete an itemtype
+    $type->check($post_id, PURGE);
     $type->delete($_POST);
     $type->redirectToList();
 } else if (isset($_POST['regenerate'])) {
    //Regenerate files for an itemtype
-    $type->getFromDB($_POST["id"]);
+    $type->check($post_id, UPDATE);
     PluginGenericobjectType::checkClassAndFilesForOneItemType(
         $type->fields['itemtype'],
         $type->fields['name'],
@@ -64,6 +76,8 @@ if (isset($_POST["add"])) {
     );
     Html::back();
 }
+
+Session::checkRight(PluginGenericobjectType::$rightname, READ);
 
 Html::header(
     __("Objects management", "genericobject"),

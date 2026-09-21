@@ -29,17 +29,23 @@
  */
 
 include("../../../inc/includes.php");
+
+$post_id  = (int) ($_POST["id"] ?? 0);
+$needs_id = isset($_POST["delete"]) || isset($_POST["add_field"]) || isset($_POST['action']);
+if ($needs_id && $post_id <= 0) {
+    Html::displayErrorAndDie("lost");
+}
+
 if (isset($_POST["delete"])) {
-    if (isset($_POST["fields"]) && count($_POST["fields"]) > 0) {
-        $type = new PluginGenericobjectType();
-        $type->getFromDB($_POST["id"]);
+    $type = new PluginGenericobjectType();
+    $type->check($post_id, PURGE);
+    if (!empty($_POST["fields"]) && is_array($_POST["fields"])) {
         $itemtype = $type->fields['itemtype'];
         PluginGenericobjectType::registerOneType($itemtype);
 
         foreach ($_POST["fields"] as $field => $value) {
             if (
-                $type->can($_POST["id"], PURGE)
-                && $value == 1
+                $value == 1
                 && PluginGenericobjectField::checkNecessaryFieldsDelete($itemtype, $field)
             ) {
                 PluginGenericobjectField::deleteField(getTableForItemType($itemtype), $field);
@@ -49,7 +55,8 @@ if (isset($_POST["delete"])) {
     }
 } else if (isset($_POST["add_field"])) {
     $type     = new PluginGenericobjectType();
-    if ($_POST["new_field"] && $type->can($_POST["id"], UPDATE)) {
+    $type->check($post_id, UPDATE);
+    if (!empty($_POST["new_field"])) {
         $itemtype = $type->fields['itemtype'];
         PluginGenericobjectType::registerOneType($itemtype);
         PluginGenericobjectField::addNewField(getTableForItemType($itemtype), $_POST["new_field"]);
@@ -57,6 +64,9 @@ if (isset($_POST["delete"])) {
     }
 } else if (isset($_POST['action'])) {
    //Move field
+    $type = new PluginGenericobjectType();
+    $type->check($post_id, UPDATE);
+    $_POST['itemtype'] = $type->fields['itemtype'];
     PluginGenericobjectField::changeFieldOrder($_POST);
 }
 

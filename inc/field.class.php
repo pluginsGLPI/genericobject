@@ -517,12 +517,17 @@ class PluginGenericobjectField extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
         $itemtype = $params['itemtype'];
-        $field    = $params['field'];
+        $field    = $params['field'] ?? '';
+        $action   = $params['action'] ?? '';
         $table    = getTableForItemType($itemtype);
-        $fields   = PluginGenericobjectSingletonObjectField::getInstance($params['itemtype']);
+        $fields   = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
+
+        if (!isset($fields[$field])) {
+            return;
+        }
 
        //If action is down, reverse array first
-        if ($params['action'] == 'down') {
+        if ($action == 'down') {
             $fields = array_reverse($fields);
         }
 
@@ -536,7 +541,7 @@ class PluginGenericobjectField extends CommonDBTM
             }
         }
        //Get 2 positions before and move field
-        if ($params['action'] == 'down') {
+        if ($action == 'down') {
             $previous = $index - 1;
         } else {
             $previous = $index - 2;
