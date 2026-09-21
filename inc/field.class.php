@@ -510,7 +510,7 @@ class PluginGenericobjectField extends CommonDBTM
    /**
     * Change field order in DB
     * @params an array which contains the itemtype, the field to move and the action (up/down)
-    * @return void
+    * @return boolean false if the field cannot be moved
     */
     public static function changeFieldOrder($params = [])
     {
@@ -519,11 +519,16 @@ class PluginGenericobjectField extends CommonDBTM
         $itemtype = $params['itemtype'];
         $field    = $params['field'] ?? '';
         $action   = $params['action'] ?? '';
+
+        if (!array_key_exists($itemtype, PluginGenericobjectType::getTypes(true))) {
+            return false;
+        }
+
         $table    = getTableForItemType($itemtype);
         $fields   = PluginGenericobjectSingletonObjectField::getInstance($itemtype);
 
         if (!isset($fields[$field])) {
-            return;
+            return false;
         }
 
        //If action is down, reverse array first
@@ -547,12 +552,16 @@ class PluginGenericobjectField extends CommonDBTM
             $previous = $index - 2;
         }
 
-        if (isset($keys[$previous])) {
-            $parent = $fields[$keys[$previous]];
-            $query  = "ALTER TABLE `$table` MODIFY `$field` " . $fields[$field]['Type'];
-            $query .= " AFTER `" . $fields[$keys[$previous]]['Field'] . "`";
-            $DB->query($query) or die($DB->error());
+       //Field is already at the edge of the list, nothing to move
+        if (!isset($keys[$previous])) {
+            return true;
         }
+
+        $query  = "ALTER TABLE " . $DB->quoteName($table);
+        $query .= " MODIFY " . $DB->quoteName($field) . " " . $fields[$field]['Type'];
+        $query .= " AFTER " . $DB->quoteName($fields[$keys[$previous]]['Field']);
+
+        return $DB->query($query) !== false;
     }
 
     public static function checkNecessaryFieldsDelete($itemtype, $field)

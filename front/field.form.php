@@ -67,7 +67,9 @@ if (isset($_POST["delete"])) {
     $type = new PluginGenericobjectType();
     $type->check($post_id, UPDATE);
     $_POST['itemtype'] = $type->fields['itemtype'];
-    PluginGenericobjectField::changeFieldOrder($_POST);
+    if (!PluginGenericobjectField::changeFieldOrder($_POST)) {
+        Session::addMessageAfterRedirect(__("Field could not be moved", "genericobject"), true, ERROR);
+    }
 }
 
 Html::back();
