@@ -134,6 +134,7 @@ function plugin_version_genericobject()
         'author'         => "<a href=\"mailto:contact@teclib.com\">Teclib'</a> & siprossii",
         'homepage'       => 'https://github.com/pluginsGLPI/genericobject',
         'license'        => 'GPLv2+',
+        'csp_compliant'  => true,
         'requirements'   => [
             'glpi' => [
                 'min' => PLUGIN_GENERICOBJECT_MIN_GLPI,

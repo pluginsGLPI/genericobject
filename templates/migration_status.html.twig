@@ -256,7 +256,7 @@
                                                     data-counter-target="{{ modal_id }}-counter"
                                                     data-warning-target="{{ modal_id }}-length-warning"
                                                     data-result-target="{{ modal_id }}-result"
-                                                    oninput="glpiGenericobjectUpdateCounter(this)"
+                                                    data-genericobject-update-counter
                                                     required
                                                 >
                                                 <div class="d-flex justify-content-between align-items-center mt-1">
@@ -331,7 +331,7 @@
                                 <div class="bg-light border border-secondary rounded p-3 position-relative mt-3">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <code id="codeBlock" class="mb-0 flex-grow-1 bg-transparent">php bin/console migration:genericobject_plugin_to_core</code>
-                                        <button class="btn btn-sm btn-outline-secondary ms-3 copy-btn" onclick="copyCode()" title="{{ __('Copy command', 'genericobject') }}">
+                                        <button class="btn btn-sm btn-outline-secondary ms-3 copy-btn" data-genericobject-copy-code title="{{ __('Copy command', 'genericobject') }}">
                                             <i class="ti ti-clipboard"></i>
                                             {{ __('Copy') }}
                                         </button>
@@ -505,4 +505,16 @@
             copyBtn.classList.add('btn-outline-secondary');
         }, 2000);
     }
+
+    document.addEventListener('input', (e) => {
+        if (e.target.matches('[data-genericobject-update-counter]')) {
+            glpiGenericobjectUpdateCounter(e.target);
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('[data-genericobject-copy-code]') !== null) {
+            copyCode();
+        }
+    });
 </script>
