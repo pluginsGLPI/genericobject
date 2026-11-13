@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [UNRELEASED]
 
 - Fix Composer autoloader collisions with other plugins
+- Make the plugin compatible with the Content Security Policy
 
 ## [3.0.3] - 2026-08-11
 
