@@ -430,4 +430,4 @@
         right: 0.5rem;
     }
 </style>
-{{ call('Html::script', ['/plugins/genericobject/js/migration_status.js', {}, false])|raw }}
+{{ call('Html::script', ['/plugins/genericobject/js/migration_status.js', {'version': constant('PLUGIN_GENERICOBJECT_VERSION')}, false])|raw }}
