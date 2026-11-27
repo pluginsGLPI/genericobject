@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 02:32+0000\n"
+"POT-Creation-Date: 2026-11-27 06:19+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: EpicIT33, 2025-2026\n"
 "Language-Team: French (France) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/fr_FR/)\n"
@@ -23,6 +23,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "Annonce sur la fin de vie de GenericObject"
+
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Conseils et informations sur la migration"
+
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Annonce importante"
+
+#: templates/eol_info.html.twig
+#, php-format
+msgid ""
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr "GenericObject v%s a atteint sa fin de vie (EOL). Cette version fournit uniquement une aide à la migration pour vous permettre de passer à la définition des actifs de GLPI 11."
+
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "Quels changements ?"
+
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 intègre désormais des fonctionnalités natives de création d'actifs personnalisés"
+
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "Toutes les fonctionnalités de GenericObject sont disponibles dans le noyau de GLPI"
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "Une meilleure intégration avec les workflows GLPI"
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Amélioration des performances et de la sécurité"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Prochaines étapes"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Passez en revue vos éléments GenericObject existants"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "Migration vers la définition native des actifs de GLPI 11"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Testez le nouveau système d'éléments"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Désinstallez le plugin GenericObject lorsque vous êtes prêt"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "Afficher l'état de la migration"
 
 #: templates/migration_status.html.twig front/migration_status.php:85
 msgid "GenericObject Migration Status"
@@ -221,75 +284,12 @@ msgstr "Former les utilisateurs à l'utilisation des actifs personnalisés natif
 msgid "Update internal documentation"
 msgstr "Mettre à jour la documentation interne"
 
-#: templates/eol_info.html.twig
-msgid "GenericObject End of Life Notice"
-msgstr "Annonce sur la fin de vie de GenericObject"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "Informations sur la fin de vie (EOL) de GenericObject"
 
-#: templates/eol_info.html.twig
-msgid "Migration guidance and information"
-msgstr "Conseils et informations sur la migration"
-
-#: templates/eol_info.html.twig
-msgid "Important Notice"
-msgstr "Annonce importante"
-
-#: templates/eol_info.html.twig
-#, php-format
-msgid ""
-"GenericObject v%s has reached End of Life (EOL). This version only provides "
-"migration assistance to help you switch to GLPI 11's asset definition"
-msgstr "GenericObject v%s a atteint sa fin de vie (EOL). Cette version fournit uniquement une aide à la migration pour vous permettre de passer à la définition des actifs de GLPI 11."
-
-#: templates/eol_info.html.twig
-msgid "What changed?"
-msgstr "Quels changements ?"
-
-#: templates/eol_info.html.twig
-msgid "GLPI 11 now has native custom asset creation capabilities"
-msgstr "GLPI 11 intègre désormais des fonctionnalités natives de création d'actifs personnalisés"
-
-#: templates/eol_info.html.twig
-msgid "All Genericobject features are available in GLPI core"
-msgstr "Toutes les fonctionnalités de GenericObject sont disponibles dans le noyau de GLPI"
-
-#: templates/eol_info.html.twig
-msgid "Better integration with GLPI workflows"
-msgstr "Une meilleure intégration avec les workflows GLPI"
-
-#: templates/eol_info.html.twig
-msgid "Improved performance and security"
-msgstr "Amélioration des performances et de la sécurité"
-
-#: templates/eol_info.html.twig
-msgid "Next steps"
-msgstr "Prochaines étapes"
-
-#: templates/eol_info.html.twig
-msgid "Review your existing genericobject assets"
-msgstr "Passez en revue vos éléments GenericObject existants"
-
-#: templates/eol_info.html.twig
-msgid "Migrate to GLPI 11 native asset definition"
-msgstr "Migration vers la définition native des actifs de GLPI 11"
-
-#: templates/eol_info.html.twig
-msgid "Test the new asset system"
-msgstr "Testez le nouveau système d'éléments"
-
-#: templates/eol_info.html.twig
-msgid "Uninstall GenericObject plugin when ready"
-msgstr "Désinstallez le plugin GenericObject lorsque vous êtes prêt"
-
-#: templates/eol_info.html.twig
-msgid "View Migration Status"
-msgstr "Afficher l'état de la migration"
-
-#: setup.php:132
-msgid "Generic Objects End-of-Life Updater"
-msgstr "Programme de mise à jour de fin de vie des objets génériques"
-
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
 msgstr "Informations relatives à la fin de vie de GenericObject"
 
 #: inc/typefamily.class.php:41
@@ -326,12 +326,12 @@ msgstr "Le nom \"%s\" est trop long. La longueur maximale autorisée est de %d c
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr "Le type «%s» a été renommé «%s»."
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
-msgstr "Informations sur la fin de vie (EOL) de GenericObject"
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
+msgstr "Programme de mise à jour de fin de vie des objets génériques"
 
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
 msgstr "Informations relatives à la fin de vie de GenericObject"
 
 #: index.php:36
