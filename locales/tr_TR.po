@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 02:32+0000\n"
+"POT-Creation-Date: 2026-11-27 06:19+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2015-2017,2019,2021-2026\n"
 "Language-Team: Turkish (Turkey) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/tr_TR/)\n"
@@ -17,6 +17,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "GenericObject destek sonu bildirimi"
+
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Aktarım rehberi ve bilgileri"
+
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Önemli not"
+
+#: templates/eol_info.html.twig
+#, php-format
+msgid ""
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr "GenericObject v%s desteği sona erdi (EOL). Bu sürüm yalnızca verilerin GLPI 11 varlık tanımlarına aktarımında yardımcı olur"
+
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "Ne değişti?"
+
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 içine doğal varlık oluşturma özellikleri eklendi"
+
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "Tüm GenericObject özellikleri GLPI çekirdeğine eklendi"
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "GLPI iş akışları ile daha iyi bütünlük sağlandı"
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Başarım ve güvenlik iyileştirildi"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Sonraki adımlar"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Var olan GenericObject varlıklarını gözden geçirin"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "GLPI 11 doğal varlık tanımlarına geçin"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Yeni varlık sistemini deneyin"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Hazır olduğunuzda GenericObject eklentisini kaldırın"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "Aktarım durumunu görüntüle"
 
 #: templates/migration_status.html.twig front/migration_status.php:85
 msgid "GenericObject Migration Status"
@@ -215,76 +278,13 @@ msgstr "Kullanıcılara GLPI doğal özel varlıkları eğitimi verin"
 msgid "Update internal documentation"
 msgstr "Kuruluş içindeki belgeleri güncelleyin"
 
-#: templates/eol_info.html.twig
-msgid "GenericObject End of Life Notice"
-msgstr "GenericObject destek sonu bildirimi"
-
-#: templates/eol_info.html.twig
-msgid "Migration guidance and information"
-msgstr "Aktarım rehberi ve bilgileri"
-
-#: templates/eol_info.html.twig
-msgid "Important Notice"
-msgstr "Önemli not"
-
-#: templates/eol_info.html.twig
-#, php-format
-msgid ""
-"GenericObject v%s has reached End of Life (EOL). This version only provides "
-"migration assistance to help you switch to GLPI 11's asset definition"
-msgstr "GenericObject v%s desteği sona erdi (EOL). Bu sürüm yalnızca verilerin GLPI 11 varlık tanımlarına aktarımında yardımcı olur"
-
-#: templates/eol_info.html.twig
-msgid "What changed?"
-msgstr "Ne değişti?"
-
-#: templates/eol_info.html.twig
-msgid "GLPI 11 now has native custom asset creation capabilities"
-msgstr "GLPI 11 içine doğal varlık oluşturma özellikleri eklendi"
-
-#: templates/eol_info.html.twig
-msgid "All Genericobject features are available in GLPI core"
-msgstr "Tüm GenericObject özellikleri GLPI çekirdeğine eklendi"
-
-#: templates/eol_info.html.twig
-msgid "Better integration with GLPI workflows"
-msgstr "GLPI iş akışları ile daha iyi bütünlük sağlandı"
-
-#: templates/eol_info.html.twig
-msgid "Improved performance and security"
-msgstr "Başarım ve güvenlik iyileştirildi"
-
-#: templates/eol_info.html.twig
-msgid "Next steps"
-msgstr "Sonraki adımlar"
-
-#: templates/eol_info.html.twig
-msgid "Review your existing genericobject assets"
-msgstr "Var olan GenericObject varlıklarını gözden geçirin"
-
-#: templates/eol_info.html.twig
-msgid "Migrate to GLPI 11 native asset definition"
-msgstr "GLPI 11 doğal varlık tanımlarına geçin"
-
-#: templates/eol_info.html.twig
-msgid "Test the new asset system"
-msgstr "Yeni varlık sistemini deneyin"
-
-#: templates/eol_info.html.twig
-msgid "Uninstall GenericObject plugin when ready"
-msgstr "Hazır olduğunuzda GenericObject eklentisini kaldırın"
-
-#: templates/eol_info.html.twig
-msgid "View Migration Status"
-msgstr "Aktarım durumunu görüntüle"
-
-#: setup.php:132
-msgid "Generic Objects End-of-Life Updater"
-msgstr "Generic Objects destek sonu güncelleyici"
-
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
 msgstr "GenericObject destek sonu bilgileri"
+
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "GenericObject destek sonu bildirimi"
 
 #: inc/typefamily.class.php:41
 msgid "Family of type of objects"
@@ -320,13 +320,13 @@ msgstr "\"%s\" adı çok uzun. En fazla %d karakter uzunluğuna izin veriliyor."
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr "\"%s\" türü \"%s\" olarak yeniden adlandırıldı."
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
-msgstr "GenericObject destek sonu bilgileri"
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
+msgstr "Generic Objects destek sonu güncelleyici"
 
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
-msgstr "GenericObject destek sonu bildirimi"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "GenericObject destek sonu bilgileri"
 
 #: index.php:36
 #, php-format

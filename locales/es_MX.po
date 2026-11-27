@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Genericobject\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 02:32+0000\n"
+"POT-Creation-Date: 2026-11-27 06:19+0000\n"
 "PO-Revision-Date: 2015-07-23 09:47+0000\n"
 "Last-Translator: Edwin Elias Alvarez <elias986@yahoo.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (http://app.transifex.com/teclib/glpi-project-plugin-genericobject/language/es_MX/)\n"
@@ -17,6 +17,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_MX\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: templates/eol_info.html.twig
+msgid "GenericObject End of Life Notice"
+msgstr "Aviso de Fin de Vida Útil del Administración de Objetos"
+
+#: templates/eol_info.html.twig
+msgid "Migration guidance and information"
+msgstr "Información y orientación de migración"
+
+#: templates/eol_info.html.twig
+msgid "Important Notice"
+msgstr "Aviso Importante"
+
+#: templates/eol_info.html.twig
+#, php-format
+msgid ""
+"GenericObject v%s has reached End of Life (EOL). This version only provides "
+"migration assistance to help you switch to GLPI 11's asset definition"
+msgstr "Administración de Objetos v%s alcanzó el Fin de Vida Útil (FVU). Esta versión solo proporciona asistencia de migración para ayudarte a cambiar a la definición de activos de GLPI 11"
+
+#: templates/eol_info.html.twig
+msgid "What changed?"
+msgstr "¿Qué cambió?"
+
+#: templates/eol_info.html.twig
+msgid "GLPI 11 now has native custom asset creation capabilities"
+msgstr "GLPI 11 ahora tiene capacidades nativas para crear activos personalizados"
+
+#: templates/eol_info.html.twig
+msgid "All Genericobject features are available in GLPI core"
+msgstr "Todas las funcionalidades de Administración de Objetos están disponibles en el núcleo de GLPI"
+
+#: templates/eol_info.html.twig
+msgid "Better integration with GLPI workflows"
+msgstr "Mejor integración con los flujos de trabajo de GLPI"
+
+#: templates/eol_info.html.twig
+msgid "Improved performance and security"
+msgstr "Rendimiento y seguridad mejorados"
+
+#: templates/eol_info.html.twig
+msgid "Next steps"
+msgstr "Próximos pasos"
+
+#: templates/eol_info.html.twig
+msgid "Review your existing genericobject assets"
+msgstr "Revisa tus activos de administración de objetos existentes"
+
+#: templates/eol_info.html.twig
+msgid "Migrate to GLPI 11 native asset definition"
+msgstr "Migra a la definición de activos nativa de GLPI 11"
+
+#: templates/eol_info.html.twig
+msgid "Test the new asset system"
+msgstr "Prueba el nuevo sistema de activos"
+
+#: templates/eol_info.html.twig
+msgid "Uninstall GenericObject plugin when ready"
+msgstr "Desinstala el complemento Administración de Objetos cuando estés listo/a"
+
+#: templates/eol_info.html.twig
+msgid "View Migration Status"
+msgstr "Ver Estado de Migración"
 
 #: templates/migration_status.html.twig front/migration_status.php:85
 msgid "GenericObject Migration Status"
@@ -215,76 +278,13 @@ msgstr "Capacita a los usuarios sobre los activos personalizados nativos de GLPI
 msgid "Update internal documentation"
 msgstr "Actualiza la documentación interna"
 
-#: templates/eol_info.html.twig
-msgid "GenericObject End of Life Notice"
-msgstr "Aviso de Fin de Vida Útil del Administración de Objetos"
+#: inc/eolinfo.class.php:47
+msgid "GenericObject EOL Info"
+msgstr "Información de FVU de Administración de Objetos"
 
-#: templates/eol_info.html.twig
-msgid "Migration guidance and information"
-msgstr "Información y orientación de migración"
-
-#: templates/eol_info.html.twig
-msgid "Important Notice"
-msgstr "Aviso Importante"
-
-#: templates/eol_info.html.twig
-#, php-format
-msgid ""
-"GenericObject v%s has reached End of Life (EOL). This version only provides "
-"migration assistance to help you switch to GLPI 11's asset definition"
-msgstr "Administración de Objetos v%s alcanzó el Fin de Vida Útil (FVU). Esta versión solo proporciona asistencia de migración para ayudarte a cambiar a la definición de activos de GLPI 11"
-
-#: templates/eol_info.html.twig
-msgid "What changed?"
-msgstr "¿Qué cambió?"
-
-#: templates/eol_info.html.twig
-msgid "GLPI 11 now has native custom asset creation capabilities"
-msgstr "GLPI 11 ahora tiene capacidades nativas para crear activos personalizados"
-
-#: templates/eol_info.html.twig
-msgid "All Genericobject features are available in GLPI core"
-msgstr "Todas las funcionalidades de Administración de Objetos están disponibles en el núcleo de GLPI"
-
-#: templates/eol_info.html.twig
-msgid "Better integration with GLPI workflows"
-msgstr "Mejor integración con los flujos de trabajo de GLPI"
-
-#: templates/eol_info.html.twig
-msgid "Improved performance and security"
-msgstr "Rendimiento y seguridad mejorados"
-
-#: templates/eol_info.html.twig
-msgid "Next steps"
-msgstr "Próximos pasos"
-
-#: templates/eol_info.html.twig
-msgid "Review your existing genericobject assets"
-msgstr "Revisa tus activos de administración de objetos existentes"
-
-#: templates/eol_info.html.twig
-msgid "Migrate to GLPI 11 native asset definition"
-msgstr "Migra a la definición de activos nativa de GLPI 11"
-
-#: templates/eol_info.html.twig
-msgid "Test the new asset system"
-msgstr "Prueba el nuevo sistema de activos"
-
-#: templates/eol_info.html.twig
-msgid "Uninstall GenericObject plugin when ready"
-msgstr "Desinstala el complemento Administración de Objetos cuando estés listo/a"
-
-#: templates/eol_info.html.twig
-msgid "View Migration Status"
-msgstr "Ver Estado de Migración"
-
-#: setup.php:132
-msgid "Generic Objects End-of-Life Updater"
-msgstr "Actualizador de Fin-de-Vida-Útil de Administración de Objetos"
-
-#: front/eol_info.php:38
-msgid "Genericobject End of Life Information"
-msgstr "Información de Fin de Vida Útil de Administración de objetos"
+#: inc/eolinfo.class.php:87
+msgid "GenericObject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de Objetos"
 
 #: inc/typefamily.class.php:41
 msgid "Family of type of objects"
@@ -320,13 +320,13 @@ msgstr "El nombre \"%s\" es demasiado largo. La longitud máxima permitida es de
 msgid "Type \"%s\" has been renamed to \"%s\"."
 msgstr "El tipo \"%s\" ha sido renombrado a \"%s\"."
 
-#: inc/eolinfo.class.php:47
-msgid "GenericObject EOL Info"
-msgstr "Información de FVU de Administración de Objetos"
+#: setup.php:132
+msgid "Generic Objects End-of-Life Updater"
+msgstr "Actualizador de Fin-de-Vida-Útil de Administración de Objetos"
 
-#: inc/eolinfo.class.php:87
-msgid "GenericObject End of Life Information"
-msgstr "Información de Fin de Vida Útil de Administración de Objetos"
+#: front/eol_info.php:38
+msgid "Genericobject End of Life Information"
+msgstr "Información de Fin de Vida Útil de Administración de objetos"
 
 #: index.php:36
 #, php-format
